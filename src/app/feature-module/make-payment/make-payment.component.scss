@@ -1,0 +1,197 @@
+span{
+  margin: 0px 0 !important;
+}
+
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+
+.container {
+  margin: 20px auto;
+  width: 800px;
+  padding: 30px
+}
+
+.container .card.box1 {
+  width: 350px;
+  height: 500px;background: rgb(2,0,36);
+  background: linear-gradient(90deg, rgb(5, 164, 196) 0%, rgb(3, 52, 143) 35%, rgba(2,0,36,1) 100%);
+  color: #baf0c3;
+  border-radius: 0
+}
+
+.container .card.box2 {
+  width: 450px;
+  height: 580px;
+  background-color: #ffffff;
+  border-radius: 0
+}
+
+.container .text {
+  font-size: 13px
+}
+
+.container .box2 .btn.btn-primary.bar {
+  width: 20px;
+  background-color: transparent;
+  border: none;
+  color: #980766
+}
+.container .box2 .btn.btn-primary.bar:hover {
+  color: #980766
+}
+
+.container .box1 .btn.btn-primary {
+  background-color: #980766;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #ddd
+}
+
+.container .box1 .btn.btn-primary:hover {
+  background-color: #f6f8f7;
+  color: #980766
+}
+
+.container .nav.nav-tabs {
+  border: none;
+  border-bottom: 2px solid #ddd
+}
+
+.container .nav.nav-tabs .nav-item .nav-link {
+  border: none;
+  color: black;
+  border-bottom: 2px solid transparent;
+  font-size: 14px
+}
+
+.container .nav.nav-tabs .nav-item .nav-link:hover {
+  border-bottom: 2px solid #980766;
+  color: #980766
+}
+
+.container .nav.nav-tabs .nav-item .nav-link.active {
+  border: none;
+  border-bottom: 2px solid #980766
+}
+
+.container .form-control {
+  border: none;
+  border-bottom: 1px solid #ddd;
+  box-shadow: none;
+  height: 15px;
+  font-weight: 400;
+  font-size: 1.5em;
+  padding: 15px 0px;
+  letter-spacing: 1.5px;
+  border-radius: 0
+}
+
+.container .inputWithIcon {
+  position: relative
+}
+
+.container .img {
+  width: 100px;
+  height: 30px;
+  object-fit: cover
+}
+
+.container .inputWithIcon span {
+  position: absolute;
+  right: 0px;
+  bottom: 9px;
+  color: #980766;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 14px
+}
+
+.container .form-control:focus {
+  box-shadow: none;
+  border-bottom: 1px solid #ddd
+}
+
+.container .btn-outline-primary {
+  color: black;
+  background-color: #ddd;
+  border: 1px solid #ddd
+}
+
+.container .btn-outline-primary:hover {
+  background-color: #980766;
+  border: 1px solid #ddd
+}
+
+.container .btn-check:active+.btn-outline-primary,
+.container .btn-check:checked+.btn-outline-primary,
+.container .btn-outline-primary.active,
+.container .btn-outline-primary.dropdown-toggle.show,
+.container .btn-outline-primary:active {
+  color: #baf0c3;
+  background-color: #980766;
+  box-shadow: none;
+  border: 1px solid #ddd
+}
+
+.container .btn-group>.btn-group:not(:last-child)>.btn,
+.container .btn-group>.btn:not(:last-child):not(.dropdown-toggle),
+.container .btn-group>.btn-group:not(:first-child)>.btn,
+.container .btn-group>.btn:nth-child(n+3),
+.container .btn-group>:not(.btn-check)+.btn {
+  border-radius: 50px;
+  margin-right: 20px
+}
+
+.container form {
+  font-size: 14px
+}
+
+.container form .btn.btn-primary {
+  width: 100%;
+  height: 45px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #980766;
+  border: 1px solid #ddd
+}
+
+.container form .btn.btn-primary:hover {
+  background-color: #980766
+}
+
+@media (max-width:750px) {
+  .container {
+      padding: 10px;
+      width: 100%
+  }
+
+  .container .text-green {
+      font-size: 14px
+  }
+
+  .container .card.box1,
+  .container .card.box2 {
+      width: 100%
+  }
+
+  .container .nav.nav-tabs .nav-item .nav-link {
+      font-size: 12px
+  }
+}
+
+
+.invoice-item-bg {
+background: #0e3476 !important;
+}
+.modal .text-primary, .invoice-total-footer h4 {
+color: #980766 !important;
+}

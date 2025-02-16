@@ -2,22 +2,26 @@
 <div class="main-wrapper login-body">
   <div class="login-wrapper">
     <div class="container">
-      <img class="img-fluid logo-dark mb-2 logo-color" src="assets/img/logo2.png" alt="Logo">
-
       <div class="loginbox">
         <div class="login-right">
           <div class="login-right-wrap">
-            <h1>Register</h1>
-            <p class="account-subtitle">Access to our dashboard</p>
+            <img class="img-fluid logo-dark mb-2 logo-color" src="assets/img/new/y_nkap.png" alt="Logo">
+            <p class="account-subtitle">Création de compte</p>
 
             <!-- Form -->
             <form [formGroup]="form" (ngSubmit)="submit()">
               <div class="input-block mb-3">
-                <label  htmlFor="label" class="form-control-label">Name</label>
-                <input id="label" class="form-control" type="text" />
+                <label  htmlFor="label" class="form-control-label">Nom</label>
+                <input id="label" class="form-control" type="text"
+                formControlName="firstName" />
               </div>
               <div class="input-block mb-3">
-                <label htmlFor="label" class="form-control-label">Email Address</label>
+                <label  htmlFor="label" class="form-control-label">Prénom</label>
+                <input id="label" class="form-control" type="text"
+                formControlName="lastName" />
+              </div>
+              <div class="input-block mb-3">
+                <label htmlFor="label" class="form-control-label">Email</label>
                 <input id="label"
                   class="form-control"
                   type="text"
@@ -34,7 +38,7 @@
                       @if (f['email'].errors && f['email'].errors['required']) {
                         <div
                           >
-                          Email is required.
+                          Email requis.
                         </div>
                       }
                     </div>
@@ -46,7 +50,7 @@
                   }
                 </div>
                 <div class="input-block mb-3">
-                  <label htmlFor="label" class="form-control-label">Password</label>
+                  <label htmlFor="label" class="form-control-label">Mot de passe</label>
                   <input id="label"
                     class="form-control"
                     type="password"
@@ -65,14 +69,14 @@
                           ) {
                           <div
                             >
-                            Password is required.
+                            Passe requis.
                           </div>
                         }
                       </div>
                     }
                   </div>
                   <div class="input-block mb-3">
-                    <label htmlFor="label" class="form-control-label">Confirm Password</label>
+                    <label htmlFor="label" class="form-control-label">Confirme le passe</label>
                     <input id="label"
                       class="form-control"
                       type="password"
@@ -96,46 +100,33 @@
                             ) {
                             <div
                               >
-                              Confirm Password is required.
+                              Champ requis.
                             </div>
                           }
                         </div>
                       }
                       @if (isValidConfirmPassword) {
                         <div class="invalid-feedback">
-                          Password not matching
+                          Le passe ne correspond pas
                         </div>
                       }
                     </div>
 
                     <div class="input-block mb-3 mb-0">
-                      <button
-                        [routerLink]="routes.login"
-                        class="btn btn-lg btn-block btn-primary w-100"
-                        type="submit"
-                        >
-                        Register
+                      <button [disabled]="form.invalid" class="btn btn-lg btn-block btn-primary w-100" type="submit"
+                        *ngIf="!isLoading">
+                        S'enregistrer
+                      </button>
+                      <button [disabled]="form.invalid" class="btn btn-lg btn-block btn-light w-100" type="submit"
+                        disabled *ngIf="isLoading">
+                        <img src="assets/img/new/loader.gif" width="30px" alt="">
                       </button>
                     </div>
                   </form>
                   <!-- /Form -->
 
-                  <div class="login-or">
-                    <span class="or-line"></span>
-                    <span class="span-or">or</span>
-                  </div>
-                  <!-- Social Login -->
-                  <div class="social-login">
-                    <span>Register with</span>
-                    <a href="javascript:void(0);" class="facebook"
-                      ><i class="fab fa-facebook-f"></i></a
-                      ><a href="javascript:void(0);" class="google"
-                      ><i class="fab fa-google"></i
-                    ></a>
-                  </div>
-                  <!-- /Social Login -->
                   <div class="text-center dont-have">
-                    Already have an account? <a [routerLink]="routes.login">Login</a>
+                    Vous avez déjà un compte ? <a [routerLink]="routes.login">connexion</a>
                   </div>
                 </div>
               </div>

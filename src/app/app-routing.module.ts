@@ -8,6 +8,13 @@ const routes: Routes = [
     redirectTo: 'login',
   },
   {
+    path: 'payment',
+    loadChildren: () =>
+      import('./feature-module/make-payment/make-payment.module').then(
+        (m) => m.MakePaymentModule
+      ),
+  },
+  {
     path: '',
     loadChildren: () =>
       import('./feature-module/feature-module.module').then(

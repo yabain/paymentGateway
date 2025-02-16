@@ -1,12 +1,15 @@
 export const environment = {
     production: false,
     firebase: {
-        apiKey: "AIzaSyDc26g824fZONJOmKJ20qb5itidS_C5-4I",
-        authDomain: "paymentgateway-66adf.firebaseapp.com",
-        projectId: "paymentgateway-66adf",
-        storageBucket: "paymentgateway-66adf.firebasestorage.app",
-        messagingSenderId: "623674309117",
-        appId: "1:623674309117:web:b57c0e06f3cdcba04d0194",
-        measurementId: "G-2HW8V33P3F"
-    }
+        apiKey: "AIzaSyDMPae-T-eoij5VGhrXfK40KsCF2IWcdfE",
+        authDomain: "paymentgateway-a84a1.firebaseapp.com",
+        projectId: "paymentgateway-a84a1",
+        storageBucket: "paymentgateway-a84a1.firebasestorage.app",
+        messagingSenderId: "1064984663961",
+        appId: "1:1064984663961:web:44ed1eb8eb59de4da56508",
+        measurementId: "G-JLMGDDSEJK"
+
+    },
+
+    apiUrl: 'https://ynkap-api.yaba-in.com',
 };

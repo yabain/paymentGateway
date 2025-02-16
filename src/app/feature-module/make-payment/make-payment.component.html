@@ -1,0 +1,318 @@
+<div class="page-wrapper">
+  <div class="content container-fluid">
+    <div class="row">
+      <div style="text-align: center;"><br>
+        <img src="assets/img/new/y_nkap.jpeg" width="150px">
+        <h3 class="page-title">Yaba-In Payment System</h3>
+      </div>
+      <div class="container bg-light d-md-flex align-items-center">
+        <div class="card box1 shadow-sm p-md-5 p-md-5 p-4">
+          <div *ngIf="!loadingData && loadingInvoice && invoiceData?.status == 'Pending'"
+            style="text-align: center !important;">
+            <img src="assets/img/new/loader.gif" width="50px" alt="" style="margin: 100px 0;"><br>
+            <p style="color: #fff; font-size: large;">Veuillez composer le #150*50# pour confirmer le paiement.</p>
+          </div>
+          <div *ngIf="!loadingData && !loadingInvoice && invoiceData?.status == 'Completed'"
+            style="text-align: center !important;">
+            <img src="assets/img/new/success_transaction.gif" width="250px" alt="" style="margin: 50px 0;">
+            <p style="color: #fff; font-size: large;">Paiement effectué avec succes.</p>
+          </div>
+          <div *ngIf="!loadingData && !loadingInvoice && invoiceData?.status == 'Rejected'"
+            style="text-align: center !important;">
+            <img src="assets/img/new/failed_transaction.gif" width="200px" alt="" style="margin: 50px 0;">
+            <p style="color: #fff; font-size: large;"><b>Paiement Rejeté</b> <br>
+              {{invoiceData?.statusErrorMsg}}</p>
+          </div>
+          <div *ngIf="loadingData" style="text-align: center !important;">
+            <img src="assets/img/new/loader.gif" width="50px" alt="" style="margin: 50px 0;">
+          </div>
+        </div>
+        <div class="card box2 shadow-sm">
+          <div class="d-flex align-items-center justify-content-between" style="padding: 10px 20px !important;">
+            <span class="h5 fw-bold m-0" style="color: #980766; font-size: 1.5em; margin: O">Détails de
+              facturation</span>
+          </div>
+          <form [formGroup]="form" (ngSubmit)="submit()">
+            <div class="row" *ngIf="!loadingData && invoiceData">
+              <div class="col-12">
+                <div class="d-flex flex-column px-md-5 px-4 mb-3">
+                  <span><b>Ref:</b> <span style="color: #980766;">{{invoiceData?.id}}</span></span>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="d-flex flex-column px-md-5 px-4 mb-3"> <span><b>Compte de facturation OM*</b></span>
+                  <div class="inputWithIcon">
+                    <input class="form-control" type="text" style="font-size: 1.5em;"
+                      placeholder="ex: 691224472" formControlName="phone">
+                    <span class=""> <img class="img" src="assets/img/new/om.png" alt=""></span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="d-flex flex-column ps-md-5 px-md-0 px-4 mb-3">
+                  <span><b>Nom / Raison sociale *</b></span>
+                  <div class="inputWithIcon">
+                    <input type="text" class="form-control input" formControlName="name"
+                      placeholder="Nom ou raison sociale">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="d-flex flex-column ps-md-5 px-md-0 px-4 mb-3">
+                  <span><b>Email *</b></span>
+                  <input type="text" class="form-control input" formControlName="email" placeholder="Adresse Email">
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="d-flex flex-column px-md-5 px-4 mb-3"> <span><b>Service: </b>{{invoiceData?.service}}</span>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="d-flex flex-column px-md-5 px-4 mb-1"> <span><b>Montant</b></span>
+                  <div class="col-12" style="text-align: right !important; background-color: #d8d8d8; font-size: 1.5em">
+                    {{invoiceData?.payment}} {{invoiceData.currency}}</div>
+                </div>
+              </div>
+              <div class="col-12" *ngIf="invoiceData?.yn" style="text-align: right">
+                <div class="d-flex flex-column px-md-5 px-4 mb-1">
+                  <span><b>Frais de transactions (2%): </b>{{(invoiceData?.payment * 2)/100}}
+                    {{invoiceData.currency}}</span>
+                </div>
+              </div>
+              <div class="col-12" *ngIf="invoiceData?.ir" style="text-align: right">
+                <div class="d-flex flex-column px-md-5 px-4 mb-1">
+                  <span><b>IR (5,5%): </b>{{(invoiceData?.payment * 5.5)/100}} {{invoiceData.currency}}</span>
+                </div>
+              </div><br><br>
+              <div class="col-12">
+                <div class="d-flex flex-column px-md-5 px-4 mb-1"> <span><b>Montant total</b></span>
+                  <div class="col-12" style="text-align: right !important; color: #980766; font-size: 1.5em">
+                    <b>{{finalPayment}} {{invoiceData.currency}}</b>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 px-md-5 px-4 mt-3"
+              *ngIf="!loadingData && invoiceData && invoiceData?.status === false "
+              (click)="submit()">
+                <div class="btn btn-primary w-100">Effectuer le paiement</div>
+              </div>
+              <div class="col-12 px-md-5 px-4 mt-3" *ngIf="invoiceData?.status == 'Pending'">
+                <div class="btn btn-primary w-100">Transaction en cours...</div>
+              </div>
+              <div class="col-12 px-md-5 px-4 mt-3" *ngIf="invoiceData?.status == 'Completed'">
+                <!-- <div class="btn btn-primary w-10" (click)="exportToPdf()">
+                                  <i class="fa fa-download"></i> Télécharger le reçu</div> -->
+              </div>
+              <!-- <div class="col-12 px-md-5 px-4 mt-3" *ngIf="invoiceData?.status == 'Rejected'"
+                          (click)="backClicked()">
+                              <div class="btn btn-white w-100" style="padding: 10px inherit;"> Retour</div>
+                          </div> -->
+            </div>
+            <div *ngIf="loadingData" style="text-align: center !important;">
+              <img src="assets/img/new/loader.gif" width="50px" alt="" style="margin: 50px 0;">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="printableView" *ngIf="printing" style="width: 300mm; height: 400mm; padding: 30px;">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="row justify-content-center">
+          <div class="col-lg-12">
+            <div class="card invoice-info-card">
+              <div class="card-body pb-0">
+                <div class="invoice-item invoice-item-one">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="invoice-logo">
+                        <img src="assets/img/new/y_nkap.jpeg" alt="logo">
+                        <h2>Yaba-In Payment System</h2>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="invoice-info">
+                        <div class="invoice-head">
+                          <h2 class="text-primary">Reçu ySchool</h2>
+                          <p>No. : {{invoiceData?.invoiceRef}}</p>
+                          <p style="color: #14660a;" *ngIf="invoiceData?.status === 'Completed'"><b>PAYED</b>
+                          </p>
+                          <p style="color: #9f6d00;" *ngIf="invoiceData?.status === 'Pending'"><b>PENDING</b></p>
+                          <p style="color: #bf1f03;" *ngIf="invoiceData?.status === 'Rejected'"><b>REJECTED</b>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Invoice Item -->
+                <div class="invoice-item invoice-item-bg">
+                  <div class="invoice-circle-img">
+                    <img src="assets/img/invoice-circle1.png" alt="" class="invoice-circle1">
+                    <img src="assets/img/invoice-circle2.png" alt="" class="invoice-circle2">
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-4 col-md-12">
+                      <div class="invoice-info">
+                        <strong class="customer-text-one">Payeur</strong>
+                        <h6 class="invoice-name">{{invoiceData?.clientName}}</h6>
+                        <p class="invoice-details invoice-details-two">
+                          {{invoiceData?.clientPhone}} <br>
+                          {{invoiceData?.clientEmail}} <br>
+                          {{invoiceData?.clientEmail}} <br>
+                        </p>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-12">
+                      <div class="invoice-info">
+                        <strong class="customer-text-one">Apprenant</strong>
+                        <h6 class="invoice-name">{{invoiceData?.studentMatricule}}</h6>
+                        <h6 class="invoice-name">{{invoiceData?.studentName}}</h6>
+                        <p class="invoice-details invoice-details-two">
+                          {{invoiceData?.classAbreviation}} <br>
+                        </p>
+                        <strong class="customer-text-one">Montant déjà versé:</strong>
+                        <p class="invoice-details invoice-details-two">
+                          {{invoiceData?.alreadyPaid}} FCFA<br>
+                        </p>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-12">
+                      <div class="invoice-info invoice-info-one border-0">
+                        <p>No. Reçu : {{invoiceData?.invoiceRef}}</p>
+                        <p>Date de facturation : {{invoiceData?.facturationDate }}</p>
+                        <p>Date de paiement : {{invoiceData?.paymentDate }}</p>
+                        <br>
+                        <p>Méthode de paiement : {{invoiceData?.paymentMethode }}</p>
+                        <p class="mb-0">Numéro payeur : {{invoiceData?.paymentMethodeNumber
+                          }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- /Invoice Item -->
+
+                <!-- Invoice Item -->
+                <div class="invoice-item invoice-table-wrap">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="table-responsive">
+                        <table class="invoice-table table table-center mb-0">
+                          <thead>
+                            <tr>
+                              <th>Désignation</th>
+                              <th>Apprenant</th>
+                              <th>Classe</th>
+                              <th>Montant</th>
+                              <th>Versement</th>
+                              <th class="text-end">Reste à payer</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>{{invoiceData?.designation}}</td>
+                              <td>{{invoiceData?.studentName}}</td>
+                              <td>{{invoiceData?.classAbreviation}}</td>
+                              <th>{{invoiceData?.classPrice}} FCFA</th>
+                              <th>{{invoiceData?.payment}} FCFA</th>
+                              <td class="text-end">{{invoiceData?.leftToPay }} FCFA
+                              </td>
+                            </tr>
+                            <tr>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <th></th>
+                              <th></th>
+                              <td></td>
+                            </tr>
+                            <tr>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <th></th>
+                              <th></th>
+                              <td></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- /Invoice Item -->
+
+                <div class="row align-items-center justify-content-center">
+                  <div class="col-lg-6 col-md-6">
+                    <div class="invoice-payment-box">
+                      <h4>Références Bancaires de l'établissement</h4>
+                      <div class="payment-details">
+                        <p>
+                          Banque: {{invoiceData?.banckName}} <br>
+                          No de compte: {{invoiceData?.banckAccountNumber}} <br>
+                          RIB: {{invoiceData?.banckRib}} <br>
+                          IBAN: {{invoiceData?.banckIban}}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 col-md-6">
+                    <div class="invoice-total-card">
+                      <div class="invoice-total-box">
+                        <div class="invoice-total-inner">
+                          <p>Somme :<span>{{invoiceData?.payment}} FCFA</span></p>
+                          <p>Taxes service en ligne ({{invoiceData?.taxes}}%)
+                            :<span>{{invoiceData?.taxesAmount}} FCFA</span></p>
+                        </div>
+                        <div class="invoice-total-footer">
+                          <h4>Montant total <span>{{invoiceData?.paymentWithTaxes}}
+                              FCFA</span>
+                          </h4>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="invoice-sign-box">
+                  <div class="row">
+                    <div class="col-lg-8 col-md-8">
+                      <div class="invoice-terms" *ngIf="invoiceData?.notes && invoiceData?.notes != ''">
+                        <h6>Notes:</h6>
+                        <p class="mb-0">{{invoiceData?.notes}}</p>
+                      </div>
+                      <div class="invoice-terms mb-0" *ngIf="invoiceData?.terms && invoiceData?.terms != ''">
+                        <h6>Termes et Conditions:</h6>
+                        <p class="mb-0">{{invoiceData?.terms}}</p>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                      <div class="invoice-sign text-end">
+                        <!-- <img class="img-fluid d-inline-block" src="{{invoiceParamsData?.image}}"
+                                                  alt="sign">
+                                              <span class="d-block">{{invoiceParamsData?.nameSignature}}</span> -->
+                        <p style="color: #14660a; font-size: 2em;" *ngIf="invoiceData?.status === 'Completed'">
+                          <b>PAYED</b>
+                        </p>
+                        <p style="color: #9f6d00; font-size: 2em;" *ngIf="invoiceData?.status === 'Pending'">
+                          <b>PENDING</b>
+                        </p>
+                        <p style="color: #bf1f03; font-size: 2em;" *ngIf="invoiceData?.status === 'Rejected'">
+                          <b>REJECTED</b>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

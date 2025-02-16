@@ -8,9 +8,9 @@ const routes: Routes = [
     component: SuperAdminComponent,
     children: [
       {
-        path: 'companies',
+        path: 'facturation',
         loadChildren: () =>
-          import('./companies/companies.module').then((m) => m.CompaniesModule),
+          import('./facturation/facturation.module').then((m) => m.FacturationModule),
       },
       {
         path: 'subscription',

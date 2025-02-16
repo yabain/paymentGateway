@@ -733,66 +733,10 @@ public sideBar: any[] = [
     menu: [
       {
         menuValue: 'Dashboard',
-        route: routes.dashboard,
+        route: routes.application,
         hasSubRoute: true,
         showSubRoute: false,
         icon: 'home',
-        base: 'dashboard',
-        subMenus: [
-          {
-            separateRoute: true,
-            menuValue: 'Admin Dashboard',
-            tittle: 'Admin Dashboard',
-            route: routes.dashboard,
-            base: routes.dashboard,
-            icon: 'home',
-            showAsTab: false,
-          },
-        ],
-      },
-      {
-        menuValue: 'Applications',
-        route: routes.application,
-        hasSubRoute: true,
-        showSubRoute: false,
-        icon: 'grid',
-        base: 'application',
-        subMenus: [
-          {
-            separateRoute: true,
-            menuValue: 'Chat',
-            tittle: 'Chat',
-            route: routes.chat,
-            base: routes.chat,
-            icon: 'message-square',
-            showAsTab: false,
-          },
-          {
-            separateRoute: true,
-            menuValue: 'Calendar',
-            tittle: 'Calendar',
-            route: routes.calender,
-            base: routes.calender,
-            icon: 'calendar',
-            showAsTab: false,
-          },
-          {
-            separateRoute: true,
-            menuValue: 'Email',
-            tittle: 'Email',
-            route: routes.email,
-            base: routes.email,
-            icon: 'mail',
-            showAsTab: false,
-          },
-        ],
-      },
-      {
-        menuValue: 'Super Admin',
-        route: routes.application,
-        hasSubRoute: true,
-        showSubRoute: false,
-        icon: 'user',
         base: 'super-admin',
         subMenus: [
           {
@@ -804,9 +748,9 @@ public sideBar: any[] = [
           },
           {
             separateRoute: true,
-            menuValue: 'Companies',
-            route: routes.companies,
-            base: routes.companies,
+            menuValue: 'Facturation',
+            route: routes.facturation,
+            base: routes.facturation,
             showAsTab: false,
           },
           {

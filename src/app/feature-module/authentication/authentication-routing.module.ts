@@ -9,16 +9,16 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'login',
+        redirectTo: 'loginAdmin123',
         pathMatch: 'full',
       },
       {
-        path: 'login',
+        path: 'loginAdmin123',
         loadChildren: () =>
           import('./login/login.module').then((m) => m.LoginModule),
       },
       {
-        path: 'register',
+        path: 'registerAdmin123',
         loadChildren: () =>
           import('./register/register.module').then((m) => m.RegisterModule),
       },

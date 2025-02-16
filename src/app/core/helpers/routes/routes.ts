@@ -14,14 +14,14 @@ export class routes {
     return routes.Url;
   }
   public static get login(): string {
-    return this.baseUrl + '/login';
+    return this.baseUrl + '/loginAdmin123';
   }
 
   public static get forgot_password(): string {
     return this.baseUrl + '/forgot-password';
   }
   public static get register(): string {
-    return this.baseUrl + '/register';
+    return this.baseUrl + '/registerAdmin123';
   }
   public static get lock_screen(): string {
     return this.baseUrl + '/lock-screen';
@@ -893,6 +893,9 @@ export class routes {
   }
   public static get companies(): string {
     return this.baseUrl + '/super-admin/companies';
+  }
+  public static get facturation(): string {
+    return this.baseUrl + '/super-admin/facturation';
   }
   public static get subscription(): string {
     return this.baseUrl + '/super-admin/subscription';

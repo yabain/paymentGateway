@@ -92,13 +92,6 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'application',
-        loadChildren: () =>
-          import('./application/application.module').then(
-            (m) => m.ApplicationModule
-          ),
-      },
-      {
         path: 'settings',
         loadChildren: () =>
           import('./setting/setting.module').then((m) => m.SettingModule),
