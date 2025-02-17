@@ -2,31 +2,10 @@
   <div class="content container-fluid">
     <div class="row">
       <div style="text-align: center;"><br>
-        <img src="assets/img/new/y_nkap.jpeg" width="150px">
+        <img src="assets/img/new/y_nkap.png" width="150px">
         <h3 class="page-title">Yaba-In Payment System</h3>
       </div>
       <div class="container bg-light d-md-flex align-items-center">
-        <div class="card box1 shadow-sm p-md-5 p-md-5 p-4">
-          <div *ngIf="!loadingData && loadingInvoice && invoiceData?.status == 'Pending'"
-            style="text-align: center !important;">
-            <img src="assets/img/new/loader.gif" width="50px" alt="" style="margin: 100px 0;"><br>
-            <p style="color: #fff; font-size: large;">Veuillez composer le #150*50# pour confirmer le paiement.</p>
-          </div>
-          <div *ngIf="!loadingData && !loadingInvoice && invoiceData?.status == 'Completed'"
-            style="text-align: center !important;">
-            <img src="assets/img/new/success_transaction.gif" width="250px" alt="" style="margin: 50px 0;">
-            <p style="color: #fff; font-size: large;">Paiement effectué avec succes.</p>
-          </div>
-          <div *ngIf="!loadingData && !loadingInvoice && invoiceData?.status == 'Rejected'"
-            style="text-align: center !important;">
-            <img src="assets/img/new/failed_transaction.gif" width="200px" alt="" style="margin: 50px 0;">
-            <p style="color: #fff; font-size: large;"><b>Paiement Rejeté</b> <br>
-              {{invoiceData?.statusErrorMsg}}</p>
-          </div>
-          <div *ngIf="loadingData" style="text-align: center !important;">
-            <img src="assets/img/new/loader.gif" width="50px" alt="" style="margin: 50px 0;">
-          </div>
-        </div>
         <div class="card box2 shadow-sm">
           <div class="d-flex align-items-center justify-content-between" style="padding: 10px 20px !important;">
             <span class="h5 fw-bold m-0" style="color: #980766; font-size: 1.5em; margin: O">Détails de
@@ -42,8 +21,9 @@
               <div class="col-12">
                 <div class="d-flex flex-column px-md-5 px-4 mb-3"> <span><b>Compte de facturation OM*</b></span>
                   <div class="inputWithIcon">
-                    <input class="form-control" type="text" style="font-size: 1.5em;"
-                      placeholder="ex: 691224472" formControlName="phone">
+                    <input class="form-control" type="text" style="font-size: 1.5em;" placeholder="ex: 691224472"
+                      formControlName="phone" *ngIf="!isDisabled">
+                    <label for="" *ngIf="isDisabled">{{phone}}</label>
                     <span class=""> <img class="img" src="assets/img/new/om.png" alt=""></span>
                   </div>
                 </div>
@@ -53,14 +33,17 @@
                   <span><b>Nom / Raison sociale *</b></span>
                   <div class="inputWithIcon">
                     <input type="text" class="form-control input" formControlName="name"
-                      placeholder="Nom ou raison sociale">
+                      placeholder="Nom ou raison sociale" *ngIf="!isDisabled">
+                    <label for="" *ngIf="isDisabled">{{name}}</label>
                   </div>
                 </div>
               </div>
               <div class="col-md-12">
                 <div class="d-flex flex-column ps-md-5 px-md-0 px-4 mb-3">
                   <span><b>Email *</b></span>
-                  <input type="text" class="form-control input" formControlName="email" placeholder="Adresse Email">
+                  <input type="text" class="form-control input" formControlName="email" placeholder="Adresse Email"
+                    *ngIf="!isDisabled">
+                  <label for="" *ngIf="isDisabled">{{email}}</label>
                 </div>
               </div>
               <div class="col-12">
@@ -91,15 +74,17 @@
                   </div>
                 </div>
               </div>
-              <div class="col-12 px-md-5 px-4 mt-3"
-              *ngIf="!loadingData && invoiceData && invoiceData?.status === false "
-              (click)="submit()">
+              <div class="col-12 px-md-5 px-4 mt-3" *ngIf="invoiceData && invoiceData?.status === false && !paying"
+                (click)="submit()">
                 <div class="btn btn-primary w-100">Effectuer le paiement</div>
               </div>
-              <div class="col-12 px-md-5 px-4 mt-3" *ngIf="invoiceData?.status == 'Pending'">
-                <div class="btn btn-primary w-100">Transaction en cours...</div>
+              <div class="col-12 px-md-5 px-4 mt-3" *ngIf="paying">
+                <div class="btn btn-primary w-100">
+                  <img src="assets/img/new/loader.gif" width="20px" alt="" style="margin-right: 5px;">
+                  Transaction en cours...
+                </div>
               </div>
-              <div class="col-12 px-md-5 px-4 mt-3" *ngIf="invoiceData?.status == 'Completed'">
+              <div class="col-12 px-md-5 px-4 mt-3" *ngIf="invoiceData?.status == true && !paying">
                 <!-- <div class="btn btn-primary w-10" (click)="exportToPdf()">
                                   <i class="fa fa-download"></i> Télécharger le reçu</div> -->
               </div>
@@ -112,6 +97,27 @@
               <img src="assets/img/new/loader.gif" width="50px" alt="" style="margin: 50px 0;">
             </div>
           </form>
+        </div>
+        <div class="card box1 shadow-sm p-md-5 p-md-5 p-4">
+          <div *ngIf="!loadingData && loadingInvoice && invoiceData?.status == 'Pending'"
+            style="text-align: center !important;">
+            <img src="assets/img/new/loader.gif" width="50px" alt="" style="margin: 100px 0;"><br>
+            <p style="color: #fff; font-size: large;">Veuillez composer le #150*50# pour confirmer le paiement.</p>
+          </div>
+          <div *ngIf="!loadingData && !loadingInvoice && invoiceData?.status == 'Completed'"
+            style="text-align: center !important;">
+            <img src="assets/img/new/success_transaction.gif" width="250px" alt="" style="margin: 50px 0;">
+            <p style="color: #fff; font-size: large;">Paiement effectué avec succes.</p>
+          </div>
+          <div *ngIf="!loadingData && !loadingInvoice && invoiceData?.status == 'Rejected'"
+            style="text-align: center !important;">
+            <img src="assets/img/new/failed_transaction.gif" width="200px" alt="" style="margin: 50px 0;">
+            <p style="color: #fff; font-size: large;"><b>Paiement Rejeté</b> <br>
+              {{invoiceData?.statusErrorMsg}}</p>
+          </div>
+          <div *ngIf="loadingData" style="text-align: center !important;">
+            <img src="assets/img/new/loader.gif" width="50px" alt="" style="margin: 50px 0;">
+          </div>
         </div>
       </div>
     </div>
