@@ -143,7 +143,7 @@ export class MakePaymentComponent {
 
           if (res.statusCode === 201) {
             // Manage success request
-            // this.handleSuccessfulRequest(res, val);
+            this.facturationService.handleSuccessfulRequest(res, this.transactionData);
           } else {
             // Gestion des erreurs liées au code de statut
             // this.handleTransactionErrors(res.statusCode);
