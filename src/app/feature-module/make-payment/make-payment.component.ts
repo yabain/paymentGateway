@@ -29,7 +29,6 @@ export class MakePaymentComponent {
   phone: any = '';
   email: string = '';
   paying: boolean = false;
-  private isProcessingSuccess = false; // Flag to break multiples exécutions
 
   constructor(
     private router: Router,
