@@ -34,8 +34,6 @@ export class MakePaymentComponent {
   constructor(
     private router: Router,
     private toastService: ToastrService,
-    private userService: UserService,
-    private route: ActivatedRoute,
     private facturationService: FacturationService,
     private paymentService: PaymentService,
     private pdfExportService: PrintService
