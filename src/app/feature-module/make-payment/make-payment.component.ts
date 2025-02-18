@@ -7,8 +7,6 @@ import { AuthService, routes } from 'src/app/core/core.index';
 import { FacturationService } from 'src/app/core/services/facturation/facturation.service';
 import { PaymentService } from 'src/app/core/services/payment/payment.service';
 import { PrintService } from 'src/app/core/services/print/print.service';
-import { StorageService } from 'src/app/core/services/storage/storage.service';
-import { UserService } from 'src/app/core/services/user/user.service';
 
 @Component({
   selector: 'app-make-payment',
