@@ -3,7 +3,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { take } from 'rxjs';
-import { AuthService, routes } from 'src/app/core/core.index';
 import { FacturationService } from 'src/app/core/services/facturation/facturation.service';
 import { PaymentService } from 'src/app/core/services/payment/payment.service';
 import { PrintService } from 'src/app/core/services/print/print.service';
