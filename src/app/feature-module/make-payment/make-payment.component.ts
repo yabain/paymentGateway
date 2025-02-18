@@ -343,4 +343,5 @@ export class MakePaymentComponent {
       }, 2000);
     }
   }
+  
 }
