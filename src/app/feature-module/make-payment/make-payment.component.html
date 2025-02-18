@@ -19,7 +19,7 @@
                 </div>
               </div>
               <div class="col-12">
-                <div class="d-flex flex-column px-md-5 px-4 mb-3"> <span><b>Compte de facturation OM*</b></span>
+                <div class="d-flex flex-column px-md-5 px-4 mb-3"> <span><b>Compte de facturation OM *</b></span>
                   <div class="inputWithIcon">
                     <input class="form-control" type="text" style="font-size: 1.5em;" placeholder="ex: 691224472"
                       formControlName="phone" *ngIf="!isDisabled">
@@ -53,69 +53,73 @@
               <div class="col-12">
                 <div class="d-flex flex-column px-md-5 px-4 mb-1"> <span><b>Montant</b></span>
                   <div class="col-12" style="text-align: right !important; background-color: #d8d8d8; font-size: 1.5em">
-                    {{invoiceData?.payment}} {{invoiceData.currency}}</div>
+                    {{invoiceData?.payment}} {{invoiceData?.currency}}</div>
                 </div>
               </div>
               <div class="col-12" *ngIf="invoiceData?.yn" style="text-align: right">
                 <div class="d-flex flex-column px-md-5 px-4 mb-1">
                   <span><b>Frais de transactions (2%): </b>{{(invoiceData?.payment * 2)/100}}
-                    {{invoiceData.currency}}</span>
+                    {{invoiceData?.currency}}</span>
                 </div>
               </div>
               <div class="col-12" *ngIf="invoiceData?.ir" style="text-align: right">
                 <div class="d-flex flex-column px-md-5 px-4 mb-1">
-                  <span><b>IR (5,5%): </b>{{(invoiceData?.payment * 5.5)/100}} {{invoiceData.currency}}</span>
+                  <span><b>IR (5,5%): </b>{{(invoiceData?.payment * 5.5)/100}} {{invoiceData?.currency}}</span>
                 </div>
               </div><br><br>
               <div class="col-12">
                 <div class="d-flex flex-column px-md-5 px-4 mb-1"> <span><b>Montant total</b></span>
                   <div class="col-12" style="text-align: right !important; color: #980766; font-size: 1.5em">
-                    <b>{{finalPayment}} {{invoiceData.currency}}</b>
+                    <b>{{finalPayment}} {{invoiceData?.currency}}</b>
                   </div>
                 </div>
               </div>
-              <div class="col-12 px-md-5 px-4 mt-3" *ngIf="invoiceData && invoiceData?.status === false && !paying"
-                (click)="submit()">
-                <div class="btn btn-primary w-100">Effectuer le paiement</div>
-              </div>
-              <div class="col-12 px-md-5 px-4 mt-3" *ngIf="paying">
-                <div class="btn btn-primary w-100">
-                  <img src="assets/img/new/loader.gif" width="20px" alt="" style="margin-right: 5px;">
-                  Transaction en cours...
+              <div *ngIf="!invoiceData.status">
+                <div class="col-12 px-md-5 px-4 mt-3"
+                  *ngIf="invoiceData && invoiceData?.status === false && !paying && transactionData?.status != 'Pending' && transactionData?.status != 'Completed'"
+                  (click)="submit()">
+                  <div class="btn btn-primary w-100">Effectuer le paiement</div>
+                </div>
+                <div class="col-12 px-md-5 px-4 mt-3" *ngIf="paying || transactionData?.status == 'Pending'">
+                  <div class="btn btn-primary w-100">
+                    <img src="assets/img/new/loader.gif" width="20px" alt="" style="margin-right: 5px;">
+                    Transaction en cours...
+                  </div>
                 </div>
               </div>
-              <div class="col-12 px-md-5 px-4 mt-3" *ngIf="invoiceData?.status == true && !paying">
-                <!-- <div class="btn btn-primary w-10" (click)="exportToPdf()">
-                                  <i class="fa fa-download"></i> Télécharger le reçu</div> -->
+              <div class="col-12 px-md-5 px-4 mt-3" *ngIf="!paying && transactionData?.status == 'Completed'">
+                <div class="btn btn-primary w-10" (click)="exportToPdf()">
+                  <i class="fa fa-download"></i> Télécharger la facture
+                </div>
               </div>
-              <!-- <div class="col-12 px-md-5 px-4 mt-3" *ngIf="invoiceData?.status == 'Rejected'"
-                          (click)="backClicked()">
-                              <div class="btn btn-white w-100" style="padding: 10px inherit;"> Retour</div>
-                          </div> -->
-            </div>
-            <div *ngIf="loadingData" style="text-align: center !important;">
-              <img src="assets/img/new/loader.gif" width="50px" alt="" style="margin: 50px 0;">
+              <div *ngIf="loadingData" style="text-align: center !important;">
+                <img src="assets/img/new/loader.gif" width="50px" alt="" style="margin: 50px 0;">
+              </div>
             </div>
           </form>
         </div>
         <div class="card box1 shadow-sm p-md-5 p-md-5 p-4">
-          <div *ngIf="!loadingData && loadingInvoice && invoiceData?.status == 'Pending'"
+          <div *ngIf="!loadingData && invoiceData?.status === true && !transactionData"
             style="text-align: center !important;">
-            <img src="assets/img/new/loader.gif" width="50px" alt="" style="margin: 100px 0;"><br>
-            <p style="color: #fff; font-size: large;">Veuillez composer le #150*50# pour confirmer le paiement.</p>
+            <img src="assets/img/new/success_transaction.gif" width="250px" alt="" style="margin: 50px 0;">
+            <p style="color: #fff; font-size: large;">Cette facture a déjà été soldée.</p>
           </div>
-          <div *ngIf="!loadingData && !loadingInvoice && invoiceData?.status == 'Completed'"
+          <div *ngIf="!loadingData && transactionData?.status == 'Pending'" style="text-align: center !important;">
+            <p style="color: #fff; font-size: large;">Veuillez composer le #150*50# pour confirmer le paiement.</p><br>
+            <img src="assets/img/new/loader.gif" width="50px" alt="" style="margin: 100px 0;">
+          </div>
+          <div *ngIf="!loadingData && !paying && transactionData?.status == 'Completed'"
             style="text-align: center !important;">
             <img src="assets/img/new/success_transaction.gif" width="250px" alt="" style="margin: 50px 0;">
             <p style="color: #fff; font-size: large;">Paiement effectué avec succes.</p>
           </div>
-          <div *ngIf="!loadingData && !loadingInvoice && invoiceData?.status == 'Rejected'"
+          <div *ngIf="!loadingData && !paying && transactionData?.status == 'Rejected'"
             style="text-align: center !important;">
             <img src="assets/img/new/failed_transaction.gif" width="200px" alt="" style="margin: 50px 0;">
             <p style="color: #fff; font-size: large;"><b>Paiement Rejeté</b> <br>
-              {{invoiceData?.statusErrorMsg}}</p>
+              {{invoiceData?.statusMsg}}</p>
           </div>
-          <div *ngIf="loadingData" style="text-align: center !important;">
+          <div *ngIf="loadingData || paying" style="text-align: center !important;">
             <img src="assets/img/new/loader.gif" width="50px" alt="" style="margin: 50px 0;">
           </div>
         </div>
@@ -143,8 +147,8 @@
                     <div class="col-md-6">
                       <div class="invoice-info">
                         <div class="invoice-head">
-                          <h2 class="text-primary">Reçu ySchool</h2>
-                          <p>No. : {{invoiceData?.invoiceRef}}</p>
+                          <h2 class="text-primary">Facture </h2>
+                          <p>No. : {{invoiceData?.id}}</p>
                           <p style="color: #14660a;" *ngIf="invoiceData?.status === 'Completed'"><b>PAYED</b>
                           </p>
                           <p style="color: #9f6d00;" *ngIf="invoiceData?.status === 'Pending'"><b>PENDING</b></p>
@@ -163,41 +167,50 @@
                     <img src="assets/img/invoice-circle2.png" alt="" class="invoice-circle2">
                   </div>
                   <div class="row">
-                    <div class="col-lg-4 col-md-12">
-                      <div class="invoice-info">
-                        <strong class="customer-text-one">Payeur</strong>
-                        <h6 class="invoice-name">{{invoiceData?.clientName}}</h6>
-                        <p class="invoice-details invoice-details-two">
-                          {{invoiceData?.clientPhone}} <br>
-                          {{invoiceData?.clientEmail}} <br>
-                          {{invoiceData?.clientEmail}} <br>
-                        </p>
-                      </div>
-                    </div>
-                    <div class="col-lg-4 col-md-12">
-                      <div class="invoice-info">
-                        <strong class="customer-text-one">Apprenant</strong>
-                        <h6 class="invoice-name">{{invoiceData?.studentMatricule}}</h6>
-                        <h6 class="invoice-name">{{invoiceData?.studentName}}</h6>
-                        <p class="invoice-details invoice-details-two">
-                          {{invoiceData?.classAbreviation}} <br>
-                        </p>
-                        <strong class="customer-text-one">Montant déjà versé:</strong>
-                        <p class="invoice-details invoice-details-two">
-                          {{invoiceData?.alreadyPaid}} FCFA<br>
-                        </p>
-                      </div>
-                    </div>
-                    <div class="col-lg-4 col-md-12">
-                      <div class="invoice-info invoice-info-one border-0">
-                        <p>No. Reçu : {{invoiceData?.invoiceRef}}</p>
-                        <p>Date de facturation : {{invoiceData?.facturationDate }}</p>
-                        <p>Date de paiement : {{invoiceData?.paymentDate }}</p>
-                        <br>
-                        <p>Méthode de paiement : {{invoiceData?.paymentMethode }}</p>
-                        <p class="mb-0">Numéro payeur : {{invoiceData?.paymentMethodeNumber
-                          }}</p>
-                      </div>
+                    <div class="col-lg-12 col-md-12">
+                      <table>
+                        <tr>
+                          <td>
+                            <div class="invoice-info">
+                              <strong class="customer-text-one">Yaba-In SARL</strong>
+                              <h6 class="invoice-name">RC: M062217426789W</h6>
+                              <p class="invoice-details invoice-details-two">
+                                Entrée ELECAM <br>
+                                Bangangté - Cameroun <br>
+                                yaba-in.com <br>
+                                contact&#64;yaba-in.com <br>
+                                (+237 ) 694949617 / 691224472
+                              </p>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="invoice-info">
+                              <strong class="customer-text-one">Client</strong>
+                              <h6 class="invoice-name">{{transactionData?.name}}</h6>
+                              <p class="invoice-details invoice-details-two">
+                                {{transactionData?.phone}} <br>
+                                {{transactionData?.email}} <br>
+                              </p>
+                              <strong class="customer-text-one">Paiement :</strong>
+                              <p class="invoice-details invoice-details-two">
+                                {{transactionData?.payment}} {{transactionData?.currency}}<br>
+                              </p>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="invoice-info invoice-info-one border-0">
+                              <!-- <p>ID. Facture : {{invoiceData?.id}}</p> -->
+                              <p>ID transaction : {{transactionData?.id}}</p>
+                              <p>Date de facturation : {{transactionData?.date | date: 'dd/MM/yyyy hh:mm'  }}</p>
+                              <p>Date de paiement : {{transactionData?.date | date: 'dd/MM/yyyy hh:mm'  }}</p>
+                              <br>
+                              <p>Méthode de paiement : Orange Money</p>
+                              <p class="mb-0">Numéro payeur : {{transactionData?.phone
+                                }}</p>
+                            </div>
+                          </td>
+                        </tr>
+                      </table>
                     </div>
                   </div>
                 </div>
@@ -212,22 +225,32 @@
                           <thead>
                             <tr>
                               <th>Désignation</th>
-                              <th>Apprenant</th>
-                              <th>Classe</th>
                               <th>Montant</th>
-                              <th>Versement</th>
                               <th class="text-end">Reste à payer</th>
                             </tr>
                           </thead>
                           <tbody>
                             <tr>
-                              <td>{{invoiceData?.designation}}</td>
-                              <td>{{invoiceData?.studentName}}</td>
-                              <td>{{invoiceData?.classAbreviation}}</td>
-                              <th>{{invoiceData?.classPrice}} FCFA</th>
-                              <th>{{invoiceData?.payment}} FCFA</th>
-                              <td class="text-end">{{invoiceData?.leftToPay }} FCFA
+                              <td>{{invoiceData?.service}}</td>
+                              <th>{{invoiceData?.payment}} {{invoiceData?.currency}}</th>
+                              <td class="text-end">{{invoiceData?.rest }} {{invoiceData?.currency}}
                               </td>
+                            </tr>
+                            <tr>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <th></th>
+                              <th></th>
+                              <td></td>
+                            </tr>
+                            <tr>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <th></th>
+                              <th></th>
+                              <td></td>
                             </tr>
                             <tr>
                               <td></td>
@@ -252,17 +275,18 @@
                   </div>
                 </div>
                 <!-- /Invoice Item -->
+                <hr>
 
                 <div class="row align-items-center justify-content-center">
                   <div class="col-lg-6 col-md-6">
                     <div class="invoice-payment-box">
-                      <h4>Références Bancaires de l'établissement</h4>
+                      <h4>Références Bancaires de l'entreprise</h4>
                       <div class="payment-details">
-                        <p>
-                          Banque: {{invoiceData?.banckName}} <br>
-                          No de compte: {{invoiceData?.banckAccountNumber}} <br>
-                          RIB: {{invoiceData?.banckRib}} <br>
-                          IBAN: {{invoiceData?.banckIban}}
+                        <p style="padding-left: 5px;">
+                          Banque: *************** <br>
+                          No de compte: ***** ********************** <br>
+                          RIB: ****** <br>
+                          IBAN: ********
                         </p>
                       </div>
                     </div>
@@ -271,13 +295,16 @@
                     <div class="invoice-total-card">
                       <div class="invoice-total-box">
                         <div class="invoice-total-inner">
-                          <p>Somme :<span>{{invoiceData?.payment}} FCFA</span></p>
-                          <p>Taxes service en ligne ({{invoiceData?.taxes}}%)
-                            :<span>{{invoiceData?.taxesAmount}} FCFA</span></p>
-                        </div>
+                          <br>
+                          <p>Somme :<span>{{invoiceData?.payment}} {{invoiceData?.currency}}</span></p>
+                          <p *ngIf="invoiceData?.ir">IR (5,5%)
+                            :<span> {{(invoiceData?.payment * 5.5)/100}} {{invoiceData?.currency}}</span></p>
+                          <p *ngIf="invoiceData?.yn">Frais de payment en ligne (2%)
+                            :<span>{{(invoiceData?.payment * 2)/100}} {{invoiceData?.currency}}</span></p>
+                        </div><br><br>
                         <div class="invoice-total-footer">
-                          <h4>Montant total <span>{{invoiceData?.paymentWithTaxes}}
-                              FCFA</span>
+                          <h4>Montant total <span>{{finalPayment}}
+                              {{invoiceData?.currency}}</span>
                           </h4>
                         </div>
                       </div>
@@ -301,7 +328,7 @@
                         <!-- <img class="img-fluid d-inline-block" src="{{invoiceParamsData?.image}}"
                                                   alt="sign">
                                               <span class="d-block">{{invoiceParamsData?.nameSignature}}</span> -->
-                        <p style="color: #14660a; font-size: 2em;" *ngIf="invoiceData?.status === 'Completed'">
+                        <p style="color: #14660a; font-size: 2em;" *ngIf="transactionData?.status === 'Completed'">
                           <b>PAYED</b>
                         </p>
                         <p style="color: #9f6d00; font-size: 2em;" *ngIf="invoiceData?.status === 'Pending'">

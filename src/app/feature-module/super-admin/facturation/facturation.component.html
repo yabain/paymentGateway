@@ -131,7 +131,7 @@
             <thead class="thead-light">
               <tr>
                 <th Class="no-sort">#</th>
-                <th >Id</th>
+                <!-- <th >Id</th> -->
                 <th >Nom</th>
                 <th >Email</th>
                 <th >Téléphone</th>
@@ -142,15 +142,16 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let invoice of tableData; let i = index">
-                <td>{{ i + 1 }}</td>
+              <tr *ngFor="let invoice of tableData; let i = index" (click)="copyToClipboard(invoice.id)">
+                <!-- <td>{{ i + 1 }}</td> -->
                 <td>{{ invoice.id}}</td>
                 <td>{{ invoice.name}}</td>
                 <td>{{ invoice.email}}</td>
                 <td>{{ invoice.phone }}</td>
                 <td>{{ invoice.payment}} {{ invoice.currency}}</td>
                 <td>{{ invoice.rest}} {{ invoice.currency}}<td>
-                <td>{{ invoice.status}}</td>
+                  <td *ngIf="invoice.status === false" style="background-color: #4b4b4b46;">{{ invoice.status}}</td>
+                  <td *ngIf="invoice.status === true" style="background-color: #0ee52b46;">{{ invoice.status}}</td>
               </tr>
             </tbody>
           </table>

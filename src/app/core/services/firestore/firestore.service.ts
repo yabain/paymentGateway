@@ -37,6 +37,12 @@ export class FirestoreService {
    */
   create(ref: string, data: any): Promise<void> {
     return this.firestore.doc(ref).set(data)
+      .then(() => console.log(`Document updated at reference: ${ref}`))
+      .catch((error) => console.error(`Error updating document at reference ${ref}:`, error));
+  }
+  
+  update(ref: string, data: any): Promise<void> {
+    return this.firestore.doc(ref).update(data)
       .then(() => console.log(`Document created at reference: ${ref}`))
       .catch((error) => console.error(`Error creating document at reference ${ref}:`, error));
   }

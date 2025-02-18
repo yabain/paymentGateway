@@ -9,129 +9,102 @@
             <p class="account-subtitle">Création de compte</p>
 
             <!-- Form -->
-            <form [formGroup]="form" (ngSubmit)="submit()">
+            <!-- <form [formGroup]="form" (ngSubmit)="submit()">
               <div class="input-block mb-3">
-                <label  htmlFor="label" class="form-control-label">Nom</label>
-                <input id="label" class="form-control" type="text"
-                formControlName="firstName" />
+                <label htmlFor="label" class="form-control-label">Nom</label>
+                <input id="label" class="form-control" type="text" formControlName="firstName" />
               </div>
               <div class="input-block mb-3">
-                <label  htmlFor="label" class="form-control-label">Prénom</label>
-                <input id="label" class="form-control" type="text"
-                formControlName="lastName" />
+                <label htmlFor="label" class="form-control-label">Prénom</label>
+                <input id="label" class="form-control" type="text" formControlName="lastName" />
               </div>
               <div class="input-block mb-3">
                 <label htmlFor="label" class="form-control-label">Email</label>
-                <input id="label"
-                  class="form-control"
-                  type="text"
-                  formControlName="email"
-                  id="email"
-                  [ngClass]="{
+                <input id="label" class="form-control" type="text" formControlName="email" id="email" [ngClass]="{
                     'is-invalid': f['email'].touched && f['email'].invalid
-                  }"
-                  />
-                  @if (f['email'].touched && f['email'].invalid) {
-                    <div
-                      class="invalid-feedback"
-                      >
-                      @if (f['email'].errors && f['email'].errors['required']) {
-                        <div
-                          >
-                          Email requis.
-                        </div>
-                      }
-                    </div>
-                  }
-                  @if (CustomControler !== 0) {
-                    <div class="invalid-feedback">
-                      {{ CustomControler }}
-                    </div>
+                  }" />
+                @if (f['email'].touched && f['email'].invalid) {
+                <div class="invalid-feedback">
+                  @if (f['email'].errors && f['email'].errors['required']) {
+                  <div>
+                    Email requis.
+                  </div>
                   }
                 </div>
-                <div class="input-block mb-3">
-                  <label htmlFor="label" class="form-control-label">Mot de passe</label>
-                  <input id="label"
-                    class="form-control"
-                    type="password"
-                    formControlName="password"
-                    id="password"
+                }
+                @if (CustomControler !== 0) {
+                <div class="invalid-feedback">
+                  {{ CustomControler }}
+                </div>
+                }
+              </div>
+              <div class="input-block mb-3">
+                <label htmlFor="label" class="form-control-label">Mot de passe</label>
+                <input id="label" class="form-control" type="password" formControlName="password" id="password"
                   [ngClass]="{
                     'is-invalid': f['password'].touched && f['password'].invalid
-                  }"
-                    />
-                    @if (f['password'].touched && f['password'].invalid) {
-                      <div
-                        class="invalid-feedback"
-                        >
-                        @if (
-                          f['password'].errors && f['password'].errors['required']
-                          ) {
-                          <div
-                            >
-                            Passe requis.
-                          </div>
-                        }
-                      </div>
-                    }
+                  }" />
+                @if (f['password'].touched && f['password'].invalid) {
+                <div class="invalid-feedback">
+                  @if (
+                  f['password'].errors && f['password'].errors['required']
+                  ) {
+                  <div>
+                    Passe requis.
                   </div>
-                  <div class="input-block mb-3">
-                    <label htmlFor="label" class="form-control-label">Confirme le passe</label>
-                    <input id="label"
-                      class="form-control"
-                      type="password"
-                      formControlName="confirmPassword"
-                      id="confirmPassword"
-                  [ngClass]="{
+                  }
+                </div>
+                }
+              </div>
+              <div class="input-block mb-3">
+                <label htmlFor="label" class="form-control-label">Confirme le passe</label>
+                <input id="label" class="form-control" type="password" formControlName="confirmPassword"
+                  id="confirmPassword" [ngClass]="{
                     'is-invalid':
                       f['confirmPassword'].touched &&
                       f['confirmPassword'].invalid
-                  }"
-                      />
-                      @if (
-                        f['confirmPassword'].touched && f['confirmPassword'].invalid
-                        ) {
-                        <div
-                          class="invalid-feedback"
-                          >
-                          @if (
-                            f['confirmPassword'].errors &&
-                            f['confirmPassword'].errors['required']
-                            ) {
-                            <div
-                              >
-                              Champ requis.
-                            </div>
-                          }
-                        </div>
-                      }
-                      @if (isValidConfirmPassword) {
-                        <div class="invalid-feedback">
-                          Le passe ne correspond pas
-                        </div>
-                      }
-                    </div>
-
-                    <div class="input-block mb-3 mb-0">
-                      <button [disabled]="form.invalid" class="btn btn-lg btn-block btn-primary w-100" type="submit"
-                        *ngIf="!isLoading">
-                        S'enregistrer
-                      </button>
-                      <button [disabled]="form.invalid" class="btn btn-lg btn-block btn-light w-100" type="submit"
-                        disabled *ngIf="isLoading">
-                        <img src="assets/img/new/loader.gif" width="30px" alt="">
-                      </button>
-                    </div>
-                  </form>
-                  <!-- /Form -->
-
-                  <div class="text-center dont-have">
-                    Vous avez déjà un compte ? <a [routerLink]="routes.login">connexion</a>
+                  }" />
+                @if (
+                f['confirmPassword'].touched && f['confirmPassword'].invalid
+                ) {
+                <div class="invalid-feedback">
+                  @if (
+                  f['confirmPassword'].errors &&
+                  f['confirmPassword'].errors['required']
+                  ) {
+                  <div>
+                    Champ requis.
                   </div>
+                  }
                 </div>
+                }
+                @if (isValidConfirmPassword) {
+                <div class="invalid-feedback">
+                  Le passe ne correspond pas
+                </div>
+                }
               </div>
+
+              <div class="input-block mb-3 mb-0">
+                <button [disabled]="form.invalid" class="btn btn-lg btn-block btn-primary w-100" type="submit"
+                  *ngIf="!isLoading">
+                  S'enregistrer
+                </button>
+                <button [disabled]="form.invalid" class="btn btn-lg btn-block btn-light w-100" type="submit" disabled
+                  *ngIf="isLoading">
+                  <img src="assets/img/new/loader.gif" width="30px" alt="">
+                </button>
+              </div>
+            </form> -->
+            <!-- /Form -->
+
+            <div class="text-center dont-have">
+              Vous avez déjà un compte ? <a [routerLink]="routes.login">connexion</a>
             </div>
           </div>
         </div>
       </div>
-      <!-- /Main Wrapper -->
+    </div>
+  </div>
+</div>
+<!-- /Main Wrapper -->

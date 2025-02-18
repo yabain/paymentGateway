@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, from, map, Observable, switchMap, take } from 'rxjs';
+import { BehaviorSubject, catchError, from, map, Observable, of, switchMap, take } from 'rxjs';
 import { FirestoreService } from '../firestore/firestore.service';
 import { environment } from 'src/environments/environment';
 import { StorageService } from '../storage/storage.service';
@@ -25,6 +25,11 @@ export class FacturationService {
         // .pipe(take(1))
     }
 
+    getTransactionsList(invoiceId: string): Observable<any> {
+        return this.firestore.read(`transactions/${invoiceId}`)
+        // .pipe(take(1))
+    }
+
     getAllInvoiceData(): Observable<any> {
         return this.firestore.getDocuments(`invoices`)
             .pipe(take(1))
@@ -33,6 +38,15 @@ export class FacturationService {
     creatInvoice(invoiceData: any): Observable<any> {
         invoiceData.id = this.generateId();
         return from(this.firestore.create(`invoices/${invoiceData.id}`, invoiceData))
+            .pipe(
+                map(() => {
+                    return { success: true, message: 'Votre facture a bien été créé' }; // Emit the user data
+                })
+            );
+    }
+
+    updateInvoice(invoiceData: any): Observable<any> {
+        return from(this.firestore.update(`invoices/${invoiceData.id}`, invoiceData))
             .pipe(
                 map(() => {
                     return { success: true, message: 'Votre facture a bien été créé' }; // Emit the user data
@@ -70,74 +84,136 @@ export class FacturationService {
         return s;
     }
 
-    checkTransactionStatus(invoiceData: any) {
-        let token = invoiceData.ref.token;
-        //    console.log("Token:", token);
+    checkTransactionStatus(invoiceData: any): Observable<any> {
+        return new Observable((observer) => {
+            let token = invoiceData.ref.token;
+            console.log("Token:", token);
 
-        this.paymentService.getPaymentStatus(token)
-            .subscribe({
+            this.paymentService.getPaymentStatus(token).subscribe({
                 next: (response) => {
-                    //    console.log('Transaction status:', response);
                     if (response) {
-                        // this.chekStatus(response, invoiceData.payment);
+                        // Émettre la réponse pour les souscripteurs
+                        observer.next(response);
+
+                        // Appeler la méthode pour vérifier le statut
+                        //   this.chekStatus(response, invoiceData.payment);
                     } else {
                         console.error('Invalid response');
-                        // this.backClicked();
+                        observer.error('Invalid response'); // Émettre une erreur
+                        //   this.backClicked();
                     }
                 },
                 error: (err) => {
                     console.error('Error:', err);
-                    //   this.backClicked();
+                    observer.error(err); // Émettre une erreur
+                    // this.backClicked();
                 },
                 complete: () => {
-                    // this.loadingInvoice = false; // Assurez-vous de réinitialiser cet état
+                    // this.loadingInvoice = false; // Réinitialiser l'état
+                    observer.complete(); // Indiquer que l'Observable est terminé
                 },
             });
+        });
     }
 
 
     /**
      * Manage transaction success status.
      */
-    handleSuccessfulRequest(res: any, transactionData: any) {
-        transactionData.ref = { ref: res.data.ref, token: res.data.token };
+    handleSuccessfulRequest(transactionData: any, res: any): Promise<any> {
+        // Vérification de res et res.data
+        if (!res || !res.data) {
+            console.error('Données de réponse invalides:', res);
+            this.toastService.error("Données de réponse invalides", "Erreur");
+            return Promise.reject("Données de réponse invalides");
+        }
+
+        console.log('Données de réponse Ici ici:', res);
+        // Ajout des références
+        if (!transactionData.ref) {
+            transactionData.ref = { ref: res.data.ref, token: res.data.token };
+        }
 
         if (res.data.state === 'financial_transaction_pending') {
-            transactionData.status = 'Pending'
-            // Save invoice's data to Firebase
-            this.firestore.addObjectToField(`invoices/${transactionData.invoiceId}`, transactionData.id, transactionData)
+            transactionData.status = 'Pending';
+            console.log("Données finales de transaction à sauvegarder: ", transactionData);
+
+            // Sauvegarde dans Firebase
+            return this.firestore.addObjectToField(`transactions/${transactionData.invoiceId}`, transactionData.id, transactionData)
                 .then(() => {
-                       console.log('Le formulaire 1: ', transactionData);
-                    // this.toastService.presentToast('Veuillez confirmer la transaction sur votre mobile.', 'top', 'info');
-                    this.toastService.info('Veuillez confirmer le payment sur votre mobile', 'Transaction initiée');
+                    console.log('Le formulaire a bien été enregistré:', transactionData);
+                    let response: any = { status: 'Pending', data: transactionData };
+                    // this.toastService.info('Veuillez confirmer le paiement sur votre mobile', 'Transaction initiée');
+                    return Promise.resolve(response);
                 })
-        } else if (res.data.state === 'financial_transaction_error') {
-            // Gestion des erreurs spécifiques de la transaction
-            this.handleTransactionStateError(res.data, transactionData);
-        } else {
-            this.toastService.error("Une erreur inconnue s'est produite", 'Erreur');
-            return
+                .catch((error) => {
+                    console.error('Erreur lors de la sauvegarde des données:', error);
+                    this.toastService.error('Erreur lors de la sauvegarde des données', 'Erreur');
+                    return Promise.reject({ status: 'Error', data: transactionData });
+                });
         }
+
+        if (res.data.state === 'financial_transaction_success') {
+            transactionData.status = 'Completed';
+            console.log("Données finales de transaction Completed à sauvegarder: ", transactionData);
+
+            // Sauvegarde dans Firebase
+            return this.firestore.addObjectToField(`transactions/${transactionData.invoiceId}`, transactionData.id, transactionData)
+                .then(() => {
+                    let response: any = { status: 'Completed', data: transactionData };
+                    // this.toastService.success('Veuillez confirmer le paiement sur votre mobile', 'Transaction initiée');
+                    return Promise.resolve(response);
+                })
+                .catch((error) => {
+                    console.error('Erreur lors de la sauvegarde des données Success:', error);
+                    this.toastService.error('Erreur lors de la sauvegarde des données', 'Erreur');
+                    return Promise.reject({ status: 'Error', data: transactionData });
+                });
+        }
+
+        if (res.data.state === 'financial_transaction_error') {
+            console.log('Erreur financière détectée');
+            this.handleTransactionStateError(transactionData, res);
+            return Promise.resolve({ status: 'Error', data: transactionData });
+        }
+
+        console.log('Erreur inconnue détectée');
+        this.handleTransactionStateError(transactionData, res);
+        this.toastService.error("Une erreur inconnue s'est produite", 'Erreur');
+        return Promise.reject({ status: 'Error', data: transactionData });
     }
+
 
     /**
      * Manage transaction errors messages.
      */
-    private handleTransactionStateError(errorData, val) {
-        val.status = "Rejected";
+    handleTransactionStateError(transactionData, res): Promise<any> {
+        transactionData.status = "Rejected";
+        transactionData.ref = { ref: res.data.ref, token: res.data.token };
 
         const errorMessages: { [key: number]: string } = {
-            '-201': 'Payer account not found',
+            '-201': 'Compte Orage Money introuvable',
             '-202': 'Receiver account not found',
-            '-200': 'Unknown error',
-            '-204': 'The balance of the payer account is insufficient',
-            '-205': 'Payment method not found',
-            '-206': 'Invalid amount',
-            '-207': 'Waiting for a long time error',
-            '-208': 'Payment rejected by the payer',
+            '-200': 'Erreur inconnue',
+            '-204': 'Le solde du compte OM payeur insufisant, veuillez recharger votre compte OM',
+            '-205': 'Méthode de paiment invalide',
+            '-206': 'Montant invalide',
+            '-207': 'Longue attente serveur',
+            '-208': 'La transaction a été rejeté par le payeur',
         };
-        // this.statusErrorMsg.message = val.statusErrorMsg = errorMessages[errorData.error] || "Unknown code error";
-        // this.toastService.presentToast(val.statusErrorMsg, 'top', 'danger');
+
+        transactionData.statusMsg = errorMessages[res.data.error] || "Erreur inconnue";
+        this.toastService.error(transactionData.statusMsg, 'Erreur', { timeOut: 10000 });
+
+        return this.firestore.addObjectToField(`transactions/${transactionData.invoiceId}`, transactionData.id, transactionData)
+            .then(() => {
+                console.log('Le formulaire a bien été sauvegardé: ', transactionData);
+                return { status: true, data: transactionData }; // Retourne une Promesse
+            })
+            .catch((error) => {
+                console.error('Erreur lors de la sauvegarde des données:', error);
+                return { status: false, data: transactionData }; // Retourne une Promesse en cas d'erreur
+            });
     }
 
 }

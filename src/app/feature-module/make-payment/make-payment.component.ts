@@ -6,6 +6,7 @@ import { take } from 'rxjs';
 import { AuthService, routes } from 'src/app/core/core.index';
 import { FacturationService } from 'src/app/core/services/facturation/facturation.service';
 import { PaymentService } from 'src/app/core/services/payment/payment.service';
+import { PrintService } from 'src/app/core/services/print/print.service';
 import { StorageService } from 'src/app/core/services/storage/storage.service';
 import { UserService } from 'src/app/core/services/user/user.service';
 
@@ -17,9 +18,8 @@ import { UserService } from 'src/app/core/services/user/user.service';
 export class MakePaymentComponent {
   isDisabled: boolean = false;
   loadingData: boolean = true;
-  loadingInvoice: boolean = true;
   invoiceData: any;
-  transactionData: any = [];
+  transactionData!: any;
   printing: boolean = false;
   showOrdes: boolean = false;
   invoiceId!: string;
@@ -37,10 +37,8 @@ export class MakePaymentComponent {
     private userService: UserService,
     private route: ActivatedRoute,
     private facturationService: FacturationService,
-    private paymentService: PaymentService
-
-    // private paymentService: PaymentService,
-    // private pdfExportService: PrintService,
+    private paymentService: PaymentService,
+    private pdfExportService: PrintService
   ) {
   }
 
@@ -94,14 +92,45 @@ export class MakePaymentComponent {
           this.name = res.name;
           this.email = res.email;
           this.phone = res.phone;
+          this.getTransactionsList(res.id);
           this.loadingData = false;
           return;
         } else {
-          this.toastService.error('Cette facture n\'est pas dans notre système', 'facture introuvable');
+          this.toastService.error('Cette facture n\'est pas dans notre système', 'Facture introuvable', {
+            timeOut: 10000
+          });
           this.loadingData = false;
           return;
         }
       })
+  }
+
+  getTransactionsList(invoiceId: string) {
+    this.facturationService.getTransactionsList(invoiceId)
+    .pipe(take(1))
+      .subscribe((res: any) => {
+        if(res) res = Object.values(res);
+        console.log('lieste des transactions', res);
+        if (res && this.invoiceData?.status === true) {
+          console.log('la transaction completed 0: ', this.transactionData)
+          this.transactionData = res.filter(e => e.status === 'Completed')[0];
+          console.log('la transaction completed: ', this.transactionData)
+        }
+        else if (res && this.invoiceData.status === false) {
+          if (res.filter(e => e.status === 'Completed')[0]) {
+            this.transactionData = res.filter(e => e.status === 'Completed')[0]
+            console.log('la transaction test: ', this.transactionData)
+            this.updateInvoiceData(this.invoiceData);
+          }
+          else if (res.filter(e => e.status === 'Pending')[0]) {
+            this.transactionData = res.filter(e => e.status === 'Pending')[0]
+            this.check(this.transactionData.ref.token);
+          }
+        }
+        console.log('transactionsData: ', this.transactionData);
+        console.log('paying: ', this.paying);
+      })
+
   }
 
   finalPaymentCalculation(invoiceData: any) {
@@ -113,87 +142,99 @@ export class MakePaymentComponent {
     if (invoiceData.yn) {
       yn = ((invoiceData.payment * 2) / 100);
     }
-    this.finalPayment = Number(invoiceData.payment) + ir + yn;
+    this.finalPayment = this.aroundValue(Number(invoiceData.payment) + ir + yn);
   }
 
   submit() {
+    this.transactionData = [];
     console.log('Invoice data: ', this.form.value);
 
     // Form verification
     if (this.verifyForm() === false) return;
 
     let transaction = { ...this.form.value };
+    console.log('transaction data: 0', transaction);
     transaction.invoiceId = this.invoiceData.id;
-    transaction.id = this.facturationService.generateId();
+    transaction.id = this.facturationService.generateId('TR');
     transaction.date = new Date();
     transaction.payment = this.aroundValue(Number(this.finalPayment))
     this.transactionData = transaction;
 
     console.log('transaction data: ', transaction);
+    console.log('this.transaction data: ', this.transactionData);
 
     this.paying = true;
     // return
     this.paymentService.getPaymentGatewayKey()
-    .subscribe((res: string) => {
-      if (res){
-        this.paymentService.deposit(this.transactionData, res)
-        .pipe(take(1))
-        .subscribe(res => {
-             console.log('Ici res du backend: ', res);
+      .subscribe((key: string) => {
+        if (key) {
+          this.paymentService.deposit(this.transactionData, key)
+            .pipe(take(1))
+            .subscribe(res => {
+              console.log('Ici res du backend: ', res);
 
-          if (res.statusCode === 201) {
-            // Manage success request
-            this.facturationService.handleSuccessfulRequest(res, this.transactionData);
-          } else {
-            // Gestion des erreurs liées au code de statut
-            // this.handleTransactionErrors(res.statusCode);
-          }
-          this.paying = false;
-        },
-          error => {
-              this.toastService.error('Impossible d\'effectuer le payment', 'Erreur');
-            console.error('Erreur pendant le dépôt:', error);
-            this.paying = false;
-          }
-        );
-      }
-    })
+              if (res.statusCode === 201) {
+                // Manage success request
+                this.facturationService.handleSuccessfulRequest(this.transactionData, res)
+                  .then((response: any) => {
+                    this.transactionData = response.data;
+                    if (response.status === 'Pending') {
+                      this.chekStatus(res);
+                    }
+                    else {
+                      this.facturationService.handleTransactionStateError(this.transactionData, res)
+                    }
+                  })
+              } else {
+                // Gestion des erreurs liées au code de statut
+                this.facturationService.handleTransactionStateError(this.transactionData, res);
+              }
+              this.paying = false;
+            },
+              error => {
+                this.toastService.error('Impossible d\'effectuer le payment', 'Erreur');
+                console.error('Erreur pendant le dépôt:', error);
+                this.paying = false;
+              }
+            );
+        }
+      })
   }
 
-  navigateToOrders(): void { this.router.navigate(['/tabs/orders']); }
 
-  chekStatus(res: any, payment?: number) {
+  chekStatus(res: any) {
+    console.log('le test de res 000: ', res);
     switch (res.data.state) {
       case 'financial_transaction_pending':
-        // Assurez-vous de ne pas relancer le polling si la transaction est déjà en traitement
-        if (!this.isProcessingSuccess) {
-          this.invoiceData.status = 'Pending';
-          setTimeout(() => {
-            // this.getPaymentStatus(this.invoiceData);
-          }, 3000);
-        }
+        this.transactionData.status = 'Pending';
+        setTimeout(() => {
+          console.log('retest');
+          this.check(this.transactionData.ref.token);
+        }, 5000);
         break;
 
       case 'financial_transaction_success':
-        if (!this.isProcessingSuccess) {
-          this.invoiceData.status = 'Completed';
-          this.updateInvoiceStatus('Completed');
-        }
+        console.log('test matin: ', res);
+        this.updateTransactionStatus('Completed', res);
+        this.exportToPdf();
+        this.updateInvoiceData(this.invoiceData);
+        this.isProcessingSuccess = true;
         break;
 
       case 'financial_transaction_error':
         const errorMessages: { [key: number]: string } = {
-          '-201': 'Payer account not found',
+          '-201': 'Compte Orage Money introuvable',
           '-202': 'Receiver account not found',
-          '-200': 'Unknown error',
-          '-204': 'The balance of the payer account is insufficient',
-          '-205': 'Payment method not found',
-          '-206': 'Invalid amount',
-          '-207': 'Waiting for a long time error',
-          '-208': 'Payment rejected by the payer',
+          '-200': 'Erreur inconnue',
+          '-204': 'Le solde du compte OM payeur insufisant, veuillez recharger votre compte OM',
+          '-205': 'Méthode de paiment invalide',
+          '-206': 'Montant invalide',
+          '-207': 'Longue attente serveur',
+          '-208': 'La transaction a été rejeté par le payeur',
         };
         const errorMsg = errorMessages[res.data.error] || 'Erreur inconnue';
-        this.updateInvoiceStatus('Rejected', errorMsg);
+        // this.isProcessingSuccess = false;
+        this.updateTransactionStatus('Rejected', res, errorMsg);
         break;
 
       default:
@@ -201,12 +242,37 @@ export class MakePaymentComponent {
     }
   }
 
-  updateInvoiceStatus(status: string, errorMsg?: string) {
-    this.invoiceData.status = status;
+  check(token) {
+    console.log('Dans le check, tokrn: ', token);
+    this.paymentService.getPaymentStatus(token)
+      .subscribe(response => {
+        console.log('le test de res 111: ', response);
+        if (response && response.data.state === 'financial_transaction_pending') {
+          this.chekStatus(response);
+        } else {
+          this.chekStatus(response);
+          this.facturationService.handleSuccessfulRequest(this.transactionData, response)
+        };
+      })
+  }
+
+  updateInvoiceData(invoiceData) {
+    console.log('update InvoiceData: ', invoiceData);
+    invoiceData.name = this.transactionData.name;
+    invoiceData.phone = this.transactionData.phone;
+    invoiceData.email = this.transactionData.email;
+    invoiceData.status = true;
+    this.facturationService.updateInvoice(invoiceData);
+  }
+
+  updateTransactionStatus(status: string, res, errorMsg?: string) {
+    this.transactionData.status = status;
+    console.log('le test de res: ', res);
     if (errorMsg) {
-      this.invoiceData.statusErrorMsg = errorMsg;
+      this.transactionData.statusMsg = errorMsg;
     }
-  };
+    this.facturationService.handleSuccessfulRequest(this.transactionData, res)
+  }
 
   aroundValue(val: number) {
     return Math.ceil(val);
@@ -233,10 +299,10 @@ export class MakePaymentComponent {
       return false;
     }
 
-    if (this.form.value.payment < 100) {
-        this.toastService.warning('Le montant minimale est de 100', 'Erreur form');
-      return false;
-    }
+    // if (this.form.value.payment < 10) {
+    //   this.toastService.warning('Le montant minimale est de 10', 'Erreur form');
+    //   return false;
+    // }
 
     // General form validation
     if (!this.form.valid) {
@@ -260,5 +326,21 @@ export class MakePaymentComponent {
     // Check if string start with 69 or 655 to 659
     const startsWithValidPrefix = /^69|65[5-9]/.test(input);
     return startsWithValidPrefix;
+  }
+
+
+  public exportToPdf(): void {
+    // console.log('exportation de pdf');
+    if (this.invoiceData) {
+      this.toastService.info("Téléchargement en cours...", "PDF", {
+        timeOut: 10000,
+        closeButton: true,
+      });
+      this.printing = true;
+      setTimeout(() => {
+        this.pdfExportService.generatePdf('printableView', 'Recu_' + this.transactionData.id + '.pdf');
+        // this.printing = false;
+      }, 2000);
+    }
   }
 }

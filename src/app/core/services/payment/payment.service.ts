@@ -24,7 +24,7 @@ export class PaymentService {
     // console.log('datat: ', paymentData);
     const depositEndPoint = environment.apiUrl + "/payment/pay";
     const depositData = {
-      "amount": 5, //paymentData.payment,
+      "amount": paymentData.payment,
       "type": "deposit",
       "paymentMode": "ORANGE",
       "moneyCode": "XAF",
@@ -77,12 +77,12 @@ export class PaymentService {
     const updateInvoiceStatus = (status: string, errorMsg?: string) => {
       invoiceData.status = status;
       if (errorMsg) {
-        invoiceData.statusErrorMsg = errorMsg;
+        invoiceData.statusMsg = errorMsg;
       }
       this.firestore.addObjectToMap(`invoices/${userId}`, invoiceData.eventId, invoiceData.id, invoiceData)
         .then(() => {
           if (errorMsg) {
-            this.toastService.error(errorMsg, 'danger');
+            this.toastService.error(errorMsg, 'danger', {timeOut: 10000});
           } else if (status === 'Completed') {
             this.toastService.success(res, 'success');
           }
@@ -110,16 +110,16 @@ export class PaymentService {
       case 'financial_transaction_error':
 
         const errorMessages: { [key: number]: string } = {
-          '-201': 'Payer account not found',
+          '-201': 'Compte Orage Money introuvable',
           '-202': 'Receiver account not found',
-          '-200': 'Unknown error',
-          '-204': 'The balance of the payer account is insufficient',
-          '-205': 'Payment method not found',
-          '-206': 'Invalid amount',
-          '-207': 'Waiting for a long time error',
-          '-208': 'Payment rejected by the payer',
+          '-200': 'Erreur inconnue',
+          '-204': 'Le solde du compte OM payeur insufisant, veuillez recharger votre compte OM',
+          '-205': 'Méthode de paiment invalide',
+          '-206': 'Montant invalide',
+          '-207': 'Longue attente serveur',
+          '-208': 'La transaction a été rejeté par le payeur',
         };
-        const errorMsg = errorMessages[res.data.error] || 'Unknown code error';
+        const errorMsg = errorMessages[res.data.error] || 'Erreur inconnue';
         updateInvoiceStatus('Rejected', errorMsg);
 
         break;
