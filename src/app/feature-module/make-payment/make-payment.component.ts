@@ -12,6 +12,7 @@ import { PrintService } from 'src/app/core/services/print/print.service';
   templateUrl: './make-payment.component.html',
   styleUrls: ['./make-payment.component.scss'],
 })
+
 export class MakePaymentComponent {
   isDisabled: boolean = false;
   loadingData: boolean = true;
