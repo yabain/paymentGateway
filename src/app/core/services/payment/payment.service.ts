@@ -12,7 +12,6 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class PaymentService {
 
-
   constructor(
     private http: HttpClient,
     private firestore: FirestoreService,
@@ -71,7 +70,6 @@ export class PaymentService {
       })
     );
   }
-
 
   chekStatus(res: any, userId: string, invoiceData: any) {
     const updateInvoiceStatus = (status: string, errorMsg?: string) => {
