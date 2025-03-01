@@ -106,7 +106,6 @@ export class PaymentService {
         break;
 
       case 'financial_transaction_error':
-
         const errorMessages: { [key: number]: string } = {
           '-201': 'Compte Orage Money introuvable',
           '-202': 'Receiver account not found',
