@@ -144,5 +144,4 @@ export class PaymentService {
     return this.firestore.readField(`systemConfig/config`, `paymentGatwayAPIKey`)
       .pipe(take(1));
   }
-  
 }
