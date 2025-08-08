@@ -105,7 +105,7 @@ export class FacturationComponent implements OnInit {
   }
 
   copyToClipboard(text: string): void {
-    let url = 'https://payment.yaba-in.com/payment/make-payment/' + text;
+    let url = 'https://payment.payments.digikuntz.com/payment/make-payment/' + text;
     navigator.clipboard.writeText(url)
       .then(() => {
         this.toastr.info('Le lien de paiement de la facture a été copié', 'Copié');

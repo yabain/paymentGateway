@@ -11,5 +11,5 @@ export const environment = {
 
     },
 
-    apiUrl: 'https://ynkap-api.yaba-in.com',
+    apiUrl: 'https://ynkap-api.payments.digikuntz.com',
 };
