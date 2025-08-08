@@ -359,10 +359,9 @@ const routes: Routes = [
         (m) => m.AdminRegisterModule
       ),
   },
-
   {
     path: '**',
-    redirectTo: 'error/404',
+    redirectTo: '',
   },
 ];
 

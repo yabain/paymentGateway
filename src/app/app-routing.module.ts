@@ -21,7 +21,12 @@ const routes: Routes = [
         (m) => m.FeatureModuleModule
       ),
   },
-  
+  {
+    path: '**',
+    pathMatch: 'full',
+    redirectTo: 'login',
+  },
+
 
 ];
 
