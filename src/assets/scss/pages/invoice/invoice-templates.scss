@@ -28,7 +28,7 @@
                 background: #EADDFF;
                 cursor: pointer;
                 i {
-                    color: #7539FF;
+                    color: #021d66;
                 }
             }
         }
@@ -82,7 +82,7 @@
                     @extend %flex-align-center;
                     &:hover {
                         i {
-                            color: #7539FF;
+                            color: #021d66;
                         }
                     }
                     i {
@@ -163,7 +163,7 @@
 .preview-boxs {
     @extend %display-flex-center-between;
     a {
-        color: #7539FF;
+        color: #021d66;
         font-weight: 600;
     }
 }

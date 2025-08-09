@@ -474,17 +474,17 @@ mat-tooltip-component .mdc-tooltip--shown .mdc-tooltip__surface-animation {
 }
 
 .btn-white:hover {
-  background-color: #7539ff;
-  border-color: #7539ff;
+  background-color: #021d66;
+  border-color: #021d66;
   color: #fff;
-  box-shadow: inset 0 50px 0 0 #7539FF;
+  box-shadow: inset 0 50px 0 0 #021d66;
 }
 
 .btn-white:focus:not(:focus-visible) {
   outline: 0;
   background-color: #fff;
   border-color: #e7eaf3;
-  color: #7539ff;
+  color: #021d66;
 }
 
 .formcal {
@@ -641,7 +641,7 @@ mat-option mat-pseudo-checkbox.mat-pseudo-checkbox {
 }
 
 mat-option.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled):not(.mat-mdc-option-multiple) {
-  background-color: #7539ff;
+  background-color: #021d66;
 }
 
 mat-option.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) .mdc-list-item__primary-text {
@@ -650,7 +650,7 @@ mat-option.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) 
 
 mat-option.mat-mdc-option:focus.mdc-list-item,
 mat-option.mat-mdc-option.mat-mdc-option-active.mdc-list-item {
-  background-color: #7539ff;
+  background-color: #021d66;
   min-height: 35px;
 }
 
@@ -673,7 +673,7 @@ mat-option.mat-mdc-option.mdc-list-item {
 
 .mdc-list-item--selected,
 .mat-mdc-option:hover {
-  background: #7539ff;
+  background: #021d66;
   color: #fff;
 }
 

@@ -23,7 +23,7 @@
             .inv-header-right {
                 h2 {
                     font-family: 'Circular Std';
-                    color: #7539FF;
+                    color: #021d66;
                     font-size: 24px;
                     font-weight: 700;
                 }
@@ -357,7 +357,7 @@
             margin: 0;
         }
         a {
-            color: #7539FF;
+            color: #021d66;
             font-size: $__font__size__18;
             font-weight: 500;
             @include respond-below(custom1399) {

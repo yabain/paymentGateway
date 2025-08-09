@@ -122,7 +122,7 @@ export class DashboardComponent {
         },
       },
       fill: {
-        colors: ['#7539FF'],
+        colors: ['#021d66'],
       },
     };
     this.chartOptions2 = {

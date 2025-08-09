@@ -56,7 +56,7 @@ export class DashboardComponent {
         {
           name: 'Received',
           data: [70, 150, 80, 180, 150, 175, 201, 60, 200, 120, 190, 160, 50],
-          colors: ['#7539FF'],
+          colors: ['#021d66'],
         },
 
         {
