@@ -29,6 +29,40 @@
   <link rel="stylesheet" href="assets/css/owl.css">
   <link rel="stylesheet" href="assets/css/style.css">
 
+<style>
+    .loader {
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #fff;
+        border-right: 3px solid #fff;
+        border-radius: 50%;
+        width: 16px;
+        height: 16px;
+        animation: spin 0.8s linear infinite;
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 8px;
+    }
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    .notification {
+        margin-top: 10px;
+        padding: 8px;
+        border-radius: 4px;
+        font-size: 14px;
+        display: none;
+        text-align: center;
+    }
+    .success {
+        background: #d4edda;
+        color: #155724;
+    }
+    .error {
+        background: #f8d7da;
+        color: #721c24;
+    }
+</style>
 </head>
 
 <body>
@@ -568,15 +602,15 @@
           </div>
         </div>
         <div class="col-lg-6 offset-lg-3">
-          <form id="search" action="#" method="GET">
+          <form id="search">
             <div class="row">
               <div class="col-lg-6 col-sm-6">
                 <fieldset>
-                  <input type="text" name="fullname" class="fullname" placeholder="Full name..." autocomplete="on"
+                  <input type="text" id="name" name="name" class="fullname" placeholder="Full name..." autocomplete="on"
                     required>
                 </fieldset>
                 <fieldset>
-                  <input type="address" name="address" class="email" placeholder="Email Address..." autocomplete="on"
+                  <input type="email" id="email" name="email" class="email" placeholder="Email Address..." autocomplete="on"
                     required>
                 </fieldset>
               </div>
@@ -585,7 +619,8 @@
                   <span style=" color: #fff;">We will only send you major updates to our service.</span>
                 </fieldset>
                 <fieldset>
-                  <button type="submit" class="main-button">Subscribe Now <i class="fa fa-angle-right"></i></button>
+                  <button type="submit" class="main-button" id="submitBtn">Subscribe Now <i class="fa fa-angle-right"></i></button>
+                  <div id="notification" class="notification"></div>
                 </fieldset>
               </div>
             </div>
@@ -644,6 +679,57 @@
   </footer>
 
 
+<script>
+document.getElementById("search").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const btn = document.getElementById("submitBtn");
+    const notif = document.getElementById("notification");
+
+    // Reset notification
+    notif.style.display = "none";
+    notif.textContent = "";
+    notif.className = "notification";
+
+    // Disable button and show loader
+    btn.disabled = true;
+    btn.innerHTML = `Subscribing... <span class="loader"></span>`;
+
+    const data = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value
+    };
+
+    try {
+        const res = await fetch("http://localhost:3000/newsletter/new", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        });
+
+        const result = await res.json(); // Attend que le backend renvoie { "success": true/false }
+        console.log("result: ", result);
+
+        if (result.status === true || result.success === true) {
+            notif.textContent = "✅ Successful subscription to our newsletter !";
+            notif.classList.add("success");
+        } else {
+            notif.textContent = "❌ Subscription to our newsletter failed";
+            notif.classList.add("error");
+        }
+    } catch (error) {
+        notif.textContent = "⚠️ Erreur de connexion au serveur.";
+        notif.classList.add("error");
+    }
+
+    // Show notification
+    notif.style.display = "block";
+
+    // Restore button
+    btn.disabled = false;
+    btn.textContent = "Subscribe";
+});
+</script>
   <!-- Scripts -->
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
