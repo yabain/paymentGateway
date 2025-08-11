@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consentement - Digikuntz Payments</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #021d66;
+            --secondary-color: #333834;
+            --accent-color: #FF6584;
+            --light-color: #F8F9FA;
+            --dark-color: #212529;
+            --gray-color: #6C757D;
+            --success-color: #28A745;
+            --warning-color: #FFC107;
+            --danger-color: #DC3545;
+            --border-radius: 12px;
+            --box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: #f5f7ff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-top: 20px;
+        }
+
+        .logo {
+            max-width: 150px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--gray-color);
+            margin-bottom: 30px;
+        }
+
+        .consent-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--secondary-color);
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            margin: 25px 0 15px;
+            color: var(--secondary-color);
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        ul, ol {
+            margin-bottom: 20px;
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .highlight {
+            background-color: #021d6617;
+            padding: 15px;
+            border-left: 4px solid var(--primary-color);
+            margin: 20px 0;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        }
+
+        .permission-box {
+            background-color: var(--light-color);
+            border: 1px solid #e0e0e0;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin: 25px 0;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .permission-icon {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-right: 15px;
+            margin-top: 3px;
+        }
+
+        .permission-content {
+            flex: 1;
+        }
+
+        .permission-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .permission-description {
+            color: var(--gray-color);
+            font-size: 0.95rem;
+        }
+
+        .consent-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(108, 99, 255, 0.1);
+        }
+
+        .btn-icon {
+            margin-right: 8px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: var(--gray-color);
+            font-size: 0.9rem;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #e0e0e0;
+            margin-bottom: 30px;
+        }
+
+        .tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            position: relative;
+            font-weight: 600;
+            color: var(--gray-color);
+        }
+
+        .tab.active {
+            color: var(--primary-color);
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--primary-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .checkbox-group {
+            margin: 20px 0;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .checkbox-item input {
+            margin-right: 15px;
+            margin-top: 3px;
+        }
+
+        .checkbox-label {
+            font-weight: 500;
+        }
+
+        .checkbox-description {
+            font-size: 0.9rem;
+            color: var(--gray-color);
+            margin-top: 5px;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .consent-card {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            h3 {
+                font-size: 1.2rem;
+            }
+
+            .permission-box {
+                flex-direction: column;
+            }
+
+            .permission-icon {
+                margin-bottom: 10px;
+            }
+
+            .consent-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+
+            .consent-card {
+                padding: 20px;
+            }
+
+            header {
+                margin-bottom: 20px;
+            }
+
+            .tabs {
+                flex-wrap: wrap;
+            }
+
+            .tab {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="../../../assets/imgs/logo.png" alt="Digikuntz Payments Logo" class="logo">
+            <h1>Gestion des données et préférences utilisateur</h1>
+            <p class="subtitle">Consentement des utilisateurs</p>
+        </header>
+
+        <div class="consent-card">
+            <div class="tabs">
+                <div class="tab active" data-tab="privacy">Politique de Confidentialité</div>
+                <div class="tab" data-tab="terms">Conditions d'Utilisation</div>
+                <div class="tab" data-tab="permissions">Permissions</div>
+            </div>
+
+            <div class="tab-content active" id="privacy-tab">
+                <h2>Politique de Confidentialité de Digikuntz Payments</h2>
+                <p><strong>Date de la dernière mise à jour :</strong> 6 Avril 2025</p>
+
+                <p>La présente Politique de Confidentialité décrit comment Digikuntz Payments (ci-après "nous", "notre" ou "l'Application") collecte, utilise et partage les informations personnelles des utilisateurs (ci-après "vous" ou "utilisateur") de notre application mobile et web.</p>
+
+                <h3>1. Informations que nous collectons :</h3>
+                <p>Nous pouvons collecter les types d'informations suivants :</p>
+
+                <div class="highlight">
+                    <h4>Informations d'identification personnelle (IIP) :</h4>
+                    <ul>
+                        <li>Nom et prénom</li>
+                        <li>Adresse e-mail</li>
+                        <li>Numéro de téléphone</li>
+                        <li>Informations de connexion (nom d'utilisateur et mot de passe crypté)</li>
+                        <li>Informations de profil que vous choisissez de fournir (préférences d'événements)</li>
+                    </ul>
+
+                    <h4>Informations transactionnelles :</h4>
+                    <ul>
+                        <li>Historique des événements auxquels vous avez participé ou pour lesquels vous avez acheté des billets</li>
+                        <li>Informations relatives aux paiements (traitées par des prestataires de services de paiement sécurisés, nous ne stockons pas vos informations de carte de crédit)</li>
+                    </ul>
+
+                    <h4>Informations d'utilisation de l'Application :</h4>
+                    <ul>
+                        <li>Journaux d'accès et d'utilisation</li>
+                        <li>Informations sur les appareils (type d'appareil, système d'exploitation)</li>
+                        <li>Données de navigation dans l'Application</li>
+                        <li>Informations collectées via des cookies et des technologies similaires (pour l'application web)</li>
+                    </ul>
+
+                    <h4>Informations relatives à l'agenda (avec votre consentement explicite) :</h4>
+                    <p>Lorsque vous choisissez d'ajouter un événement à votre Google Agenda, nous accédons aux informations nécessaires (titre, date, heure, lieu, description) pour créer l'événement dans votre agenda.</p>
+                </div>
+
+                <h3>2. Comment nous utilisons vos informations :</h3>
+                <p>Nous utilisons vos informations personnelles pour les finalités suivantes :</p>
+                <ul>
+                    <li><strong>Fournir et gérer l'Application :</strong> Créer et gérer votre compte utilisateur, faciliter votre inscription et votre participation à des événements, traiter vos achats de billets, vous fournir une assistance utilisateur.</li>
+                    <li><strong>Personnaliser votre expérience :</strong> Vous recommander des événements susceptibles de vous intéresser, adapter le contenu de l'Application à vos préférences.</li>
+                    <li><strong>Communiquer avec vous :</strong> Vous envoyer des notifications relatives aux événements auxquels vous êtes inscrit ou qui pourraient vous intéresser (avec votre consentement).</li>
+                    <li><strong>Améliorer l'Application :</strong> Analyser l'utilisation de l'Application pour identifier les points à améliorer, effectuer des recherches et des analyses de données, développer de nouvelles fonctionnalités.</li>
+                    <li><strong>Sécurité et prévention de la fraude :</strong> Protéger votre compte et l'Application contre les accès non autorisés et les activités frauduleuses, appliquer nos Conditions d'Utilisation.</li>
+                </ul>
+
+                <h3>3. Partage de vos informations :</h3>
+                <p>Nous pouvons partager vos informations personnelles avec les catégories de tiers suivantes :</p>
+                <ul>
+                    <li><strong>Organisateurs d'événements :</strong> Lorsque vous vous inscrivez à un événement, nous pouvons partager vos informations (nom, e-mail) avec l'organisateur pour la gestion de l'événement.</li>
+                    <li><strong>Prestataires de services :</strong> Nous faisons appel à des prestataires de services tiers pour nous aider à fournir l'Application.</li>
+                    <li><strong>Autorités légales :</strong> Nous pouvons divulguer vos informations personnelles si la loi l'exige ou en réponse à une demande légale valide.</li>
+                </ul>
+
+                <h3>4. Vos droits en matière de protection des données :</h3>
+                <p>Vous disposez des droits suivants concernant vos informations personnelles :</p>
+                <ul>
+                    <li>Droit d'accès</li>
+                    <li>Droit de rectification</li>
+                    <li>Droit à l'effacement</li>
+                    <li>Droit à la limitation du traitement</li>
+                    <li>Droit d'opposition</li>
+                    <li>Droit à la portabilité des données</li>
+                </ul>
+
+                <div class="highlight">
+                    <p>Pour exercer ces droits ou pour toute question concernant notre politique de confidentialité, veuillez nous contacter à : <a href="mailto:support@digikuntz.com">support@digikuntz.com</a></p>
+                </div>
+            </div>
+
+            <div class="tab-content" id="terms-tab">
+                <h2>Conditions d'Utilisation de Digikuntz Payments</h2>
+                <p><strong>Date de la dernière mise à jour :</strong> 6 Avril 2025</p>
+
+                <p>Les présentes Conditions d'Utilisation régissent votre accès et votre utilisation de l'application mobile et web Digikuntz Payments (ci-après "l'Application"), fournie par Digikuntz Payments. En accédant ou en utilisant l'Application, vous acceptez d'être lié par les présentes Conditions d'Utilisation.</p>
+
+                <h3>1. Acceptation des Conditions :</h3>
+                <p>En utilisant l'Application, vous reconnaissez avoir lu, compris et accepté d'être lié par les présentes Conditions d'Utilisation et notre Politique de Confidentialité. Si vous n'acceptez pas ces conditions, veuillez ne pas utiliser l'Application.</p>
+
+                <h3>2. Utilisation de l'Application :</h3>
+                <ul>
+                    <li>Vous devez utiliser l'Application conformément aux présentes Conditions d'Utilisation et à toutes les lois et réglementations applicables.</li>
+                    <li>Vous êtes responsable de maintenir la confidentialité de vos informations de connexion et de toute activité qui se produit sous votre compte.</li>
+                    <li>Vous vous engagez à ne pas utiliser l'Application à des fins illégales, nuisibles, diffamatoires, obscènes ou autrement répréhensibles.</li>
+                </ul>
+
+                <h3>3. Gestion des Événements et Billetterie :</h3>
+                <ul>
+                    <li>L'Application permet de découvrir, de s'inscrire et d'acheter des billets pour des événements organisés par des tiers.</li>
+                    <li>Nous ne sommes pas les organisateurs des événements listés sur l'Application, sauf indication contraire.</li>
+                    <li>Les informations relatives aux événements (dates, heures, lieux, prix, descriptions) sont fournies par les organisateurs.</li>
+                </ul>
+
+                <h3>4. Authentification des Utilisateurs :</h3>
+                <p>L'Application peut nécessiter une authentification pour accéder à certaines fonctionnalités. Vous êtes responsable de fournir des informations exactes et à jour lors de la création de votre compte.</p>
+
+                <h3>5. Scanner de QR Code/Code-Barres :</h3>
+                <p>La fonctionnalité de scanner de QR code/code-barres est destinée à faciliter l'accès aux événements pour lesquels vous avez un billet valide.</p>
+
+                <h3>6. Intégration de Paiement :</h3>
+                <p>L'Application intègre des services de paiement tiers pour faciliter l'achat de billets. En utilisant ces services, vous acceptez leurs conditions d'utilisation et politiques de confidentialité.</p>
+
+                <h3>7. Système de Notifications :</h3>
+                <p>L'Application peut vous envoyer des notifications relatives aux événements, à votre compte ou à d'autres informations pertinentes. Vous pouvez gérer vos préférences de notification dans les paramètres de l'Application.</p>
+
+                <h3>8. Support Multilingue :</h3>
+                <p>L'Application est disponible en plusieurs langues (français, espagnol, etc.). Nous nous efforçons de fournir des traductions précises, mais des erreurs peuvent survenir.</p>
+
+                <h3>9. Impression de Billets :</h3>
+                <p>L'Application peut vous permettre d'imprimer vos billets. Vous êtes responsable de la conservation et de la présentation de votre billet imprimé lors de l'événement.</p>
+
+                <h3>10. Partage Social :</h3>
+                <p>L'Application peut intégrer des fonctionnalités de partage social pour vous permettre de partager des informations sur les événements sur des plateformes tierces.</p>
+
+                <h3>11. Intégration avec Google Calendar :</h3>
+                <p>Avec votre consentement explicite, l'Application peut s'intégrer à votre Google Calendar pour vous permettre d'ajouter des événements auxquels vous souscrivez.</p>
+
+                <h3>12. Propriété Intellectuelle :</h3>
+                <p>L'Application et son contenu sont protégés par des droits de propriété intellectuelle appartenant à nous ou à nos concédants de licence.</p>
+
+                <h3>13. Limitation de Responsabilité :</h3>
+                <p>L'Application est fournie "telle quelle" et "selon la disponibilité", sans aucune garantie d'aucune sorte, expresse ou implicite.</p>
+
+                <div class="highlight">
+                    <p>Pour toute question concernant nos conditions d'utilisation, veuillez nous contacter à : <a href="mailto:support@digikuntz.com">support@digikuntz.com</a></p>
+                </div>
+            </div>
+
+            <div class="tab-content" id="permissions-tab">
+                <h2>Gestion de vos Permissions</h2>
+                <p>Veuillez consulter et gérer les permissions que vous accordez à Digikuntz Payments :</p>
+
+                <div class="permission-box">
+                    <div class="permission-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="permission-content">
+                        <div class="permission-title">Accès à Google Calendar</div>
+                        <div class="permission-description">
+                            <p>Cette permission permet à Digikuntz Payments d'ajouter des événements à votre Google Calendar lorsque vous choisissez cette option. Nous n'accédons qu'aux informations nécessaires pour créer l'événement (titre, date, heure, lieu, description) et ne lisons pas d'autres événements de votre agenda.</p>
+                            <p><strong>Justification :</strong> Cette fonctionnalité vous permet de centraliser la gestion de vos événements et de bénéficier des rappels de Google Calendar.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="permission-box">
+                    <div class="permission-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div class="permission-content">
+                        <div class="permission-title">Notifications</div>
+                        <div class="permission-description">
+                            <p>Cette permission permet à Digikuntz Payments de vous envoyer des notifications concernant les événements auxquels vous êtes inscrit, les mises à jour importantes et les offres personnalisées.</p>
+                            <p><strong>Justification :</strong> Ces notifications vous aident à ne pas manquer les événements importants et à rester informé des dernières actualités.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="permission-box">
+                    <div class="permission-icon">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    <div class="permission-content">
+                        <div class="permission-title">Accès à l'appareil photo</div>
+                        <div class="permission-description">
+                            <p>Cette permission permet à Digikuntz Payments d'accéder à l'appareil photo de votre appareil pour scanner les codes QR des billets lors des événements.</p>
+                            <p><strong>Justification :</strong> Cette fonctionnalité est essentielle pour faciliter votre accès aux événements en scannant votre billet.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checkbox-group">
+                    <h3>Vos préférences de consentement :</h3>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="consent-marketing" checked>
+                        <div>
+                            <label for="consent-marketing" class="checkbox-label">Recevoir des communications marketing</label>
+                            <p class="checkbox-description">J'accepte de recevoir des e-mails et notifications concernant les offres promotionnelles et les nouveaux événements.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="consent-analytics" checked>
+                        <div>
+                            <label for="consent-analytics" class="checkbox-label">Partager des données d'analyse</label>
+                            <p class="checkbox-description">J'accepte que Digikuntz Payments utilise mes données d'utilisation anonymisées pour améliorer le service.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="consent-calendar">
+                        <div>
+                            <label for="consent-calendar" class="checkbox-label">Accès à Google Calendar</label>
+                            <p class="checkbox-description">J'autorise Digikuntz Payments à ajouter des événements à mon Google Calendar lorsque j'utilise cette fonctionnalité.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="consent-actions">
+                <button class="btn btn-primary">
+                    <i class="fas fa-check-circle btn-icon"></i> Accepter tout
+                </button>
+                <button class="btn btn-outline">
+                    <i class="fas fa-cog btn-icon"></i> Personnaliser
+                </button>
+                <button class="btn btn-outline">
+                    <i class="fas fa-times-circle btn-icon"></i> Refuser tout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Digikuntz Payments. Tous droits réservés.</p>
+        <p>Version 2.1.0</p>
+    </footer>
+
+    <script>
+        // Tab functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.tab');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs and content
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked tab and corresponding content
+                    this.classList.add('active');
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId + '-tab').classList.add('active');
+                });
+            });
+
+            // Consent buttons functionality
+            const acceptAllBtn = document.querySelector('.btn-primary');
+            const customizeBtn = document.querySelectorAll('.btn-outline')[0];
+            const rejectAllBtn = document.querySelectorAll('.btn-outline')[1];
+            
+            acceptAllBtn.addEventListener('click', function() {
+                document.querySelectorAll('.checkbox-item input').forEach(checkbox => {
+                    checkbox.checked = true;
+                });
+                alert('Vous avez accepté toutes les permissions. Merci !');
+            });
+            
+            rejectAllBtn.addEventListener('click', function() {
+                document.querySelectorAll('.checkbox-item input').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                alert('Vous avez refusé toutes les permissions optionnelles. Les fonctionnalités essentielles restent actives.');
+            });
+            
+            customizeBtn.addEventListener('click', function() {
+                document.getElementById('permissions-tab').classList.add('active');
+                document.querySelector('.tab[data-tab="permissions"]').classList.add('active');
+                document.querySelectorAll('.tab:not([data-tab="permissions"])').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                document.querySelectorAll('.tab-content:not(#permissions-tab)').forEach(content => {
+                    content.classList.remove('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

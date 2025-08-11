@@ -707,10 +707,10 @@ document.getElementById("search").addEventListener("submit", async function(e) {
             body: JSON.stringify(data)
         });
 
-        const result = await res.json(); // Attend que le backend renvoie { "success": true/false }
+        const result = await res.json();
         console.log("result: ", result);
 
-        if (result.status === true || result.success === true) {
+        if (result.status === true) {
             notif.textContent = "✅ Successful subscription to our newsletter !";
             notif.classList.add("success");
         } else {

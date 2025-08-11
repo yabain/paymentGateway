@@ -1,0 +1,200 @@
+<div>
+  <div class="container">
+    <header>
+      <img src="assets/ressorces/dk_logo.png" alt="Digikuntz Payments Logo" class="logo">
+      <h1 class="adaptive-primary">{{ 'terms.title' | translate }}</h1>
+      <p class="subtitle">{{ 'terms.subtitle' | translate }}</p>
+    </header>
+
+    <div class="consent-card">
+      <div class="tabs">
+        <div class="tab" [class.active]="isActiveTab('privacy')" (click)="changeTab('privacy')">
+          {{ 'terms.privacyPolicy' | translate }}
+        </div>
+        <div class="tab" [class.active]="isActiveTab('terms')" (click)="changeTab('terms')">
+          {{ 'terms.termsOfUse' | translate }}
+        </div>
+        <div class="tab" [class.active]="isActiveTab('permissions')" (click)="changeTab('permissions')">
+          {{ 'terms.permissions' | translate }}
+        </div>
+      </div>
+
+      <div class="tab-content" [class.active]="isActiveTab('privacy')">
+        <h2>{{ 'terms.privacyPolicyTitle' | translate }}</h2>
+        <p><strong>{{ 'terms.lastUpdate' | translate }}:</strong> {{ 'terms.lastUpdateDate' | translate }}</p>
+
+        <p>{{ 'terms.privacyPolicyIntro' | translate }}</p>
+
+        <h3>{{ 'terms.collectedInfo' | translate }}</h3>
+        <p>{{ 'terms.collectedInfoIntro' | translate }}</p>
+
+        <div class="highlight">
+          <h4>{{ 'terms.personalInfo' | translate }}</h4>
+          <ul>
+            <li>{{ 'terms.name' | translate }}</li>
+            <li>{{ 'terms.email' | translate }}</li>
+            <li>{{ 'terms.phone' | translate }}</li>
+            <li>{{ 'terms.loginInfo' | translate }}</li>
+            <li>{{ 'terms.profileInfo' | translate }}</li>
+          </ul>
+
+          <h4>{{ 'terms.transactionInfo' | translate }}</h4>
+          <ul>
+            <li>{{ 'terms.transactionsHistory' | translate }}</li>
+            <li>{{ 'terms.paymentInfo' | translate }}</li>
+          </ul>
+
+          <h4>{{ 'terms.usageInfo' | translate }}</h4>
+          <ul>
+            <li>{{ 'terms.accessLogs' | translate }}</li>
+            <li>{{ 'terms.deviceInfo' | translate }}</li>
+            <li>{{ 'terms.navigationData' | translate }}</li>
+            <li>{{ 'terms.cookiesInfo' | translate }}</li>
+          </ul>
+        </div>
+
+        <h3>{{ 'terms.infoUsage' | translate }}</h3>
+        <p>{{ 'terms.infoUsageIntro' | translate }}</p>
+        <ul>
+          <li><strong>{{ 'terms.provideService' | translate }}:</strong> {{ 'terms.provideServiceDesc' | translate }}</li>
+          <li><strong>{{ 'terms.personalize' | translate }}:</strong> {{ 'terms.personalizeDesc' | translate }}</li>
+          <li><strong>{{ 'terms.communicate' | translate }}:</strong> {{ 'terms.communicateDesc' | translate }}</li>
+          <li><strong>{{ 'terms.improve' | translate }}:</strong> {{ 'terms.improveDesc' | translate }}</li>
+          <li><strong>{{ 'terms.security' | translate }}:</strong> {{ 'terms.securityDesc' | translate }}</li>
+        </ul>
+
+        <div class="highlight">
+          <p>{{ 'terms.userRightEnd' | translate }} <a href="mailto:suppor@gic.cm">support&#64;gic.cm</a></p>
+        </div>
+      </div>
+
+      <div class="tab-content" [class.active]="isActiveTab('terms')">
+        <h2>{{ 'terms.termsAndConditions' | translate }}</h2>
+        <p><strong>{{ 'terms.lastUpdate' | translate }}:</strong> {{ 'terms.lastUpdateDate' | translate }}</p>
+
+        <p>{{ 'terms.p1' | translate }}</p>
+
+        <h3>{{ 'terms.introduction' | translate }}</h3>
+        <p>{{ 'terms.termsMessage' | translate }}</p>
+
+        <h3>{{ 'terms.dataCollection' | translate }}</h3>
+        <p>{{ 'terms.dataUsage' | translate }}</p>
+        <ul>
+          <li>{{ 'terms.firstNameAndLastName' | translate }}</li>
+          <li>{{ 'terms.email' | translate }}</li>
+          <li>{{ 'terms.phone' | translate }}</li>
+          <li>{{ 'terms.authConnexion' | translate }}</li>
+        </ul>
+
+        <h3>{{ 'terms.dataUsageTitle' | translate }}</h3>
+        <p>{{ 'terms.dataUsageSubtitle' | translate }}</p>
+        <ul>
+          <li>{{ 'terms.usage1' | translate }}</li>
+          <li>{{ 'terms.usage2' | translate }}</li>
+          <li>{{ 'terms.usage3' | translate }}</li>
+          <li>{{ 'terms.usage4' | translate }}</li>
+          <li>{{ 'terms.usage5' | translate }}</li>
+        </ul>
+
+        <div class="highlight">
+          <p>{{ 'terms.endTerms' | translate }}</p>
+        </div>
+      </div>
+
+      <div class="tab-content" [class.active]="isActiveTab('permissions')">
+        <h2>{{ 'terms.permissionsTitle' | translate }}</h2>
+        <p>{{ 'terms.permissionsIntro' | translate }}</p>
+
+        <div class="permission-box">
+          <div class="permission-icon">
+            <!-- <ion-icon name="calendar-outline"></ion-icon> -->
+          </div>
+          <div class="permission-content">
+            <div class="permission-title">{{ 'terms.googleCalendarAccess' | translate }}</div>
+            <div class="permission-description">
+              <p>{{ 'terms.googleCalendarDesc' | translate }}</p>
+              <p><strong>{{ 'terms.justification' | translate }}:</strong> {{ 'terms.googleCalendarJustification' | translate }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="permission-box">
+          <div class="permission-icon">
+            <!-- <ion-icon name="notifications-outline"></ion-icon> -->
+          </div>
+          <div class="permission-content">
+            <div class="permission-title">{{ 'terms.notifications' | translate }}</div>
+            <div class="permission-description">
+              <p>{{ 'terms.notificationsContent' | translate }}</p>
+              <p><strong>{{ 'terms.justification' | translate }}:</strong> {{ 'terms.justificationContent' | translate }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="permission-box">
+          <div class="permission-icon">
+            <!-- <ion-icon name="camera-outline"></ion-icon> -->
+          </div>
+          <div class="permission-content">
+            <div class="permission-title">{{ 'terms.cameraAccess' | translate }}</div>
+            <div class="permission-description">
+              <p>{{ 'terms.cameraAccessContent' | translate }}</p>
+              <p><strong>{{ 'terms.justification' | translate }}:</strong> {{ 'terms.justificationCamera' | translate }}</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="content-card">
+
+        <div class="checkbox-group">
+            <h3>{{ 'terms.consentPreferences' | translate }}</h3>
+            
+            <div class="checkbox-item">
+              <input type="checkbox" id="consent-marketing" [checked]="consentPreferences?.marketing" (change)="toggleConsent('marketing')">
+              <div>
+                <label for="consent-marketing" class="checkbox-label">{{ 'terms.marketingConsent' | translate }}</label>
+                <p class="checkbox-description">{{ 'terms.marketingConsentDesc' | translate }}</p>
+              </div>
+            </div>
+            
+            <div class="checkbox-item">
+              <input type="checkbox" id="consent-analytics" [checked]="consentPreferences?.analytics" (change)="toggleConsent('analytics')">
+              <div>
+                <label for="consent-analytics" class="checkbox-label">{{ 'terms.analyticsConsent' | translate }}</label>
+                <p class="checkbox-description">{{ 'terms.analyticsConsentDesc' | translate }}</p>
+              </div>
+            </div>
+            
+            <div class="checkbox-item">
+              <input type="checkbox" id="consent-calendar" [checked]="consentPreferences?.calendar" (change)="toggleConsent('calendar')">
+              <div>
+                <label for="consent-calendar" class="checkbox-label">{{ 'terms.calendarConsent' | translate }}</label>
+                <p class="checkbox-description">{{ 'terms.calendarConsentDesc' | translate }}</p>
+              </div>
+            </div>
+          </div>
+      </div>
+
+      <div class="consent-actions">
+        <button class="btn btn-primary" (click)="acceptAll()">
+          <!-- <ion-icon name="checkmark-circle-outline" class="btn-icon"></ion-icon> -->
+          {{ 'terms.acceptAll' | translate }}
+        </button>
+        <button class="btn btn-outline" (click)="changeTab('permissions')">
+          <!-- <ion-icon name="options-outline" class="btn-icon"></ion-icon> -->
+          {{ 'terms.customize' | translate }}
+        </button>
+        <button class="btn btn-outline" (click)="rejectAll()">
+          <!-- <ion-icon name="close-circle-outline" class="btn-icon"></ion-icon> -->
+          {{ 'terms.rejectAll' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; {{ 'terms.copyright' | translate }}</p>
+    <p>{{ 'terms.version' | translate }} {{appVersion}}</p>
+  </footer>
+</div>
