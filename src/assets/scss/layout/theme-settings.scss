@@ -514,7 +514,8 @@
         .user-menu.nav>li>a span,
         .user-content .user-name,
         .user-content .user-details {
-            color: $__white;
+            // color: $__white;
+            color: #000;
         }
 
         .has-arrow .dropdown-toggle:after {

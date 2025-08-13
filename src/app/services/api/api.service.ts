@@ -22,8 +22,7 @@ export class ApiService {
   getToken(): Promise<string> {
     return this.storage.getStorage('token')
       .then((token: any) => {
-        if (token.value) {
-          token = token.value;
+        if (token) {
           token = token.replace('"', '');
           token = token.replace('"', '');
           return token

@@ -11,7 +11,7 @@
 	.login-content {
 		width: 100%;
 		height: 100vh;
-		padding: 60px 0;
+		padding: 30px 0;
 		overflow-y: auto;
 		overflow-x: hidden;
 		display: -webkit-box;
@@ -27,6 +27,7 @@
 		.login-logo {
 			display: block;
 			text-align: center;
+			max-height: 50px;
 		}
 		@include respond-below(custom575){
 			padding: 40px 15px;
@@ -70,7 +71,7 @@
 	border-radius: 10px;
 	background-color: $__white;
 	box-shadow: 0px 16px 32px 0px #BEBEBE33;
-	margin: 40px 0;
+	margin: 10px 0;
 	.toggle-password {
 		position: $__absolute;
 		right: 17px;
@@ -108,7 +109,7 @@
 	}
 }
 .authentication-wrapper {
-	background: $__primarycolor;
+	// background: $__primarycolor;
 	height: 100%;
 	position: fixed;
 	top: 0;

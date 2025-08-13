@@ -45,7 +45,7 @@ export class LanguageService {
         this.storage.setStorage("language", lang);
     }
 
-    getDefaultLanguage(): Promise<string> {
+    getDefaultLanguage(){
         return this.storage.getStorage("language")
             .then((lang: any) => {
                 if (lang.value) {
@@ -68,11 +68,11 @@ export class LanguageService {
     initLanguage() {
         this.storage.getStorage('language')
             .then((res: any) => {
-                if (res.value) {
-                    if (res.value) {
-                        // this.setLocalUserLanguage(res.value);
-                        this.translate.use(res.value);
-                        return res.value;
+                if (res) {
+                    if (res) {
+                        // this.setLocalUserLanguage(res);
+                        this.translate.use(res);
+                        return res;
                     } else return this.setDefaultLanguage();
                 } else {
                     // console.log("initLanguage - no res")

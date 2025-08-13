@@ -1,3 +1,6 @@
-<div class="auth-body">
+<div class="auth-body" *ngIf="!wattingData && !networkError">
   <router-outlet></router-outlet>
+</div>
+<div *ngIf="wattingData || networkError" class="load-auth-body">
+  <img src="assets/img/new/loader.gif" width="30px" alt="" />
 </div>

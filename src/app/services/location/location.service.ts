@@ -19,9 +19,9 @@ export class LocationService {
     // Convertir la Promise en Observable
     return from(this.storage.getStorage(environment.cities_data)).pipe(
       switchMap((citiesData: any) => {
-        if (citiesData?.value && citiesData.value.length >= 2) {
+        if (citiesData && citiesData.length >= 2) {
           // Si les données sont déjà dans le stockage, les retourner
-          const parsedData = JSON.parse(citiesData.value);
+          const parsedData = JSON.parse(citiesData);
           return of(parsedData);
         } else {
           // Si les données ne sont pas dans le stockage, les récupérer depuis l'API
@@ -44,8 +44,8 @@ export class LocationService {
   getCountries(): Observable<any | undefined> {
     return from(this.storage.getStorage(environment.countries_data)).pipe(
       switchMap((countriesData: any) => {
-        if (countriesData?.value && countriesData.value.length >= 2) {
-          const parsedData = JSON.parse(countriesData.value);
+        if (countriesData && countriesData.length >= 2) {
+          const parsedData = JSON.parse(countriesData);
           return of(parsedData);
         } else {
           return this.apiService.get('country/available-countries').pipe(

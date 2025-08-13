@@ -10,7 +10,8 @@ export const environment = {
   CLIENT_ID_MOBILE: '663038665050-adeqbfi3nesb3itj75ancckh6qj2j470.apps.googleusercontent.com',
 
   // backendUrl: 'https://digikuntz.com',  // For Production
-  backendUrl: 'http://localhost:3000', // For dev
+  // backendUrl: 'http://localhost:3000', // For dev
+  backendUrl: 'http://192.168.2.79:3000',
 
   ENCRYPTION_KEY: '1KSLDKHFSHLKHLKQB8CIZY8Z9D70CC68Z612GHG923G2904240HKH42086763071535021', // Key for encrypt data
   
@@ -19,9 +20,9 @@ export const environment = {
   // Variables to use to set datas in local storage
   user_key: 'dk_user_id',
   user_data: 'dk_user_data',
-  countries_data: 'yabi_countries_data',
-  cities_data: 'yabi_cities_data',
-  categories_data: 'yabi_categories_data',
+  countries_data: 'dk_countries_data',
+  cities_data: 'dk_cities_data',
+  categories_data: 'dk_categories_data',
   memory_link: 'memory-link',
 
   // Url for download app

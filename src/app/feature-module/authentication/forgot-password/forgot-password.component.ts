@@ -8,6 +8,4 @@ import { routes } from 'src/app/core/core.index';
 })
 export class ForgotPasswordComponent  {
   public routes = routes;
-
- 
 }

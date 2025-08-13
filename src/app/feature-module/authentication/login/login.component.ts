@@ -1,84 +1,181 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
-import { take } from 'rxjs';
-import { AuthService, routes } from 'src/app/core/core.index';
-import { StorageService } from 'src/app/core/services/storage/storage.service';
-import { UserService } from 'src/app/core/services/user/user.service';
+import { TranslateService } from '@ngx-translate/core';
+import { routes } from 'src/app/core/core.index';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { StorageService } from 'src/app/services/storage/storage.service';
+import { SystemService } from 'src/app/services/system/system.service';
+import { UserService } from 'src/app/services/user/user.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
+  styleUrl: './login.component.scss'
 })
-export class LoginComponent {
-  isLoading: boolean = false;
+export class LoginComponent  implements OnInit {
   public routes = routes;
-  public show_password = true;
-  form = new FormGroup({
-    email: new FormControl('', [Validators.required,  Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$')]),
-    password: new FormControl('', [Validators.required]),
-  });
 
-  get f() {
-    return this.form.controls;
-  }
+  form: FormGroup;
+  type = true; // Used to toggle password visibility
+  isLoading: boolean = false;
 
   constructor(
+    private authService: AuthService,
     private router: Router,
-    private auth: AuthService,
-    private userService: UserService,
+    // private alertController: AlertController,
     private storage: StorageService,
-    private toastr: ToastrService) {
-
+    private userService: UserService,
+    private translate: TranslateService,
+    private systemService: SystemService
+  ) {
+    this.initForm();
   }
 
+  /**
+   * Initializes the component and checks if the user is already connected
+   */
+  ngOnInit() {
+    this.getIfIsConnected()
+      .then((response) => {
+        if (response === true) {
+          this.router.navigateByUrl('/tabs', { replaceUrl: true });
+        }
+      });
+  }
 
+  /**
+   * Custom formatter for character counter display in the input fields
+   * @param inputLength - Current input length
+   * @param maxLength - Maximum allowed length
+   * @returns The remaining characters count as a string
+   */
+  customCounterFormatter(inputLength: number, maxLength: number) {
+    return `${maxLength - inputLength} characters remaining`;
+  }
 
-  loginFormSubmit() {
-    if (this.form.valid) {
-      this.isLoading = true;
-      this.auth.login(this.form.value)
-        .then((res) => {
-          console.log("res login: ", res);
-          if (res.success === true){
-            this.userService.getUserData(res.message)
-            .pipe(take(1))
-            .subscribe((data: any) => {
-              if(data){
-                console.log('data of getting userDaya: ',  JSON.stringify(data))
-                this.storage.setStorage('user_data', JSON.stringify(data))
-                this.toastr.success("Heureux de vous revoir!", "Bienvenue", {
-                  timeOut: 7000,
-                  closeButton: true,
-                });
-                this.router.navigate([routes.superAdminDashboard]);
-                this.isLoading = false;
-              } else {
-                this.auth.logout()
-                this.toastr.error(res.message, "Erreur", {
-                  timeOut: 7000,
-                  closeButton: true,
-                });
-                console.log('No userDaya: ')
-                this.isLoading = false;
-              }
+  /**
+   * Initializes the login form with validation rules
+   */
+  initForm() {
+    this.form = new FormGroup({
+      email: new FormControl(null, { validators: [Validators.required, Validators.email] }),
+      password: new FormControl(null, { validators: [Validators.required, Validators.minLength(8)] })
+    });
+  }
+
+  /**
+   * Toggles the password field's visibility
+   */
+  changeType() {
+    this.type = !this.type;
+  }
+
+  /**
+   * Handles form submission for user login
+   */
+  onSubmit() {
+    if (!this.form.valid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    console.log('le form: ', this.form.value)
+    this.isLoading = true;
+    this.authService.login(this.form.value)
+      .then((user: any) => {
+            console.log("onSubmit: ", user);
+        if (user) {
+          if (user === false) {
+            console.log("onSubmit false");
+            this.translate.get("auth.errorCredential").subscribe((res: string) => {
+              this.isLoading = false;
+              this.showAlert(res);
               return;
             })
-          } else {
-            this.toastr.error(res.message, "Erreur", {
-              timeOut: 7000,
-              closeButton: true,
-            });
-            this.isLoading = false;
           }
-        })
-    } else {
-      this.toastr.error("Veuillez vérifier vos données", "Formulaire invalide", {
-        timeOut: 7000,
-        closeButton: true,
+          if (user.active === false) {
+            console.log("onSubmit active");
+            this.isLoading = false;
+            this.translate.get("auth.desabledAccountMsg").subscribe((res: string) => {
+              this.showAlert(res);
+            })
+            this.authService.logout();
+            return;
+          } else {
+            console.log("onSubmit else in");
+            this.userService.setCurrentUser(user);
+            this.isLoading = false;
+            this.form.reset();
+            this.storage.getStorage(environment.memory_link)
+              .then((url) => {
+                if (url) {
+                  this.router.navigateByUrl(url, { replaceUrl: true });
+                  // setTimeout(() => window.location.reload(), 1000);
+                  this.storage.removeStorage(environment.memory_link);
+                } else {
+                  this.router.navigateByUrl('/tabs', { replaceUrl: true });
+                  // setTimeout(() => window.location.reload(), 1000);
+                }
+              })
+          }
+        } else {
+            console.log("onSubmit else out");
+          this.isLoading = false;
+          this.translate.get("auth.errorCredential").subscribe((res: string) => {
+            this.showAlert(res);
+          })
+          this.authService.logout();
+        }
+      })
+      .catch(e => {
+        this.isLoading = false;
+        this.translate.get("auth.errorCredential").subscribe((res: string) => {
+          let msg = res;
+          this.showAlert(msg);
+        console.error("onSubmit catch: ", msg);
+        });
       });
-    }
+  }
+
+  /**
+   * Checks if a user is already connected by checking local storage
+   * @returns A promise that resolves to true if the user is authenticated
+   */
+  async getIfIsConnected(): Promise<boolean> {
+    const isAuth = await this.storage.getStorage(environment.user_data);
+    return isAuth ? true : false;
+  }
+
+  /**
+   * Displays an alert with a given message
+   * @param message - The message to display in the alert
+   */
+  async showAlert(message: string) {
+    let msg = "";
+    this.translate.get("auth.authenticationFailed").subscribe((res: string) => {
+      msg = res;
+    })
+    // const alert = await this.alertController.create({
+    //   header: msg,
+    //   message,
+    //   buttons: ['OK'],
+    // });
+    // await alert.present();
+  }
+
+  /**
+   * Navigates to the forgot password screen
+   */
+  navigateToForgotPassword() {
+    this.router.navigate(['/auth/reset-password']);
+  }
+
+  /**
+   * Navigates to the home screen
+   */
+  navigateToHome() {
+    this.router.navigate(['/tabs']);
   }
 }

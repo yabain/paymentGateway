@@ -1,111 +1,148 @@
-<!-- Main Wrapper -->
-<div class="main-wrapper login-body">
-  <div class="login-wrapper">
-    <div class="container">
-      <div class="loginbox">
-        <div class="login-right">
-          <div class="login-right-wrap">
-            <img class="img-fluid logo-dark mb-2 logo-color" src="assets/img/ressorces/dk_logo.png" alt="Logo">
-            <p class="account-subtitle">Création de compte</p>
-
-            <!-- Form -->
-            <!-- <form [formGroup]="form" (ngSubmit)="submit()">
-              <div class="input-block mb-3">
-                <label htmlFor="label" class="form-control-label">Nom</label>
-                <input id="label" class="form-control" type="text" formControlName="firstName" />
-              </div>
-              <div class="input-block mb-3">
-                <label htmlFor="label" class="form-control-label">Prénom</label>
-                <input id="label" class="form-control" type="text" formControlName="lastName" />
-              </div>
-              <div class="input-block mb-3">
-                <label htmlFor="label" class="form-control-label">Email</label>
-                <input id="label" class="form-control" type="text" formControlName="email" id="email" [ngClass]="{
-                    'is-invalid': f['email'].touched && f['email'].invalid
-                  }" />
-                @if (f['email'].touched && f['email'].invalid) {
-                <div class="invalid-feedback">
-                  @if (f['email'].errors && f['email'].errors['required']) {
-                  <div>
-                    Email requis.
-                  </div>
-                  }
-                </div>
-                }
-                @if (CustomControler !== 0) {
-                <div class="invalid-feedback">
-                  {{ CustomControler }}
-                </div>
-                }
-              </div>
-              <div class="input-block mb-3">
-                <label htmlFor="label" class="form-control-label">Mot de passe</label>
-                <input id="label" class="form-control" type="password" formControlName="password" id="password"
-                  [ngClass]="{
-                    'is-invalid': f['password'].touched && f['password'].invalid
-                  }" />
-                @if (f['password'].touched && f['password'].invalid) {
-                <div class="invalid-feedback">
-                  @if (
-                  f['password'].errors && f['password'].errors['required']
-                  ) {
-                  <div>
-                    Passe requis.
-                  </div>
-                  }
-                </div>
-                }
-              </div>
-              <div class="input-block mb-3">
-                <label htmlFor="label" class="form-control-label">Confirme le passe</label>
-                <input id="label" class="form-control" type="password" formControlName="confirmPassword"
-                  id="confirmPassword" [ngClass]="{
-                    'is-invalid':
-                      f['confirmPassword'].touched &&
-                      f['confirmPassword'].invalid
-                  }" />
-                @if (
-                f['confirmPassword'].touched && f['confirmPassword'].invalid
-                ) {
-                <div class="invalid-feedback">
-                  @if (
-                  f['confirmPassword'].errors &&
-                  f['confirmPassword'].errors['required']
-                  ) {
-                  <div>
-                    Champ requis.
-                  </div>
-                  }
-                </div>
-                }
-                @if (isValidConfirmPassword) {
-                <div class="invalid-feedback">
-                  Le passe ne correspond pas
-                </div>
-                }
-              </div>
-
-              <div class="input-block mb-3 mb-0">
-                <button [disabled]="form.invalid" class="btn btn-lg btn-block btn-primary w-100" type="submit"
-                  *ngIf="!isLoading">
-                  S'enregistrer
-                </button>
-                <button [disabled]="form.invalid" class="btn btn-lg btn-block btn-light w-100" type="submit" disabled
-                  *ngIf="isLoading">
-                  <img src="assets/img/new/loader.gif" width="30px" alt="">
-                </button>
-              </div>
-            </form> -->
-            <!-- /Form -->
-
-
-            <div class="text-center dont-have">
-              Vous avez déjà un compte ? <a [routerLink]="routes.login">connexion</a>
-            </div>
-          </div>
-        </div>
+<!-- Sign In -->
+<div class="row gx-0">
+  <!-- Banner Content -->
+  <div class="col-lg-6">
+    <div class="authentication-wrapper">
+      <div class="authentication-content">
+        <h1>
+          Take control of your invoicing process. Sign up for a account today.
+        </h1>
+        <p>Effortless Invoice Management for Your Business</p>
+      </div>
+      <div class="authen-img">
+        <img src="assets/img/saas-login-img.png" alt="" />
+      </div>
+      <div class="login-bg-img">
+        <img src="assets/img/saas-login-bg-04.png" class="img-fluid vector-bg-four" alt="Img" />
       </div>
     </div>
   </div>
+  <!-- /Banner Content -->
+
+  <!-- login Content -->
+  <div class="col-lg-6">
+    <div class="saas-login-wrapper p-0">
+      <div class="login-content">
+        <form [formGroup]="form" *ngIf="form">
+          <div class="login-userset">
+            <div class="login-logo">
+              <img src="assets/img/ressorces/dk_logo.png" alt="Logo" />
+            </div>
+            <div class="login-card">
+              <div class="login-heading">
+                <h3>Create an Account</h3>
+                <p>Sign Up Instantly to get free trail for 14 days!!!</p>
+              </div>
+              <div class="input-block mb-3">
+                <label htmlFor="label">{{ 'auth.accountType' | translate}} *</label>
+                <select id="accountType" formControlName="accountType" class="form-select"
+                  (change)="accountTypeOnSelect($event)">
+                  <option value="personal" selected (click)="updateFormStructure('personal')">{{ 'auth.personal' |
+                    translate }}</option>
+                  <option value="organisation" (click)="updateFormStructure('organisation')">{{ 'auth.organisation' |
+                    translate }}</option>
+                </select>
+              </div>
+              <div class="input-block mb-3" *ngIf="formType === 'organisation'">
+                <label class="form-label">{{ 'auth.organisationName' | translate }}</label>
+                <input type="text" formControlName="name" class="form-control"
+                  placeholder="{{ 'auth.organisationName' | translate }}" />
+              </div>
+              <div class="input-block mb-3" *ngIf="formType === 'personal'">
+                <label class="form-label">{{ 'auth.firstName'| translate }}</label>
+                <input type="text" formControlName="firstName" class="form-control"
+                  placeholder="{{ 'auth.needFirstName'| translate }}" />
+              </div>
+              <div class="input-block mb-3" *ngIf="formType === 'personal'">
+                <label class="form-label">{{ 'auth.lastName'| translate }}</label>
+                <input type="text" formControlName="lastName" class="form-control"
+                  placeholder="{{ 'auth.needLastName'| translate }}" />
+              </div>
+              <div class="input-block mb-3">
+                <label htmlFor="country">{{ 'auth.country' | translate}} *</label>
+                <div class="col-lg-12">
+                  <div class="input-group">
+                    <span id="basic-addon1">
+                      <img src="assets/img/new/loader.gif" width="15px" alt="" *ngIf="gettingLocations">
+                    </span>
+                    <img [src]="flagCountry" alt="" class="flag" slot="start" style="width: 30px; margin: 5px 5px;">
+                    <select id="country" formControlName="countryId" *ngIf="!gettingLocations"
+                      (change)="onSelect($event)" class="form-select" (onChange)="accountTypeOnSelect($event)">
+                      <option value="" selected></option>
+                      <option *ngFor="let country of countries" [value]="country._id">
+                        {{ country.name | translate}}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="input-block mb-3">
+                <label htmlFor="city">{{ 'auth.city' | translate}} *</label>
+                <select id="city" formControlName="cityId" *ngIf="!gettingLocations" class="form-select">
+                  <option *ngFor="let city of cities" value="{{city._id}}">
+                    {{city.name}}
+                  </option>
+                </select>
+                <img src="assets/img/new/loader.gif" width="15px" alt="" *ngIf="gettingLocations">
+              </div>
+              <div class="input-block mb-3 row">
+                <label htmlFor="phone">{{ 'auth.phone' | translate}} *</label>
+                <div class="col-lg-12">
+                  <div class="input-group">
+                    <span class="input-group-text" id="basic-addon1">{{contryCode}}</span>
+                    <input id="phone" type="text" formControlName="phone" class="form-control" placeholder="phone" aria-label="Username"
+                      aria-describedby="basic-addon1" />
+                  </div>
+                </div>
+              </div>
+              <div class="input-block mb-3">
+                <label htmlFor="email" class="form-label">{{ 'auth.emailAddres'| translate }}</label>
+                <input type="email" id="email" formControlName="email" class="form-control"
+                  placeholder="{{ 'auth.needEmail'| translate }}" />
+              </div>
+              <div class="input-block mb-3">
+                <label class="form-control-label">{{ 'auth.password' | translate }} *</label>
+                <div class="pass-group">
+                  <input class="form-control" label="" formControlName="password" [type]="type ? 'password' : 'text'"
+                    placeholder="{{ 'auth.enterPassword' | translate }}" minlength="8" />
+                  <a href="javascript:void(0);" (click)="changeType()">
+                    <span [ngClass]="
+                        type
+                          ? 'fas toggle-password fa-eye-slash'
+                          : 'fas toggle-password fa-eye'
+                      "></span>
+                  </a>
+                </div>
+              </div>
+              <div class="input-block mb-3">
+                <div class="form-check custom-checkbox mb-0">
+                  <input type="checkbox" class="form-check-input" id="terms" formControlName="agreeTerms"/>
+                  <label htmlFor="terms" class="custom-control-label mb-0" for="terms">
+                    {{ 'auth.agree' | translate }} <a (click)="navigateToTerms()"
+                      style="color: orange;">{{
+                      'auth.terms' | translate }}</a>.
+                  </label>
+                </div>
+              </div>
+              <button type="submit" (click)="onSubmit()" class="btn btn-primary" *ngIf="!isLoading">
+                {{ 'auth.register' | translate }}
+              </button>
+              <button [disabled]="form.invalid" class="btn btn-lg btn-block btn-light w-100" type="submit" disabled
+                *ngIf="isLoading">
+                <img src="assets/img/new/loader.gif" width="30px" alt="">
+              </button>
+            </div>
+            <div class="acc-in">
+              <p>
+                {{ 'auth.allreadyHaveAccount' | translate }} ?
+                <a [routerLink]="routes.sassLogin"> {{ 'auth.login' | translate }}</a>
+              </p>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- /Login Content -->
 </div>
-<!-- /Main Wrapper -->
+<!-- /Sign In -->

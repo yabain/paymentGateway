@@ -1,1 +1,2 @@
-<router-outlet></router-outlet>
+<router-outlet *ngIf="!isTermsPage"></router-outlet>
+<app-terms *ngIf="isTermsPage"></app-terms>
