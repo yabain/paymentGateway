@@ -1,8 +1,9 @@
 import { Component, OnDestroy} from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { AuthService, DataService, routes } from 'src/app/core/core.index';
+import { DataService, routes } from 'src/app/core/core.index';
 import { MenuItem } from 'src/app/core/models/models';
 import { SideBarService } from 'src/app/core/services/side-bar/side-bar.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 interface SubMenu {
   menuValue: string;
@@ -16,7 +17,7 @@ interface MainMenus {
 }
 
 interface SideBarData {
-  
+
   mainMenus?: MainMenus[];
   active: boolean;
   icon: string;
@@ -47,7 +48,7 @@ export class SideMenuOneComponent implements OnDestroy {
   public primarySkinStyle = '0';
   public mobileSidebar = false;
   public multilevel: Array<boolean> = [false, false, false];
-  
+
 
   base = 'dashboard';
   page = '';
@@ -87,7 +88,7 @@ export class SideMenuOneComponent implements OnDestroy {
     });
   }
 
- 
+
 
   private getRoutes(route: url): void {
     const splitVal = route.url.split('/');
@@ -132,5 +133,5 @@ export class SideMenuOneComponent implements OnDestroy {
   public logOut(): void {
     this.auth.logout();
   }
-  
+
 }

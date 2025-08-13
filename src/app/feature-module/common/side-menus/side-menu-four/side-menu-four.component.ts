@@ -1,7 +1,9 @@
 import { Component,  OnDestroy,  ViewEncapsulation } from '@angular/core';
 import { NavigationEnd,Router } from '@angular/router';
-import { routes, DataService, SideBarService, AuthService } from 'src/app/core/core.index'
+import { routes, DataService, SideBarService } from 'src/app/core/core.index'
 import { Menu, RouterObject, SideBarData, mainMenus, subMenus } from 'src/app/core/models/models';
+import { AuthService } from 'src/app/services/auth/auth.service';
+
 interface MainTitle {
   tittle: string;
 
@@ -21,7 +23,7 @@ export class SideMenuFourComponent implements OnDestroy {
   public routes = routes;
   public headerSidebarStyle = '1';
   public primarySkinStyle = '1';
- 
+
 
   base = 'dashboard';
   page = '';
@@ -29,8 +31,8 @@ export class SideMenuFourComponent implements OnDestroy {
   currentRoute = '';
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   side_bar_data: Array<any> = [];
-  
-  
+
+
 
   constructor(
     public router: Router,
@@ -49,7 +51,7 @@ export class SideMenuFourComponent implements OnDestroy {
     this.sideBar.primarySkinStyle.subscribe((res: string) => {
       this.primarySkinStyle = res;
     });
-     
+
     // get sidebar data as observable because data is controlled for design to expand submenus
     this.data.getSideBarData.subscribe((sideBarData: SideBarData[]) => {
       sideBarData.forEach((mainMenu:SideBarData, mainMenuIndex: number) => {
@@ -58,7 +60,7 @@ export class SideMenuFourComponent implements OnDestroy {
         if (['Main', 'Pages', 'UI Interface'].includes(mainMenu.tittle)) {
           this.side_bar_data.push(mainMenu);
         }
-   
+
         mainMenu.menu.forEach((menu:MenuItem) => {
           if (menu.menuValue === 'Application') {
             this.side_bar_data.push(...(menu.subMenus || []));

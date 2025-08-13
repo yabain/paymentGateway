@@ -12,7 +12,6 @@ import { environment } from '../environments/environment';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { DatePipe } from '@angular/common';
 import { RouteReuseStrategy } from '@angular/router';
-import { AuthService } from './core/core.index';
 import { CryptService } from './services/crypt/crypt.service';
 import { ShareLinkService } from './services/share-link/share.link.service';
 import { SystemService } from './services/system/system.service';
@@ -22,6 +21,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TermsComponent } from './shared/terms/terms.component';
 import { PaymentComponent } from './payment/payment.component';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {

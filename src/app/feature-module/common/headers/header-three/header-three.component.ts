@@ -1,5 +1,6 @@
 import { Component} from '@angular/core';
-import { AuthService, routes, SideBarService } from 'src/app/core/core.index';
+import { routes, SideBarService } from 'src/app/core/core.index';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-header-three',

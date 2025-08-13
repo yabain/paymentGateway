@@ -37,8 +37,8 @@ export class SystemService {
 
   async getRacineToshare(): Promise<string> {
     let systemData: any = await this.storage.getStorage('systemData');
-    if (systemData?.value) {
-      systemData = JSON.parse(systemData.value);
+    if (systemData) {
+      systemData = JSON.parse(systemData);
       return systemData.racineLink;
     } else {
       // Await the observable and return the racineLink if available
@@ -58,8 +58,8 @@ export class SystemService {
   async getInvoiceTaxes(): Promise<number> {
     let taxe: any = await this.storage.getStorage('systemData');
 
-    if (taxe?.value) {
-      taxe = JSON.parse(taxe.value);
+    if (taxe) {
+      taxe = JSON.parse(taxe);
       console.log('taxes', taxe.invoiceTaxes);
       return Number(taxe.invoiceTaxes);
     } else {
@@ -100,9 +100,10 @@ export class SystemService {
   getSystemData(): Observable<any | undefined> {
     return this.apiService.get(`system`).pipe(
       map((res: any) => {
+        console.log('getSystemData: ', res);
         if (res) {
-          this.storage.setStorage('systemData', JSON.stringify(res));
-          return res;
+          this.storage.setStorage('systemData', JSON.stringify(res[0]));
+          return res[0];
         }
       }),
     );
@@ -182,7 +183,7 @@ export class SystemService {
     let countriesData: any = await this.storage.getStorage(
       environment.countries_data,
     );
-    console.log('Loading static data... ', countriesData);
+    // console.log('Loading static data... ', countriesData);
     if (countriesData && countriesData.length >= 3) {
       countriesData = JSON.parse(countriesData);
       this.countriesList.next(countriesData);
@@ -217,8 +218,8 @@ export class SystemService {
     }
 
     let systemData: any = await this.storage.getStorage('systemData');
-    if (systemData.value) {
-      systemData = JSON.parse(systemData.value);
+    if (systemData) {
+      systemData = JSON.parse(systemData);
       this.systemData.next(systemData);
     } else {
       // console.log("No system data");

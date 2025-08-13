@@ -62,9 +62,6 @@
                 <label htmlFor="country">{{ 'auth.country' | translate}} *</label>
                 <div class="col-lg-12">
                   <div class="input-group">
-                    <span id="basic-addon1">
-                      <img src="assets/img/new/loader.gif" width="15px" alt="" *ngIf="gettingLocations">
-                    </span>
                     <img [src]="flagCountry" alt="" class="flag" slot="start" style="width: 30px; margin: 5px 5px;">
                     <select id="country" formControlName="countryId" *ngIf="!gettingLocations"
                       (change)="onSelect($event)" class="form-select" (onChange)="accountTypeOnSelect($event)">
@@ -73,25 +70,33 @@
                         {{ country.name | translate}}
                       </option>
                     </select>
+                    <span id="basic-addon1" class="form-select">
+                      <img src="assets/img/new/loader.gif" width="15px" alt="" *ngIf="gettingLocations">
+                    </span>
                   </div>
                 </div>
               </div>
               <div class="input-block mb-3">
                 <label htmlFor="city">{{ 'auth.city' | translate}} *</label>
-                <select id="city" formControlName="cityId" *ngIf="!gettingLocations" class="form-select">
-                  <option *ngFor="let city of cities" value="{{city._id}}">
-                    {{city.name}}
-                  </option>
-                </select>
-                <img src="assets/img/new/loader.gif" width="15px" alt="" *ngIf="gettingLocations">
+                <div class="col-lg-12">
+                  <div class="input-group">
+                    <select id="city" formControlName="cityId" *ngIf="!gettingLocations" class="form-select">
+                      <option *ngFor="let city of cities" value="{{city._id}}">
+                        {{city.name}}
+                      </option>
+                    </select>
+                    <img src="assets/img/new/loader.gif" width="15px" alt="" *ngIf="gettingLocations"
+                      class="form-select">
+                  </div>
+                </div>
               </div>
               <div class="input-block mb-3 row">
                 <label htmlFor="phone">{{ 'auth.phone' | translate}} *</label>
                 <div class="col-lg-12">
                   <div class="input-group">
                     <span class="input-group-text" id="basic-addon1">{{contryCode}}</span>
-                    <input id="phone" type="text" formControlName="phone" class="form-control" placeholder="phone" aria-label="Username"
-                      aria-describedby="basic-addon1" />
+                    <input id="phone" type="text" formControlName="phone" class="form-control" placeholder="phone"
+                      aria-label="Username" aria-describedby="basic-addon1" />
                   </div>
                 </div>
               </div>
@@ -116,10 +121,9 @@
               </div>
               <div class="input-block mb-3">
                 <div class="form-check custom-checkbox mb-0">
-                  <input type="checkbox" class="form-check-input" id="terms" formControlName="agreeTerms"/>
+                  <input type="checkbox" class="form-check-input" id="terms" formControlName="agreeTerms" />
                   <label htmlFor="terms" class="custom-control-label mb-0" for="terms">
-                    {{ 'auth.agree' | translate }} <a (click)="navigateToTerms()"
-                      style="color: orange;">{{
+                    {{ 'auth.agree' | translate }} <a (click)="navigateToTerms()" style="color: orange;">{{
                       'auth.terms' | translate }}</a>.
                   </label>
                 </div>

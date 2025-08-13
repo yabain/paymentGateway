@@ -22,27 +22,27 @@ export class AuthService {
   ) {}
 
   register(formValue: any): Observable<any> {
-  const data: User = {
-    ...formValue,
-    pictureUrl: 'assets/imgs/pictures/user.png',
-  };
+    const data: User = {
+      ...formValue,
+      pictureUrl: 'assets/imgs/pictures/user.png',
+    };
 
-  return from(this.apiService.create(`auth/signup`, data)).pipe(
-    map((user) => {
-      this.storage.setStorage(environment.user_key, user.userData._id);
-      this.storage.setStorage('token', user.token);
-      return user.userData;
-    }),
-    catchError((error) => {
-      console.error('Erreur lors de l’inscription:', error);
+    return from(this.apiService.create(`auth/signup`, data)).pipe(
+      map((user) => {
+        this.storage.setStorage(environment.user_key, user.userData._id);
+        this.storage.setStorage('token', user.token);
+        return user.userData;
+      }),
+      catchError((error) => {
+        console.error('Erreur lors de l’inscription:', error);
 
-      const message =
-        error?.error?.message || error?.message || 'Une erreur est survenue';
-      
-      return throwError(() => new Error(message));
-    })
-  );
-}
+        const message =
+          error?.error?.message || error?.message || 'Une erreur est survenue';
+
+        return throwError(() => new Error(message));
+      }),
+    );
+  }
 
   /**
    * Authenticates a user using the provided form values.
@@ -97,23 +97,24 @@ export class AuthService {
    * @returns A promise that resolves once the logout and redirect are complete.
    */
   async logout() {
+    console.log('logout action initiated');
+    this.storage.removeStorage(environment.user_key);
+    this.storage.removeStorage(environment.user_data);
+    this.storage.removeStorage('authenticated');
+    this.storage.removeStorage('timeOut');
+    setTimeout(() => {
+      this.router.navigateByUrl('/auth/login', { replaceUrl: true });
+      // window.location.reload();
+    }, 2000);
     try {
       this.apiService
         .create('auth/logout', {
           token: await this.storage.getStorage('token'),
         })
         .subscribe((res) => {
-          if (res && res === true) {
-            this.storage.removeStorage(environment.user_key);
-            this.storage.removeStorage(environment.user_data);
-            this.storage.removeStorage('token');
-            this.router.navigateByUrl('/tabs/home', { replaceUrl: true });
-            setTimeout(() => {
-              window.location.reload();
-            }, 3000);
-            console.log('logout true');
-            return true;
-          } else return false;
+          this.storage.removeStorage('token');
+          console.log('logout true');
+          return true;
         });
     } catch (e) {
       console.log('logout error');

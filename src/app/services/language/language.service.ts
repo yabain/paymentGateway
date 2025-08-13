@@ -48,9 +48,9 @@ export class LanguageService {
     getDefaultLanguage(){
         return this.storage.getStorage("language")
             .then((lang: any) => {
-                if (lang.value) {
-                    // this.setLocalUserLanguage(lang.value);
-                    return lang.value;
+                if (lang) {
+                    // this.setLocalUserLanguage(lang);
+                    return lang;
                 }
                 else {
                     this.setLocalUserLanguage('en');

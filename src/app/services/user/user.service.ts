@@ -30,7 +30,7 @@ export class UserService {
   async getCurrentUser() {
     try {
       let user: any = await this.storage.getStorage(environment.user_data);
-      return user.value ? JSON.parse(user.value) : undefined;
+      return user ? JSON.parse(user) : undefined;
     } catch (e) {
       console.error(e);
       return undefined;
@@ -56,7 +56,7 @@ export class UserService {
   async getCurrentUserId() {
     try {
       let user: any = await this.storage.getStorage(environment.user_key);
-      return user.value || undefined;
+      return user || undefined;
     } catch (e) {
       console.error(e);
       return undefined;
@@ -144,7 +144,7 @@ export class UserService {
     } else {
       return of({ error: true, message: 'No file provided' });
     }
-  
+
     return from(this.apiService.uploadPicture('user/picture', data)).pipe(
       catchError(error => {
         return of({ error: true, message: error.message || 'An error occurred: update user\'s picture' });
@@ -188,7 +188,7 @@ export class UserService {
     return this.apiService.getById('follow/followers-list', userId);
   }
 
-  
+
   getFollowers(userId: string): Observable<any | undefined> {
     return this.apiService.getById('follow/followers-number', userId);
   }
@@ -200,7 +200,7 @@ export class UserService {
   getFollowingsList(userId: string): Observable<any | undefined> {
     return this.apiService.getById('follow/followings-list', userId);
   }
-  
+
   getFollowings(userId: string): Observable<any | undefined> {
     return this.apiService.getById('follow/followings-number', userId);
   }
@@ -232,8 +232,8 @@ export class UserService {
   async getCurrentUserData(): Promise<any> {
     try {
       const storedUserData: any = await this.storage.getStorage(environment.user_data);
-      if (storedUserData.value) {
-        const userData = JSON.parse(storedUserData.value);
+      if (storedUserData) {
+        const userData = JSON.parse(storedUserData);
         return userData;
       } else {
         const userId = await this.getCurrentUserId();

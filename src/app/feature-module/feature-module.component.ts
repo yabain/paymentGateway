@@ -3,13 +3,13 @@ import { NavigationEnd, Router } from '@angular/router';
 
 
 import {
-  AuthService,
   CommonService,
   DataService,
   routes,
 } from '../core/core.index';
 import { SideBarService } from '../core/services/side-bar/side-bar.service';
 import { MenuItem, RouterObject, mainMenu, mainMenus } from '../core/models/models';
+import { AuthService } from '../services/auth/auth.service';
 
 @Component({
   selector: 'app-feature-module',
@@ -250,7 +250,7 @@ export class FeatureModuleComponent implements OnDestroy {
     // sidebar hide
     if(
       (this.common.pageRoute.getValue() == 'general-invoice1')
-    ) 
+    )
     {
       this.sidebar = false;
     }else {
@@ -275,7 +275,7 @@ export class FeatureModuleComponent implements OnDestroy {
     }else {
       this.stickysidebar  = true ;
     }
-   
+
   }
 
   private sessionOut(): void {
@@ -286,9 +286,9 @@ export class FeatureModuleComponent implements OnDestroy {
     if (new Date().getHours() > timeOut.getHours()) {
       this.auth.logout();
     }
-  
+
   }
-  
+
   public toggleMobileIcon(): void {
     this.sideBar.switchMobileSideBarPosition();
   }
@@ -299,7 +299,7 @@ export class FeatureModuleComponent implements OnDestroy {
   //   if (this.expandMenuCondition()) {
   //     const target = event.target as HTMLElement;
   //     const closestSidebar = target.closest('.sidebar');
-      
+
   //     if (closestSidebar) {
   //       // Handle adding classes and sliding down
   //     } else {
@@ -307,5 +307,5 @@ export class FeatureModuleComponent implements OnDestroy {
   //     }
   //   }
   // }
-  
+
 }

@@ -112,8 +112,8 @@ export class LoginComponent  implements OnInit {
               .then((url) => {
                 if (url) {
                   this.router.navigateByUrl(url, { replaceUrl: true });
-                  // setTimeout(() => window.location.reload(), 1000);
                   this.storage.removeStorage(environment.memory_link);
+                  // setTimeout(() => window.location.reload(), 1000);
                 } else {
                   this.router.navigateByUrl('/tabs', { replaceUrl: true });
                   // setTimeout(() => window.location.reload(), 1000);

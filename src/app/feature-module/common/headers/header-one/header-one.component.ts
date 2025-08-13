@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
-import { AuthService, routes } from 'src/app/core/core.index';
+import { routes } from 'src/app/core/core.index';
 import { SideBarService } from 'src/app/core/services/side-bar/side-bar.service';
 import { StorageService } from 'src/app/core/services/storage/storage.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-header-one',
@@ -32,7 +33,7 @@ export class HeaderOneComponent implements OnInit  {
       this.headerSidebarStyle = res;
     });
   }
- 
+
 
   ngOnInit(): void {
       this.getUserData();

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { environment } from 'src/environments/environment';
+import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
   selector: 'app-intro',
@@ -9,14 +9,19 @@ import { environment } from 'src/environments/environment';
 })
 export class WelcomeComponent implements OnInit {
   constructor(
+    private userService: UserService,
     private router: Router,
-  ) {
-  }
-
-  /**
-   * Initializes the component. Sets up animations and checks if intro has been seen.
-   */
+  ) {}
   ngOnInit(): void {
+    if (this.isUserConnected()) this.navigateTo('/tabs');
   }
 
+  isUserConnected(): boolean {
+    const user = this.userService.getCurrentUser();
+    return !!user;
+  }
+
+  navigateTo(route) {
+    this.router.navigate([route]);
+  }
 }

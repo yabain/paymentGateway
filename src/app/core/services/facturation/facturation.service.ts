@@ -3,9 +3,9 @@ import { BehaviorSubject, catchError, from, map, Observable, of, switchMap, take
 import { FirestoreService } from '../firestore/firestore.service';
 import { environment } from 'src/environments/environment';
 import { StorageService } from '../storage/storage.service';
-import { AuthService } from '../auth/auth.service';
 import { PaymentService } from '../payment/payment.service';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Injectable({
     providedIn: 'root',

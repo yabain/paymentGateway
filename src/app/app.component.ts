@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit, OnDestroy } from '@angular/core';
 import {
   NavigationEnd,
   NavigationStart,
@@ -12,6 +12,8 @@ import { SystemService } from './services/system/system.service';
 import { StorageService } from './services/storage/storage.service';
 import { MetaService } from './services/meta/meta.service';
 import { LanguageService } from './services/language/language.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -20,12 +22,15 @@ import { LanguageService } from './services/language/language.service';
   providers: [DatePipe],
   encapsulation: ViewEncapsulation.None,
 })
-export class AppComponent {
+export class AppComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
   countriesList: any;
   citiesList: any;
   categoriesList: any;
   url: string;
   isTermsPage: boolean = false;
+  networkError: boolean = false;
+  idrate: boolean = false;
 
   constructor(
     private systemService: SystemService,
@@ -39,16 +44,21 @@ export class AppComponent {
     this.language.initLanguage();
 
     this.metaTag.setDefaultMetatag();
-    this.loadStaticData();
     this.route.paramMap.subscribe((params) => {
       this.getId();
+      this.loadStaticData();
     });
   }
 
   /**
    * Initializes the app component and sets the status bar background color.
    */
-  async ngOnInit() {}
+  async ngOnInit() {
+    // this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+    //   this.getId();
+    //   this.loadStaticData();
+    // });
+  }
 
   /**
    * Loads static data (e.g., countries, cities, categories) using the system service.
@@ -68,5 +78,23 @@ export class AppComponent {
     this.url = this.location.path();
     this.isTermsPage = this.url.endsWith('terms');
     // console.log("isTermsPage: ", this.isTermsPage)
+  }
+
+  checkNetwork() {
+    setTimeout(() => {
+      if (this.idrate) {
+        this.networkError = false;
+      } else {
+        this.networkError = true;
+        this.checkNetwork();
+      }
+    }, 8000)
+  }
+  /**
+   * Cleans up data when the component is destroyed.
+   */
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

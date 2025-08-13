@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FlutterwaveService } from '../services/flutterwave.service';
+import { FlutterwaveService } from '../services/flutterwave/flutterwave.service';
 
 @Component({
   selector: 'app-payment',

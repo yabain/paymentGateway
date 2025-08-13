@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { AuthService, DataService, routes,SideBarService,} from 'src/app/core/core.index';
+import { DataService, routes,SideBarService,} from 'src/app/core/core.index';
 import {MenuItem,RouterObject, SideBarData,
 } from 'src/app/core/models/models';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-header-five',
@@ -11,7 +12,7 @@ import {MenuItem,RouterObject, SideBarData,
 })
 export class HeaderFiveComponent {
   public miniSidebar = false;
-   
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public side_bar_data: Array<any> = [];
   public headerSidebarStyle = '1';
@@ -51,7 +52,7 @@ export class HeaderFiveComponent {
           this.side_bar_data.push(mainMenu);
         }
 
-   
+
 
         if (
           !['Main', 'Customers', 'UI Interface', 'Pages'].includes(

@@ -20,21 +20,22 @@ export class ApiService {
   }
 
   getToken(): Promise<string> {
-    return this.storage.getStorage('token')
-      .then((token: any) => {
-        if (token) {
-          token = token.replace('"', '');
-          token = token.replace('"', '');
-          return token
-        } else return '';
-      })
+    return this.storage.getStorage('token');
+    // return this.storage.getStorage('token')
+    //   .then((token: any) => {
+    //     if (token) {
+    //       token = token.replace('"', '');
+    //       token = token.replace('"', '');
+    //       return token
+    //     } else return '';
+    //   })
   }
 
   get(endpoint: string, id?: string): Observable<any[]> {
     if (id) return this.http.get<any[]>(`${this.apiUrl}/${endpoint}/${id}`);
     else return this.http.get<any[]>(`${this.apiUrl}/${endpoint}`);
   }
-  
+
   getWithToken(endpoint: string, id?: string): Observable<any[]> {
 
     return from(this.getToken()).pipe(
@@ -72,7 +73,7 @@ export class ApiService {
 
     return this.http.get<any[]>(`${this.apiUrl}/${endpoint}/${id}`, { params });
   }
-  
+
   progressiveGetWith2Id(endpoint: string, id?: any, id2?: string, page?: number): Observable<any[]> {
     let params = new HttpParams();
     if (id2) {
@@ -115,6 +116,7 @@ export class ApiService {
         const headers = new HttpHeaders({
           'Authorization': `Bearer ${token}`
         });
+        console.log('token: ', token);
         return this.http.post<any>(`${this.apiUrl}/${endpoint}`, data, { headers: headers });
       })
     );

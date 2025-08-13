@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { routes } from 'src/app/core/helpers/routes/routes';
 import { MenuItem, SideBar, SideBarMenu } from 'src/app/core/models/models';
-import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { DataService } from 'src/app/core/services/data/data.service';
 import { SideBarService } from 'src/app/core/services/side-bar/side-bar.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
+
 interface SubMenu {
   menuValue: string;
   route?: string;
@@ -17,7 +18,7 @@ interface MainMenus {
 }
 
 interface SideBarData {
-  
+
   mainMenus?: MainMenus[];
   active: boolean;
   icon: string;
@@ -63,7 +64,7 @@ export class SideMenuFiveComponent {
     this.last = splitVal[3];
   }
 
- 
+
 
   public expandSubMenus(menu: SideBarMenu): void {
     if (
@@ -157,7 +158,7 @@ export class SideMenuFiveComponent {
       });
     });
   }
- 
-  
+
+
 
 }

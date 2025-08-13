@@ -64,17 +64,16 @@ export class RegisterComponent implements OnInit {
     private language: LanguageService,
     private userService: UserService,
     private toastService: ToastrService,
-  ) {
-  }
+  ) {}
 
   /**
    * Initializes component and triggers location data retrieval.
    */
-async ngOnInit() {
-  await this.initForm();
-  this.getLocations();
-  this.updateFormStructure('personal');
-}
+  async ngOnInit() {
+    await this.initForm();
+    this.getLocations();
+    this.updateFormStructure('personal');
+  }
   /**
    * Initializes the reactive form with necessary fields and validators.
    */
@@ -137,58 +136,59 @@ async ngOnInit() {
   /**
    * Handles the form submission process, registers the user and navigates to home if successful.
    */
-onSubmit(): void {
-  console.log('form', this.form.value);
+  onSubmit(): void {
+    console.log('form', this.form.value);
 
-  // Vérification numéro
-  if (!this.isValidPhoneNumber(this.form.value.phone)) {
-    this.showAlert('Numéro payeur Invalid', 'Erreur form');
-    return;
-  }
-
-  // Vérification formulaire
-  if (!this.form.valid) {
-    this.form.markAllAsTouched();
-    this.showAlert('Error form');
-    return;
-  }
-
-  // Nettoyage numéro
-  this.form.value.phone = this.form.value.phone.replace(/\D/g, '');
-
-  this.isLoading = true;
-
-  this.authService.register(this.form.value).subscribe({
-    next: (data) => {
-      if (data) {
-        this.userService.setCurrentUser(data);
-        this.storage.getStorage(environment.memory_link).then((url) => {
-          if (url) {
-            this.router.navigateByUrl(url, { replaceUrl: true });
-            this.form.reset();
-            // setTimeout(() => window.location.reload(), 1000);
-            this.storage.removeStorage(environment.memory_link);
-          } else {
-            this.router.navigateByUrl('/tabs', { replaceUrl: true });
-            this.form.reset();
-            // setTimeout(() => window.location.reload(), 1000);
-          }
-        });
-      }
-      this.isLoading = false;
-    },
-    error: (e) => {
-      this.isLoading = false;
-      this.translate.get('auth.emailAlreadyUsed').subscribe((res: string) => {
-        this.translate.get('auth.creationAccountError').subscribe((res1: string) => {
-          const msg = e.message.includes('email') ? res : res1;
-          this.showAlert(msg);
-        });
-      });
+    // Vérification numéro
+    if (!this.isValidPhoneNumber(this.form.value.phone)) {
+      this.showAlert('Numéro payeur Invalid', 'Erreur form');
+      return;
     }
-  });
-}
 
+    // Vérification formulaire
+    if (!this.form.valid) {
+      this.form.markAllAsTouched();
+      this.showAlert('Error form');
+      return;
+    }
+
+    // Nettoyage numéro
+    this.form.value.phone = this.form.value.phone.replace(/\D/g, '');
+
+    this.isLoading = true;
+
+    this.authService.register(this.form.value).subscribe({
+      next: (data) => {
+        if (data) {
+          this.userService.setCurrentUser(data);
+          this.storage.getStorage(environment.memory_link).then((url) => {
+            if (url) {
+              this.router.navigateByUrl(url, { replaceUrl: true });
+              this.storage.removeStorage(environment.memory_link);
+              // this.form.reset();
+              // setTimeout(() => window.location.reload(), 1000);
+            } else {
+              this.router.navigateByUrl('/tabs', { replaceUrl: true });
+              // this.form.reset();
+              // setTimeout(() => window.location.reload(), 1000);
+            }
+          });
+        }
+        this.isLoading = false;
+      },
+      error: (e) => {
+        this.isLoading = false;
+        this.translate.get('auth.emailAlreadyUsed').subscribe((res: string) => {
+          this.translate
+            .get('auth.creationAccountError')
+            .subscribe((res1: string) => {
+              const msg = e.message.includes('email') ? res : res1;
+              this.showAlert(msg);
+            });
+        });
+      },
+    });
+  }
 
   /**
    * Displays an alert with a specified error message.
@@ -258,7 +258,7 @@ onSubmit(): void {
   navigateToTerms() {
     this.router.navigate(['/terms']);
   }
-  
+
   isValidPhoneNumber(input: string): boolean {
     console.log('Input phone number:', input);
     // Chech if string has exactly 9 numbers
