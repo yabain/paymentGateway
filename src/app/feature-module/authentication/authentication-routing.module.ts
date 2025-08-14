@@ -4,6 +4,7 @@ import { AuthenticationComponent } from './authentication.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { NewPasswordComponent } from './new-password/new-password.component';
 
 const routes: Routes = [
   {
@@ -41,6 +42,10 @@ const routes: Routes = [
       {
         path: 'forgot-password',
         component: ForgotPasswordComponent,
+      },
+      {
+        path: 'new-password',
+        component: NewPasswordComponent,
       },
       {
         path: 'lock-screen',

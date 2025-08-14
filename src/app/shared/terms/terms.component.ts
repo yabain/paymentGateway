@@ -4,8 +4,8 @@ import { SystemService } from 'src/app/services/system/system.service';
 import { TranslateService } from '@ngx-translate/core';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { Router } from '@angular/router';
-import { ToastService } from 'src/app/services/toast.service';
 import { LanguageService } from 'src/app/services/language/language.service';
+import { ToastService } from 'src/app/services/toast/toast.service';
 
 @Component({
   selector: 'app-terms',
@@ -71,7 +71,7 @@ export class TermsComponent implements OnInit {
     };
     await this.saveConsentPreferences();
     this.translate.get('terms.consentAccepted').subscribe((message: string) => {
-      this.toastService.presentToast(message, 'top', 'success');
+      this.toastService.presentToast('success', 'Accepted !',message);
     });
     setTimeout(() => {
       this.backClicked();
@@ -86,7 +86,7 @@ export class TermsComponent implements OnInit {
     };
     await this.saveConsentPreferences();
     this.translate.get('terms.consentRejected').subscribe((message: string) => {
-      this.toastService.presentToast(message, 'top', 'danger');
+      this.toastService.presentToast('error', 'Rejected!', message);
     });
     // setTimeout(() => {
     //   this.navigateTo('/tabs/home');

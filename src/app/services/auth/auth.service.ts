@@ -113,7 +113,6 @@ export class AuthService {
         })
         .subscribe((res) => {
           this.storage.removeStorage('token');
-          console.log('logout true');
           return true;
         });
     } catch (e) {

@@ -6,6 +6,7 @@ import { routes } from 'src/app/core/core.index';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { SystemService } from 'src/app/services/system/system.service';
+import { ToastService } from 'src/app/services/toast/toast.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { environment } from 'src/environments/environment';
 
@@ -28,7 +29,8 @@ export class LoginComponent  implements OnInit {
     private storage: StorageService,
     private userService: UserService,
     private translate: TranslateService,
-    private systemService: SystemService
+    private systemService: SystemService,
+    private toastService: ToastService
   ) {
     this.initForm();
   }
@@ -81,7 +83,6 @@ export class LoginComponent  implements OnInit {
       return;
     }
 
-    console.log('le form: ', this.form.value)
     this.isLoading = true;
     this.authService.login(this.form.value)
       .then((user: any) => {
@@ -156,6 +157,8 @@ export class LoginComponent  implements OnInit {
     let msg = "";
     this.translate.get("auth.authenticationFailed").subscribe((res: string) => {
       msg = res;
+      this.toastService.presentToast('error', 'Error', msg, 10000);
+
     })
     // const alert = await this.alertController.create({
     //   header: msg,
@@ -168,14 +171,7 @@ export class LoginComponent  implements OnInit {
   /**
    * Navigates to the forgot password screen
    */
-  navigateToForgotPassword() {
-    this.router.navigate(['/auth/reset-password']);
-  }
-
-  /**
-   * Navigates to the home screen
-   */
-  navigateToHome() {
-    this.router.navigate(['/tabs']);
+  navigateTo(location: string) {
+    this.router.navigate([location], { replaceUrl: true });
   }
 }

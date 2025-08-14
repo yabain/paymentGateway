@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { StorageService } from '../storage/storage.service';
-import { ToastService } from '../toast.service';
 import { from, Observable, of } from 'rxjs';
 import { catchError, map, switchMap, take } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
@@ -18,7 +17,6 @@ export class UserService {
   constructor(
     private router: Router,
     private storage: StorageService,
-    private toastService: ToastService,
     private authService: AuthService,
     private apiService: ApiService
   ) { }

@@ -70,8 +70,8 @@
                         {{ country.name | translate}}
                       </option>
                     </select>
-                    <span id="basic-addon1" class="form-select">
-                      <img src="assets/img/new/loader.gif" width="15px" alt="" *ngIf="gettingLocations">
+                    <span id="basic-addon1" class="form-select" *ngIf="gettingLocations">
+                      <img src="assets/img/new/loader.gif" width="15px" alt="">
                     </span>
                   </div>
                 </div>

@@ -16,24 +16,21 @@ export class LocationService {
   ) {}
 
   getCities(): Observable<any | undefined> {
-    // Convertir la Promise en Observable
     return from(this.storage.getStorage(environment.cities_data)).pipe(
       switchMap((citiesData: any) => {
         if (citiesData && citiesData.length >= 2) {
-          // Si les données sont déjà dans le stockage, les retourner
           const parsedData = JSON.parse(citiesData);
           return of(parsedData);
         } else {
-          // Si les données ne sont pas dans le stockage, les récupérer depuis l'API
           return this.apiService.get('city').pipe(
             take(1),
             map((data) => {
               this.storage.setStorage(environment.cities_data, JSON.stringify(data));
-              return data ? data[0] : []; // Retourner les données ou un tableau vide
+              return data ? data[0] : [];
             }),
             catchError((error) => {
               console.error('Error fetching cities:', error);
-              return of([]); // Retourner un tableau vide en cas d'erreur
+              return of([]);
             }),
           );
         }

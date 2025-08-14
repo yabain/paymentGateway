@@ -24,9 +24,7 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class AppComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
-  countriesList: any;
-  citiesList: any;
-  categoriesList: any;
+  staticData: any;
   url: string;
   isTermsPage: boolean = false;
   networkError: boolean = false;
@@ -44,9 +42,9 @@ export class AppComponent implements OnInit, OnDestroy {
     this.language.initLanguage();
 
     this.metaTag.setDefaultMetatag();
-    this.route.paramMap.subscribe((params) => {
+    this.route.paramMap.subscribe(async (params) => {
       this.getId();
-      this.loadStaticData();
+      await this.loadStaticData();
     });
   }
 
@@ -64,12 +62,15 @@ export class AppComponent implements OnInit, OnDestroy {
    * Loads static data (e.g., countries, cities, categories) using the system service.
    * @returns A promise that resolves when the static data is loaded and optionally saved in storage.
    */
-  async loadStaticData() {
+  async loadStaticData(): Promise<any> {
     this.systemService
       .getStaticData()
       .then((staticData) => {
-        // Example: Save data in storage for later use
-        // this.storage.setStorage('staticData', JSON.stringify(staticData));
+
+        // Save static data in storage if needed
+        // this.storage.setStorage('countriesList', JSON.stringify(this.countriesList));
+        // this.storage.setStorage('citiesList', JSON.stringify(this.citiesList));
+        // this.storage.setStorage('categoriesList', JSON.stringify(this.categoriesList));
       })
       .catch((error) => console.error('Error loading static data:', error));
   }

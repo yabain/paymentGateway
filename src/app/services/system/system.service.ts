@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, from, of } from 'rxjs';
 import { catchError, map, take } from 'rxjs/operators';
 import { StorageService } from '../storage/storage.service';
-import { ToastService } from '../toast.service';
 import { LocationService } from '../location/location.service';
 import { environment } from 'src/environments/environment';
 import { AuthService } from '../auth/auth.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ApiService } from '../api/api.service';
+import { ToastService } from '../toast/toast.service';
 
 @Injectable({
   providedIn: 'root',
@@ -32,7 +32,6 @@ export class SystemService {
 
     private apiService: ApiService,
   ) {
-    this.getStaticData();
   }
 
   async getRacineToshare(): Promise<string> {
@@ -41,11 +40,10 @@ export class SystemService {
       systemData = JSON.parse(systemData);
       return systemData.racineLink;
     } else {
-      // Await the observable and return the racineLink if available
       try {
         const resp = await this.getSystemData().pipe(take(1)).toPromise();
-        if (resp && resp[0] && resp[0].racineLink) {
-          return resp[0].racineLink;
+        if (resp && resp.racineLink) {
+          return resp.racineLink;
         } else {
           return '';
         }
@@ -100,7 +98,7 @@ export class SystemService {
   getSystemData(): Observable<any | undefined> {
     return this.apiService.get(`system`).pipe(
       map((res: any) => {
-        console.log('getSystemData: ', res);
+        console.log('getSystemData: ', res[0]);
         if (res) {
           this.storage.setStorage('systemData', JSON.stringify(res[0]));
           return res[0];
@@ -109,125 +107,37 @@ export class SystemService {
     );
   }
 
-  async comparAppVersion() {
-    let version = environment.appVersion;
-    // console.log('local appVersion: ', version);
-    this.checkIfNeedToUpdate();
+  async getStaticData(): Promise<any> {
+    this.locationService.getCountries().subscribe((countries) => {
+      if (countries) {
+        this.countriesList.next(countries);
+      } else {
+        this.countriesList.next(false);
+        console.log('No countries data');
+      }
+    });
 
-    // if (this.plateforme == "web") {
-    //   if (version) {
-    //     this.checkIfNeedToUpdate();
-    //   } else if (version == undefined || !version || version == null) {
-    //     this.getAppVersion()
-    //       .subscribe(resp => {
-    //         version = this.appVersion = resp; // Assigne la version récupérée à 'version'
-    //         console.log('App Version:', this.appVersion);
-    //         this.checkIfNeedToUpdate(version);
-    //         return false
-    //       })
-    //       , (error => {
-    //         console.error("Error to get version :", error);
-    //       });
-    //   }
-    // } else if (this.plateforme == "mobile") {
-    //   version = environment.appVersion;
-    // }
-  }
-
-  checkIfNeedToUpdate(): Observable<boolean> {
-    let version = environment.appVersion;
-    // console.log('version local', version);
-    return this.getSystemData().pipe(
-      map((response: any) => {
-        if (!response) {
-          console.error('Error to get version:');
-          this.availableUpdate.next(false);
-          return false;
-        }
-
-        this.storage.setStorage('systemData', JSON.stringify(response[0]));
-        // console.log(`online appVersion: ${response[0].appVersion}`);
-        if (response[0].appVersion !== version) {
-          this.availableUpdate.next(true);
-          if (this.plateforme === 'web') {
-            this.translate
-              .get('update.updateMessage')
-              .subscribe((res: string) => {
-                this.toastService.presentToast(res, 'top', 'warning', 7000);
-              });
-            version = response.appVersion; // Mise à jour de la version
-
-            setTimeout(() => {
-              this.storage.clearStorage();
-              location.reload();
-            }, 12000);
-          } else if (this.plateforme === 'mobile') {
-            // Logic for mobile
-          }
-          this.availableUpdate.next(true);
-          return true; // Mise à jour disponible
-        } else {
-          this.availableUpdate.next(false);
-          return false; // Pas de mise à jour nécessaire
-        }
-      }),
-      catchError((error) => {
-        console.error('Error to get version:', error);
-        this.availableUpdate.next(false);
-        return of(false); // Retourne un Observable de `false` en cas d'erreur
-      }),
-    );
-  }
-
-  async getStaticData() {
-    let countriesData: any = await this.storage.getStorage(
-      environment.countries_data,
-    );
-    // console.log('Loading static data... ', countriesData);
-    if (countriesData && countriesData.length >= 3) {
-      countriesData = JSON.parse(countriesData);
-      this.countriesList.next(countriesData);
-    } else {
-      console.log('No countries data');
-      this.locationService.getCountries().subscribe((countries) => {
-        if (countries) {
-          this.countriesList.next(countriesData);
-        } else {
-          console.log('No Countries');
-          this.countriesList.next(false);
-        }
-      });
-    }
-
-    let citiesData: any = await this.storage.getStorage(
-      environment.cities_data,
-    );
-    if (citiesData && citiesData.length >= 2) {
-      citiesData = JSON.parse(citiesData);
-      this.citiesList.next(citiesData);
-    } else {
-      console.log('No cities data');
-      this.locationService.getCities().subscribe((cities) => {
-        if (cities) {
-          this.citiesList.next(citiesData);
-        } else {
-          this.citiesList.next(false);
-          console.log('No cities data');
-        }
-      });
-    }
+    this.locationService.getCities().subscribe((cities) => {
+      if (cities) {
+        this.citiesList.next(cities);
+      } else {
+        this.citiesList.next(false);
+        console.log('No cities data');
+      }
+    });
 
     let systemData: any = await this.storage.getStorage('systemData');
+    console.log('systemData 00: ', systemData);
     if (systemData) {
-      systemData = JSON.parse(systemData);
+      console.log('systemData 11: ', systemData);
       this.systemData.next(systemData);
     } else {
-      // console.log("No system data");
+      console.log('No system data');
       this.getSystemData().subscribe((systemData) => {
-        // console.log("systemData: ", systemData);
+        console.log('systemData: ', systemData);
         if (systemData) {
-          this.storage.setStorage('systemData', JSON.stringify(systemData[0]));
-          this.systemData.next(systemData[0]);
+          console.log('systemData 11: ', systemData);
+          this.systemData.next(systemData);
         } else {
           this.systemData.next(false);
           // console.log("No systemData data");

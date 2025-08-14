@@ -14,14 +14,14 @@ export class routes {
     return routes.Url;
   }
   public static get login(): string {
-    return this.baseUrl + '/login';
+    return this.baseUrl + '/auth/login';
   }
 
   public static get forgot_password(): string {
-    return this.baseUrl + '/forgot-password';
+    return this.baseUrl + '/auth/forgot-password';
   }
   public static get register(): string {
-    return this.baseUrl + '/register';
+    return this.baseUrl + '/auth/register';
   }
   public static get lock_screen(): string {
     return this.baseUrl + '/lock-screen';

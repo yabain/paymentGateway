@@ -10,7 +10,7 @@ import { StorageService } from 'src/app/services/storage/storage.service';
 import { SystemService } from 'src/app/services/system/system.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { environment } from 'src/environments/environment';
-import { ToastrService } from 'ngx-toastr';
+import { ToastService } from 'src/app/services/toast/toast.service';
 
 @Component({
   selector: 'app-register',
@@ -63,7 +63,7 @@ export class RegisterComponent implements OnInit {
     private translate: TranslateService,
     private language: LanguageService,
     private userService: UserService,
-    private toastService: ToastrService,
+    private toastService: ToastService,
   ) {}
 
   /**
@@ -78,7 +78,7 @@ export class RegisterComponent implements OnInit {
    * Initializes the reactive form with necessary fields and validators.
    */
   async initForm(): Promise<void> {
-    let lang = this.language.getDefaultLanguage() || 'en';
+    let lang = (await this.language.getDefaultLanguage()) || 'en';
     this.form = new FormGroup({
       firstName: new FormControl(null),
       lastName: new FormControl(null),
@@ -113,13 +113,12 @@ export class RegisterComponent implements OnInit {
    */
   getLocations() {
     this.location.getCountries().subscribe((countries) => {
-      console.log('countries: ', countries);
+      // console.log('countries: ', countries);
       this.countries = countries.sort((a, b) => a.name.localeCompare(b.name));
       this.countries = this.countries.filter((e) => e.status != false);
       this.location.getCities().subscribe((cities) => {
-        console.log('cities: ', cities);
+        // console.log('cities: ', cities);
         this.allCities = cities.sort((a, b) => a.name.localeCompare(b.name));
-        console.log(this.allCities);
         this.gettingLocations = false;
       });
     });
@@ -141,22 +140,43 @@ export class RegisterComponent implements OnInit {
 
     // Vérification numéro
     if (!this.isValidPhoneNumber(this.form.value.phone)) {
-      this.showAlert('Numéro payeur Invalid', 'Erreur form');
+      this.toastService.presentToast(
+        'warning',
+        'Invalid phone number',
+        'Please enter a valid phone number.',
+        10000,
+      );
       return;
     }
 
     // Vérification formulaire
-    if (!this.form.valid) {
-      this.form.markAllAsTouched();
-      this.showAlert('Error form');
-      return;
+    if (this.form.value.accountType === 'persolnal') {
+      this.form.get('firstName').setValidators([Validators.required]);
+      this.form.get('lastName').setValidators([Validators.required]);
+      this.form.get('name').clearValidators();
+      this.form.value.name = null;
+      console.log('Account personal', this.form);
+    } else if (this.form.value.accountType === 'organisation') {
+      this.form.get('name').setValidators([Validators.required]);
+      this.form.get('firstName').clearValidators();
+      this.form.get('lastName').clearValidators();
+      this.form.value.firstName = null;
+      this.form.value.lastName = null;
+      console.log('Account organisation', this.form);
     }
+
+    // if (!this.form.valid) {
+    //   this.form.markAllAsTouched();
+    //   this.showAlert('Error form');
+    //   return;
+    // }
 
     // Nettoyage numéro
     this.form.value.phone = this.form.value.phone.replace(/\D/g, '');
 
     this.isLoading = true;
 
+    // return ;
     this.authService.register(this.form.value).subscribe({
       next: (data) => {
         if (data) {
@@ -165,6 +185,13 @@ export class RegisterComponent implements OnInit {
             if (url) {
               this.router.navigateByUrl(url, { replaceUrl: true });
               this.storage.removeStorage(environment.memory_link);
+              this.toastService.presentToast(
+                'success',
+                'Welcome !' +
+                  this.userService.showName(this.form.value),
+                'Your account has been created successfully !',
+                10000,
+              );
               // this.form.reset();
               // setTimeout(() => window.location.reload(), 1000);
             } else {
@@ -183,19 +210,11 @@ export class RegisterComponent implements OnInit {
             .get('auth.creationAccountError')
             .subscribe((res1: string) => {
               const msg = e.message.includes('email') ? res : res1;
-              this.showAlert(msg);
+              this.toastService.presentToast('error', 'Error', msg, 10000);
             });
         });
       },
     });
-  }
-
-  /**
-   * Displays an alert with a specified error message.
-   * @param message The message to display in the alert.
-   */
-  async showAlert(message: string, title: string = 'Error') {
-    this.toastService.warning(message, title, { timeOut: 10000 });
   }
 
   /**

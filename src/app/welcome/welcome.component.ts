@@ -12,12 +12,14 @@ export class WelcomeComponent implements OnInit {
     private userService: UserService,
     private router: Router,
   ) {}
-  ngOnInit(): void {
-    if (this.isUserConnected()) this.navigateTo('/tabs');
+  async ngOnInit() {
+    const res: boolean = await this.isUserConnected();
+    console.log('isUserConnected: ', res);
+    if (res === true ) this.navigateTo('/tabs');
   }
 
-  isUserConnected(): boolean {
-    const user = this.userService.getCurrentUser();
+  async isUserConnected(): Promise<boolean> {
+    const user = await this.userService.getCurrentUser();
     return !!user;
   }
 
