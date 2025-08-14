@@ -22,7 +22,6 @@ export class AuthenticationComponent  implements OnInit {
 
   async ngOnInit() {
     let user = await this.userService.getCurrentUser();
-    console.log('isUserConnected', user);
     user = user != undefined ? true : false;
     if (user) this.navigateTo('/tabs');
     console.log('isUserConnected', user);
