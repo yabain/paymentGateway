@@ -116,7 +116,7 @@ export class ApiService {
         const headers = new HttpHeaders({
           'Authorization': `Bearer ${token}`
         });
-        console.log('token: ', token);
+        // console.log('token: ', token);
         return this.http.post<any>(`${this.apiUrl}/${endpoint}`, data, { headers: headers });
       })
     );
