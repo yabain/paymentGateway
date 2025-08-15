@@ -1,15 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { catchError, of } from 'rxjs';
 import { routes } from 'src/app/core/core.index';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
-import { SystemService } from 'src/app/services/system/system.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { UserService } from 'src/app/services/user/user.service';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-new-password',
@@ -17,11 +15,12 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./new-password.component.scss'],
 })
 export class NewPasswordComponent implements OnInit {
-
+  public routes = routes;
   form: FormGroup;
   type = true; // Used to toggle password visibility
   isSending: boolean = false;
-  isLoading: boolean = true;
+  isLoading: boolean = false;
+  isBadToken: boolean = true;
   userId: string;
   token: string;
   success: boolean = false;
@@ -30,7 +29,6 @@ export class NewPasswordComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute,
-    private alertController: AlertController,
     private storage: StorageService,
     private userService: UserService,
     private translate: TranslateService,
@@ -45,23 +43,24 @@ export class NewPasswordComponent implements OnInit {
   ngOnInit() {
     this.route.paramMap.subscribe((datas: any) => {
       this.isLoading = true;
-      console.log('les params: ', datas);
-      this.getIfIsConnected()
-        .then((response) => {
-          console.log('resp: ', response)
-          if (response === true) {
-            this.router.navigateByUrl('/tabs', { replaceUrl: true });
-          } else {
-            this.initForm();
-            console.log('params.token: ', datas.params.token)
-            if(datas.params.token){
-              this.verityToken(datas.params.token);
-            }
-            // else this.router.navigateByUrl('/tabs', { replaceUrl: true });
-          }
-        });
+      if (!datas.params.id) {
+        this.router.navigateByUrl('/welcome', { replaceUrl: true });
+        return;
+      }
 
-    })
+      this.token = datas.params.id;
+      console.log('params token: ', this.token);
+      this.getIfIsConnected().then((response) => {
+        console.log('resp: ', response);
+        if (response === true) {
+          this.router.navigateByUrl('/tabs', { replaceUrl: true });
+          this.isLoading = false;
+        } else {
+          this.initForm();
+          this.verityToken(this.token);
+        }
+      });
+    });
   }
 
   /**
@@ -79,8 +78,12 @@ export class NewPasswordComponent implements OnInit {
    */
   initForm() {
     this.form = new FormGroup({
-      password: new FormControl(null, { validators: [Validators.required, Validators.email] }),
-      password2: new FormControl(null, { validators: [Validators.required, Validators.email] }),
+      password: new FormControl(null, {
+        validators: [Validators.required, Validators.email],
+      }),
+      password2: new FormControl(null, {
+        validators: [Validators.required, Validators.email],
+      }),
     });
   }
 
@@ -95,40 +98,53 @@ export class NewPasswordComponent implements OnInit {
    * Handles form submission to request a password reset email
    */
   onSubmit() {
-    if (!this.form.valid) {
-      this.form.markAllAsTouched();
-      return;
-    }
-    if (this.form.value.password != this.form.value.password2){
-      this.toastService.presentToast('Verify your form', 'top', 'warning')
+    if (this.form.value.password != this.form.value.password2) {
+      this.toastService.presentToast(
+        'error',
+        'Not match',
+        'The password does not match',
+      );
       return;
     }
 
     this.isSending = true;
     const data = {
       password: this.form.value.password,
-      token: this.token
-    }
+      token: this.token,
+    };
 
-    this.authService.resetPassword(data)
+    this.authService
+      .resetPassword(data)
       .pipe(
-        catchError(error => {
+        catchError((error) => {
           console.error('Password reset error:', error);
           if (error.status === 404) {
-            this.translate.get("auth.unknowEmail").subscribe((res: string) => {
-              this.toastService.presentToast(res, 'top', 'danger', 10000);
+            this.translate.get('auth.unknowEmail').subscribe((res: string) => {
+              this.toastService.presentToast('error', 'Error', res);
             });
-          } else this.translate.get("auth.unableResetPwd").subscribe((res: string) => {
-            this.toastService.presentToast(res, 'top', 'danger');
-          });
+          } else
+            this.translate
+              .get('auth.unableResetPwd')
+              .subscribe((res: string) => {
+                this.toastService.presentToast('error', 'Error', res);
+              });
           this.isSending = false;
           return of(null);
-        })
+        }),
       )
       .subscribe((res) => {
         if (res === true) {
-          this.toastService.presentToast('Success !', 'top', 'success', 5000);
-          // this.router.navigateByUrl('/auth-screen', { replaceUrl: true });
+          this.translate
+            .get('auth.passwordUpdated')
+            .subscribe((res: string) => {
+              this.toastService.presentToast(
+                'success',
+                'Password updated!',
+                res,
+                15000,
+              );
+            });
+          this.navigateTo('/auth/login');
           this.isSending = false;
           this.success = true;
         }
@@ -141,55 +157,40 @@ export class NewPasswordComponent implements OnInit {
    */
   async getIfIsConnected(): Promise<boolean> {
     const isAuth = await this.storage.getStorage('dk_user_data');
-    return isAuth.value ? true : false;
+    return isAuth ? true : false;
   }
 
-  /**
-   * Displays an alert with a given message
-   * @param message - The message to display in the alert
-   */
-  async showAlert(message: string) {
-    let msg = "";
-    this.translate.get("auth.authenticationFailed").subscribe((res: string) => {
-      msg = res;
-    })
-    const alert = await this.alertController.create({
-      header: msg,
-      message,
-      buttons: ['OK'],
-    });
-    await alert.present();
+  showNotification(type: string, title: string, message: string) {
+    this.toastService.presentToast(type, title, message);
   }
 
   /**
    * Navigates to the login screen
    */
   navigateTo(route: string) {
-    this.router.navigateByUrl(route, { replaceUrl: true })
+    this.router.navigateByUrl(route, { replaceUrl: true });
   }
 
-  verityToken(token){
-    this.authService.verifyResetPwdToken(token)
-    .pipe(
-      catchError(error => {
-        console.error('Token error:', error);
-        if (error.status === 400) {
-          this.translate.get("auth.requestExpired").subscribe((res: string) => {
-            this.toastService.presentToast('error', 'Link Expired', res, 10000);
+  verityToken(token) {
+    this.authService
+      .verifyResetPwdToken(token)
+      .pipe(
+        catchError((error) => {
+          console.error('Token error:', error);
+          this.translate.get('auth.requestExpired').subscribe((res: string) => {
+            this.toastService.presentToast('error', 'Link Expired !', res, 10000);
           });
-        } else this.translate.get("auth.unableResetPwd").subscribe((res: string) => {
-            this.toastService.presentToast('error', 'An error occurred', res, 10000);
-        });
+          this.isBadToken = true;
+          this.isLoading = false;
+          // this.navigateTo('/welcome');
+          return of(null);
+        }),
+      )
+      .subscribe((data: any) => {
+        console.log('userId:', data.userId);
+        this.userId = data.userId;
+        this.isBadToken = false;
         this.isLoading = false;
-        this.navigateTo('/welcome');
-        return of(null);
-      })
-    )
-    .subscribe((data: any) =>{
-      console.log('userId:', data.userId)
-      this.userId = data.userId;
-      this.token = token;
-      this.isLoading = false;
-    })
+      });
   }
 }

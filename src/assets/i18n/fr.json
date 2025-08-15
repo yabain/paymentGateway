@@ -89,6 +89,7 @@
     "address": "Votre adresse",
     "reset": "Réinitialiser",
     "or": "ou",
+    "retryResetPassword": "Réessayer la réinitialisation du mot de passe",
     "registerSuccess": "Inscription réussie",
     "registerSuccessMessage": "Vous pouvez maintenant vous connecter avec vos identifiants",
     "registerErrorUserExists": "L'utilisateur existe déjà",

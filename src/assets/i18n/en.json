@@ -89,6 +89,7 @@
     "address": "Your address",
     "reset": "Reset",
     "or": "or",
+    "retryResetPassword": "Retry password reset",
     "registerSuccess": "Registration successful",
     "registerSuccessMessage": "You can now log in with your credentials",
     "registerErrorUserExists": "User already exists",

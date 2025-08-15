@@ -16,7 +16,7 @@ presentToast(
   ): any {
     if (type === 'info') return this.toastService.info(message, title, { timeOut: timer });
     if (type === 'warning') return this.toastService.warning(message, title, { timeOut: timer });
-    if (type === 'danger') return this.toastService.error(message, title, { timeOut: timer });
+    if (type === 'error') return this.toastService.error(message, title, { timeOut: timer });
     if (type === 'success') return this.toastService.success(message, title, { timeOut: timer });
     // const toast = await this.toastController.create({
     //     message: message,

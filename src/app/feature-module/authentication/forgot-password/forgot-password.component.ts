@@ -104,11 +104,9 @@ export class ForgotPasswordComponent  implements OnInit {
       .subscribe((res) => {
         if (res === true) {
           this.translate.get("auth.resetLinkSend").subscribe((res: string) => {
-            // this.toastService.presentToast(res, 'top', 'success', 15000);
           });
           this.emailSended = true;
           this.email = this.form.value.email;
-          // this.router.navigateByUrl('/auth-screen', { replaceUrl: true });
           this.isLoading = false;
         }
       });

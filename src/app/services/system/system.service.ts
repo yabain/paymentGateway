@@ -98,7 +98,7 @@ export class SystemService {
   getSystemData(): Observable<any | undefined> {
     return this.apiService.get(`system`).pipe(
       map((res: any) => {
-        console.log('getSystemData: ', res[0]);
+        // console.log('getSystemData: ', res[0]);
         if (res) {
           this.storage.setStorage('systemData', JSON.stringify(res[0]));
           return res[0];
@@ -113,7 +113,7 @@ export class SystemService {
         this.countriesList.next(countries);
       } else {
         this.countriesList.next(false);
-        console.log('No countries data');
+        // console.log('No countries data');
       }
     });
 
@@ -122,21 +122,21 @@ export class SystemService {
         this.citiesList.next(cities);
       } else {
         this.citiesList.next(false);
-        console.log('No cities data');
+        // console.log('No cities data');
       }
     });
 
     let systemData: any = await this.storage.getStorage('systemData');
-    console.log('systemData 00: ', systemData);
+    // console.log('systemData 00: ', systemData);
     if (systemData) {
-      console.log('systemData 11: ', systemData);
+      // console.log('systemData 11: ', systemData);
       this.systemData.next(systemData);
     } else {
-      console.log('No system data');
+      // console.log('No system data');
       this.getSystemData().subscribe((systemData) => {
         console.log('systemData: ', systemData);
         if (systemData) {
-          console.log('systemData 11: ', systemData);
+          // console.log('systemData 11: ', systemData);
           this.systemData.next(systemData);
         } else {
           this.systemData.next(false);
