@@ -1692,13 +1692,13 @@
 				&.active {
 					color: #3F4254;
 					&::before {
-						border-color: #2DA7FF;
+						border-color: #021d66;
 					}
 					&::after {
 						content: "";
 						width: 12px;
 						height: 12px;
-						background: #2DA7FF;
+						background: #021d66;
 						border-radius: 50%;
 						@include position($__absolute,15px,null,null,26px);
 					}

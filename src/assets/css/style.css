@@ -867,7 +867,7 @@ strong {
 .avatar .avatar-title {
   width: 100%;
   height: 100%;
-  background-color: #2DA7FF;
+  background-color: #021d66;
   color: #fff;
 }
 .avatar.avatar-online::before {
@@ -9210,13 +9210,13 @@ table .badge {
   color: #3F4254;
 }
 .paynow-tab .nav-pills .nav-item button.active::before {
-  border-color: #2DA7FF;
+  border-color: #021d66;
 }
 .paynow-tab .nav-pills .nav-item button.active::after {
   content: "";
   width: 12px;
   height: 12px;
-  background: #2DA7FF;
+  background: #021d66;
   border-radius: 50%;
   position: absolute;
   top: 15px;
@@ -9798,10 +9798,10 @@ table .badge {
   }
 }
 .add-vendor-btns .vendor-btn-cancel {
-  color: #2DA7FF;
-  border: 1px solid #2DA7FF;
+  color: #021d66;
+  border: 1px solid #021d66;
   background: #fff;
-  box-shadow: inset 0 0 0 0 #2DA7FF;
+  box-shadow: inset 0 0 0 0 #021d66;
   border-radius: 6px;
   min-width: 98px;
   margin: 0 12px 0 0;
@@ -9815,9 +9815,9 @@ table .badge {
 }
 .add-vendor-btns .vendor-btn-cancel:hover {
   color: #fff;
-  background: #2DA7FF;
-  border-color: #2DA7FF;
-  box-shadow: inset 0 50px 0 0 #2DA7FF;
+  background: #021d66;
+  border-color: #021d66;
+  box-shadow: inset 0 50px 0 0 #021d66;
 }
 .add-vendor-btns .vendor-btn-add {
   color: #fff;
@@ -23541,7 +23541,7 @@ table tr td .status-toggle .checktoggle {
   background: #DDF3FF;
   padding: 14px;
   border-radius: 10px;
-  border: 1px solid #2DA7FF;
+  border: 1px solid #021d66;
 }
 .invoice-three .invoice-wrapper .inv-content .thanks-msg {
   padding: 40px 0 0 0;
@@ -24921,7 +24921,7 @@ table th.no-sort::after {
 
 .modal-header .bg-info-light {
   background: #DDF3FF;
-  color: #2DA7FF;
+  color: #021d66;
   font-weight: normal;
 }
 
@@ -25478,7 +25478,7 @@ td .invoice-detail i {
   position: relative;
 }
 #plan-billing-slider .owl-item .packages.active a {
-  color: #2DA7FF;
+  color: #021d66;
 }
 #plan-billing-slider .owl-item .packages.active:before {
   position: absolute;
@@ -25959,24 +25959,24 @@ td .invoice-detail i {
   }
 }
 .super-admin-dashboard .dash-user-card .dash-btns a.view-company-btn {
-  background: #2DA7FF;
-  border: 1px solid #2DA7FF;
+  background: #F57C11;
+  border: 1px solid #F57C11;
   box-shadow: inset 0 0 0 0 #fff;
 }
 .super-admin-dashboard .dash-user-card .dash-btns a.view-company-btn:hover {
-  color: #2DA7FF;
-  border: 1px solid #2DA7FF;
+  color: #F57C11;
+  border: 1px solid #F57C11;
   background: #fff;
 }
 .super-admin-dashboard .dash-user-card .dash-btns a.view-package-btn {
-  color: #2DA7FF;
-  border: 1px solid #2DA7FF;
+  color: #021d66;
+  border: 1px solid #021d66;
   background: #fff;
   margin-left: 5px;
 }
 .super-admin-dashboard .dash-user-card .dash-btns a.view-package-btn:hover {
-  background: #2DA7FF;
-  border: 1px solid #2DA7FF;
+  background: #F57C11;
+  border: 1px solid #F57C11;
   color: #fff;
 }
 .super-admin-dashboard .dash-img {

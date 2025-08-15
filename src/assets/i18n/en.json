@@ -114,7 +114,12 @@
     "selectAccountType": "Select your account type",
     "selectCountry": "Select your country",
     "selectCity": "Select your city",
-    "allreadyHaveAccount": "Already have an account?"
+    "allreadyHaveAccount": "Already have an account?",
+    "leftLoginMesseg": "Access to our dashboard, Please login to continue your session!",
+    "leftLoginSubMessage": "Gestion des factures sans effort pour votre entreprise",
+    "leftRegisterMessage": "Take control of your invoicing process. Sign up for a account today.",
+    "leftRegisterSubMessage": "Effortless Invoice Management for Your Business"
+
   },
   "update": {
     "updateAvailable": "Update available",
@@ -322,7 +327,8 @@
     "terms&conditions": "Terms & Conditions",
     "privacyPolicy": "Privacy Policy",
     "help": "Help",
-    "admin": "Administration"
+    "admin": "Administration",
+    "settings": "Settings"
   },
   "payment": {
     "title": "Payment",
@@ -424,6 +430,10 @@
   "mail": {
     "title": "Mail center",
     "status": "Status"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome"
   },
   "tool": "Tool",
   "meetUrl": "Visio URL",

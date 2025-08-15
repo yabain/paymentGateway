@@ -13,7 +13,7 @@ import {
   ApexTooltip,
   ApexTitleSubtitle,
 } from 'ng-apexcharts';
-import { routes } from 'src/app/core/core.index';
+import { routes, SideBarService } from 'src/app/core/core.index';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries | any;
@@ -43,7 +43,13 @@ export class DashboardComponent {
   public chartOptions2: Partial<ChartOptions>;
   public chartOptions3: Partial<ChartOptions>;
 
-  constructor() {
+  
+    public chartOptions4: Partial<ChartOptions>;
+    public chartOptions5: Partial<ChartOptions>;
+    public layoutPosition = '1';
+
+  constructor(private sideBar: SideBarService) {
+      this.initCharts()
     this.chartOptions = {
       series: [
         {
@@ -244,5 +250,87 @@ export class DashboardComponent {
         },
       },
     };
+  }
+
+  
+  initCharts() {
+    this.chartOptions4 = {
+      series: [
+        {
+          name: 'Received',
+          data: [70, 150, 80, 180, 150, 175, 201, 60, 200, 120, 190, 160, 50],
+          colors: ['#021d66'],
+        },
+
+        {
+          name: 'Pending',
+          data: [23, 42, 35, 27, 43, 22, 17, 31, 22, 22, 12, 16, 80],
+          colors: ['#fda600'],
+        },
+      ],
+
+      chart: {
+        type: 'bar',
+        height: 350,
+      },
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          columnWidth: '60%',
+          borderRadius: 5,
+          borderRadiusOnAllStackedSeries: true,
+          borderRadiusApplication: 'end',
+          endingShape: 'rounded',
+        },
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      legend: {
+        show: true,
+        markers: {
+          fillColors: ['#7638ff', '#fda600'],
+        },
+      },
+      stroke: {
+        show: true,
+        width: 2,
+        colors: ['transparent'],
+      },
+      xaxis: {
+        categories: [
+          'Feb',
+          'Mar',
+          'Apr',
+          'May',
+          'Jun',
+          'Jul',
+          'Aug',
+          'Sep',
+          'Oct',
+        ],
+      },
+      yaxis: {
+        title: {
+          text: '$ (thousands)',
+        },
+      },
+      fill: {
+        opacity: 1,
+        colors: ['#7638ff', '#fda600'],
+      },
+      tooltip: {
+        y: {
+          formatter: function (val: string) {
+            return '$ ' + val + ' thousands';
+          },
+        },
+      },
+    };
+
+    // <* to check layout position *>
+    this.sideBar.layoutPosition.subscribe((res) => {
+      this.layoutPosition = res;
+    });
   }
 }

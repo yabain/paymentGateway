@@ -1,27 +1,27 @@
 <!-- Header -->
-<div
-  class="header header-one">
-  <a [routerLink]="routes.dashboard"  class="d-inline-flex d-sm-inline-flex align-items-center d-md-inline-flex d-lg-none align-items-center device-logo">
+<div class="header header-one">
+  <a [routerLink]="routes.dashboard"
+    class="d-inline-flex d-sm-inline-flex align-items-center d-md-inline-flex d-lg-none align-items-center device-logo">
     <img src="assets/img/ressorces/dk_logo.png" class="img-fluid logo2" alt="Logo" style="width: 120px">
-</a>
-<div class="main-logo d-inline float-start d-lg-flex align-items-center d-none d-sm-none d-md-none">
-  <div class="logo-white">
-    <a [routerLink]="routes.dashboard">
-      <img src="assets/img/ressorces/dk_logo.png" class="img-fluid logo-blue" alt="Logo" style="width: 120px">
-    </a>
-    <a [routerLink]="routes.dashboard">
-      <img src="assets/img/ressorces/dk_logo.png" class="img-fluid logo-small" alt="Logo" style="width: 120px">
-    </a>
+  </a>
+  <div class="main-logo d-inline float-start d-lg-flex align-items-center d-none d-sm-none d-md-none">
+    <div class="logo-white">
+      <a [routerLink]="routes.dashboard">
+        <img src="assets/img/ressorces/dk_logo.png" class="img-fluid logo-blue" alt="Logo" style="width: 120px">
+      </a>
+      <a [routerLink]="routes.dashboard">
+        <img src="assets/img/ressorces/dk_logo.png" class="img-fluid logo-small" alt="Logo" style="width: 120px">
+      </a>
+    </div>
+    <div class="logo-color">
+      <a [routerLink]="routes.dashboard">
+        <img src="assets/img/ressorces/dk_logo.png" class="img-fluid logo-blue" alt="Logo" style="width: 120px">
+      </a>
+      <a [routerLink]="routes.dashboard">
+        <img src="assets/img/ressorces/dk_logo.png" class="img-fluid logo-small" alt="Logo" style="width: 120px">
+      </a>
+    </div>
   </div>
-  <div class="logo-color">
-    <a [routerLink]="routes.dashboard">
-      <img src="assets/img/ressorces/dk_logo.png" class="img-fluid logo-blue" alt="Logo" style="width: 120px">
-    </a>
-    <a [routerLink]="routes.dashboard">
-      <img src="assets/img/ressorces/dk_logo.png" class="img-fluid logo-small" alt="Logo" style="width: 120px">
-    </a>
-  </div>
-</div>
   <!-- Sidebar Toggle -->
   <a (click)="toggleSideBar()" href="javascript:void(0);" id="toggle_btn">
     <span class="toggle-bars">
@@ -45,7 +45,8 @@
   <!-- /Search -->
 
   <!-- Mobile Menu Toggle -->
-  <a href="javascript:void(0);" class="mobile_btn" (click)="toggleMobileIcon()" (keydown.enter)="toggleMobileIcon()" tabindex="0" id="mobile_btn">
+  <a href="javascript:void(0);" class="mobile_btn" (click)="toggleMobileIcon()" (keydown.enter)="toggleMobileIcon()"
+    tabindex="0" id="mobile_btn">
     <i class="fas fa-bars"></i>
   </a>
   <!-- /Mobile Menu Toggle -->
@@ -60,23 +61,13 @@
 
     <!-- User Menu -->
 
-    <li class="nav-item dropdown">
-      <a
-        href="javascript:void(0)"
-        class="user-link nav-link"
-        data-bs-toggle="dropdown"
-      >
-        <span class="user-img">
-          <img
-            src="assets/img/new/user.png"
-            alt="img"
-            class="profilesidebar"
-          />
-          <span class="animate-circle"></span>
-        </span>
+    <li class="nav-item dropdown language-show">
+      <a href="javascript:void(0)" class="user-link nav-link" data-bs-toggle="dropdown">
         <span class="user-content">
-          <span class="user-details">Flambel SANOU</span>
-          <!-- <span class="user-name">{{userData.firstName}} {{userData.lastName}}</span> -->
+          <span class="user-name" style="margin-right: 10px;">
+            <img [src]="selectedLanguage[0].flagImage" alt="" style="width: 15px; height: 12px;">
+            {{ selectedLanguage[0].name | translate }} <i class="fa-solid fa-chevron-down"></i>
+          </span>
         </span>
       </a>
       <div class="dropdown-menu menu-drop-user">
@@ -84,21 +75,55 @@
           <div class="subscription-menu">
             <ul>
               <li>
-                <a class="dropdown-item" [routerLink]="routes.profile"
-                  >Profile</a
-                >
+                <a class="dropdown-item" (click)="useLanguage('en')">
+                  <img [src]="en[0].flagImage" alt="" style="width: 15px;">
+                  {{ en[0].name | translate }}
+                </a>
               </li>
               <li>
-                <a class="dropdown-item" [routerLink]="routes.profileSettings"
-                  >Settings</a
-                >
+                <a class="dropdown-item" (click)="useLanguage('fr')">
+                  <img [src]="fr[0].flagImage" alt="" style="width: 15px;">
+                  {{ fr[0].name | translate }}
+                </a>
               </li>
             </ul>
           </div>
-          <div class="subscription-logout">
+        </div>
+      </div>
+    </li>
+    <li class="nav-item dropdown">
+      <a href="javascript:void(0)" class="user-link nav-link" data-bs-toggle="dropdown">
+        <span class="user-img">
+          <img [src]="currentUserData ? currentUserData.pictureUrl : 'assets/img/new/user.png'" alt="img" class="profilesidebar" />
+          <span class="animate-circle"></span>
+        </span>
+        <span class="user-content">
+          <span class="user-name">{{userName}}</span>
+        </span>
+      </a>
+      <div class="dropdown-menu menu-drop-user">
+        <div class="profilemenu">
+          <div class="subscription-menu">
+            <ul>
+              <li>
+                <a class="dropdown-item" [routerLink]="routes.profile">
+                  <i class="fa fa-user" aria-hidden="true" style="margin-right: 10px;"></i>
+                  {{ 'profile.title' | translate }}
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" [routerLink]="routes.profileSettings">
+                  <i class="fa fa-cog" aria-hidden="true" style="margin-right: 10px;"></i>
+                  {{ 'profile.settings' | translate }}
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="subscription-logout" style="background-color: rgb(121, 0, 0); color: #fff;">
             <ul>
               <li class="pb-0">
-                <a href="javascript:void(0);" class="dropdown-item" (click)="logOut()">Log Out</a>
+                <a href="javascript:void(0);" class="dropdown-item" (click)="logOut()" style="color: #fff !important;">
+                  <i class="fa fa-sign-out" aria-hidden="true" style="margin-right: 10px;"></i> Log Out</a>
               </li>
             </ul>
           </div>

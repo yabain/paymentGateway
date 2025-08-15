@@ -16,6 +16,7 @@ import { SideMenuFiveComponent } from './common/side-menus/side-menu-five/side-m
 import { SideMenuTwoComponent } from './common/side-menus/side-menu-two/side-menu-two.component';
 import { SideMenuThreeComponent } from './common/side-menus/side-menu-three/side-menu-three.component';
 import { SideMenuFourComponent } from './common/side-menus/side-menu-four/side-menu-four.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @NgModule({
@@ -34,6 +35,10 @@ import { SideMenuFourComponent } from './common/side-menus/side-menu-four/side-m
     SideMenuThreeComponent,
     SideMenuFourComponent,
   ],
-  imports: [CommonModule, FeatureModuleRoutingModule, SharedModule],
+  imports: [
+    CommonModule,
+    FeatureModuleRoutingModule, 
+    TranslateModule,
+    SharedModule],
 })
 export class FeatureModuleModule {}

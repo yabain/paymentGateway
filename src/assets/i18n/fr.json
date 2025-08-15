@@ -114,7 +114,12 @@
     "selectAccountType": "Sélectionnez le type de compte",
     "selectCountry": "Sélectionnez votre pays",
     "selectCity": "Sélectionnez votre ville",
-    "allreadyHaveAccount": "Vous avez déjà un compte ?"
+    "allreadyHaveAccount": "Vous avez déjà un compte ?",
+    "leftLoginMessage": "Accédez à notre tableau de bord, Veuillez vous connecter pour continuer votre session !",
+    "leftLoginSubMessage": "Gestion des factures sans effort pour votre entreprise",
+    "leftRegisterMessage": "Prenez le contrôle de votre processus de facturation. Créez un compte dès aujourd'hui.",
+    "leftRegisterSubMessage": "Gestion des factures sans effort pour votre entreprise"
+
   },
   "update": {
     "updateAvailable": "Mise à jour disponible",
@@ -322,7 +327,8 @@
     "terms&conditions": "Conditions d'utilisation",
     "privacyPolicy": "Politique de confidentialité",
     "help": "Aide",
-    "admin": "Administration"
+    "admin": "Administration",
+    "settings": "Paramètres"
   },
   "payment": {
     "title": "Paiement",
@@ -424,6 +430,10 @@
   "mail": {
     "title": "Mail center",
     "status": "Statut"
+  },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "welcome": "Welcome"
   },
   "tool": "Outil",
   "meetUrl": "Lien de la Visio",

@@ -5,83 +5,86 @@ import { environment } from 'src/environments/environment';
 import { DatePipe } from '@angular/common';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
 export class LanguageService {
-    selectedDate = new Date();
-    formattedDate: string;
+  selectedDate = new Date();
+  formattedDate: string;
+  en = [{ name: 'lang.en', value: 'en', flagImage: 'assets/icons/uk-flag.svg' }];
+  fr = [{ name: 'lang.fr', value: 'fr', flagImage: 'assets/icons/fr-flag.svg' }];
 
-    constructor(
-        private translate: TranslateService,
-        private storage: StorageService,
-        private datePipe: DatePipe
-    ) {
-        this.translate.setDefaultLang('en');
-        this.translate.onLangChange.subscribe((event) => {
-            const dateFormat = this.translate.instant('DATE_FORMAT');
-            this.formattedDate = this.datePipe.transform(this.selectedDate, dateFormat, undefined, event.lang);
-        });
+  constructor(
+    private translate: TranslateService,
+    private storage: StorageService,
+    private datePipe: DatePipe,
+  ) {
+    this.translate.onLangChange.subscribe((event) => {
+      const dateFormat = this.translate.instant('DATE_FORMAT');
+      this.formattedDate = this.datePipe.transform(
+        this.selectedDate,
+        dateFormat,
+        undefined,
+        event.lang,
+      );
+    });
 
-        this.translate.addLangs(['en', 'en']);
-        // Switch language based on user preference
-        const browserLang = this.translate.getBrowserLang();
-        this.translate.use(browserLang.match(/en|fr/) ? browserLang : 'en');
+    this.translate.addLangs(['en', 'en']);
+    // Switch language based on user preference
+    const browserLang = this.translate.getBrowserLang();
+    console.log('browserLang: ', browserLang)
+    this.translate.setDefaultLang(browserLang ? browserLang : 'en');
+    this.translate.use(browserLang ? browserLang : 'en');
+  }
 
-    }
+  currentLanguage!: { name: string; value: string; flagImage: string };
 
-    currentLanguage!: { name: string, value: string, flagImage: string };
+  setDefaultLanguage() {
+    // console.log("setDefaultLanguage - no lan")
+    this.translate.setDefaultLang('en');
+    this.setLocalUserLanguage('en');
+    this.useLanguage('en');
+    return 'en';
+  }
 
+  setLocalUserLanguage(lang) {
+    console.log('setLocalUserLanguage', lang);
+    this.storage.setStorage('language', lang);
+  }
 
-    setDefaultLanguage() {
-        // console.log("setDefaultLanguage - no lan")
-        this.translate.setDefaultLang('en');
+  getDefaultLanguage() {
+    return this.storage.getStorage('language').then((lang: any) => {
+      if (lang) {
+        // this.setLocalUserLanguage(lang);
+        return lang;
+      } else {
         this.setLocalUserLanguage('en');
-        this.useLanguage('en');
-        return "en"
-    }
+        return 'en';
+      }
+    });
+  }
 
-    setLocalUserLanguage(lang) {
-        console.log("setLocalUserLanguage", lang);
-        this.storage.setStorage("language", lang);
-    }
+  useLanguage(language: any) {
+    this.translate.use(language);
+    this.storage.setStorage('language', language);
+    this.currentLanguage = language;
+  }
 
-    getDefaultLanguage(){
-        return this.storage.getStorage("language")
-            .then((lang: any) => {
-                if (lang) {
-                    // this.setLocalUserLanguage(lang);
-                    return lang;
-                }
-                else {
-                    this.setLocalUserLanguage('en');
-                    return "en";
-                }
-            })
-    }
+  initLanguage() {
+    this.storage.getStorage('language').then((res: any) => {
+      if (res) {
+        if (res) {
+          // this.setLocalUserLanguage(res);
+          this.translate.use(res);
+          return res;
+        } else return this.setDefaultLanguage();
+      } else {
+        // console.log("initLanguage - no res")
+        return this.setDefaultLanguage();
+      }
+    });
+  }
 
-    useLanguage(language: any) {
-        this.translate.use(language);
-        this.storage.setStorage("language", language);
-        this.currentLanguage = language;
-    }
-
-    initLanguage() {
-        this.storage.getStorage('language')
-            .then((res: any) => {
-                if (res) {
-                    if (res) {
-                        // this.setLocalUserLanguage(res);
-                        this.translate.use(res);
-                        return res;
-                    } else return this.setDefaultLanguage();
-                } else {
-                    // console.log("initLanguage - no res")
-                    return this.setDefaultLanguage();
-                }
-            })
-    }
-
-    switchLanguage(lang: string) {
-        this.translate.use(lang);
-    }
+  switchLanguage(lang: string) {
+    this.translate.use(lang);
+  }
 }

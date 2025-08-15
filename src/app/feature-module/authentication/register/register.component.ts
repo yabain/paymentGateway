@@ -91,6 +91,7 @@ export class RegisterComponent implements OnInit {
       cityId: new FormControl(null, { validators: [Validators.required] }),
       agreeTerms: new FormControl(null, { validators: [Validators.required] }),
       language: new FormControl(lang, { validators: [Validators.required] }),
+      pictureUrl: new FormControl('assets/img/new/user.png', { validators: [Validators.required] }),
       email: new FormControl(null, {
         validators: [Validators.required, Validators.email],
       }),

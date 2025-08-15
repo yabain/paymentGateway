@@ -43,7 +43,7 @@ export class ForgotPasswordComponent  implements OnInit {
     this.getIfIsConnected()
       .then((response) => {
         if (response === true) {
-          this.router.navigateByUrl('/tabs', { replaceUrl: true });
+          // this.router.navigateByUrl('/tabs', { replaceUrl: true });
         }
       });
   }
@@ -136,13 +136,6 @@ export class ForgotPasswordComponent  implements OnInit {
     //   buttons: ['OK'],
     // });
     // await alert.present();
-  }
-
-  /**
-   * Navigates to the forgot password screen
-   */
-  navigateToForgotPassword() {
-    this.router.navigate(['/auth/reset-password']);
   }
 
   /**
