@@ -14,6 +14,7 @@ import {
   ApexTitleSubtitle,
 } from 'ng-apexcharts';
 import { routes, SideBarService } from 'src/app/core/core.index';
+import { UserService } from 'src/app/services/user/user.service';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries | any;
@@ -37,19 +38,27 @@ export type ChartOptions = {
   styleUrl: './dashboard.component.scss',
 })
 export class DashboardComponent {
+  currentUserData: any = [];
+  userName: string = 'User';
   public routes = routes;
   @ViewChild('chart') chart!: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
   public chartOptions2: Partial<ChartOptions>;
   public chartOptions3: Partial<ChartOptions>;
 
-  
-    public chartOptions4: Partial<ChartOptions>;
-    public chartOptions5: Partial<ChartOptions>;
-    public layoutPosition = '1';
+  public chartOptions4: Partial<ChartOptions>;
+  public chartOptions5: Partial<ChartOptions>;
+  public layoutPosition = '1';
 
-  constructor(private sideBar: SideBarService) {
-      this.initCharts()
+  constructor(
+    private sideBar: SideBarService,
+    private userService: UserService,
+  ) {
+    this.initCharts();
+    this.getUserData();
+  }
+
+  initCharts() {
     this.chartOptions = {
       series: [
         {
@@ -250,10 +259,6 @@ export class DashboardComponent {
         },
       },
     };
-  }
-
-  
-  initCharts() {
     this.chartOptions4 = {
       series: [
         {
@@ -332,5 +337,15 @@ export class DashboardComponent {
     this.sideBar.layoutPosition.subscribe((res) => {
       this.layoutPosition = res;
     });
+  }
+
+  async getUserData() {
+    this.currentUserData = await this.userService.getCurrentUserData();
+    // this.userData = await this.storage.getStorage(environment.user_data);
+    console.log('user Data: ', this.currentUserData);
+    if (this.currentUserData) {
+      this.userName = this.userService.showName(this.currentUserData);
+      this.userName = this.userName.split(' ')[0]; // Get only the first name
+    }
   }
 }

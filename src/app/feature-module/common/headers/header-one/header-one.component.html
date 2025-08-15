@@ -65,8 +65,8 @@
       <a href="javascript:void(0)" class="user-link nav-link" data-bs-toggle="dropdown">
         <span class="user-content">
           <span class="user-name" style="margin-right: 10px;">
-            <img [src]="selectedLanguage[0].flagImage" alt="" style="width: 15px; height: 12px;">
-            {{ selectedLanguage[0].name | translate }} <i class="fa-solid fa-chevron-down"></i>
+            <img [src]="selectedLanguage[0]?.flagImage" alt="" style="width: 15px; height: 12px;">
+            {{ selectedLanguage[0]?.name | translate }} <i class="fa-solid fa-chevron-down"></i>
           </span>
         </span>
       </a>

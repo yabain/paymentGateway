@@ -433,7 +433,13 @@
   },
   "dashboard": {
     "title": "Dashboard",
-    "welcome": "Welcome"
+    "welcome": "Welcome",
+    "sendMoney": "Send money",
+    "subTitleWelcome": "Express Transfer: Easy, Fast and Safe...",
+    "lastMonth": "Last month",
+    "payment": "Payments",
+    "fundraising": "Fundraising",
+    "subscriptions": "Subscriptions"
   },
   "tool": "Tool",
   "meetUrl": "Visio URL",

@@ -433,7 +433,13 @@
   },
   "dashboard": {
     "title": "Tableau de bord",
-    "welcome": "Welcome"
+    "welcome": "Bienvenue",
+    "sendMoney": "Envoyer de l'argent",
+    "subTitleWelcome": "digiKUNTZ Payments: Facile, Rapide et Sécurisé...",
+    "lastMonth": "Le mois dernier",
+    "payment": "Paiements",
+    "fundraising": "Collecte de fonds",
+    "subscriptions": "Abonnements"
   },
   "tool": "Outil",
   "meetUrl": "Lien de la Visio",
