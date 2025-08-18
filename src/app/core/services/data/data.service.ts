@@ -1,4 +1,4 @@
- 
+
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map } from 'rxjs';
@@ -721,7 +721,7 @@ export class DataService {
         })
       );
   }
-   
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 public sideBar: any[] = [
   {
@@ -731,6 +731,14 @@ public sideBar: any[] = [
     showAsTab: false,
     separateRoute: false,
     menu: [
+      {
+        menuValue: 'Dashboard',
+        route: routes.application,
+        hasSubRoute: false,
+        showSubRoute: false,
+        icon: 'home',
+        base: 'super-admin',
+      },
       {
         menuValue: 'Dashboard',
         route: routes.application,
@@ -1558,7 +1566,7 @@ public sideBar: any[] = [
             route: routes.placeholder,
             base: routes.placeholder,
           },
-          
+
           {
             menuValue: 'Spinner',
             route: routes.spinner,
@@ -1821,7 +1829,7 @@ public sideBar: any[] = [
     menu: [
       {
         menuValue: 'Documentation',
-      
+
         hasSubRoute: false,
         showSubRoute: false,
         icon: 'file-text',
@@ -1837,7 +1845,7 @@ public sideBar: any[] = [
         base: 'lock',
         subMenus: [],
       }
-      
+
     ],
   },
 ];

@@ -48,6 +48,7 @@ export class SideMenuOneComponent implements OnDestroy {
   public primarySkinStyle = '0';
   public mobileSidebar = false;
   public multilevel: Array<boolean> = [false, false, false];
+  userData: any = {};
 
 
   base = 'dashboard';
@@ -88,7 +89,7 @@ export class SideMenuOneComponent implements OnDestroy {
     });
   }
 
-
+cliclReloader() {}
 
   private getRoutes(route: url): void {
     const splitVal = route.url.split('/');
