@@ -62,7 +62,7 @@ export class AuthService {
             if (user) {
               console.log('token: ', user.token);
               this.storage.setStorage(environment.user_key, user.userData._id);
-              this.storage.setStorage('token', JSON.stringify(user.token));
+              this.storage.setStorage('token', user.token);
               resolve(user.userData); // Résoudre la Promise avec user.userData
             } else {
               resolve(false); // Résoudre la Promise avec false

@@ -2,7 +2,7 @@
     width: 300px; /* Set the desired width */
     height: 400px; /* Set the desired height */
   }
-  
+
 .view-btn {
   background: #F57C11;
   border: 1px solid #F57C11;
@@ -12,4 +12,12 @@
   border: 1px solid #F57C11;
   background: #fff;
   color: #021d66 !important;
+}
+
+.element-shadow-box-primary {
+  box-shadow: 5px 5px 10px #021d6664; /* Décalage horizontal de 5px, vertical de 5px, flou de 10px, couleur noire semi-transparente */
+}
+
+.element-shadow-box-secondary {
+  box-shadow: 5px 5px 10px #f57b116d; /* Décalage horizontal de 5px, vertical de 5px, flou de 10px, couleur noire semi-transparente */
 }

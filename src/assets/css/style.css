@@ -6059,7 +6059,7 @@ table .badge {
   color: #AAAAAA;
 }
 [data-layout-mode=dark] body .settings-icon span {
-  background: rgba(117, 57, 255, 0.7);
+  background: #F57C11;
 }
 [data-layout-mode=dark] body h1, [data-layout-mode=dark] body h2, [data-layout-mode=dark] body h3, [data-layout-mode=dark] body h4, [data-layout-mode=dark] body h5, [data-layout-mode=dark] body h6, [data-layout-mode=dark] body .customer-additional-form .input-block label {
   color: #fff;

@@ -158,62 +158,6 @@ export class UserService {
   }
 
   /**
-   * Adds a follow relationship from one user to another.
-   * @param currentUserId - The ID of the current user.
-   * @param profileId - The ID of the profile to follow.
-   * @returns An observable indicating the success of the follow action.
-   */
-  follow(profileId: string): Observable<void> {
-    return this.apiService.getById(`follow/new`, profileId);
-  }
-
-  /**
-   * Removes a follow relationship from one user to another.
-   * @param userId - The ID of the current user.
-   * @param profileId - The ID of the profile to unfollow.
-   * @returns An observable indicating the success of the unfollow action.
-   */
-  unFollow(profileId: string): Observable<void> {
-    return this.apiService.delete(`follow`, profileId)
-  }
-
-  /**
-   * Get if a user is following another user.
-   * @param userId - The ID of the current user.
-   * @returns An observable indicating if the user is following the profile.
-   */
-  getFollowersList(userId: string): Observable<any | undefined> {
-    return this.apiService.getById('follow/followers-list', userId);
-  }
-
-
-  getFollowers(userId: string): Observable<any | undefined> {
-    return this.apiService.getById('follow/followers-number', userId);
-  }
-  /**
-   * gets if a user is following another user.
-   * @param userId - The ID of the current user.
-   * @returns An observable indicating if the user is following the profile.
-   */
-  getFollowingsList(userId: string): Observable<any | undefined> {
-    return this.apiService.getById('follow/followings-list', userId);
-  }
-
-  getFollowings(userId: string): Observable<any | undefined> {
-    return this.apiService.getById('follow/followings-number', userId);
-  }
-
-  /**
-   * Checks if a user is following another user.
-   * @param currentUserId - The ID of the current user.
-   * @param profileId - The ID of the profile being checked.
-   * @returns An observable indicating if the user is following the profile.
-   */
-  checkFollowing(profileId: string): Observable<any | undefined> {
-    return this.apiService.getById(`follow/follow-ckeck`, profileId);
-  }
-
-  /**
    * Searches for users by their username, first name, or last name.
    * @param searchString - The string to filter users by.
    * @returns An observable of users filtered by the search string.
@@ -270,4 +214,13 @@ export class UserService {
     }
   }
 
+  async getUsersStats(): Promise<any> {
+    try {
+      const response = await this.apiService.getWithoutId('user/users-stats').toPromise();
+      return response;
+    } catch (error) {
+      console.error('Error fetching users stats:', error);
+      throw error;
+    }
+  }
 }

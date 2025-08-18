@@ -60,7 +60,6 @@ export class HeaderOneComponent implements OnInit {
   async getLanguage(){
     this.selectedLanguage = await this.language.getDefaultLanguage();
     this.selectedLanguage = this.selectedLanguage === 'en' ? this.en : this.fr;
-    console.log('selected : ', this.selectedLanguage);
   }
 
   public logOut(): void {
@@ -78,7 +77,6 @@ export class HeaderOneComponent implements OnInit {
   async getUserData() {
     this.currentUserData = await this.userService.getCurrentUserData();
     // this.userData = await this.storage.getStorage(environment.user_data);
-    console.log('user Data: ', this.currentUserData);
     if (this.currentUserData) {
       this.userName = this.userService.showName(this.currentUserData);
     }

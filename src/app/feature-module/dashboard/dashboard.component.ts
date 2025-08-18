@@ -1,4 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -13,7 +14,11 @@ import {
   ApexTooltip,
   ApexTitleSubtitle,
 } from 'ng-apexcharts';
+import { Subject, takeUntil } from 'rxjs';
 import { routes, SideBarService } from 'src/app/core/core.index';
+import { ExchangeService } from 'src/app/services/exchange/exchange.service';
+import { LocationService } from 'src/app/services/location/location.service';
+import { SystemService } from 'src/app/services/system/system.service';
 import { UserService } from 'src/app/services/user/user.service';
 
 export type ChartOptions = {
@@ -37,7 +42,8 @@ export type ChartOptions = {
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
   currentUserData: any = [];
   userName: string = 'User';
   public routes = routes;
@@ -49,13 +55,170 @@ export class DashboardComponent {
   public chartOptions4: Partial<ChartOptions>;
   public chartOptions5: Partial<ChartOptions>;
   public layoutPosition = '1';
+  gettingUserStats: boolean = false;
+  public userStats: any = {
+    usersNumber: 0,
+    pourcentage: 0,
+  };
+  gettingExchangeRate: boolean = false;
+  exchangeRate: any = [];
+  allCountries: any = [];
+  availableCountries: any = [];
+  otherCountries: any = [];
+  gettingLocations: boolean = true;
+  networkError: boolean = false;
+  transactionList: any = [];
 
   constructor(
     private sideBar: SideBarService,
     private userService: UserService,
-  ) {
-    this.initCharts();
-    this.getUserData();
+    private router: Router,
+    private route: ActivatedRoute,
+    private location: LocationService,
+    private systemService: SystemService,
+    private exchange: ExchangeService,
+  ) {}
+
+  async ngOnInit() {
+    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+      this.getUserData();
+      this.initCharts();
+    });
+    this.checkNetwork();
+  }
+
+  async getUserData() {
+    await this.userService
+      .getCurrentUser()
+      .then(
+        (userData) => {
+          if (!userData) {
+            this.navigateTo('/auth-screen');
+            return;
+          }
+          this.currentUserData = userData;
+          if (this.currentUserData) {
+            this.userName = this.userService.showName(this.currentUserData);
+            this.userName = this.userName.split(' ')[0]; // Get only the first name
+            if (this.currentUserData.isAdmin === true) {
+              this.gettingUserStats = true;
+              this.userStats = this.getUsersStats();
+            }
+          }
+          this.getExchangeRate();
+          this.getLocations();
+        },
+        (e) => {
+          console.log('error to get current User: ', e);
+        },
+      )
+      .catch((e) => {
+        this.currentUserData = undefined;
+      });
+
+    console.log('user Data: ', this.currentUserData);
+  }
+
+  async getUsersStats() {
+    try {
+      const response = await this.userService.getUsersStats();
+      if (response) {
+        this.userStats = response;
+        this.gettingUserStats = false;
+      } else {
+        console.error('No data found in response');
+        this.gettingUserStats = false;
+      }
+    } catch (error) {
+      console.error('Error fetching users stats:', error);
+      this.gettingUserStats = false;
+    }
+  }
+
+  navigateTo(location) {
+    this.router.navigate([location]); // Directs to the authentication screen for login.
+  }
+
+  private getExchangeRate() {
+    this.gettingExchangeRate = true;
+    this.exchange
+      .getOtherExchangeRate()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(
+        (data) => {
+          if (data) {
+            this.exchangeRate = data;
+          } else {
+            console.error('Failed to fetch exchange rate data');
+          }
+          this.gettingExchangeRate = false;
+        },
+        (error) => {
+          this.gettingExchangeRate = false;
+          console.error('Error fetching exchange rate:', error);
+        },
+      );
+  }
+
+  exchangeTo(currency) {
+    let data: any = this.exchangeRate.filter((e) => e.toCurrency === currency);
+    data = data[0];
+    return data.value;
+  }
+
+  /**
+   * Retrieves and sets available countries and cities for the form.
+   */
+  getLocations() {
+    this.location
+      .getCountries()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((countries) => {
+        if (countries) {
+          this.allCountries = countries.sort((a, b) =>
+            a.name.localeCompare(b.name),
+          );
+          this.availableCountries = this.allCountries.filter(
+            (e) => e.status === true,
+          );
+          this.otherCountries = this.availableCountries.filter(
+            (e) => e._id != this.currentUserData.countryId._id,
+          );
+          this.location
+            .getCities()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((cities) => {
+              this.gettingLocations = false;
+              return;
+            });
+        } else {
+          this.systemService.getStaticData().then(() => {
+            setTimeout(() => {
+              this.getLocations();
+              window.location.reload();
+            }, 10 * 1000);
+          });
+        }
+      });
+  }
+
+  checkNetwork() {
+    setTimeout(() => {
+      if (this.userService && this.allCountries) {
+        this.networkError = false;
+      } else {
+        this.networkError = true;
+        this.checkNetwork();
+      }
+    }, 20000);
+  }
+
+  /**
+   * Cleans up data when the component is destroyed.
+   */
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   initCharts() {
@@ -337,15 +500,5 @@ export class DashboardComponent {
     this.sideBar.layoutPosition.subscribe((res) => {
       this.layoutPosition = res;
     });
-  }
-
-  async getUserData() {
-    this.currentUserData = await this.userService.getCurrentUserData();
-    // this.userData = await this.storage.getStorage(environment.user_data);
-    console.log('user Data: ', this.currentUserData);
-    if (this.currentUserData) {
-      this.userName = this.userService.showName(this.currentUserData);
-      this.userName = this.userName.split(' ')[0]; // Get only the first name
-    }
   }
 }
