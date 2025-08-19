@@ -1,287 +1,12 @@
-mat-stepper {
-  .mat-horizontal-stepper-header-container {
-    margin-bottom: 20px;
-  }
-
-  mat-progress-bar {
-    margin-bottom: 20px;
-  }
-}
-
-/* Dans le fichier SCSS de votre composant */
-.no-spinners {
-  --webkit-appearance: none;
-  margin: 0;
-
-  &::-webkit-inner-spin-button,
-  &::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-
-  &[type="number"] {
-    -moz-appearance: textfield;
-  }
-}
-
-.non-clickable-steps .mat-step-header {
-  pointer-events: none;
-}
-
-.step2 {
-  :root {
-    --primary: #4361ee;
-    --primary-light: #4895ef;
-    --secondary: #3f37c9;
-    --dark: #1a1a2e;
-    --light: #f8f9fa;
-    --success: #4cc9f0;
-    --warning: #f72585;
-    --gray: #adb5bd;
-    --gray-dark: #495057;
-  }
-
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  body {
-    font-family: "Poppins", sans-serif;
-    background-color: #f5f7ff;
-    color: var(--dark);
-    line-height: 1.6;
-  }
-
-  .payment-container {
-    max-width: 600px;
-    margin: 40px auto;
-    padding: 30px;
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
-  }
-
-  .payment-header {
-    text-align: center;
-    margin-bottom: 30px;
-  }
-
-  .payment-header h1 {
-    font-size: 28px;
-    font-weight: 600;
-    color: var(--dark);
-    margin-bottom: 10px;
-  }
-
-  .payment-header p {
-    color: var(--gray-dark);
-    font-size: 16px;
-  }
-
-  .payment-methods {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 15px;
-    margin-bottom: 30px;
-  }
-
-  .method-card {
-    display: flex;
-    align-items: center;
-    padding: 20px;
-    background: white;
-    border-radius: 12px;
-    border: 1px solid #e9ecef;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .method-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
-    border-color: var(--primary-light);
-  }
-
-  .method-card.active {
-    border: 2px solid #021d66;
-    background-color: #f0f7ff;
-    h3 {
-      color: #021d66;
-    }
-    p {
-      color: #000000;
-      opacity: 0.9;
-    }
-    i {
-      color: #021d66;
-    }
-    .method-icon {
-      background: #fff !important;
-    }
-  }
-
-  .method-icon {
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #fff;
-    border-radius: 12px;
-    margin-right: 20px;
-    color: var(--primary);
-    font-size: 24px;
-  }
-
-  .method-img {
-    max-width: 40px;
-  }
-
-  .method-info {
-    flex: 1;
-  }
-
-  .method-info h3 {
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 5px;
-    color: var(--dark);
-  }
-
-  .method-info p {
-    font-size: 14px;
-    color: var(--gray-dark);
-    opacity: 0.8;
-  }
-
-  .coming-soon {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: rgb(0, 0, 0);
-    color: white;
-    padding: 3px 8px;
-    border-radius: 20px;
-    font-size: 10px;
-    font-weight: 500;
-  }
-
-  .account-details {
-    background: #d9edf7 !important;
-    padding: 25px;
-    border-radius: 5px;
-    margin-top: 30px;
-    animation: fadeIn 0.5s ease;
-  }
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .account-details h2 {
-    font-size: 18px;
-    margin-bottom: 20px;
-    color: var(--dark);
-    display: flex;
-    align-items: center;
-  }
-
-  .account-details h2 i {
-    margin-right: 10px;
-    color: var(--primary);
-  }
-
-  .form-group {
-    margin-bottom: 20px;
-  }
-
-  .form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--gray-dark);
-  }
-
-  .form-control {
-    width: 100%;
-    padding: 12px 15px;
-    border: 1px solid #e9ecef;
-    border-radius: 10px;
-    font-size: 15px;
-    transition: all 0.3s;
-    background-color: white;
-  }
-
-  .form-control:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
-  }
-
-  .navigation-buttons {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 30px;
-  }
-
-  .btn {
-    padding: 12px 25px;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s;
-    border: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .btn-outline {
-    background: white;
-    color: var(--primary);
-    border: 1px solid var(--primary);
-  }
-
-  .btn-outline:hover {
-    background: #f0f7ff;
-  }
-
-  .btn-primary {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-    color: white;
-    box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
-  }
-
-  .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
-  }
-
-  .btn i {
-    margin-right: 8px;
-  }
-
-  .bank-logo {
-    width: 80px;
-    height: auto;
-    margin-bottom: 20px;
-  }
-}
-
-.step3 {
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmation de Transfert</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
         :root {
             --primary: #4361ee;
             --primary-light: #4895ef;
@@ -315,7 +40,7 @@ mat-stepper {
             margin: 0 auto;
             background: white;
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(145, 144, 144, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
         
@@ -345,6 +70,7 @@ mat-stepper {
             background: var(--light);
             padding: 25px;
             border-radius: 15px;
+            margin-bottom: 30px;
             text-align: center;
         }
         
@@ -357,7 +83,7 @@ mat-stepper {
         .amount-main {
             font-size: 42px;
             font-weight: 700;
-            color: #000;
+            color: var(--primary);
             margin: 10px 0;
         }
         
@@ -478,20 +204,19 @@ mat-stepper {
         
         .btn-cancel {
             background: white;
-            color: #252525;
-            border: 2px solid #6f6e6e;
+            color: var(--gray-dark);
+            border: 2px solid var(--gray-light);
         }
         
         .btn-cancel:hover {
-            background: #000000;
-            border-color: #000000;
-            color: #fff;
+            background: #f8f9fa;
+            border-color: var(--gray);
         }
         
         .btn-confirm {
-            background: linear-gradient(135deg, #3f37c9 0%, #4895ef 100%) !important;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
             color: white;
-            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.3) !important;
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.3);
         }
         
         .btn-confirm:hover {
@@ -582,4 +307,141 @@ mat-stepper {
             color: var(--primary);
             font-weight: 600;
         }
-}
+    </style>
+</head>
+<body>
+    <div class="confirmation-container">
+        <div class="confirmation-header">
+            <h1><i class="fas fa-shield-check"></i> Confirmation de Transfert</h1>
+            <p>Veuillez vérifier les détails avant de confirmer</p>
+        </div>
+        
+        <div class="confirmation-content">
+            <div class="amount-summary">
+                <div class="amount-label">Montant à transférer</div>
+                <div class="amount-main">1 250,00 €</div>
+                <div class="amount-secondary">Équivalent à 819 950 XAF</div>
+            </div>
+            
+            <div class="countdown">
+                <i class="fas fa-clock"></i> Offre garantie pendant : <span id="countdown">04:59</span>
+            </div>
+            
+            <div class="details-grid">
+                <div class="detail-card">
+                    <h3><i class="fas fa-user"></i> Expéditeur</h3>
+                    <div class="detail-item">
+                        <span class="detail-label">Nom</span>
+                        <span class="detail-value">Jean Dupont</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Compte</span>
+                        <span class="detail-value">FR76 3000 1000 1200 3456 7890 123</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Contact</span>
+                        <span class="detail-value">+33 6 12 34 56 78</span>
+                    </div>
+                </div>
+                
+                <div class="detail-card">
+                    <h3><i class="fas fa-user-friends"></i> Bénéficiaire</h3>
+                    <div class="detail-item">
+                        <span class="detail-label">Nom</span>
+                        <span class="detail-value">Marie Kwemo</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Méthode</span>
+                        <span class="detail-value">Virement Bancaire</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Compte</span>
+                        <span class="detail-value">CM21 1000 2000 3000 4000 5000 6</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Contact</span>
+                        <span class="detail-value">+237 6 91 22 91 22</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="fee-breakdown">
+                <h4><i class="fas fa-receipt"></i> Détail des frais</h4>
+                <div class="fee-item">
+                    <span>Frais de transfert</span>
+                    <span>5,00 €</span>
+                </div>
+                <div class="fee-item">
+                    <span>Commission de change</span>
+                    <span>3,50 €</span>
+                </div>
+                <div class="fee-item">
+                    <span>Frais bancaires</span>
+                    <span>1,00 €</span>
+                </div>
+                <div class="fee-total">
+                    <span>Total des frais</span>
+                    <span>9,50 €</span>
+                </div>
+            </div>
+            
+            <div class="detail-card">
+                <h3><i class="fas fa-info-circle"></i> Informations de transfert</h3>
+                <div class="detail-item">
+                    <span class="detail-label">Référence</span>
+                    <span class="detail-value">TRX-2023-05876</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Taux de change</span>
+                    <span class="detail-value">1 EUR = 655.96 XAF</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Date estimée d'arrivée</span>
+                    <span class="detail-value">16 Nov 2023</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Motif</span>
+                    <span class="detail-value">Aide familiale</span>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-cancel">
+                    <i class="fas fa-times"></i> Modifier
+                </button>
+                <button class="btn btn-confirm">
+                    <i class="fas fa-check"></i> Confirmer le transfert
+                </button>
+            </div>
+            
+            <div class="security-notice">
+                <i class="fas fa-lock"></i>
+                <p>Vos informations sont sécurisées et cryptées. Ce transfert est protégé par notre garantie de sécurité.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Compte à rebours
+        function startCountdown() {
+            let timeLeft = 5 * 60; // 5 minutes en secondes
+            const countdownElement = document.getElementById('countdown');
+            
+            const interval = setInterval(() => {
+                if (timeLeft <= 0) {
+                    clearInterval(interval);
+                    countdownElement.innerHTML = '00:00';
+                    countdownElement.style.color = 'var(--warning)';
+                    return;
+                }
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                countdownElement.innerHTML = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                timeLeft--;
+            }, 1000);
+        }
+        
+        startCountdown();
+    </script>
+</body>
+</html>

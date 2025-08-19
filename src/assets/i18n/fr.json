@@ -390,7 +390,7 @@
     "card": "Carte bancaire",
     "omDescription": "Paiement mobile rapide et sécurisé",
     "mtnDescription": "Paiement mobile rapide et sécurisé",
-    "paypalDescription": "Payez avec votre compte PayPal",
+    "paypalDescription": "Payez vers un compte PayPal",
     "cardDescription": "Visa, Mastercard, CB",
     "bank": "Banque",
     "bankDescription": "Virement bancaire sécurisé",
@@ -403,7 +403,13 @@
     "accountNumber": "Numéro de compte",
     "amountDetails": "Détails de la transaction",
     "personalDetails": "Informations personnel",
-    "warningMessage": "Le montant estimatif correspond à la valeur en votre votre monaie. Il n'inclut pas les frais de transfert éventuellement appliqués lors de l'envoi de fonds."
+    "warningMessage": "Le montant estimatif correspond à la valeur en votre votre monaie. Il n'inclut pas les frais de transfert éventuellement appliqués lors de l'envoi de fonds.",
+    "equivalentTo": "Equivalent à",
+    "comingSoon": "Bientôt disponible",
+    "sender": "Expéditeur",
+    "receiver": "Bénéficiaire",
+    "secureMessage": "Vos informations sont sécurisées et cryptées. Ce transfert est protégé par notre partenaire Flutterwave.",
+    "feeDetails": "Frais de transaction"
   },
   "whatsapp": {
     "title": "WhatsApp",

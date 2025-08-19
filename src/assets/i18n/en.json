@@ -390,7 +390,7 @@
     "card": "Card",
     "omDescription": "Fast and secure mobile payment",
     "mtnDescription": "Fast and secure mobile payment",
-    "paypalDescription": "Pay with your PayPal account",
+    "paypalDescription": "Pay to PayPal account",
     "cardDescription": "Visa, Mastercard, CB",
     "bank": "Bank",
     "bankDescription": "Secure bank transfer",
@@ -403,7 +403,13 @@
     "accountNumber": "Account number",
     "amountDetails": "Amount details",
     "personalDetails": "Personnal details",
-    "warningMessage": "The estimated amount is the value in your currency. It does not include any transfer fees that may apply when sending funds."
+    "warningMessage": "The estimated amount is the value in your currency. It does not include any transfer fees that may apply when sending funds.",
+    "equivalentTo": "Equivalent to",
+    "comingSoon": "Coming soon",
+    "sender": "Sender",
+    "receiver": "Receiver",
+    "secureMessage": "Your information is secure and encrypted. This transfer is protected by our partner Flutterwave.",
+    "feeDetails": "Fee details"
   },
   "whatsapp": {
     "title": "WhatsApp center",

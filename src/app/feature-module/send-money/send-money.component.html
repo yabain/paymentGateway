@@ -144,7 +144,7 @@
 
               <div class="card-header">
                 <h4>{{ "payment.accountDetailsReception" | translate }}</h4>
-                {{ "payment.receiverSubTitle" | translate }}  <br />
+                {{ "payment.receiverSubTitle" | translate }} <br />
               </div>
               <div class="card-body">
                 <form action="#">
@@ -154,37 +154,37 @@
                       <div class="step2">
 
                         <div class="payment-methods">
-                          
+
                           <div (click)="selectMethod('BANK')"
-                          [ngClass]="selectedMethod === 'BANK' ? 'method-card active' : 'method-card'">
+                            [ngClass]="selectedMethod === 'BANK' ? 'method-card active' : 'method-card'">
                             <div class="method-icon">
                               <i class="fas fa-university"></i>
                             </div>
                             <div class="method-info">
-                              <h3>Virement Bancaire</h3>
-                              <p>Transfert sécurisé vers votre compte bancaire</p>
+                              <h3>{{ "payment.bank" | translate }}</h3>
+                              <p>{{ "payment.bankDescription" | translate }}</p>
                             </div>
                           </div>
 
-                          <div class="method-card" (click)="selectMethod('OM')"
-                          [ngClass]="selectedMethod === 'OM' ? 'method-card active' : 'method-card'">
+                          <div class="method-card" (click)="selectMethod('OM')" *ngIf="selectedCountry.code === '237'"
+                            [ngClass]="selectedMethod === 'OM' ? 'method-card active' : 'method-card'">
                             <div class="method-icon">
                               <img src="assets/img/ressorces/om.png" alt="" class="method-img">
                             </div>
                             <div class="method-info">
                               <h3>Orange Money</h3>
-                              <p>Reception instantanée sur votre mobile</p>
+                              <p>{{ "payment.omDescription" | translate }}</p>
                             </div>
                           </div>
 
-                          <div class="method-card" (click)="selectMethod('MTN')"
-                          [ngClass]="selectedMethod === 'MTN' ? 'method-card active' : 'method-card'">
+                          <div class="method-card" (click)="selectMethod('MTN')" *ngIf="selectedCountry.code === '237'"
+                            [ngClass]="selectedMethod === 'MTN' ? 'method-card active' : 'method-card'">
                             <div class="method-icon">
                               <img src="assets/img/ressorces/mtn_money.webp" alt="" class="method-img">
                             </div>
                             <div class="method-info">
                               <h3>MTN Mobile Money</h3>
-                              <p>Reception rapide et sécurisée</p>
+                              <p>{{ "payment.mtnDescription" | translate }}</p>
                             </div>
                           </div>
 
@@ -194,8 +194,8 @@
                             </div>
                             <div class="method-info">
                               <h3>PayPal</h3>
-                              <p>Recevez directement sur votre compte PayPal</p>
-                              <span class="coming-soon">Bientôt disponible</span>
+                              <p>{{ "payment.paypalDescription" | translate }}</p>
+                              <span class="coming-soon">{{ "payment.comingSoon" | translate }}</span>
                             </div>
                           </div>
                         </div>
@@ -209,7 +209,8 @@
                       </h5>
                       <br>
                       <div class="row">
-                        <div class="account-details" style="background: #edf4f7 !important; padding: 25px; border-radius: 8px;">
+                        <div class="account-details"
+                          style="background: #edf4f7 !important; padding: 25px; border-radius: 8px;">
 
                           <div class="col-md-12" *ngIf="selectedMethod === 'OM' || selectedMethod === 'MTN'">
                             <div class="col-md-12">
@@ -261,12 +262,163 @@
           </mat-step>
           <mat-step>
             <mat-progress-bar mode="determinate" value="100"></mat-progress-bar>
+            <ng-template matStepLabel>{{ "payment.confirmation" | translate }}</ng-template>
+            <!-- <p>{{ "payment.receiverInformation" | translate }}</p> -->
+            <div class="row">
+              <div class="col-md-3"></div>
+              <div class="col-md-6">
+                <div class="step3">
+                  <div class="confirmation-container">
+                    <div class="confirmation-content">
+                      <div class="amount-summary">
+                        <div class="amount-label">{{ "payment.amountToBeReceived" | translate }}</div>
+                        <div class="amount-main">{{amountToBeReceived}} {{ selectedCountry?.currency }}</div>
+                        <div class="amount-secondary">{{ "payment.equivalentTo" | translate }} {{estimation}} {{
+                          currentUser?.countryId.currency }}</div>
+                      </div>
+                      
 
-            <ng-template matStepLabel>Done</ng-template>
-            <p>You are now done.</p>
-            <div>
-              <button mat-button matStepperPrevious>Back</button>
-              <button mat-button (click)="resetStepper()">Reset</button>
+                        <div class="detail-card">
+                          <h3><i class="fas fa-user-friends"></i> {{ "payment.receiver" | translate }}</h3>
+                          <div class="detail-item">
+                            <span class="detail-label">{{ "auth.firstName" | translate }}</span>
+                            <span class="detail-value">{{ receiverFirstName }}</span>
+                          </div>
+                          <div class="detail-item">
+                            <span class="detail-label">{{ "auth.lastName" | translate }}</span>
+                            <span class="detail-value">{{ receiverLastName }} </span>
+                          </div>
+                          <div class="detail-item">
+                            <span class="detail-label">{{ "terms.email" | translate }}</span>
+                            <span class="detail-value">{{ receiverEmail }}</span>
+                          </div>
+                          <div class="detail-item">
+                            <span class="detail-label">{{ 'payment.receiverCountry' | translate }}</span>
+                            <span class="detail-value">{{ selectedCountry.name }}</span>
+                          </div>
+                          <div class="detail-item">
+                            <span class="detail-label">{{ "terms.phone" | translate }}</span>
+                            <span class="detail-value">+{{ selectedCountry.code }} {{ receiverContact }}</span>
+                          </div>
+                        </div>
+                        <hr>
+                      
+
+                        <div class="detail-card">
+                          <h3 style="margin-bottom: 10px;">{{ "payment.accountDetails" | translate }}</h3>
+                          <h3 *ngIf="selectedMethod === 'BANK'"><i class="fas fa-university"></i> {{ methodName }}
+                          </h3>
+                          <h3 *ngIf="selectedMethod === 'OM'">
+                            <img src="assets/img/ressorces/om.png" alt="" style="width: 50px; margin-right: 10px;"> {{ methodName }}
+                          </h3>
+                          <h3 *ngIf="selectedMethod === 'MTN'">
+                            <img src="assets/img/ressorces/mtn_money.webp" alt="" style="width: 50px; margin-right: 10px;"> {{ methodName }}
+                          </h3>
+
+                          <div class="detail-item" *ngIf="selectedMethod === 'BANK'">
+                            <span class="detail-label">{{ 'payment.accountNumber' | translate }}</span>
+                            <span class="detail-value">{{ bankAccountNumber }}</span>
+                          </div>
+                          <div class="detail-item" *ngIf="selectedMethod === 'BANK'">
+                            <span class="detail-label">BIC/SWIFT</span>
+                            <span class="detail-value">{{ bic }}</span>
+                          </div>
+                          <div class="detail-item" *ngIf="selectedMethod != 'BANK'">
+                            <span class="detail-label">{{ 'payment.receiverMobileAccountNumber' | translate }}</span>
+                            <span class="detail-value">+{{ selectedCountry.code }} {{ receiverMobileAccountNumber
+                              }}</span>
+                          </div>
+                        </div>
+                        <hr>
+
+                      <div class="details-grid">
+                        <div class="detail-card">
+                          <h3><i class="fas fa-user"></i> {{ "payment.sender" | translate }}</h3>
+                          <div class="detail-item">
+                            <span class="detail-label">{{ "auth.firstName" | translate }}</span>
+                            <span class="detail-value">{{ currentUser.firstName }}</span>
+                          </div>
+                          <div class="detail-item">
+                            <span class="detail-label">{{ "auth.lastName" | translate }}</span>
+                            <span class="detail-value">{{ currentUser.lastName }} </span>
+                          </div>
+                          <div class="detail-item">
+                            <span class="detail-label">{{ "terms.email" | translate }}</span>
+                            <span class="detail-value">{{ currentUser.email }}</span>
+                          </div>
+                          <div class="detail-item">
+                            <span class="detail-label">{{ "auth.country" | translate }}</span>
+                            <span class="detail-value">{{ currentUser.countryId.name }}</span>
+                          </div>
+                          <div class="detail-item">
+                            <span class="detail-label">{{ "terms.phone" | translate }}</span>
+                            <span class="detail-value">+{{ currentUser.countryId.code }} {{ currentUser.phone }}</span>
+                          </div>
+                        </div>
+                        <hr>
+
+                      </div>
+
+                      <div class="fee-breakdown">
+                        <h4><i class="fas fa-receipt"></i> Détail des frais</h4>
+                        <div class="fee-item">
+                          <span>Frais de transfert</span>
+                          <span>5,00 €</span>
+                        </div>
+                        <div class="fee-item">
+                          <span>Commission de change</span>
+                          <span>3,50 €</span>
+                        </div>
+                        <div class="fee-item">
+                          <span>Frais bancaires</span>
+                          <span>1,00 €</span>
+                        </div>
+                        <div class="fee-total">
+                          <span>Total des frais</span>
+                          <span>9,50 €</span>
+                        </div>
+                      </div>
+
+                      <div class="detail-card">
+                        <h3><i class="fas fa-info-circle"></i> Informations de transfert</h3>
+                        <div class="detail-item">
+                          <span class="detail-label">Référence</span>
+                          <span class="detail-value">TRX-2023-05876</span>
+                        </div>
+                        <div class="detail-item">
+                          <span class="detail-label">Taux de change</span>
+                          <span class="detail-value">1 EUR = 655.96 XAF</span>
+                        </div>
+                        <div class="detail-item">
+                          <span class="detail-label">Date estimée d'arrivée</span>
+                          <span class="detail-value">16 Nov 2023</span>
+                        </div>
+                        <div class="detail-item">
+                          <span class="detail-label">Motif</span>
+                          <span class="detail-value">Aide familiale</span>
+                        </div>
+                      </div>
+
+                      <div class="security-notice">
+                        <img src="assets/img/ressorces/flutterwave.png" alt=""
+                          style="max-width: 100px; border-radius: 5px; margin-right: 10px;">
+                        <p>{{ "payment.secureMessage" | translate }}</p>
+                      </div>
+                      <div class="action-buttons">
+                        <button class="btn btn-cancel" matStepperPrevious>
+                          <i class="feather icon-arrow-left" data-bs-toggle="tooltip"
+                            title="feather icon-skip-back"></i>
+                          Modifier
+                        </button>
+                        <button class="btn btn-confirm" (click)="resetStepper()">
+                          <i class="fas fa-check"></i> {{ "payment.proceed" | translate }}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3"></div>
             </div>
           </mat-step>
         </mat-stepper>

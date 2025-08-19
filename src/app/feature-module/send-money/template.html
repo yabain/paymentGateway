@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Méthode de Réception | Transfert</title>
+    <title>Récapitulatif de Transaction</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -32,7 +32,7 @@
             line-height: 1.6;
         }
         
-        .payment-container {
+        .summary-container {
             max-width: 600px;
             margin: 40px auto;
             padding: 30px;
@@ -41,151 +41,177 @@
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
         }
         
-        .payment-header {
+        .summary-header {
             text-align: center;
             margin-bottom: 30px;
+            position: relative;
         }
         
-        .payment-header h1 {
+        .summary-header h1 {
             font-size: 28px;
             font-weight: 600;
             color: var(--dark);
             margin-bottom: 10px;
         }
         
-        .payment-header p {
-            color: var(--gray-dark);
-            font-size: 16px;
-        }
-        
-        .payment-methods {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-        
-        .method-card {
-            display: flex;
-            align-items: center;
-            padding: 20px;
-            background: white;
-            border-radius: 12px;
-            border: 1px solid #e9ecef;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .method-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
-            border-color: var(--primary-light);
-        }
-        
-        .method-card.active {
-            border: 2px solid var(--primary);
-            background-color: #f0f7ff;
-        }
-        
-        .method-icon {
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #f5f7ff 0%, #e8ecff 100%);
-            border-radius: 12px;
-            margin-right: 20px;
-            color: var(--primary);
-            font-size: 24px;
-        }
-        
-        .method-info {
-            flex: 1;
-        }
-        
-        .method-info h3 {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 5px;
-            color: var(--dark);
-        }
-        
-        .method-info p {
-            font-size: 14px;
-            color: var(--gray-dark);
-            opacity: 0.8;
-        }
-        
-        .coming-soon {
+        .summary-header .status-badge {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: var(--warning);
+            top: 0;
+            right: 0;
+            background-color: var(--success);
             color: white;
-            padding: 3px 8px;
+            padding: 5px 15px;
             border-radius: 20px;
-            font-size: 10px;
+            font-size: 12px;
             font-weight: 500;
+            display: flex;
+            align-items: center;
         }
         
-        .account-details {
+        .summary-header .status-badge i {
+            margin-right: 5px;
+        }
+        
+        .transaction-details {
             background: #f8f9fa;
             padding: 25px;
             border-radius: 15px;
-            margin-top: 30px;
-            animation: fadeIn 0.5s ease;
+            margin-bottom: 30px;
         }
         
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e9ecef;
         }
         
-        .account-details h2 {
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        
+        .detail-label {
+            font-weight: 500;
+            color: var(--gray-dark);
+        }
+        
+        .detail-value {
+            font-weight: 600;
+            text-align: right;
+        }
+        
+        .amount-highlight {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            text-align: center;
+        }
+        
+        .amount-highlight .amount {
+            font-size: 36px;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+        
+        .amount-highlight .currency {
             font-size: 18px;
-            margin-bottom: 20px;
-            color: var(--dark);
+            opacity: 0.9;
+        }
+        
+        .parties-container {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0;
+        }
+        
+        .party-card {
+            flex: 0 0 48%;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+            border: 1px solid #e9ecef;
+        }
+        
+        .party-card h3 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: var(--gray-dark);
             display: flex;
             align-items: center;
         }
         
-        .account-details h2 i {
+        .party-card h3 i {
             margin-right: 10px;
             color: var(--primary);
         }
         
-        .form-group {
+        .party-info {
+            margin-top: 15px;
+        }
+        
+        .party-info p {
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .timeline {
+            margin: 30px 0;
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--primary-light);
+        }
+        
+        .timeline-item {
+            position: relative;
             margin-bottom: 20px;
         }
         
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 14px;
-            font-weight: 500;
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .timeline-dot {
+            position: absolute;
+            left: -30px;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 10px;
+        }
+        
+        .timeline-content {
+            padding-left: 15px;
+        }
+        
+        .timeline-content h4 {
+            font-size: 15px;
+            margin-bottom: 5px;
+        }
+        
+        .timeline-content p {
+            font-size: 13px;
             color: var(--gray-dark);
         }
         
-        .form-control {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #e9ecef;
-            border-radius: 10px;
-            font-size: 15px;
-            transition: all 0.3s;
-            background-color: white;
-        }
-        
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
-        }
-        
-        .navigation-buttons {
+        .action-buttons {
             display: flex;
             justify-content: space-between;
             margin-top: 30px;
@@ -229,85 +255,117 @@
             margin-right: 8px;
         }
         
-        .bank-logo {
-            width: 80px;
-            height: auto;
-            margin-bottom: 20px;
+        .receipt-btn {
+            width: 100%;
+            margin-top: 15px;
+            background: white;
+            color: var(--dark);
+            border: 1px solid #e9ecef;
+        }
+        
+        .receipt-btn:hover {
+            background: #f8f9fa;
         }
     </style>
 </head>
 <body>
-    <div class="payment-container">
-        <div class="payment-header">
-            <h1>Méthode de Réception</h1>
-            <p>Choisissez comment vous souhaitez recevoir les fonds</p>
+    <div class="summary-container">
+        <div class="summary-header">
+            <h1>Récapitulatif de Transaction</h1>
+            <div class="status-badge">
+                <i class="fas fa-check-circle"></i> Complétée
+            </div>
+            <p>Votre transfert a été effectué avec succès</p>
         </div>
         
-        <div class="payment-methods">
-            <div class="method-card active">
-                <div class="method-icon">
-                    <i class="fas fa-university"></i>
-                </div>
-                <div class="method-info">
-                    <h3>Virement Bancaire</h3>
-                    <p>Transfert sécurisé vers votre compte bancaire</p>
-                </div>
+        <div class="amount-highlight">
+            <div>Montant transféré</div>
+            <div class="amount">1 250,00</div>
+            <div class="currency">EUR</div>
+        </div>
+        
+        <div class="transaction-details">
+            <div class="detail-row">
+                <span class="detail-label">Référence</span>
+                <span class="detail-value">TRX-2023-05876</span>
             </div>
-            
-            <div class="method-card">
-                <div class="method-icon" style="color: #ff6b00;">
-                    <i class="fas fa-mobile-alt"></i>
-                </div>
-                <div class="method-info">
-                    <h3>Orange Money</h3>
-                    <p>Reception instantanée sur votre mobile</p>
-                </div>
+            <div class="detail-row">
+                <span class="detail-label">Date</span>
+                <span class="detail-value">15 Nov 2023, 14:30</span>
             </div>
-            
-            <div class="method-card">
-                <div class="method-icon" style="color: #ffc107;">
-                    <i class="fas fa-money-bill-wave"></i>
-                </div>
-                <div class="method-info">
-                    <h3>MTN Mobile Money</h3>
-                    <p>Reception rapide et sécurisée</p>
-                </div>
+            <div class="detail-row">
+                <span class="detail-label">Méthode</span>
+                <span class="detail-value">Virement Bancaire</span>
             </div>
-            
-            <div class="method-card" style="opacity: 0.6;">
-                <div class="method-icon" style="color: #003087;">
-                    <i class="fab fa-paypal"></i>
-                </div>
-                <div class="method-info">
-                    <h3>PayPal</h3>
-                    <p>Recevez directement sur votre compte PayPal</p>
-                    <span class="coming-soon">Bientôt disponible</span>
-                </div>
+            <div class="detail-row">
+                <span class="detail-label">Frais</span>
+                <span class="detail-value">9,50 EUR</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Taux de change</span>
+                <span class="detail-value">1 EUR = 655.96 XAF</span>
             </div>
         </div>
         
-        <div class="account-details">
-            <h2><i class="fas fa-info-circle"></i> Détails du compte bénéficiaire</h2>
-            
-            <div class="form-group">
-                <label>Numéro de compte</label>
-                <input type="text" class="form-control" value="FR76 1234 5678 9012 3456 7890 123" readonly>
+        <div class="parties-container">
+            <div class="party-card">
+                <h3><i class="fas fa-user"></i> Expéditeur</h3>
+                <div class="party-info">
+                    <p><strong>Jean Dupont</strong></p>
+                    <p>jean.dupont@email.com</p>
+                    <p>+33 6 12 34 56 78</p>
+                    <p>FR76 3000 1000 1200 3456 7890 123</p>
+                </div>
             </div>
             
-            <div class="form-group">
-                <label>Code BIC/SWIFT</label>
-                <input type="text" class="form-control" value="BNPAFRPPXXX" readonly>
+            <div class="party-card">
+                <h3><i class="fas fa-user-friends"></i> Bénéficiaire</h3>
+                <div class="party-info">
+                    <p><strong>Marie Kwemo</strong></p>
+                    <p>marie.kwemo@email.com</p>
+                    <p>+237 6 91 22 91 22</p>
+                    <p>CM21 1000 2000 3000 4000 5000 6</p>
+                </div>
             </div>
         </div>
         
-        <div class="navigation-buttons">
+        <div class="timeline">
+            <h3>Historique de la transaction</h3>
+            <div class="timeline-item">
+                <div class="timeline-dot"><i class="fas fa-check"></i></div>
+                <div class="timeline-content">
+                    <h4>Transfert complété</h4>
+                    <p>15 Nov 2023, 14:35</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot"><i class="fas fa-exchange-alt"></i></div>
+                <div class="timeline-content">
+                    <h4>Conversion de devise</h4>
+                    <p>15 Nov 2023, 14:32</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot"><i class="fas fa-money-bill-wave"></i></div>
+                <div class="timeline-content">
+                    <h4>Paiement initié</h4>
+                    <p>15 Nov 2023, 14:30</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="action-buttons">
             <button class="btn btn-outline">
-                <i class="fas fa-arrow-left"></i> Retour
+                <i class="fas fa-home"></i> Accueil
             </button>
             <button class="btn btn-primary">
-                Continuer <i class="fas fa-arrow-right"></i>
+                <i class="fas fa-redo"></i> Nouveau transfert
             </button>
         </div>
+        
+        <button class="btn receipt-btn">
+            <i class="fas fa-file-download"></i> Télécharger le reçu
+        </button>
     </div>
 </body>
 </html>
