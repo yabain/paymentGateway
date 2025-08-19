@@ -81,21 +81,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+      this.scrollToTop();
       this.getUserData();
       this.initCharts();
-      setTimeout(()=>{
-        this.scrollToTop();
-      }, 500)
     });
     this.checkNetwork();
   }
 
   scrollToTop(): void {
-    window.scroll({
-      top: 0,
-      left: 0,
-      behavior: 'smooth'
-    });
+    setTimeout(() => {
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      });
+    }, 100);
   }
 
   async getUserData() {
@@ -173,6 +173,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   exchangeTo(currency) {
     let data: any = this.exchangeRate.filter((e) => e.toCurrency === currency);
+    console.log('data: ', data)
     data = data[0];
     return data.value;
   }

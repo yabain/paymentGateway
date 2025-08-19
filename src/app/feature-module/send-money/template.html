@@ -3,78 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reception Account</title>
+    <title>Méthode de Réception | Transfert</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #4895ef;
+            --secondary: #3f37c9;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --success: #4cc9f0;
+            --warning: #f72585;
+            --gray: #adb5bd;
+            --gray-dark: #495057;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7ff;
+            color: var(--dark);
             line-height: 1.6;
-            color: #333;
+        }
+        
+        .payment-container {
             max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
+            margin: 40px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
         }
         
-        h1 {
-            color: #2c3e50;
-            font-size: 24px;
+        .payment-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .payment-header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--dark);
             margin-bottom: 10px;
         }
         
-        h2 {
-            color: #2c3e50;
-            font-size: 18px;
-            margin-top: 25px;
-            margin-bottom: 15px;
-        }
-        
-        .payment-method {
-            background-color: #f9f9f9;
-            border-left: 4px solid #3498db;
-            padding: 12px 15px;
-            margin-bottom: 10px;
-            border-radius: 0 4px 4px 0;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .payment-method:hover {
-            background-color: #f0f0f0;
-        }
-        
-        .payment-method strong {
-            color: #2c3e50;
+        .payment-header p {
+            color: var(--gray-dark);
             font-size: 16px;
         }
         
-        .payment-method p {
-            color: #7f8c8d;
-            margin: 5px 0 0 0;
-            font-size: 14px;
+        .payment-methods {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
         }
         
-        .divider {
-            border-top: 1px solid #ecf0f1;
-            margin: 20px 0;
+        .method-card {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e9ecef;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .method-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            border-color: var(--primary-light);
+        }
+        
+        .method-card.active {
+            border: 2px solid var(--primary);
+            background-color: #f0f7ff;
+        }
+        
+        .method-icon {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f5f7ff 0%, #e8ecff 100%);
+            border-radius: 12px;
+            margin-right: 20px;
+            color: var(--primary);
+            font-size: 24px;
+        }
+        
+        .method-info {
+            flex: 1;
+        }
+        
+        .method-info h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+        
+        .method-info p {
+            font-size: 14px;
+            color: var(--gray-dark);
+            opacity: 0.8;
+        }
+        
+        .coming-soon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--warning);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 500;
         }
         
         .account-details {
-            margin-top: 20px;
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+            animation: fadeIn 0.5s ease;
         }
         
-        .account-details label {
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .account-details h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+        }
+        
+        .account-details h2 i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-dark);
         }
         
-        .account-details input {
+        .form-control {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 16px;
+            padding: 12px 15px;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s;
+            background-color: white;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
         }
         
         .navigation-buttons {
@@ -83,70 +191,123 @@
             margin-top: 30px;
         }
         
-        .navigation-buttons button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
+        .btn {
+            padding: 12px 25px;
+            border-radius: 10px;
             font-size: 16px;
+            font-weight: 500;
             cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
         
-        .previous-btn {
-            background-color: #f9f9f9;
-            color: #3498db;
+        .btn-outline {
+            background: white;
+            color: var(--primary);
+            border: 1px solid var(--primary);
         }
         
-        .next-btn {
-            background-color: #3498db;
+        .btn-outline:hover {
+            background: #f0f7ff;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
             color: white;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
         }
         
-        .coming-soon {
-            opacity: 0.6;
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+        }
+        
+        .btn i {
+            margin-right: 8px;
+        }
+        
+        .bank-logo {
+            width: 80px;
+            height: auto;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
-    <h1>Reception account</h1>
-    <p>choose the reception method</p>
-    
-    <div class="payment-methods">
-        <div class="payment-method">
-            <strong>Bank</strong>
-            <p>Secure bank transfer</p>
+    <div class="payment-container">
+        <div class="payment-header">
+            <h1>Méthode de Réception</h1>
+            <p>Choisissez comment vous souhaitez recevoir les fonds</p>
         </div>
         
-        <div class="payment-method">
-            <strong>Orange Money</strong>
-            <p>Fast and secure mobile payment</p>
+        <div class="payment-methods">
+            <div class="method-card active">
+                <div class="method-icon">
+                    <i class="fas fa-university"></i>
+                </div>
+                <div class="method-info">
+                    <h3>Virement Bancaire</h3>
+                    <p>Transfert sécurisé vers votre compte bancaire</p>
+                </div>
+            </div>
+            
+            <div class="method-card">
+                <div class="method-icon" style="color: #ff6b00;">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <div class="method-info">
+                    <h3>Orange Money</h3>
+                    <p>Reception instantanée sur votre mobile</p>
+                </div>
+            </div>
+            
+            <div class="method-card">
+                <div class="method-icon" style="color: #ffc107;">
+                    <i class="fas fa-money-bill-wave"></i>
+                </div>
+                <div class="method-info">
+                    <h3>MTN Mobile Money</h3>
+                    <p>Reception rapide et sécurisée</p>
+                </div>
+            </div>
+            
+            <div class="method-card" style="opacity: 0.6;">
+                <div class="method-icon" style="color: #003087;">
+                    <i class="fab fa-paypal"></i>
+                </div>
+                <div class="method-info">
+                    <h3>PayPal</h3>
+                    <p>Recevez directement sur votre compte PayPal</p>
+                    <span class="coming-soon">Bientôt disponible</span>
+                </div>
+            </div>
         </div>
         
-        <div class="payment-method">
-            <strong>MTN Mobile Money</strong>
-            <p>Fast and secure mobile payment</p>
+        <div class="account-details">
+            <h2><i class="fas fa-info-circle"></i> Détails du compte bénéficiaire</h2>
+            
+            <div class="form-group">
+                <label>Numéro de compte</label>
+                <input type="text" class="form-control" value="FR76 1234 5678 9012 3456 7890 123" readonly>
+            </div>
+            
+            <div class="form-group">
+                <label>Code BIC/SWIFT</label>
+                <input type="text" class="form-control" value="BNPAFRPPXXX" readonly>
+            </div>
         </div>
         
-        <div class="payment-method coming-soon">
-            <strong>PayPal (comming soon)</strong>
-            <p>Pay with your PayPal account</p>
+        <div class="navigation-buttons">
+            <button class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i> Retour
+            </button>
+            <button class="btn btn-primary">
+                Continuer <i class="fas fa-arrow-right"></i>
+            </button>
         </div>
-    </div>
-    
-    <div class="divider"></div>
-    
-    <div class="account-details">
-        <h2>Bank transfer: Details of the receiver's account</h2>
-        
-        <label>Account number</label>
-        <input type="text" value="FR76 1234 5678 9012 3456 7890 123" readonly>
-        
-        <label>BIC/SWIFT</label>
-        <input type="text" value="BNPAF RPPXXX" readonly>
-    </div>
-    
-    <div class="navigation-buttons">
-        <button class="previous-btn">PREVIOUS</button>
-        <button class="next-btn">NEXT</button>
     </div>
 </body>
 </html>

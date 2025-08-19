@@ -107,7 +107,7 @@ export class SendMoneyComponent  implements OnInit {
       this.currentDate = this.formatDate(new Date());
       setTimeout(()=>{
         this.scrollToTop();
-      }, 500)
+      }, 100)
     });
   }
 

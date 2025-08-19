@@ -144,7 +144,7 @@
 
               <div class="card-header">
                 <h4>{{ "payment.accountDetailsReception" | translate }}</h4>
-                --- <br />
+                {{ "payment.receiverSubTitle" | translate }}  <br />
               </div>
               <div class="card-body">
                 <form action="#">
@@ -152,61 +152,98 @@
                     <div class="col-md-6">
                       <h5 class="card-title">{{ "payment.chooseReceptionMethod" | translate }}</h5><br>
                       <div class="step2">
+
                         <div class="payment-methods">
-                          <div class="payment-method">
-                            <strong>Bank</strong>
-                            <p>Secure bank transfer</p>
+                          
+                          <div (click)="selectMethod('BANK')"
+                          [ngClass]="selectedMethod === 'BANK' ? 'method-card active' : 'method-card'">
+                            <div class="method-icon">
+                              <i class="fas fa-university"></i>
+                            </div>
+                            <div class="method-info">
+                              <h3>Virement Bancaire</h3>
+                              <p>Transfert sécurisé vers votre compte bancaire</p>
+                            </div>
                           </div>
 
-                          <div class="payment-method">
-                            <strong>Orange Money</strong>
-                            <p>Fast and secure mobile payment</p>
+                          <div class="method-card" (click)="selectMethod('OM')"
+                          [ngClass]="selectedMethod === 'OM' ? 'method-card active' : 'method-card'">
+                            <div class="method-icon">
+                              <img src="assets/img/ressorces/om.png" alt="" class="method-img">
+                            </div>
+                            <div class="method-info">
+                              <h3>Orange Money</h3>
+                              <p>Reception instantanée sur votre mobile</p>
+                            </div>
                           </div>
 
-                          <div class="payment-method">
-                            <strong>MTN Mobile Money</strong>
-                            <p>Fast and secure mobile payment</p>
+                          <div class="method-card" (click)="selectMethod('MTN')"
+                          [ngClass]="selectedMethod === 'MTN' ? 'method-card active' : 'method-card'">
+                            <div class="method-icon">
+                              <img src="assets/img/ressorces/mtn_money.webp" alt="" class="method-img">
+                            </div>
+                            <div class="method-info">
+                              <h3>MTN Mobile Money</h3>
+                              <p>Reception rapide et sécurisée</p>
+                            </div>
                           </div>
 
-                          <div class="payment-method coming-soon">
-                            <strong>PayPal (comming soon)</strong>
-                            <p>Pay with your PayPal account</p>
+                          <div class="method-card" style="opacity: 0.6;">
+                            <div class="method-icon" style="color: #003087;">
+                              <img src="assets/img/ressorces/paypal.png" alt="" class="method-img">
+                            </div>
+                            <div class="method-info">
+                              <h3>PayPal</h3>
+                              <p>Recevez directement sur votre compte PayPal</p>
+                              <span class="coming-soon">Bientôt disponible</span>
+                            </div>
                           </div>
                         </div>
                       </div>
 
                     </div>
                     <div class="col-md-6">
-                      <h5 class="card-title">{{ "payment.accountDetails" | translate }}: {{ methodName }}</h5><br>
+                      <h5 class="card-title">
+                        <i class="fas fa-info-circle" style="color: #003087;"></i>
+                        {{ "payment.accountDetails" | translate }}: {{ methodName }}
+                      </h5>
+                      <br>
                       <div class="row">
-                        <div class="col-md-12"  *ngIf="selectedMethod === 'OM' || selectedMethod === 'MTN'">
-                          <div class="col-md-12">
-                            <div class="input-block mb-3">
-                              <label htmlFor="receiverMobileAccountNumber">
-                                {{ 'payment.receiverMobileAccountNumber' | translate }} *</label> +{{ selectedCountry?.code }}
-                              <input id="receiverMobileAccountNumber" type="text" class="form-control" placeholder="691229122"
-                                [(ngModel)]="receiverMobileAccountNumber" name="receiverMobileAccountNumber" (input)="canNext2()" />
+                        <div class="account-details" style="background: #edf4f7 !important; padding: 25px; border-radius: 8px;">
+
+                          <div class="col-md-12" *ngIf="selectedMethod === 'OM' || selectedMethod === 'MTN'">
+                            <div class="col-md-12">
+                              <div class="input-block mb-3">
+                                <label htmlFor="receiverMobileAccountNumber">
+                                  {{ 'payment.receiverMobileAccountNumber' | translate }} *</label> +{{
+                                selectedCountry?.code }}
+                                <input id="receiverMobileAccountNumber" type="telephone" class="form-control"
+                                  placeholder="691229122" [(ngModel)]="receiverMobileAccountNumber"
+                                  name="receiverMobileAccountNumber" (input)="canNext2()" />
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-12" *ngIf="selectedMethod === 'BANK'">
+                            <div class="col-md-12">
+                              <div class="input-block mb-3">
+                                <label htmlFor="bankAccountNumber">{{ 'payment.accountNumber' | translate }} *</label>
+                                <input id="bankAccountNumber" type="text" class="form-control"
+                                  placeholder="FR76 1234 5678 9012 3456 7890 123" [(ngModel)]="bankAccountNumber"
+                                  name="bankAccountNumber" (input)="formatAccountNumber($event)" />
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-12" *ngIf="selectedMethod === 'BANK'">
+                            <div class="col-md-12">
+                              <div class="input-block mb-3">
+                                <label htmlFor="bic">BIC/SWIFT *</label>
+                                <input id="bic" type="text" class="form-control" placeholder="BNPAFRPPXXX"
+                                  [(ngModel)]="bic" name="bic" (input)="canNext2()" />
+                              </div>
                             </div>
                           </div>
                         </div>
-                        <div class="col-md-12" *ngIf="selectedMethod === 'BANK'">
-                          <div class="col-md-12">
-                            <div class="input-block mb-3">
-                              <label htmlFor="bankAccountNumber">{{ 'payment.accountNumber' | translate }} *</label>
-                              <input id="bankAccountNumber" type="text" class="form-control" placeholder="FR76 1234 5678 9012 3456 7890 123"
-                                [(ngModel)]="bankAccountNumber" name="bankAccountNumber" (input)="formatAccountNumber($event)" />
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-md-12" *ngIf="selectedMethod === 'BANK'">
-                          <div class="col-md-12">
-                            <div class="input-block mb-3">
-                              <label htmlFor="bic">BIC/SWIFT *</label>
-                              <input id="bic" type="text" class="form-control" placeholder="BNPAFRPPXXX"
-                                [(ngModel)]="bic" name="bic"  (input)="canNext2()" />
-                            </div>
-                          </div>
-                        </div>
+
                       </div>
                     </div>
                   </div>
