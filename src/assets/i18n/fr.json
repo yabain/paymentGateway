@@ -71,8 +71,8 @@
     "agree": "J'accepte les",
     "terms": "termes & conditions",
     "accountType": "Type de compte",
-    "firstName": "Votre nom",
-    "lastName": "Votre prénom",
+    "firstName": "Nom",
+    "lastName": "Prénom",
     "organisationName": "Nom de l'organisation",
     "needOrganisationName": "Nom de l'organisation requis.",
     "forgotPassword": "Mot de passe oublié",
@@ -333,14 +333,14 @@
   "payment": {
     "title": "Paiement",
     "moneyTransfer": "Transfert d'argent",
-    "recipientInfo": "Informations du destinataire",
-    "recipientCountry": "Pays du destinataire",
-    "recipientSubTitle": "Renseignez les informations du destinataire et assurez-vous que les informations sont correctes.",
-    "recipientName": "Nom du destinataire",
-    "recipientEmail": "Email du destinataire",
-    "recipientContact": "Contact du destinataire",
-    "recipientMobileAccountNumber": "Numéro de compte mobile du destinataire",
-    "recipientAddress": "Adresse du destinataire",
+    "receiverInfo": "Informations du destinataire",
+    "receiverCountry": "Pays du destinataire",
+    "receiverSubTitle": "Renseignez les informations du destinataire et assurez-vous que les informations sont correctes.",
+    "receiverName": "Nom du destinataire",
+    "receiverEmail": "Email du destinataire",
+    "receiverContact": "Contact du destinataire",
+    "receiverMobileAccountNumber": "Numéro de compte mobile du destinataire",
+    "receiverAddress": "Adresse du bénéficiaire",
     "amountToBeReceived": "Montant à percevoir",
     "estimation": "Estimation",
     "raisonForTransfer": "Raison du transfert",
@@ -396,10 +396,14 @@
     "bankDescription": "Virement bancaire sécurisé",
     "total": "Total",
     "accountReception": "Compte de réception",
-    "accountDetails": "Coordonnées du compte du destinataire",
+    "accountDetailsReception": "Détails du compte bénéficiaire",
+    "accountDetails": "Coordonnées du compte",
     "chooseReceptionMethod": "Choisissez la méthode de réception",
-    "receiverInformation": "Informations du destinataire",
-    "accountNumber": "Numéro de compte"
+    "receiverInformation": "Informations du bénéficiaire",
+    "accountNumber": "Numéro de compte",
+    "amountDetails": "Détails de la transaction",
+    "personalDetails": "Informations personnel",
+    "warningMessage": "Le montant estimatif correspond à la valeur en votre votre monaie. Il n'inclut pas les frais de transfert éventuellement appliqués lors de l'envoi de fonds."
   },
   "whatsapp": {
     "title": "WhatsApp",
@@ -453,6 +457,16 @@
     "recentTransactions": "Mes transactions récentes",
     "nothingToShow": "Rien à afficher"
   },
+  "sideMenu": {
+    "title": "Menu",
+    "main": "Menu",
+    "dashboard": "Tableau de board",
+    "sendMoney": "Envoyer de l'argent",
+    "payments": "Paiements",
+    "subscriptions": "Abonnements",
+    "fundraising": "Collecte de fonds",
+    "cashWithdrawal": "Retirer de l'argent"
+  },
   "tool": "Outil",
   "meetUrl": "Lien de la Visio",
   "Cameroon": "Cameroun",
@@ -473,5 +487,6 @@
   "searchAccount": "Rechercher un utilisateur sur Digikuntz Paymentst.",
   "OM": "Orange Money",
   "MTN": "MTN Money",
-  "BANK": "Banque"
+  "BANK": "Banque",
+  "DATE_FORMAT": "dd/MM/yyyy"
 }

@@ -96,9 +96,10 @@ export class SystemService {
   }
 
   getSystemData(): Observable<any | undefined> {
+    console.log('getSystemData');
     return this.apiService.get(`system`).pipe(
       map((res: any) => {
-        // console.log('getSystemData: ', res[0]);
+        console.log('getSystemData: ', res[0]);
         if (res) {
           this.storage.setStorage('systemData', JSON.stringify(res[0]));
           return res[0];

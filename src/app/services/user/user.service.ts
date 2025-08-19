@@ -214,7 +214,8 @@ export class UserService {
     }
   }
 
-  async getUsersStats(): Promise<any> {
+  async getUsersStatistics(): Promise<any> {
+    console.log('getUsersStatistics');
     try {
       const response = await this.apiService.getWithoutId('user/users-stats').toPromise();
       return response;

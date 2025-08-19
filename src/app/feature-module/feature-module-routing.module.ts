@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from '../core/core.index';
 import { LoggedInGuard } from '../core/guards/loggedIn/logged-in.guard';
 import { FeatureModuleComponent } from './feature-module.component';
+import { SendMoneyComponent } from './send-money/send-money.component';
 
 const routes: Routes = [
   {
@@ -19,6 +20,14 @@ const routes: Routes = [
         path: 'dashboard',
         loadChildren: () =>
           import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
+      },
+      {
+        path: 'send-money',
+        component: SendMoneyComponent,
+      },
+      {
+        path: 'send-money/:id',
+        component: SendMoneyComponent,
       },
       {
         path: 'customer',
@@ -70,13 +79,6 @@ const routes: Routes = [
         loadChildren: () =>
           import('./blank-page/blank-page.module').then(
             (m) => m.BlankPageModule
-          ),
-      },
-      {
-        path: 'google-maps',
-        loadChildren: () =>
-          import('./google-maps/google-maps.module').then(
-            (m) => m.GoogleMapsModule
           ),
       },
       {

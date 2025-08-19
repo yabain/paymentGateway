@@ -1,0 +1,239 @@
+<h2>{{ "dashboard.sendMoney" | translate }}</h2>
+<br>
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body">
+        <mat-stepper #stepperTwo linear class="non-clickable-steps">
+          <mat-step>
+            <ng-template matStepLabel>{{ "payment.receiverInfo" | translate }}</ng-template>
+            <mat-progress-bar mode="determinate" value="33"></mat-progress-bar>
+            <div class="card-header">
+              <h4>{{ "payment.receiverInfo" | translate }}</h4>
+              {{ "payment.receiverSubTitle" | translate }} <br />
+            </div>
+            <div class="card-body">
+              <form action="#">
+                <div class="row">
+                  <div class="col-md-6">
+                    <h5 class="card-title">{{ "payment.personalDetails" | translate }}</h5><br>
+                    <div class="input-block mb-3">
+                      <label htmlFor="label">{{ 'payment.receiverCountry' | translate }} *</label>
+                      <div class="row">
+                        <div class="col-lg-12">
+                          <div class="input-group">
+                            <span class="input-group-text"><img [src]="flagCountry" alt="" class="flag" slot="start"
+                                style="width: 20px" /></span>
+                            <select id="label" class="form-select" (change)="onSelect($event)" id="country"
+                              *ngIf="!waitingLocations" [value]="selectedCountry._id">
+                              <option *ngFor="let country of availableCountries" [value]="country._id">
+                                {{ country.name | translate }}
+                              </option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="input-block mb-3">
+                          <label htmlFor="receiverFirstName">{{ "auth.firstName" | translate }} *</label>
+                          <input id="receiverFirstName" type="text" class="form-control" [(ngModel)]="receiverFirstName"
+                            name="receiverFirstName" />
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="input-block mb-3">
+                          <label htmlFor="label">{{ "auth.lastName" | translate }} *</label>
+                          <input id="receiverLastName" type="text" class="form-control" [(ngModel)]="receiverLastName"
+                            name="receiverLastName" />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="input-block mb-3">
+                          <label htmlFor="contact">{{ 'payment.receiverContact' | translate }} *</label>
+                          <div class="row">
+                            <div class="col-lg-12">
+                              <div class="input-group">
+                                <span class="input-group-text">+{{ selectedCountry?.code }}</span>
+                                <input id="contact" type="telephone" class="form-control" [(ngModel)]="receiverContact"
+                                  name="receiverContact" />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="input-block mb-3">
+                          <label htmlFor="receiverEmail">{{ 'payment.receiverEmail' | translate }} *</label>
+                          <input id="receiverEmail" type="email" class="form-control" placeholder="exemple@test.com"
+                            [(ngModel)]="receiverEmail" name="receiverEmail" />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="input-block mb-3">
+                          <label htmlFor="receiverAddress">{{ 'payment.receiverAddress' | translate }} *</label>
+                          <input id="receiverAddress" type="text" class="form-control" placeholder=""
+                            [(ngModel)]="receiverAddress" name="receiverAddress" />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="input-block mb-3">
+                      <label htmlFor="label">{{ 'payment.raisonForTransfer' | translate }} *</label>
+                      <textarea rows="5" cols="5" class="form-control" id="raisonForTransfer" placeholder="Description"
+                        [(ngModel)]="raisonForTransfer" name="raisonForTransfer"></textarea>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <h5 class="card-title">{{ "payment.amountDetails" | translate }}</h5><br>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="input-block mb-3">
+                          <label htmlFor="amountToBeReceived">{{ 'payment.amountToBeReceived' | translate }} *</label>
+                          <div class="input-group">
+                            <input id="amountToBeReceived" id="amountToBeReceived" type="text" class="form-control"
+                              placeholder="" [(ngModel)]="amountToBeReceived" name="amountToBeReceived"
+                              style="text-align: right" (input)="formatAmount($event); convertCurrency()" />
+                            <span class="input-group-text">{{ selectedCountry?.currency }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="input-block mb-3">
+                          <label htmlFor="estimation">{{ 'payment.estimation' | translate }} HT</label>
+                          <div class="input-group">
+
+                            <span class="spinner-border spinner-border-sm me-2" role="status" *ngIf="watingEstimation"
+                              style="margin-left: 25vh"></span>
+
+                            <input class="form-control" placeholder="Estimation" *ngIf="!watingEstimation"
+                              style="text-align: right" type="number" id="estimation" placeholder=""
+                              [(ngModel)]="estimation" name="estimation" [disabled]="true" />
+                            <span class="input-group-text">{{ currentUser?.countryId.currency }}</span>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <p style="background: #fda430; color: black; padding: 10px; border-radius: 5px;">
+                          {{ "payment.warningMessage" | translate }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="text-end">
+                  <button type="button" matStepperNext class="btn btn-primary" (click)="nextStep()"
+                    [disabled]="!canNext()">
+                    {{ "payment.next" | translate }}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </mat-step>
+          <mat-step>
+            <mat-progress-bar mode="determinate" value="66"></mat-progress-bar>
+            <form>
+              <ng-template matStepLabel>{{ "payment.accountReception" | translate }}</ng-template>
+
+              <div class="card-header">
+                <h4>{{ "payment.accountDetailsReception" | translate }}</h4>
+                --- <br />
+              </div>
+              <div class="card-body">
+                <form action="#">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <h5 class="card-title">{{ "payment.chooseReceptionMethod" | translate }}</h5><br>
+                      <div class="step2">
+                        <div class="payment-methods">
+                          <div class="payment-method">
+                            <strong>Bank</strong>
+                            <p>Secure bank transfer</p>
+                          </div>
+
+                          <div class="payment-method">
+                            <strong>Orange Money</strong>
+                            <p>Fast and secure mobile payment</p>
+                          </div>
+
+                          <div class="payment-method">
+                            <strong>MTN Mobile Money</strong>
+                            <p>Fast and secure mobile payment</p>
+                          </div>
+
+                          <div class="payment-method coming-soon">
+                            <strong>PayPal (comming soon)</strong>
+                            <p>Pay with your PayPal account</p>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                    <div class="col-md-6">
+                      <h5 class="card-title">{{ "payment.accountDetails" | translate }}: {{ methodName }}</h5><br>
+                      <div class="row">
+                        <div class="col-md-12"  *ngIf="selectedMethod === 'OM' || selectedMethod === 'MTN'">
+                          <div class="col-md-12">
+                            <div class="input-block mb-3">
+                              <label htmlFor="receiverMobileAccountNumber">
+                                {{ 'payment.receiverMobileAccountNumber' | translate }} *</label> +{{ selectedCountry?.code }}
+                              <input id="receiverMobileAccountNumber" type="text" class="form-control" placeholder="691229122"
+                                [(ngModel)]="receiverMobileAccountNumber" name="receiverMobileAccountNumber" (input)="canNext2()" />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-12" *ngIf="selectedMethod === 'BANK'">
+                          <div class="col-md-12">
+                            <div class="input-block mb-3">
+                              <label htmlFor="bankAccountNumber">{{ 'payment.accountNumber' | translate }} *</label>
+                              <input id="bankAccountNumber" type="text" class="form-control" placeholder="FR76 1234 5678 9012 3456 7890 123"
+                                [(ngModel)]="bankAccountNumber" name="bankAccountNumber" (input)="formatAccountNumber($event)" />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-12" *ngIf="selectedMethod === 'BANK'">
+                          <div class="col-md-12">
+                            <div class="input-block mb-3">
+                              <label htmlFor="bic">BIC/SWIFT *</label>
+                              <input id="bic" type="text" class="form-control" placeholder="BNPAFRPPXXX"
+                                [(ngModel)]="bic" name="bic"  (input)="canNext2()" />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="text-end">
+                    <button mat-button matStepperPrevious>Back</button>
+                    <button type="button" matStepperNext class="btn btn-primary" (click)="nextStep()"
+                      [disabled]="!canNext()">
+                      {{ "payment.next" | translate }}
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+            </form>
+          </mat-step>
+          <mat-step>
+            <mat-progress-bar mode="determinate" value="100"></mat-progress-bar>
+
+            <ng-template matStepLabel>Done</ng-template>
+            <p>You are now done.</p>
+            <div>
+              <button mat-button matStepperPrevious>Back</button>
+              <button mat-button (click)="resetStepper()">Reset</button>
+            </div>
+          </mat-step>
+        </mat-stepper>
+      </div>
+    </div>
+  </div>
+</div>

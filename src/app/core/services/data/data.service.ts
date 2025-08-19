@@ -725,19 +725,59 @@ export class DataService {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 public sideBar: any[] = [
   {
-    tittle: 'Main',
+    tittle: 'main',
     active: false,
     icon: 'airplay',
     showAsTab: false,
     separateRoute: false,
     menu: [
       {
-        menuValue: 'Dashboard',
-        route: routes.application,
-        hasSubRoute: false,
-        showSubRoute: false,
+        menuValue: 'dashboard',
+        route: 'dashboard',
+        hasSubRoute: false, // Show arrow after menu item title
+        showSubRoute: true,
         icon: 'home',
-        base: 'super-admin',
+        base: 'dashboard',
+      },
+      {
+        menuValue: 'sendMoney',
+        route: 'send-money',
+        hasSubRoute: false, // Show arrow after menu item title
+        showSubRoute: true,
+        icon: 'send',
+        base: 'send-money',
+      },
+      {
+        menuValue: 'cashWithdrawal',
+        route: routes.application,
+        hasSubRoute: false, // Show arrow after menu item title
+        showSubRoute: true,
+        icon: 'download',
+        base: 'cash-withdrawal',
+      },
+      {
+        menuValue: 'payments',
+        route: routes.application,
+        hasSubRoute: false, // Show arrow after menu item title
+        showSubRoute: true,
+        icon: 'home',
+        base: 'payments',
+      },
+      {
+        menuValue: 'subscriptions',
+        route: '/subscriptions',
+        hasSubRoute: false, // Show arrow after menu item title
+        showSubRoute: true,
+        icon: 'repeat',
+        base: 'subscriptions',
+      },
+      {
+        menuValue: 'fundraising',
+        route: routes.application,
+        hasSubRoute: false, // Show arrow after menu item title
+        showSubRoute: true,
+        icon: 'command',
+        base: 'fundraising',
       },
       {
         menuValue: 'Dashboard',

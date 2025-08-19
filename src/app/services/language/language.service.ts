@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { StorageService } from '../storage/storage.service';
 import { TranslateService } from '@ngx-translate/core';
 import { environment } from 'src/environments/environment';
-import { DatePipe } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
@@ -16,24 +15,51 @@ export class LanguageService {
   constructor(
     private translate: TranslateService,
     private storage: StorageService,
-    private datePipe: DatePipe,
   ) {
     this.translate.onLangChange.subscribe((event) => {
-      const dateFormat = this.translate.instant('DATE_FORMAT');
-      this.formattedDate = this.datePipe.transform(
-        this.selectedDate,
-        dateFormat,
-        undefined,
-        event.lang,
-      );
+      try {
+        this.formattedDate = this.formatDate(this.selectedDate, event.lang);
+      } catch (error) {
+        console.warn('Erreur lors du formatage de la date:', error);
+        // Fallback au format par défaut
+        this.formattedDate = this.formatDate(this.selectedDate, 'en');
+      }
     });
 
-    this.translate.addLangs(['en', 'en']);
+    this.translate.addLangs(['en', 'fr']);
     // Switch language based on user preference
     const browserLang = this.translate.getBrowserLang();
-    console.log('browserLang: ', browserLang)
-    this.translate.setDefaultLang(browserLang ? browserLang : 'en');
-    this.translate.use(browserLang ? browserLang : 'en');
+    console.log('browserLang: ', browserLang);
+    
+    // Vérifier que la langue du navigateur est supportée
+    const supportedLang = browserLang && ['en', 'fr'].includes(browserLang) ? browserLang : 'en';
+    
+    this.translate.setDefaultLang('en');
+    this.translate.use(supportedLang);
+  }
+
+  /**
+   * Formate une date selon la langue spécifiée
+   */
+  private formatDate(date: Date, lang: string): string {
+    try {
+      if (lang === 'fr') {
+        return date.toLocaleDateString('fr-FR', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric'
+        });
+      } else {
+        return date.toLocaleDateString('en-US', {
+          month: '2-digit',
+          day: '2-digit',
+          year: 'numeric'
+        });
+      }
+    } catch (error) {
+      // Fallback au format ISO si la locale n'est pas supportée
+      return date.toISOString().split('T')[0];
+    }
   }
 
   currentLanguage!: { name: string; value: string; flagImage: string };
@@ -53,7 +79,7 @@ export class LanguageService {
 
   getDefaultLanguage() {
     return this.storage.getStorage('language').then((lang: any) => {
-      if (lang) {
+      if (lang && ['en', 'fr'].includes(lang)) {
         // this.setLocalUserLanguage(lang);
         return lang;
       } else {
@@ -64,14 +90,19 @@ export class LanguageService {
   }
 
   useLanguage(language: any) {
-    this.translate.use(language);
-    this.storage.setStorage('language', language);
-    this.currentLanguage = language;
+    if (['en', 'fr'].includes(language)) {
+      this.translate.use(language);
+      this.storage.setStorage('language', language);
+      this.currentLanguage = language;
+    } else {
+      console.warn(`Langue non supportée: ${language}, utilisation de l'anglais par défaut`);
+      this.useLanguage('en');
+    }
   }
 
   initLanguage() {
     this.storage.getStorage('language').then((res: any) => {
-      if (res) {
+      if (res && ['en', 'fr'].includes(res)) {
         if (res) {
           // this.setLocalUserLanguage(res);
           this.translate.use(res);
@@ -85,6 +116,10 @@ export class LanguageService {
   }
 
   switchLanguage(lang: string) {
-    this.translate.use(lang);
+    if (['en', 'fr'].includes(lang)) {
+      this.translate.use(lang);
+    } else {
+      console.warn(`Langue non supportée: ${lang}`);
+    }
   }
 }

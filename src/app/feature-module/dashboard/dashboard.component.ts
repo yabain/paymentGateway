@@ -44,7 +44,7 @@ export type ChartOptions = {
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
-  currentUserData: any = [];
+  currentUserData!: any;
   userName: string = 'User';
   public routes = routes;
   @ViewChild('chart') chart!: ChartComponent;
@@ -83,8 +83,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.getUserData();
       this.initCharts();
+      setTimeout(()=>{
+        this.scrollToTop();
+      }, 500)
     });
     this.checkNetwork();
+  }
+
+  scrollToTop(): void {
+    window.scroll({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
   }
 
   async getUserData() {
@@ -102,7 +113,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.userName = this.userName.split(' ')[0]; // Get only the first name
             if (this.currentUserData.isAdmin === true) {
               this.gettingUserStats = true;
-              this.userStats = this.getUsersStats();
+              this.userStats = this.getUsersStatistics();
             }
           }
           this.getExchangeRate();
@@ -119,9 +130,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     console.log('user Data: ', this.currentUserData);
   }
 
-  async getUsersStats() {
+  async getUsersStatistics() {
     try {
-      const response = await this.userService.getUsersStats();
+      const response = await this.userService.getUsersStatistics();
       if (response) {
         this.userStats = response;
         this.gettingUserStats = false;

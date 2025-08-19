@@ -17,6 +17,8 @@ import { SideMenuTwoComponent } from './common/side-menus/side-menu-two/side-men
 import { SideMenuThreeComponent } from './common/side-menus/side-menu-three/side-menu-three.component';
 import { SideMenuFourComponent } from './common/side-menus/side-menu-four/side-menu-four.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { SendMoneyComponent } from './send-money/send-money.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -34,11 +36,15 @@ import { TranslateModule } from '@ngx-translate/core';
     SideMenuTwoComponent,
     SideMenuThreeComponent,
     SideMenuFourComponent,
+    SendMoneyComponent,
   ],
   imports: [
     CommonModule,
     FeatureModuleRoutingModule, 
     TranslateModule,
-    SharedModule],
+    SharedModule,
+    FormsModule,
+    ReactiveFormsModule
+  ],
 })
 export class FeatureModuleModule {}

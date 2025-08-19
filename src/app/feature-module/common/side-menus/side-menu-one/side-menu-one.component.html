@@ -34,13 +34,14 @@
         <ul class="sidebar-vertical">
           @for (mainTittle of side_bar_data; track mainTittle) {
           <li class="menu-title">
-            <span>{{ mainTittle.tittle }}</span>
+            <span>{{ 'sideMenu.' + mainTittle.tittle | translate }}</span>
           </li>
           @for (menu of mainTittle?.menu; track menu) {
           @if (menu?.hasSubRoute === false) {
           <li [class.active]="base === menu.base">
-            <a [routerLink]="menu.route"><i class="feather" [class]="'icon-' + menu.icon"></i><span>{{ menu?.menuValue
-                }}</span> @if (menu.changeLogVersion === true) {
+            <a [routerLink]="menu.route"><i class="feather" [class]="'icon-' + menu.icon"></i>
+              <span>
+                {{ 'sideMenu.' + menu?.menuValue | translate }}</span> @if (menu.changeLogVersion === true) {
               <span class="badge badge-primary ms-auto">v2.0.5</span>
               }</a>
           </li>

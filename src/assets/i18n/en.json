@@ -333,14 +333,14 @@
   "payment": {
     "title": "Payment",
     "moneyTransfer": "Money transfer",
-    "recipientInfo": "Recipient Informations",
-    "recipientCountry": "Recipient country",
-    "recipientSubTitle": "Fill in the recipient's information and ensure that the information is correct.",
-    "recipientName": "Recipient name",
-    "recipientEmail": "Recipient email",
-    "recipientContact": "Recipient contact",
-    "recipientMobileAccountNumber": "Recipient mobile account number",
-    "recipientAddress": "Recipient Address",
+    "receiverInfo": "Receiver Informations",
+    "receiverCountry": "Receiver country",
+    "receiverSubTitle": "Fill in the receiver's information and ensure that the information is correct.",
+    "receiverName": "Receiver name",
+    "receiverEmail": "Receiver email",
+    "receiverContact": "Receiver contact",
+    "receiverMobileAccountNumber": "Receiver mobile account number",
+    "receiverAddress": "Receiver Address",
     "amountToBeReceived": "Amount to be received",
     "estimation": "Estimation",
     "raisonForTransfer": "Reason for transfer",
@@ -396,10 +396,14 @@
     "bankDescription": "Secure bank transfer",
     "total": "Total",
     "accountReception": "Reception account",
-    "accountDetails": "Details of the receiver's account",
-    "chooseReceptionMethod": "choose the reception method",
+    "accountDetailsReception": "Beneficiary account details",
+    "accountDetails": "Details of the account",
+    "chooseReceptionMethod": "Choose the reception method",
     "receiverInformation": "Receiver information",
-    "accountNumber": "Account number"
+    "accountNumber": "Account number",
+    "amountDetails": "Amount details",
+    "personalDetails": "Personnal details",
+    "warningMessage": "The estimated amount is the value in your currency. It does not include any transfer fees that may apply when sending funds."
   },
   "whatsapp": {
     "title": "WhatsApp center",
@@ -453,6 +457,16 @@
     "recentTransactions": "My recent Transactions",
     "nothingToShow": "Nothing to show"
   },
+  "sideMenu": {
+    "title": "Main",
+    "main": "Main",
+    "dashboard": "Dashboard",
+    "sendMoney": "Send money",
+    "payments": "Payments",
+    "subscriptions": "Subscriptions",
+    "fundraising": "Fundraising",
+    "cashWithdrawal": "Cash Withdrawal"
+  },
   "tool": "Tool",
   "meetUrl": "Visio URL",
   "Cameroon": "Cameroon",
@@ -473,5 +487,6 @@
   "searchAccount": "Search for a user on Digikuntz Payments.",
   "OM": "Orange Money",
   "MTN": "MTN Money",
-  "BANK": "Bank"
+  "BANK": "Bank",
+  "DATE_FORMAT": "MM/dd/yyyy"
 }

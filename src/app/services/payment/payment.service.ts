@@ -4,9 +4,9 @@ import { Injectable } from '@angular/core';
 import { map, catchError, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { from, Observable, of, throwError } from 'rxjs';
-import { ToastService } from '../toast.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ApiService } from '../api/api.service';
+import { ToastService } from '../toast/toast.service';
 
 @Injectable({
   providedIn: 'root'
@@ -25,10 +25,10 @@ export class PaymentService {
   proceedPayment(data): Observable<any> {
       return from(this.apiService.create(`transaction/new`, data))
         .pipe(
-          map((resp) => { // Emit a value on successful set
+          map((resp) => {
             return resp;
           }),
-          catchError(error => of({ error })) // Handle errors and emit an error object
+          catchError(error => of({ error }))
         );
   }
 

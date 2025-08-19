@@ -16,9 +16,13 @@
         <p>{{ 'dashboard.subTitleWelcome' | translate }}</p>
         <h3 style="color: #fff; font-weight: bolder;">00 XAF</h3>
         <div class="dash-btns">
-          <a [routerLink]="routes.companies" class="btn view-btn">{{ 'dashboard.sendMoney' | translate }}</a>
-          <a [routerLink]="routes.packages" class="btn view-package-btn">{{ "dashboard.cashWithdrawal" | translate
-            }}</a>
+          <a [routerLink]="'/send-money'" class="btn view-btn">{{ 'dashboard.sendMoney' | translate }} 
+              <i class="feather icon-send" data-bs-toggle="tooltip" title="feather icon-send" ></i>
+            </a>
+          <a [routerLink]="routes.packages" class="btn view-package-btn">
+            {{ "dashboard.cashWithdrawal" | translate }}
+              <i class="feather icon-download" data-bs-toggle="tooltip"></i>
+            </a>
         </div>
         <div class="dash-img">
           <img src="assets/img/dashboard-card-img.png" alt="">
@@ -52,18 +56,6 @@
             </div>
           </div>
         </div>
-        <!-- <div class="col-lg-4 col-sm-6 d-flex">
-          <div class="company-detail-card bg-pink-light w-100">
-            <div class="company-icon">
-              <img src="assets/img/icons/dash-card-icon-03.svg" alt="">
-            </div>
-            <div class="dash-comapny-info">
-              <h6>Inactive Company</h6>
-              <h5>2</h5>
-              <p><span>2% <i class="feather icon-chevrons-up"></i></span>{{ 'dashboard.lastMonth' | translate }}</p>
-            </div>
-          </div>
-        </div> -->
         <div class="col-lg-4 col-sm-6 d-flex">
           <div class="company-detail-card w-100 element-shadow-box-secondary">
             <div class="company-icon">
@@ -79,7 +71,7 @@
       </div>
     </div>
   </div>
-  <div class="row" *ngIf="currentUserData.isAdmin === true">
+  <div class="row" *ngIf="currentUserData?.isAdmin === true">
     <div class="col-xl-3 col-sm-6 col-12">
       <div class="card">
         <div class="card-body">
@@ -166,7 +158,7 @@
         <div class="card-body">
           <div class="dash-widget-header">
             <span class="dash-widget-icon bg-4">
-              <i class="fa fa-globe"></i>
+              <i class="feather icon-command" data-bs-toggle="tooltip"></i>
             </span>
             <div class="dash-count">
               <div class="dash-title">{{ "dashboard.allFundraisings" | translate }}</div>
@@ -195,9 +187,9 @@
             <div class="col">
               <h5 class="card-title">{{ "home.exchangeRate" | translate }}</h5>
             </div>
-            <div class="col-auto">
+            <div class="col-auto" *ngIf="currentUserData">
               <a [routerLink]="routes.companies" class="btn-right btn btn-sm btn-outline-primary">
-                <img [src]="currentUserData.countryId.flagUrl" alt="" class="flag" />
+                <img [src]="currentUserData?.countryId.flagUrl" alt="" class="flag" />
                 {{ currentUserData.countryId.currency }}
               </a>
             </div>

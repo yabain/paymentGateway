@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reception Account</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            color: #2c3e50;
+            font-size: 18px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        
+        .payment-method {
+            background-color: #f9f9f9;
+            border-left: 4px solid #3498db;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .payment-method:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .payment-method strong {
+            color: #2c3e50;
+            font-size: 16px;
+        }
+        
+        .payment-method p {
+            color: #7f8c8d;
+            margin: 5px 0 0 0;
+            font-size: 14px;
+        }
+        
+        .divider {
+            border-top: 1px solid #ecf0f1;
+            margin: 20px 0;
+        }
+        
+        .account-details {
+            margin-top: 20px;
+        }
+        
+        .account-details label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .account-details input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .navigation-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        .previous-btn {
+            background-color: #f9f9f9;
+            color: #3498db;
+        }
+        
+        .next-btn {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .coming-soon {
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+    <h1>Reception account</h1>
+    <p>choose the reception method</p>
+    
+    <div class="payment-methods">
+        <div class="payment-method">
+            <strong>Bank</strong>
+            <p>Secure bank transfer</p>
+        </div>
+        
+        <div class="payment-method">
+            <strong>Orange Money</strong>
+            <p>Fast and secure mobile payment</p>
+        </div>
+        
+        <div class="payment-method">
+            <strong>MTN Mobile Money</strong>
+            <p>Fast and secure mobile payment</p>
+        </div>
+        
+        <div class="payment-method coming-soon">
+            <strong>PayPal (comming soon)</strong>
+            <p>Pay with your PayPal account</p>
+        </div>
+    </div>
+    
+    <div class="divider"></div>
+    
+    <div class="account-details">
+        <h2>Bank transfer: Details of the receiver's account</h2>
+        
+        <label>Account number</label>
+        <input type="text" value="FR76 1234 5678 9012 3456 7890 123" readonly>
+        
+        <label>BIC/SWIFT</label>
+        <input type="text" value="BNPAF RPPXXX" readonly>
+    </div>
+    
+    <div class="navigation-buttons">
+        <button class="previous-btn">PREVIOUS</button>
+        <button class="next-btn">NEXT</button>
+    </div>
+</body>
+</html>
