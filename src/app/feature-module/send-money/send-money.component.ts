@@ -30,8 +30,7 @@ export enum ReqStatus {
   styleUrls: ['./send-money.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class SendMoneyComponent  implements OnInit {
-
+export class SendMoneyComponent implements OnInit {
   selectedMethod: string = 'BANK';
   step: number = 1;
   invoiceTaxes: number = 5;
@@ -82,7 +81,6 @@ export class SendMoneyComponent  implements OnInit {
     secondCtrl: ['', Validators.required],
   });
 
-
   constructor(
     private _formBuilder: FormBuilder,
     private toastService: ToastService,
@@ -105,9 +103,9 @@ export class SendMoneyComponent  implements OnInit {
       this.getCurrentUser();
       this.invoiceRef = this.paymentService.generateId();
       this.currentDate = this.formatDate(new Date());
-      setTimeout(()=>{
+      setTimeout(() => {
         this.scrollToTop();
-      }, 100)
+      }, 100);
     });
   }
 
@@ -230,9 +228,9 @@ export class SendMoneyComponent  implements OnInit {
           this.availableCountries = countries.sort((a, b) =>
             a.name.localeCompare(b.name),
           );
-          
+
           let selectedCountry: any;
-          
+
           // Vérifier si idParam existe avant de filtrer
           if (this.idParam) {
             selectedCountry = this.availableCountries.filter(
@@ -240,14 +238,18 @@ export class SendMoneyComponent  implements OnInit {
             );
             selectedCountry = selectedCountry[0];
           }
-          
+
           // Si aucun pays n'est sélectionné, utiliser le pays par défaut de l'utilisateur
-          if (!selectedCountry && this.currentUser && this.currentUser.countryId) {
+          if (
+            !selectedCountry &&
+            this.currentUser &&
+            this.currentUser.countryId
+          ) {
             selectedCountry = this.availableCountries.find(
               (e) => e._id === this.currentUser.countryId._id,
             );
           }
-          
+
           this.setSelectedCountry(selectedCountry);
           this.waitingLocations = false;
         } else {
@@ -296,7 +298,7 @@ export class SendMoneyComponent  implements OnInit {
 
   canNext(): boolean {
     this.receiverName = this.receiverFirstName + ' ' + this.receiverLastName;
-    return true;
+    // return true;
     if (
       this.estimation < 1000 ||
       this.watingEstimation ||
@@ -319,7 +321,7 @@ export class SendMoneyComponent  implements OnInit {
     window.scroll({
       top: 0,
       left: 0,
-      behavior: 'smooth'
+      behavior: 'smooth',
     });
   }
 
@@ -331,17 +333,19 @@ export class SendMoneyComponent  implements OnInit {
     if (this.step === 2) {
       console.log('step2: ');
       if (this.selectedMethod === 'OM' || this.selectedMethod === 'MTN') {
-        console.log('OM MOMO: ');
-        return (this.canNext2Val = this.isValidPhoneNumber(
-          this.transactionData.receiverMobileAccountNumber,
-        ));
+        if (this.selectedCountry.currency === 'XAF') {
+          return (this.canNext2Val = this.isValidPhoneNumber(
+            this.transactionData.receiverMobileAccountNumber,
+          ));
+        } else if (this.receiverMobileAccountNumber) {
+          return (this.canNext2Val = true);
+        } else return (this.canNext2Val = false)
       } else {
         console.log('Else Bank ');
         if (
           this.transactionData?.bic &&
           this.transactionData?.bankAccountNumber
         ) {
-          console.log('bic and bankAccountNumber: ');
           return (this.canNext2Val = true);
         } else {
           console.log('esle bankaccount: ');
@@ -349,7 +353,6 @@ export class SendMoneyComponent  implements OnInit {
         }
       }
     }
-    console.log('canNextVal Out: ', this.transactionData);
     return (this.canNext2Val = false);
   }
 
@@ -400,13 +403,17 @@ export class SendMoneyComponent  implements OnInit {
     const idParam = this.route.snapshot.paramMap.get('id');
     console.log('idParam00: ', idParam);
     console.log('currentUser countryId: ', this.currentUser.countryId._id);
-    
+
     // Vérifier si idParam existe et n'est pas null/undefined
     if (idParam && idParam !== 'null' && idParam !== 'undefined') {
       this.idParam = idParam;
     } else {
       // Utiliser la valeur par défaut avec vérification de sécurité
-      if (this.currentUser && this.currentUser.countryId && this.currentUser.countryId._id) {
+      if (
+        this.currentUser &&
+        this.currentUser.countryId &&
+        this.currentUser.countryId._id
+      ) {
         this.idParam = this.currentUser.countryId._id;
       } else {
         console.error('currentUser.countryId._id is not available');
@@ -414,7 +421,7 @@ export class SendMoneyComponent  implements OnInit {
         this.idParam = null;
       }
     }
-    
+
     console.log('idParam final: ', this.idParam);
     return this.getLocations();
   }
@@ -474,7 +481,7 @@ export class SendMoneyComponent  implements OnInit {
       senderId: this.currentUser._id,
       senderName: this.showName(this.currentUser),
       senderEmail: this.currentUser.email,
-      senderContact: this.currentUser.phone.replace(/\D/g, ''),
+      senderContact: this.currentUser.phone,
       senderCountry: this.currentUser.countryId.name,
       senderCurrency: this.currentUser.countryId.currency,
 
@@ -482,7 +489,7 @@ export class SendMoneyComponent  implements OnInit {
 
       receiverName: this.receiverName,
       receiverEmail: this.receiverEmail,
-      receiverContact: this.receiverContact.replace(/\D/g, ''),
+      receiverContact: this.receiverContact,
       receiverAddress: this.receiverAddress,
       receiverCountry: this.selectedCountry.name,
       receiverCurrency: this.selectedCountry.currency,
@@ -606,28 +613,28 @@ export class SendMoneyComponent  implements OnInit {
       this.setTransactionData();
       if (!this.verifytransactionData(this.transactionData)) return;
     }
-    
+
     // Vérifier la validité du formulaire avant de passer à l'étape suivante
     if (this.step === 1 && !this.firstFormGroup.valid) {
       this.markFormGroupTouched(this.firstFormGroup);
       return;
     }
-    
+
     if (this.step === 2 && !this.secondFormGroup.valid) {
       this.markFormGroupTouched(this.secondFormGroup);
       return;
     }
-    
+
     if (this.step <= 3) {
       this.step++;
-      console.log('Passage à l\'étape:', this.step);
+      console.log("Passage à l'étape:", this.step);
     }
   }
 
   previousStep() {
     if (this.step > 1) {
       this.step--;
-      console.log('Retour à l\'étape:', this.step);
+      console.log("Retour à l'étape:", this.step);
     }
   }
 
@@ -636,7 +643,7 @@ export class SendMoneyComponent  implements OnInit {
     this.step = 1;
     this.firstFormGroup.reset();
     this.secondFormGroup.reset();
-    console.log('Stepper réinitialisé à l\'étape:', this.step);
+    console.log("Stepper réinitialisé à l'étape:", this.step);
   }
 
   // Méthode pour vérifier si on peut passer à l'étape suivante
@@ -669,11 +676,14 @@ export class SendMoneyComponent  implements OnInit {
 
   setSelectedCountry(countryData: any) {
     if (!countryData) {
-      console.warn('Aucun pays sélectionné, utilisation des valeurs par défaut');
+      console.warn(
+        'Aucun pays sélectionné, utilisation des valeurs par défaut',
+      );
       // Utiliser les valeurs par défaut de l'utilisateur
       if (this.currentUser && this.currentUser.countryId) {
         this.selectedCountry = this.currentUser.countryId;
-        this.flagCountry = this.currentUser.countryId.flagUrl || 'assets/ressorces/flag.png';
+        this.flagCountry =
+          this.currentUser.countryId.flagUrl || 'assets/ressorces/flag.png';
         this.receiverCurrency = this.currentUser.countryId.currency || 'XAF';
       } else {
         // Valeurs de fallback absolues
@@ -686,7 +696,7 @@ export class SendMoneyComponent  implements OnInit {
       this.flagCountry = countryData.flagUrl || 'assets/ressorces/flag.png';
       this.receiverCurrency = countryData.currency || '--';
     }
-    
+
     this.convertCurrency();
   }
 

@@ -249,9 +249,12 @@
                     </div>
                   </div>
                   <div class="text-end">
-                    <button mat-button matStepperPrevious>Back</button>
+                    <button mat-button matStepperPrevious>
+                      <i class="feather icon-arrow-left" data-bs-toggle="tooltip"
+                            title="feather icon-skip-back"></i>{{ "action.back" | translate }}
+                          </button>
                     <button type="button" matStepperNext class="btn btn-primary" (click)="nextStep()"
-                      [disabled]="!canNext()">
+                      [disabled]="!canNext2()">
                       {{ "payment.next" | translate }}
                     </button>
                   </div>
@@ -264,72 +267,39 @@
             <mat-progress-bar mode="determinate" value="100"></mat-progress-bar>
             <ng-template matStepLabel>{{ "payment.confirmation" | translate }}</ng-template>
             <!-- <p>{{ "payment.receiverInformation" | translate }}</p> -->
+                <h4>{{ "payment.confirmation" | translate }}</h4>
+                {{ "payment.receiverSubTitleRecap" | translate }} <br />
             <div class="row">
-              <div class="col-md-3"></div>
               <div class="col-md-6">
                 <div class="step3">
                   <div class="confirmation-container">
                     <div class="confirmation-content">
-                      <div class="amount-summary">
-                        <div class="amount-label">{{ "payment.amountToBeReceived" | translate }}</div>
-                        <div class="amount-main">{{amountToBeReceived}} {{ selectedCountry?.currency }}</div>
-                        <div class="amount-secondary">{{ "payment.equivalentTo" | translate }} {{estimation}} {{
-                          currentUser?.countryId.currency }}</div>
+                      <div class="detail-card">
+                        <h3><i class="fas fa-user-friends"></i> {{ "payment.receiver" | translate }}</h3>
+                        <div class="detail-item">
+                          <span class="detail-label">{{ "auth.firstName" | translate }}</span>
+                          <span class="detail-value">{{ receiverFirstName }}</span>
+                        </div>
+                        <div class="detail-item">
+                          <span class="detail-label">{{ "auth.lastName" | translate }}</span>
+                          <span class="detail-value">{{ receiverLastName }} </span>
+                        </div>
+                        <div class="detail-item">
+                          <span class="detail-label">{{ "terms.email" | translate }}</span>
+                          <span class="detail-value">{{ receiverEmail }}</span>
+                        </div>
+                        <div class="detail-item">
+                          <span class="detail-label">{{ 'payment.receiverCountry' | translate }}</span>
+                          <span class="detail-value">{{ selectedCountry.name }}</span>
+                        </div>
+                        <div class="detail-item">
+                          <span class="detail-label">{{ "terms.phone" | translate }}</span>
+                          <span class="detail-value">+{{ selectedCountry.code }} {{ receiverContact }}</span>
+                        </div>
                       </div>
-                      
+                      <hr>
 
-                        <div class="detail-card">
-                          <h3><i class="fas fa-user-friends"></i> {{ "payment.receiver" | translate }}</h3>
-                          <div class="detail-item">
-                            <span class="detail-label">{{ "auth.firstName" | translate }}</span>
-                            <span class="detail-value">{{ receiverFirstName }}</span>
-                          </div>
-                          <div class="detail-item">
-                            <span class="detail-label">{{ "auth.lastName" | translate }}</span>
-                            <span class="detail-value">{{ receiverLastName }} </span>
-                          </div>
-                          <div class="detail-item">
-                            <span class="detail-label">{{ "terms.email" | translate }}</span>
-                            <span class="detail-value">{{ receiverEmail }}</span>
-                          </div>
-                          <div class="detail-item">
-                            <span class="detail-label">{{ 'payment.receiverCountry' | translate }}</span>
-                            <span class="detail-value">{{ selectedCountry.name }}</span>
-                          </div>
-                          <div class="detail-item">
-                            <span class="detail-label">{{ "terms.phone" | translate }}</span>
-                            <span class="detail-value">+{{ selectedCountry.code }} {{ receiverContact }}</span>
-                          </div>
-                        </div>
-                        <hr>
-                      
-
-                        <div class="detail-card">
-                          <h3 style="margin-bottom: 10px;">{{ "payment.accountDetails" | translate }}</h3>
-                          <h3 *ngIf="selectedMethod === 'BANK'"><i class="fas fa-university"></i> {{ methodName }}
-                          </h3>
-                          <h3 *ngIf="selectedMethod === 'OM'">
-                            <img src="assets/img/ressorces/om.png" alt="" style="width: 50px; margin-right: 10px;"> {{ methodName }}
-                          </h3>
-                          <h3 *ngIf="selectedMethod === 'MTN'">
-                            <img src="assets/img/ressorces/mtn_money.webp" alt="" style="width: 50px; margin-right: 10px;"> {{ methodName }}
-                          </h3>
-
-                          <div class="detail-item" *ngIf="selectedMethod === 'BANK'">
-                            <span class="detail-label">{{ 'payment.accountNumber' | translate }}</span>
-                            <span class="detail-value">{{ bankAccountNumber }}</span>
-                          </div>
-                          <div class="detail-item" *ngIf="selectedMethod === 'BANK'">
-                            <span class="detail-label">BIC/SWIFT</span>
-                            <span class="detail-value">{{ bic }}</span>
-                          </div>
-                          <div class="detail-item" *ngIf="selectedMethod != 'BANK'">
-                            <span class="detail-label">{{ 'payment.receiverMobileAccountNumber' | translate }}</span>
-                            <span class="detail-value">+{{ selectedCountry.code }} {{ receiverMobileAccountNumber
-                              }}</span>
-                          </div>
-                        </div>
-                        <hr>
+                      <hr>
 
                       <div class="details-grid">
                         <div class="detail-card">
@@ -355,9 +325,52 @@
                             <span class="detail-value">+{{ currentUser.countryId.code }} {{ currentUser.phone }}</span>
                           </div>
                         </div>
-                        <hr>
-
                       </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="step3">
+                  <div class="confirmation-container">
+                    <div class="confirmation-content">
+                      <div class="amount-summary">
+                        <div class="amount-label">{{ "payment.amountToBeReceived" | translate }}</div>
+                        <div class="amount-main">{{amountToBeReceived}} {{ selectedCountry?.currency }}</div>
+                        <div class="amount-secondary">{{ "payment.equivalentTo" | translate }} {{estimation}} {{
+                          currentUser?.countryId.currency }}</div>
+                      </div>
+
+                      <hr>
+
+                      <div class="detail-card">
+                        <h3 style="margin-bottom: 10px;">{{ "payment.accountDetailsReception" | translate }}</h3>
+                        <h3 *ngIf="selectedMethod === 'BANK'"><i class="fas fa-university"></i> {{ methodName }}
+                        </h3>
+                        <h3 *ngIf="selectedMethod === 'OM'">
+                          <img src="assets/img/ressorces/om.png" alt="" style="width: 50px; margin-right: 10px;"> {{
+                          methodName }}
+                        </h3>
+                        <h3 *ngIf="selectedMethod === 'MTN'">
+                          <img src="assets/img/ressorces/mtn_money.webp" alt=""
+                            style="width: 50px; margin-right: 10px;"> {{ methodName }}
+                        </h3>
+
+                        <div class="detail-item" *ngIf="selectedMethod === 'BANK'">
+                          <span class="detail-label">{{ 'payment.accountNumber' | translate }}</span>
+                          <span class="detail-value">{{ bankAccountNumber }}</span>
+                        </div>
+                        <div class="detail-item" *ngIf="selectedMethod === 'BANK'">
+                          <span class="detail-label">BIC/SWIFT</span>
+                          <span class="detail-value">{{ bic }}</span>
+                        </div>
+                        <div class="detail-item" *ngIf="selectedMethod != 'BANK'">
+                          <span class="detail-label">{{ 'payment.receiverMobileAccountNumber' | translate }}</span>
+                          <span class="detail-value">+{{ selectedCountry.code }} {{ receiverMobileAccountNumber
+                            }}</span>
+                        </div>
+                      </div>
+                      <hr>
 
                       <div class="fee-breakdown">
                         <h4><i class="fas fa-receipt"></i> Détail des frais</h4>
@@ -379,26 +392,6 @@
                         </div>
                       </div>
 
-                      <div class="detail-card">
-                        <h3><i class="fas fa-info-circle"></i> Informations de transfert</h3>
-                        <div class="detail-item">
-                          <span class="detail-label">Référence</span>
-                          <span class="detail-value">TRX-2023-05876</span>
-                        </div>
-                        <div class="detail-item">
-                          <span class="detail-label">Taux de change</span>
-                          <span class="detail-value">1 EUR = 655.96 XAF</span>
-                        </div>
-                        <div class="detail-item">
-                          <span class="detail-label">Date estimée d'arrivée</span>
-                          <span class="detail-value">16 Nov 2023</span>
-                        </div>
-                        <div class="detail-item">
-                          <span class="detail-label">Motif</span>
-                          <span class="detail-value">Aide familiale</span>
-                        </div>
-                      </div>
-
                       <div class="security-notice">
                         <img src="assets/img/ressorces/flutterwave.png" alt=""
                           style="max-width: 100px; border-radius: 5px; margin-right: 10px;">
@@ -408,7 +401,7 @@
                         <button class="btn btn-cancel" matStepperPrevious>
                           <i class="feather icon-arrow-left" data-bs-toggle="tooltip"
                             title="feather icon-skip-back"></i>
-                          Modifier
+                          {{ "action.back" | translate }}
                         </button>
                         <button class="btn btn-confirm" (click)="resetStepper()">
                           <i class="fas fa-check"></i> {{ "payment.proceed" | translate }}
@@ -418,7 +411,6 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-3"></div>
             </div>
           </mat-step>
         </mat-stepper>
