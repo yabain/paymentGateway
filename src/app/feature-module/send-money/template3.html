@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Envoyer de l'Argent - Transfert Sécurisé</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #4895ef;
+            --primary-dark: #3f37c9;
+            --secondary: #7209b7;
+            --success: #4cc9f0;
+            --warning: #f72585;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gray-light: #e9ecef;
+            --gray: #adb5bd;
+            --gray-dark: #495057;
+            --border-radius: 16px;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 0;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            min-height: 100vh;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: var(--shadow);
+        }
+
+        /* Sidebar Hero */
+        .hero-sidebar {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 30px;
+            display: inline-block;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-title {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .features-list {
+            list-style: none;
+            margin-bottom: 50px;
+        }
+
+        .features-list li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .features-list i {
+            background: rgba(255, 255, 255, 0.2);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 18px;
+        }
+
+        .security-badge {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .security-badge p {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .security-badge i {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+
+        .hero-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.1;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="white"/></svg>');
+            background-size: 50px 50px;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .form-header h2 {
+            font-size: 32px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .form-header p {
+            color: var(--gray-dark);
+            font-size: 16px;
+        }
+
+        .transfer-form {
+            background: white;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: var(--dark);
+            font-size: 14px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid var(--gray-light);
+            border-radius: 12px;
+            font-size: 16px;
+            transition: var(--transition);
+            background: white;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+            font-size: 18px;
+        }
+
+        .input-with-icon .form-control {
+            padding-left: 50px;
+        }
+
+        .select-wrapper {
+            position: relative;
+        }
+
+        .select-wrapper::after {
+            content: '⌄';
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+            font-size: 20px;
+            pointer-events: none;
+        }
+
+        .amount-section {
+            background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+            border: 2px solid var(--gray-light);
+        }
+
+        .amount-display {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .amount-label {
+            font-size: 16px;
+            color: var(--gray-dark);
+            margin-bottom: 10px;
+        }
+
+        .amount-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .conversion-rate {
+            text-align: center;
+            font-size: 14px;
+            color: var(--gray-dark);
+            padding: 10px;
+            background: rgba(67, 97, 238, 0.1);
+            border-radius: 8px;
+        }
+
+        .fee-breakdown {
+            background: #fffaf3;
+            border: 2px solid #ffe8cc;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .fee-breakdown h4 {
+            color: #e67e22;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .fee-breakdown h4 i {
+            margin-right: 10px;
+        }
+
+        .fee-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .fee-total {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #ffe8cc;
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--dark);
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 18px 25px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-outline {
+            background: white;
+            color: var(--gray-dark);
+            border: 2px solid var(--gray-light);
+        }
+
+        .btn-outline:hover {
+            background: #f8f9fa;
+            border-color: var(--gray);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(67, 97, 238, 0.4);
+        }
+
+        .security-assurance {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            background: #e8f5ff;
+            border-radius: var(--border-radius);
+            border: 2px solid #b3e0ff;
+        }
+
+        .security-assurance p {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 14px;
+            color: var(--gray-dark);
+        }
+
+        .security-assurance i {
+            color: var(--primary);
+            font-size: 20px;
+        }
+
+        /* Animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animated {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* Hover Effects */
+        .form-control:hover {
+            border-color: var(--primary-light);
+        }
+
+        .btn {
+            transition: var(--transition);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Hero -->
+        <div class="hero-sidebar">
+            <div class="hero-pattern"></div>
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-rocket"></i> Transfert Instantané
+                </div>
+                <h1 class="hero-title">Envoyez de l'argent à travers le monde en quelques clics</h1>
+                <p class="hero-subtitle">Des transferts rapides, sécurisés et à des taux compétitifs. Rejoignez des millions de clients qui nous font confiance.</p>
+                
+                <ul class="features-list">
+                    <li>
+                        <i class="fas fa-bolt"></i>
+                        <span>Transferts instantanés vers 130+ pays</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-lock"></i>
+                        <span>Sécurité bancaire de niveau militaire</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-percentage"></i>
+                        <span>Frais transparents sans surprise</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-headset"></i>
+                        <span>Support client 24/7</span>
+                    </li>
+                </ul>
+
+                <div class="security-badge">
+                    <p>
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Vos données sont cryptées et protégées conformément au RGPD</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="form-header">
+                <h2>Nouveau Transfert</h2>
+                <p>Remplissez les informations pour envoyer de l'argent en toute sécurité</p>
+            </div>
+
+            <form class="transfer-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Destinataire</label>
+                        <div class="input-with-icon">
+                            <i class="input-icon fas fa-user"></i>
+                            <input type="text" class="form-control" placeholder="Nom complet du bénéficiaire">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Email du destinataire</label>
+                        <div class="input-with-icon">
+                            <i class="input-icon fas fa-envelope"></i>
+                            <input type="email" class="form-control" placeholder="email@exemple.com">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Pays de destination</label>
+                        <div class="select-wrapper">
+                            <select class="form-control">
+                                <option value="">Sélectionnez un pays</option>
+                                <option value="cm">Cameroun</option>
+                                <option value="fr">France</option>
+                                <option value="us">États-Unis</option>
+                                <option value="uk">Royaume-Uni</option>
+                                <option value="de">Allemagne</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Numéro de téléphone</label>
+                        <div class="input-with-icon">
+                            <i class="input-icon fas fa-phone"></i>
+                            <input type="tel" class="form-control" placeholder="+237 6 91 22 91 22">
+                        </div>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label class="form-label">Adresse du destinataire</label>
+                        <input type="text" class="form-control" placeholder="Adresse complète du bénéficiaire">
+                    </div>
+                </div>
+
+                <div class="amount-section">
+                    <div class="amount-display">
+                        <div class="amount-label">Montant à envoyer</div>
+                        <div class="amount-value">1 000,00 €</div>
+                    </div>
+                    <div class="conversion-rate">
+                        <i class="fas fa-exchange-alt"></i> 1 EUR = 655.96 XAF
+                    </div>
+                </div>
+
+                <div class="fee-breakdown">
+                    <h4><i class="fas fa-receipt"></i> Détail des frais</h4>
+                    <div class="fee-item">
+                        <span>Frais de transfert</span>
+                        <span>5,00 €</span>
+                    </div>
+                    <div class="fee-item">
+                        <span>Commission de change</span>
+                        <span>3,50 €</span>
+                    </div>
+                    <div class="fee-item">
+                        <span>Frais bancaires</span>
+                        <span>1,00 €</span>
+                    </div>
+                    <div class="fee-total">
+                        <span>Total des frais</span>
+                        <span>9,50 €</span>
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label class="form-label">Motif du transfert</label>
+                    <textarea class="form-control" rows="3" placeholder="Décrivez la raison de ce transfert (optionnel)"></textarea>
+                </div>
+
+                <div class="action-buttons">
+                    <button type="button" class="btn btn-outline">
+                        <i class="fas fa-times"></i> Annuler
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Confirmer l'envoi
+                    </button>
+                </div>
+            </form>
+
+            <div class="security-assurance">
+                <p>
+                    <i class="fas fa-lock"></i>
+                    <span>Transactions sécurisées SSL 256-bit • Garantie de remboursement • Support 24/7</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -395,7 +395,7 @@
     "cardDescription": "Visa, Mastercard, CB",
     "bank": "Bank",
     "bankDescription": "Secure bank transfer",
-    "total": "Total",
+    "total": "Total amount",
     "accountReception": "Reception account",
     "accountDetailsReception": "Beneficiary account details",
     "accountDetails": "Details of the account",
@@ -410,7 +410,15 @@
     "sender": "Sender",
     "receiver": "Receiver",
     "secureMessage": "Your information is secure and encrypted. This transfer is protected by our partner Flutterwave.",
-    "feeDetails": "Fee details"
+    "feeDetails": "Fee details",
+    "instantTransfer": "Instant Transfer",
+    "hero-title": "Send money worldwide in just a few clicks",
+    "hero-subTitle": "Fast, secure transfers at competitive rates. Join millions of customers who trust us.",
+    "hero-item1": "Instant transfers abroad",
+    "hero-item2": "High-level banking security",
+    "hero-item3": "Unbeatable fees",
+    "hero-item4": "24/7 Customer Support",
+    "hero-secureMessage": "Your data is encrypted and protected in accordance with the General Data Protection Regulation (GDPR)."
   },
   "whatsapp": {
     "title": "WhatsApp center",

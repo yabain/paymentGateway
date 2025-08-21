@@ -1,9 +1,10 @@
-<h2>{{ "dashboard.sendMoney" | translate }}</h2>
-<br>
+<div class="main-title" style="text-align: center;">
+  <h2>{{ "dashboard.sendMoney" | translate }}</h2>
+</div>
 <div class="row">
   <div class="col-md-12">
     <div class="card">
-      <div class="card-body">
+      <div class="card-body" *ngIf="!goToProceed">
         <mat-stepper #stepperTwo linear class="non-clickable-steps">
           <mat-step>
             <ng-template matStepLabel>{{ "payment.receiverInfo" | translate }}</ng-template>
@@ -53,13 +54,13 @@
                     <div class="row">
                       <div class="col-md-6">
                         <div class="input-block mb-3">
-                          <label htmlFor="contact">{{ 'payment.receiverContact' | translate }} *</label>
+                          <label htmlFor="telephone">{{ 'payment.receiverContact' | translate }} *</label>
                           <div class="row">
                             <div class="col-lg-12">
                               <div class="input-group">
                                 <span class="input-group-text">+{{ selectedCountry?.code }}</span>
-                                <input id="contact" type="telephone" class="form-control" [(ngModel)]="receiverContact"
-                                  name="receiverContact" />
+                                <input id="telephone" type="telephone" class="form-control"
+                                  [(ngModel)]="receiverContact" name="receiverContact" />
                               </div>
                             </div>
                           </div>
@@ -250,9 +251,9 @@
                   </div>
                   <div class="text-end">
                     <button mat-button matStepperPrevious>
-                      <i class="feather icon-arrow-left" data-bs-toggle="tooltip"
-                            title="feather icon-skip-back"></i>{{ "action.back" | translate }}
-                          </button>
+                      <i class="feather icon-chevron-left" data-bs-toggle="tooltip"
+                        title="feather icon-skip-back"></i>{{ "action.back" | translate }}
+                    </button>
                     <button type="button" matStepperNext class="btn btn-primary" (click)="nextStep()"
                       [disabled]="!canNext2()">
                       {{ "payment.next" | translate }}
@@ -267,8 +268,8 @@
             <mat-progress-bar mode="determinate" value="100"></mat-progress-bar>
             <ng-template matStepLabel>{{ "payment.confirmation" | translate }}</ng-template>
             <!-- <p>{{ "payment.receiverInformation" | translate }}</p> -->
-                <h4>{{ "payment.confirmation" | translate }}</h4>
-                {{ "payment.receiverSubTitleRecap" | translate }} <br />
+            <h4>{{ "payment.confirmation" | translate }}</h4>
+            {{ "payment.receiverSubTitleRecap" | translate }} <br />
             <div class="row">
               <div class="col-md-6">
                 <div class="step3">
@@ -297,9 +298,6 @@
                           <span class="detail-value">+{{ selectedCountry.code }} {{ receiverContact }}</span>
                         </div>
                       </div>
-                      <hr>
-
-                      <hr>
 
                       <div class="details-grid">
                         <div class="detail-card">
@@ -334,16 +332,8 @@
                 <div class="step3">
                   <div class="confirmation-container">
                     <div class="confirmation-content">
-                      <div class="amount-summary">
-                        <div class="amount-label">{{ "payment.amountToBeReceived" | translate }}</div>
-                        <div class="amount-main">{{amountToBeReceived}} {{ selectedCountry?.currency }}</div>
-                        <div class="amount-secondary">{{ "payment.equivalentTo" | translate }} {{estimation}} {{
-                          currentUser?.countryId.currency }}</div>
-                      </div>
 
-                      <hr>
-
-                      <div class="detail-card">
+                      <div class="detail-card" style="border-left: 4px solid #fff !important; margin-bottom: 10px;">
                         <h3 style="margin-bottom: 10px;">{{ "payment.accountDetailsReception" | translate }}</h3>
                         <h3 *ngIf="selectedMethod === 'BANK'"><i class="fas fa-university"></i> {{ methodName }}
                         </h3>
@@ -370,25 +360,30 @@
                             }}</span>
                         </div>
                       </div>
-                      <hr>
+
+                      <div class="amount-summary">
+                        <div class="amount-label"></div>
+                        <div class="amount-main"></div>
+                        <div class="amount-secondary"> </div>
+                      </div>
 
                       <div class="fee-breakdown">
-                        <h4><i class="fas fa-receipt"></i> Détail des frais</h4>
+                        <h4><i class="fas fa-receipt"></i> {{ "payment.amountDetails" | translate }}</h4>
                         <div class="fee-item">
-                          <span>Frais de transfert</span>
-                          <span>5,00 €</span>
+                          <span>{{ "payment.amountToBeReceived" | translate }}</span>
+                          <span>{{amountToBeReceived}} {{ selectedCountry?.currency }}</span>
                         </div>
                         <div class="fee-item">
-                          <span>Commission de change</span>
-                          <span>3,50 €</span>
+                          <span>{{ "payment.equivalentTo" | translate }}</span>
+                          <span>{{estimation}} {{ currentUser?.countryId.currency }}</span>
                         </div>
                         <div class="fee-item">
-                          <span>Frais bancaires</span>
-                          <span>1,00 €</span>
+                          <span>{{ "payment.feeDetails" | translate }}</span>
+                          <span>{{ transactionData?.taxesAmount }} {{ currentUser?.countryId.currency }}</span>
                         </div>
                         <div class="fee-total">
-                          <span>Total des frais</span>
-                          <span>9,50 €</span>
+                          <span>{{ "payment.total" | translate }}</span>
+                          <span>{{ transactionData?.paymentWithTaxes }} {{ currentUser?.countryId.currency }}</span>
                         </div>
                       </div>
 
@@ -399,11 +394,11 @@
                       </div>
                       <div class="action-buttons">
                         <button class="btn btn-cancel" matStepperPrevious>
-                          <i class="feather icon-arrow-left" data-bs-toggle="tooltip"
+                          <i class="feather icon-chevron-left" data-bs-toggle="tooltip"
                             title="feather icon-skip-back"></i>
                           {{ "action.back" | translate }}
                         </button>
-                        <button class="btn btn-confirm" (click)="resetStepper()">
+                        <button class="btn btn-confirm" (click)="stepperToProceed()">
                           <i class="fas fa-check"></i> {{ "payment.proceed" | translate }}
                         </button>
                       </div>
@@ -414,6 +409,62 @@
             </div>
           </mat-step>
         </mat-stepper>
+      </div>
+      <div class="card-body" *ngIf="goToProceed">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="wating-msg">
+              <img src="assets/img/new/loader.gif" width="30px" alt="">
+              <p style="margin-top: 50px;">
+                Le traitement de votre transaction est en cours. <br>
+              Confirmez le paiement via notre portail flutterwave.
+            </p>
+                <img src="assets/img/ressorces/flutterwave.png" alt=""
+                    style="max-width: 100px;;">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="container">
+              <!-- Sidebar Hero -->
+              <div class="hero-sidebar">
+                <div class="hero-pattern"></div>
+                <div class="hero-content">
+                  <div class="hero-badge" style="color: #F57C11;">
+                    <i class="fas fa-rocket"></i> {{ "payment.instantTransfer" | translate }}
+                  </div>
+                  <h1 class="hero-title">{{ "payment.hero-title" | translate }}</h1>
+                  <p class="hero-subtitle">{{ "payment.hero-subTitle" | translate }}</p>
+
+                  <ul class="features-list">
+                    <li>
+                      <i class="fas fa-bolt"></i>
+                      <span>{{ "payment.hero-item1" | translate }}</span>
+                    </li>
+                    <li>
+                      <i class="fas fa-lock"></i>
+                      <span>{{ "payment.hero-item2" | translate }}</span>
+                    </li>
+                    <li>
+                      <i class="fas fa-percentage"></i>
+                      <span>{{ "payment.hero-item3" | translate }}</span>
+                    </li>
+                    <li>
+                      <i class="fas fa-headset"></i>
+                      <span>{{ "payment.hero-item4" | translate }}</span>
+                    </li>
+                  </ul>
+
+                  <div class="security-badge">
+                    <p>
+                      <i class="fas fa-shield-alt"></i>
+                      <span>{{ "payment.hero-secureMessage" | translate }}</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

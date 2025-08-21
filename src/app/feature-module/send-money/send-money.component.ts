@@ -73,6 +73,7 @@ export class SendMoneyComponent implements OnInit {
   bankAccountNumber: string = '';
   bic: string = '';
   canNext2Val: boolean = false;
+  goToProceed: boolean = true;
 
   firstFormGroup = this._formBuilder.group({
     firstCtrl: ['', Validators.required],
@@ -326,33 +327,13 @@ export class SendMoneyComponent implements OnInit {
   }
 
   canNext2(): boolean {
-    console.log('canNext2: ');
-    console.log('step: ', this.step);
-    console.log('canNextVal: ', this.canNext2Val);
     this.setTransactionData();
-    if (this.step === 2) {
-      console.log('step2: ');
-      if (this.selectedMethod === 'OM' || this.selectedMethod === 'MTN') {
-        if (this.selectedCountry.currency === 'XAF') {
-          return (this.canNext2Val = this.isValidPhoneNumber(
-            this.transactionData.receiverMobileAccountNumber,
-          ));
-        } else if (this.receiverMobileAccountNumber) {
-          return (this.canNext2Val = true);
-        } else return (this.canNext2Val = false)
-      } else {
-        console.log('Else Bank ');
-        if (
-          this.transactionData?.bic &&
-          this.transactionData?.bankAccountNumber
-        ) {
-          return (this.canNext2Val = true);
-        } else {
-          console.log('esle bankaccount: ');
-          return (this.canNext2Val = false);
-        }
-      }
+    if ( this.selectedMethod === 'BANK') {
+      if (this.bankAccountNumber && this.bic) return (this.canNext2Val = true);
+    } else {
+      if (this.receiverMobileAccountNumber) return (this.canNext2Val = true);
     }
+    console.log('transaction data: ', this.transactionData);
     return (this.canNext2Val = false);
   }
 
@@ -366,7 +347,6 @@ export class SendMoneyComponent implements OnInit {
   }
 
   canSubmit(): boolean {
-    // Checks that at least one ticket has been selected
     if (this.canNext() && this.canNext2()) return true;
     else return false;
   }
@@ -456,7 +436,7 @@ export class SendMoneyComponent implements OnInit {
           this.proceed = false;
           this.toastService.presentToast('error', 'Error', res.message);
         } else if (res && res.success === true) {
-          this.handleRequest(res.transactionData);
+          // this.handleRequest(res.transactionData);
         }
       });
   }
@@ -493,6 +473,7 @@ export class SendMoneyComponent implements OnInit {
       receiverAddress: this.receiverAddress,
       receiverCountry: this.selectedCountry.name,
       receiverCurrency: this.selectedCountry.currency,
+      receiverAmount: this.getCleanAmount(),
 
       paymentMethod: this.selectedMethod,
       receiverMobileAccountNumber: this.receiverMobileAccountNumber,
@@ -567,21 +548,21 @@ export class SendMoneyComponent implements OnInit {
   /**
    * Manage transaction response.
    */
-  private handleRequest(transactionData) {
-    if (transactionData.reqStatus === ReqStatus.PENDING) {
-      this.router.navigate(['/tabs/proceed-transfer/' + transactionData._id]);
-    } else if (transactionData.reqStatus === ReqStatus.ERROR) {
-      this.toastService.presentToast(
-        transactionData.message,
-        'top',
-        'danger',
-        10000,
-      );
-    } else {
-      this.toastService.presentToast('Error', 'top', 'danger');
-    }
-    this.proceed = false;
-  }
+  // private handleRequest(transactionData) {
+  //   if (transactionData.reqStatus === ReqStatus.PENDING) {
+  //     this.router.navigate(['/tabs/proceed-transfer/' + transactionData._id]);
+  //   } else if (transactionData.reqStatus === ReqStatus.ERROR) {
+  //     this.toastService.presentToast(
+  //       transactionData.message,
+  //       'top',
+  //       'danger',
+  //       10000,
+  //     );
+  //   } else {
+  //     this.toastService.presentToast('Error', 'top', 'danger');
+  //   }
+  //   this.proceed = false;
+  // }
 
   backClicked() {
     this.router.navigate(['/tabs/home']);
@@ -639,13 +620,16 @@ export class SendMoneyComponent implements OnInit {
   }
 
   // Méthode pour réinitialiser le stepper
-  resetStepper() {
+  stepperToProceed() {
+    this.goToProceed = true;
+  }
+
+  resetStepper(){
     this.step = 1;
     this.firstFormGroup.reset();
     this.secondFormGroup.reset();
     console.log("Stepper réinitialisé à l'étape:", this.step);
   }
-
   // Méthode pour vérifier si on peut passer à l'étape suivante
   canProceedToNextStep(): boolean {
     switch (this.step) {

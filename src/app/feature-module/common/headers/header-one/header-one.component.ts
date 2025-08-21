@@ -57,7 +57,7 @@ export class HeaderOneComponent implements OnInit {
     this.getUserData();
   }
 
-  async getLanguage(){
+  async getLanguage() {
     this.selectedLanguage = await this.language.getDefaultLanguage();
     this.selectedLanguage = this.selectedLanguage === 'en' ? this.en : this.fr;
   }
@@ -100,9 +100,9 @@ export class HeaderOneComponent implements OnInit {
         this.language.useLanguage(lang);
         this.currentUserData.language = lang;
         this.userService.setCurrentUser(this.currentUserData);
-        // this.translate.get('lang.langChanged').subscribe((res: string) => {
-        // this.toastService.presentToast(res, 'top', 'success');
-        // });
+        this.translate.get('lang.langChanged').subscribe((res: string) => {
+          this.toastService.presentToast('success', 'Done!', res, 2000);
+        });
         this.getLanguage();
         this.changingLang = false;
       });

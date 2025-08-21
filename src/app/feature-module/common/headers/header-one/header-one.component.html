@@ -65,7 +65,8 @@
       <a href="javascript:void(0)" class="user-link nav-link" data-bs-toggle="dropdown">
         <span class="user-content">
           <span class="user-name" style="margin-right: 10px;">
-            <img [src]="selectedLanguage[0]?.flagImage" alt="" style="width: 15px; height: 12px;">
+            <span class="spinner-border spinner-border-sm me-2" role="status" *ngIf="changingLang"></span>
+            <img [src]="selectedLanguage[0]?.flagImage" alt="" style="width: 15px; height: 12px;" *ngIf="!changingLang">
             {{ selectedLanguage[0]?.name | translate }} <i class="fa-solid fa-chevron-down"></i>
           </span>
         </span>
@@ -94,7 +95,8 @@
     <li class="nav-item dropdown">
       <a href="javascript:void(0)" class="user-link nav-link" data-bs-toggle="dropdown">
         <span class="user-img">
-          <img [src]="currentUserData ? currentUserData.pictureUrl : 'assets/img/new/user.png'" alt="img" class="profilesidebar" />
+          <img [src]="currentUserData ? currentUserData.pictureUrl : 'assets/img/new/user.png'" alt="img"
+            class="profilesidebar" />
           <span class="animate-circle"></span>
         </span>
         <span class="user-content">
