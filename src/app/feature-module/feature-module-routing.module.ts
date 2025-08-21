@@ -38,21 +38,21 @@ const routes: Routes = [
         path: 'base-ui',
         loadChildren: () =>
           import('./ui-interface/base-ui/base-ui.module').then(
-            (m) => m.BaseUIModule
+            (m) => m.BaseUIModule,
           ),
       },
       {
         path: 'elements',
         loadChildren: () =>
           import('./ui-interface/elements/elements.module').then(
-            (m) => m.ElementsModule
+            (m) => m.ElementsModule,
           ),
       },
       {
         path: 'tables',
         loadChildren: () =>
           import('./ui-interface/tables/tables.module').then(
-            (m) => m.TablesModule
+            (m) => m.TablesModule,
           ),
       },
       {
@@ -64,21 +64,21 @@ const routes: Routes = [
         path: 'forms',
         loadChildren: () =>
           import('./ui-interface/forms/forms.module').then(
-            (m) => m.FormsModule
+            (m) => m.FormsModule,
           ),
       },
       {
         path: 'chart',
         loadChildren: () =>
           import('./ui-interface/charts/charts.module').then(
-            (m) => m.ChartsModule
+            (m) => m.ChartsModule,
           ),
       },
       {
         path: 'blank-page',
         loadChildren: () =>
           import('./blank-page/blank-page.module').then(
-            (m) => m.BlankPageModule
+            (m) => m.BlankPageModule,
           ),
       },
       {
@@ -90,7 +90,7 @@ const routes: Routes = [
         path: 'users',
         loadChildren: () =>
           import('./users-list/users-list.module').then(
-            (m) => m.UsersListModule
+            (m) => m.UsersListModule,
           ),
       },
       {
@@ -143,14 +143,14 @@ const routes: Routes = [
         path: 'delivery-challans',
         loadChildren: () =>
           import('./delivery-challans/delivery-challans.module').then(
-            (m) => m.DeliveryChallansModule
+            (m) => m.DeliveryChallansModule,
           ),
       },
       {
         path: 'membership',
         loadChildren: () =>
           import('./membership/membership.module').then(
-            (m) => m.MembershipModule
+            (m) => m.MembershipModule,
           ),
       },
       {
@@ -162,14 +162,14 @@ const routes: Routes = [
         path: 'product-service',
         loadChildren: () =>
           import('./products-service/products-service.module').then(
-            (m) => m.ProductsServiceModule
+            (m) => m.ProductsServiceModule,
           ),
       },
       {
         path: 'manageusers',
         loadChildren: () =>
           import('./manageusers/manageusers.module').then(
-            (m) => m.ManageusersModule
+            (m) => m.ManageusersModule,
           ),
       },
 
@@ -177,28 +177,28 @@ const routes: Routes = [
         path: 'purchase-orders',
         loadChildren: () =>
           import('./purchase-orders/purchase-orders.module').then(
-            (m) => m.PurchaseOrdersModule
+            (m) => m.PurchaseOrdersModule,
           ),
       },
       {
         path: 'debit-notes',
         loadChildren: () =>
           import('./debit-notes/debit-notes.module').then(
-            (m) => m.DebitNotesModule
+            (m) => m.DebitNotesModule,
           ),
       },
       {
         path: 'roles-permission',
         loadChildren: () =>
           import('./roles-permission/roles-permission.module').then(
-            (m) => m.RolesPermissionModule
+            (m) => m.RolesPermissionModule,
           ),
       },
       {
         path: 'delete-account-request',
         loadChildren: () =>
           import('./delete-account-request/delete-account-request.module').then(
-            (m) => m.DeleteAccountRequestModule
+            (m) => m.DeleteAccountRequestModule,
           ),
       },
 
@@ -206,7 +206,7 @@ const routes: Routes = [
         path: 'recurring-pages',
         loadChildren: () =>
           import('./recurring-pages/recurring-pages.module').then(
-            (m) => m.RecurringPagesModule
+            (m) => m.RecurringPagesModule,
           ),
       },
 
@@ -214,14 +214,14 @@ const routes: Routes = [
         path: 'contact-messages',
         loadChildren: () =>
           import('./contact-messages/contact-messages.module').then(
-            (m) => m.ContactMessagesModule
+            (m) => m.ContactMessagesModule,
           ),
       },
       {
         path: 'ticket-pages',
         loadChildren: () =>
           import('./ticket-pages/ticket-pages.module').then(
-            (m) => m.TicketPagesModule
+            (m) => m.TicketPagesModule,
           ),
       },
 
@@ -235,7 +235,7 @@ const routes: Routes = [
         path: 'credit-note-pages',
         loadChildren: () =>
           import('./credit-note-pages/credit-note-pages.module').then(
-            (m) => m.CreditNotePagesModule
+            (m) => m.CreditNotePagesModule,
           ),
       },
 
@@ -247,35 +247,35 @@ const routes: Routes = [
         path: 'testimonial-page',
         loadChildren: () =>
           import('./testimonial-page/testimonial-page.module').then(
-            (m) => m.TestimonialPageModule
+            (m) => m.TestimonialPageModule,
           ),
       },
       {
         path: 'customerdetailspage',
         loadChildren: () =>
           import('./customerdetailspage/customerdetailspage.module').then(
-            (m) => m.CustomerdetailspageModule
+            (m) => m.CustomerdetailspageModule,
           ),
       },
       {
         path: 'purchasepage',
         loadChildren: () =>
           import('./purchasepage/purchasepage.module').then(
-            (m) => m.PurchasepageModule
+            (m) => m.PurchasepageModule,
           ),
       },
       {
         path: 'quotationspage',
         loadChildren: () =>
           import('./quotationspage/quotationspage.module').then(
-            (m) => m.QuotationspageModule
+            (m) => m.QuotationspageModule,
           ),
       },
       {
         path: 'payment-summary',
         loadChildren: () =>
           import('./payment-summary/payment-summary.module').then(
-            (m) => m.PaymentSummaryModule
+            (m) => m.PaymentSummaryModule,
           ),
       },
 
@@ -283,7 +283,7 @@ const routes: Routes = [
         path: 'permission',
         loadChildren: () =>
           import('./permission/permission.module').then(
-            (m) => m.PermissionModule
+            (m) => m.PermissionModule,
           ),
       },
 
@@ -296,42 +296,49 @@ const routes: Routes = [
         path: 'contact-details',
         loadChildren: () =>
           import('./contact-details/contact-details.module').then(
-            (m) => m.ContactDetailsModule
+            (m) => m.ContactDetailsModule,
           ),
       },
       {
         path: 'signature-list',
         loadChildren: () =>
           import('./signature-list/signature-list.module').then(
-            (m) => m.SignatureListModule
+            (m) => m.SignatureListModule,
           ),
       },
       {
         path: 'pay-online',
         loadChildren: () =>
           import('./pay-online/pay-online.module').then(
-            (m) => m.PayOnlineModule
+            (m) => m.PayOnlineModule,
           ),
       },
       {
         path: 'notifications',
         loadChildren: () =>
           import('./notifications/notifications.module').then(
-            (m) => m.NotificationsModule
+            (m) => m.NotificationsModule,
           ),
       },
       {
         path: 'mail-pay-invoice',
         loadChildren: () =>
           import('./mail-pay-invoice/mail-pay-invoice.module').then(
-            (m) => m.MailPayInvoiceModule
+            (m) => m.MailPayInvoiceModule,
           ),
       },
       {
         path: 'super-admin',
         loadChildren: () =>
           import('./super-admin/super-admin.module').then(
-            (m) => m.SuperAdminModule
+            (m) => m.SuperAdminModule,
+          ),
+      },
+      {
+        path: 'subscription',
+        loadChildren: () =>
+          import('./subscription/subscription.module').then(
+            (m) => m.SubscriptionModule,
           ),
       },
       {
@@ -346,7 +353,7 @@ const routes: Routes = [
     canActivate: [LoggedInGuard],
     loadChildren: () =>
       import('./authentication/authentication.module').then(
-        (m) => m.AuthenticationModule
+        (m) => m.AuthenticationModule,
       ),
   },
   {
@@ -358,7 +365,7 @@ const routes: Routes = [
     path: 'admin-register',
     loadChildren: () =>
       import('./authentication/admin-register/admin-register.module').then(
-        (m) => m.AdminRegisterModule
+        (m) => m.AdminRegisterModule,
       ),
   },
   {

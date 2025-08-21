@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { routes } from 'src/app/core/core.index';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { LanguageService } from 'src/app/services/language/language.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { SystemService } from 'src/app/services/system/system.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
@@ -13,9 +14,9 @@ import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrl: './login.component.scss',
 })
-export class LoginComponent  implements OnInit {
+export class LoginComponent implements OnInit {
   public routes = routes;
 
   form: FormGroup;
@@ -30,7 +31,8 @@ export class LoginComponent  implements OnInit {
     private userService: UserService,
     private translate: TranslateService,
     private systemService: SystemService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private language: LanguageService,
   ) {
     this.initForm();
   }
@@ -39,12 +41,11 @@ export class LoginComponent  implements OnInit {
    * Initializes the component and checks if the user is already connected
    */
   ngOnInit() {
-    this.getIfIsConnected()
-      .then((response) => {
-        if (response === true) {
-          this.router.navigateByUrl('/tabs', { replaceUrl: true });
-        }
-      });
+    this.getIfIsConnected().then((response) => {
+      if (response === true) {
+        this.router.navigateByUrl('/tabs', { replaceUrl: true });
+      }
+    });
   }
 
   /**
@@ -62,8 +63,12 @@ export class LoginComponent  implements OnInit {
    */
   initForm() {
     this.form = new FormGroup({
-      email: new FormControl(null, { validators: [Validators.required, Validators.email] }),
-      password: new FormControl(null, { validators: [Validators.required, Validators.minLength(8)] })
+      email: new FormControl(null, {
+        validators: [Validators.required, Validators.email],
+      }),
+      password: new FormControl(null, {
+        validators: [Validators.required, Validators.minLength(8)],
+      }),
     });
   }
 
@@ -84,59 +89,77 @@ export class LoginComponent  implements OnInit {
     }
 
     this.isLoading = true;
-    this.authService.login(this.form.value)
+    this.authService
+      .login(this.form.value)
       .then((user: any) => {
-            console.log("onSubmit: ", user);
+        console.log('onSubmit: ', user);
         if (user) {
           if (user === false) {
-            console.log("onSubmit false");
-            this.translate.get("auth.errorCredential").subscribe((res: string) => {
-              this.isLoading = false;
-              this.showAlert(res);
-              return;
-            })
+            console.log('onSubmit false');
+            this.translate
+              .get('auth.errorCredential')
+              .subscribe((res: string) => {
+                this.isLoading = false;
+                this.showAlert(res);
+                return;
+              });
           }
-          if (user.active === false) {
-            console.log("onSubmit active");
+          if (user.isActive === false) {
+            console.log('onSubmit active');
             this.isLoading = false;
-            this.translate.get("auth.desabledAccountMsg").subscribe((res: string) => {
-              this.showAlert(res);
-            })
+            this.translate
+              .get('auth.desabledAccountMsg')
+              .subscribe((res: string) => {
+                this.showAlert(res);
+              });
             this.authService.logout();
             return;
           } else {
-            console.log("onSubmit else in");
             this.userService.setCurrentUser(user);
             this.isLoading = false;
+            this.language.setLocalUserLanguage(user.language);
+            this.language.useLanguage(user.language);
             this.form.reset();
-            this.storage.getStorage(environment.memory_link)
-              .then((url) => {
-                if (url) {
-                  this.router.navigateByUrl(url, { replaceUrl: true });
-                  this.storage.removeStorage(environment.memory_link);
-                  // setTimeout(() => window.location.reload(), 1000);
-                } else {
-                  this.router.navigateByUrl('/tabs', { replaceUrl: true });
-                  // setTimeout(() => window.location.reload(), 1000);
-                }
-              })
+            this.storage.getStorage(environment.memory_link).then((url) => {
+              if (url) {
+                this.router.navigateByUrl(url, { replaceUrl: true });
+                this.storage.removeStorage(environment.memory_link);
+                // setTimeout(() => window.location.reload(), 1000);
+              } else {
+                this.router.navigateByUrl('/tabs', { replaceUrl: true });
+                // setTimeout(() => window.location.reload(), 1000);
+              }
+            });
           }
         } else {
-            console.log("onSubmit else out");
+          console.log('onSubmit else out');
           this.isLoading = false;
-          this.translate.get("auth.errorCredential").subscribe((res: string) => {
-            this.showAlert(res);
-          })
+          this.translate
+            .get('auth.errorCredential')
+            .subscribe((res: string) => {
+              this.showAlert(res);
+            });
           this.authService.logout();
         }
       })
-      .catch(e => {
+      .catch((e) => {
         this.isLoading = false;
-        this.translate.get("auth.errorCredential").subscribe((res: string) => {
-          let msg = res;
-          this.showAlert(msg);
-        console.error("onSubmit catch: ", msg);
-        });
+        const err = e.error.message.message;
+        if (err.search('account is disabled') > 0) {
+          this.translate
+            .get('auth.desabledAccountMsg')
+            .subscribe((res: string) => {
+              this.showAlert(res);
+            });
+          this.authService.logout();
+        } else {
+          console.error('onSubmit catch: ', e.error.message.message);
+          this.translate
+            .get('auth.errorCredential')
+            .subscribe((res: string) => {
+              this.showAlert(res);
+            });
+        }
       });
   }
 
@@ -154,12 +177,11 @@ export class LoginComponent  implements OnInit {
    * @param message - The message to display in the alert
    */
   async showAlert(message: string) {
-    let msg = "";
-    this.translate.get("auth.authenticationFailed").subscribe((res: string) => {
+    let msg = '';
+    this.translate.get('auth.authenticationFailed').subscribe((res: string) => {
       msg = res;
       this.toastService.presentToast('error', 'Error', msg, 10000);
-
-    })
+    });
     // const alert = await this.alertController.create({
     //   header: msg,
     //   message,

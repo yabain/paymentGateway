@@ -73,7 +73,7 @@ export class SendMoneyComponent implements OnInit {
   bankAccountNumber: string = '';
   bic: string = '';
   canNext2Val: boolean = false;
-  goToProceed: boolean = true;
+  goToProceed: boolean = false;
 
   firstFormGroup = this._formBuilder.group({
     firstCtrl: ['', Validators.required],
@@ -327,6 +327,7 @@ export class SendMoneyComponent implements OnInit {
   }
 
   canNext2(): boolean {
+    if (!this.canNext()) return false;
     this.setTransactionData();
     if ( this.selectedMethod === 'BANK') {
       if (this.bankAccountNumber && this.bic) return (this.canNext2Val = true);
@@ -622,6 +623,7 @@ export class SendMoneyComponent implements OnInit {
   // Méthode pour réinitialiser le stepper
   stepperToProceed() {
     this.goToProceed = true;
+    console.log('transactionData: ', this.transactionData);
   }
 
   resetStepper(){

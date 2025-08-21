@@ -68,7 +68,7 @@ public layoutSidebarView: BehaviorSubject<string> = new BehaviorSubject<string>(
       this.toggleSideBar.next("false");
       this.expandSideBar.next("true");
       localStorage.removeItem('isMiniSidebar'); 
-      this.data.sideBar.map((mainMenus:SideBar) => {
+      this.data.sideBarMenuDigikuntz.map((mainMenus:SideBar) => {
         mainMenus.menu.map((resMenu: SideBarMenu) => {
           const menuValue = sessionStorage.getItem('menuValue'); 
           if (menuValue && menuValue == resMenu.menuValue) {
@@ -80,7 +80,7 @@ public layoutSidebarView: BehaviorSubject<string> = new BehaviorSubject<string>(
       this.toggleSideBar.next('true');
       this.expandSideBar.next("false");
       localStorage.setItem('isMiniSidebar', 'true');
-      this.data.sideBar.map((mainMenus: SideBar) => {
+      this.data.sideBarMenuDigikuntz.map((mainMenus: SideBar) => {
         mainMenus.menu.map((resMenu: SideBarMenu) => {
           resMenu.showSubRoute = false;
         });

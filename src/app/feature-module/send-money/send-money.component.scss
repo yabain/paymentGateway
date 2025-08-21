@@ -477,7 +477,7 @@ mat-stepper {
     margin-top: 30px;
   }
 
-  .btn {
+  .btn2 {
     padding: 16px 25px;
     border-radius: 12px;
     font-size: 16px;
@@ -886,7 +886,7 @@ mat-stepper {
   gap: 20px;
 }
 
-.btn {
+.btn2 {
   padding: 18px 25px;
   border-radius: 12px;
   font-size: 16px;
@@ -912,7 +912,7 @@ mat-stepper {
   transform: translateY(-2px);
 }
 
-.btn-primary {
+.btn-primary2 {
   background: linear-gradient(
     135deg,
     var(--primary) 0%,
@@ -922,7 +922,7 @@ mat-stepper {
   box-shadow: 0 6px 20px rgba(67, 97, 238, 0.3);
 }
 
-.btn-primary:hover {
+.btn-primary2:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(67, 97, 238, 0.4);
 }
@@ -971,10 +971,10 @@ mat-stepper {
   border-color: var(--primary-light);
 }
 
-.btn {
+.btn2 {
   transition: var(--transition);
 }
 
-.btn:hover {
+.btn2:hover {
   transform: translateY(-2px);
 }

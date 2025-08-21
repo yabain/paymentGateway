@@ -104,7 +104,7 @@ export class FeatureModuleComponent implements OnDestroy {
       this.expandMenu = res;
       // <* to collapse submenu while toggling side menu*>
       if (res == false && this.miniSidebar == true) {
-        this.data.sideBar.map((mainMenus: mainMenus) => {
+        this.data.sideBarMenuDigikuntz.map((mainMenus: mainMenus) => {
           mainMenus.menu.map((resMenu: MenuItem) => {
             resMenu.showSubRoute = false;
           });
@@ -112,7 +112,7 @@ export class FeatureModuleComponent implements OnDestroy {
       }
       // <* to expand submenu while hover toggled side menu*>
       if (res == true && this.miniSidebar == false) {
-        this.data.sideBar.map((mainMenus: mainMenu) => {
+        this.data.sideBarMenuDigikuntz.map((mainMenus: mainMenu) => {
           mainMenus.menu.map((resMenu: MenuItem) => {
             const menuValue = sessionStorage.getItem('menuValue');
             if (menuValue && menuValue == resMenu.menuValue) {

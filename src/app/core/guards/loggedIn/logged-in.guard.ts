@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { routes } from '../../core.index';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +17,7 @@ export class LoggedInGuard {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    if (localStorage.getItem('authenticated')) {
+    if (localStorage.getItem(environment.user_data)) {
       this.router.navigate([routes.dashboard]);
       return false;
     } else {

@@ -418,7 +418,11 @@
     "hero-item2": "High-level banking security",
     "hero-item3": "Unbeatable fees",
     "hero-item4": "24/7 Customer Support",
-    "hero-secureMessage": "Your data is encrypted and protected in accordance with the General Data Protection Regulation (GDPR)."
+    "hero-secureMessage": "Your data is encrypted and protected in accordance with the General Data Protection Regulation (GDPR).",
+    "processing-message1": "Your request is being processed.",
+    "processing-message2": "Confirm payment through our flutterwave portal.",
+    "processing-message3": "",
+    "processing-message4": ""
   },
   "whatsapp": {
     "title": "WhatsApp center",
@@ -480,7 +484,10 @@
     "payments": "Payments",
     "subscriptions": "Subscriptions",
     "fundraising": "Fundraising",
-    "cashWithdrawal": "Cash Withdrawal"
+    "cashWithdrawal": "Cash Withdrawal",
+    "customers": "Users",
+    "admin": "Admin space",
+    "systemSettings": "system Settings"
   },
   "tool": "Tool",
   "meetUrl": "Visio URL",

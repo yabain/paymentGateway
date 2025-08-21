@@ -126,8 +126,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .catch((e) => {
         this.currentUserData = undefined;
       });
-
-    console.log('user Data: ', this.currentUserData);
   }
 
   async getUsersStatistics() {
@@ -162,10 +160,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
           } else {
             console.error('Failed to fetch exchange rate data');
           }
+          setTimeout(() => {
           this.gettingExchangeRate = false;
+          }, 3000)
         },
         (error) => {
+          setTimeout(() => {
           this.gettingExchangeRate = false;
+          }, 3000)
           console.error('Error fetching exchange rate:', error);
         },
       );
@@ -173,7 +175,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   exchangeTo(currency) {
     let data: any = this.exchangeRate.filter((e) => e.toCurrency === currency);
-    console.log('data: ', data)
     data = data[0];
     return data.value;
   }

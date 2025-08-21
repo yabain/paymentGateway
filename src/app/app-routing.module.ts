@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { PaymentComponent } from './payment/payment.component';
+import { LoggedInGuard } from './core/guards/loggedIn/logged-in.guard';
 
 const routes: Routes = [
   {
@@ -26,16 +27,17 @@ const routes: Routes = [
   },
   {
     path: '',
+    canActivate: [LoggedInGuard],
     loadChildren: () =>
       import('./feature-module/feature-module.module').then(
         (m) => m.FeatureModuleModule
       ),
   },
-  {
-    path: '**',
-    pathMatch: 'full',
-    redirectTo: 'login',
-  },
+  // {
+  //   path: '**',
+  //   pathMatch: 'full',
+  //   redirectTo: 'login',
+  // },
 
 
 ];

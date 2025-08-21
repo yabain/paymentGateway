@@ -1,4 +1,4 @@
-<div class="main-title" style="text-align: center;">
+<div class="main-title" *ngIf="!goToProceed">
   <h2>{{ "dashboard.sendMoney" | translate }}</h2>
 </div>
 <div class="row">
@@ -398,7 +398,7 @@
                             title="feather icon-skip-back"></i>
                           {{ "action.back" | translate }}
                         </button>
-                        <button class="btn btn-confirm" (click)="stepperToProceed()">
+                        <button class="btn2 btn-confirm" (click)="stepperToProceed()">
                           <i class="fas fa-check"></i> {{ "payment.proceed" | translate }}
                         </button>
                       </div>
@@ -416,8 +416,8 @@
             <div class="wating-msg">
               <img src="assets/img/new/loader.gif" width="30px" alt="">
               <p style="margin-top: 50px;">
-                Le traitement de votre transaction est en cours. <br>
-              Confirmez le paiement via notre portail flutterwave.
+                {{ "payment.processing-message1" | translate }}<br>
+              {{ "payment.processing-message2" | translate }}
             </p>
                 <img src="assets/img/ressorces/flutterwave.png" alt=""
                     style="max-width: 100px;;">

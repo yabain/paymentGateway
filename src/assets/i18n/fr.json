@@ -418,7 +418,11 @@
     "hero-item2": "Sécurité bancaire de haut niveau",
     "hero-item3": "Frais imbatable",
     "hero-item4": "Support client 24/7",
-    "hero-secureMessage": "Vos données sont cryptées et protégées conformément au Règlement Général sur la Protection des Données (RGPD)."
+    "hero-secureMessage": "Vos données sont cryptées et protégées conformément au Règlement Général sur la Protection des Données (RGPD).",
+    "processing-message1": "Le traitement de votre demande est en cours.",
+    "processing-message2": "Confirmez le paiement via notre portail flutterwave.",
+    "processing-message3": "",
+    "processing-message4": ""
   },
   "whatsapp": {
     "title": "WhatsApp",
@@ -480,7 +484,10 @@
     "payments": "Paiements",
     "subscriptions": "Abonnements",
     "fundraising": "Collecte de fonds",
-    "cashWithdrawal": "Retirer de l'argent"
+    "cashWithdrawal": "Retirer de l'argent",
+    "customers": "Utilisateurs",
+    "admin": "Espace Administrateur",
+    "systemSettings": "Paramètres Système"
   },
   "tool": "Outil",
   "meetUrl": "Lien de la Visio",
