@@ -1,31 +1,38 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SubscriptionComponent } from './subscription/subscription.component';
+import { SubscriptionComponent } from './subscription.component';
 import { PackagesComponent } from './packages/packages.component';
+import { SubscriptionListComponent } from './subscription-list/subscription-list.component';
 
 const routes: Routes = [
   {
     path: '',
-    pathMatch: 'full',
-    redirectTo: 'subscription',
-  },
-  {
-    path: 'subscription',
-    component: SubscriptionComponent
-  },
-  {
-    path: 'packages',
-    component: PackagesComponent
+    component: SubscriptionComponent,
+    children: [
+      {
+        path: '',
+        redirectTo: 'subscription',
+        pathMatch: 'full',
+      },
+      {
+        path: 'subscription',
+        component: SubscriptionListComponent,
+      },
+      {
+        path: 'packages',
+        component: PackagesComponent,
+      },
+    ],
   },
   {
     path: '**',
     pathMatch: 'full',
-    redirectTo: 'subscription',
+    redirectTo: 'packages',
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class SubscriptionRoutingModule { }
+export class SubscriptionRoutingModule {}

@@ -11,19 +11,19 @@ import {
 import { PaginationService, tablePageSize } from 'src/app/shared/sharedIndex';
 
 @Component({
-  selector: 'app-subscription',
-  templateUrl: './subscription.component.html',
-  styleUrls: ['./subscription.component.scss'],
+  selector: 'app-subscription-list',
+  templateUrl: './subscription-list.component.html',
+  styleUrls: ['./subscription-list.component.scss'],
 })
-export class SubscriptionComponent {
+export class SubscriptionListComponent {
   public routes = routes;
-  public tableData: Array<subscription> = [];
+  public tableData: Array<any> = [];
   // pagination variables
   public pageSize = 10;
   public serialNumberArray: Array<number> = [];
   public totalData = 0;
   showFilter = false;
-  dataSource!: MatTableDataSource<subscription>;
+  dataSource!: MatTableDataSource<any>;
   public searchDataValue = '';
   // pagination variables end
 

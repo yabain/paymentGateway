@@ -284,7 +284,7 @@ export class FeatureModuleComponent implements OnDestroy {
     const timeOut: Date = new Date(loginTime);
 
     if (new Date().getHours() > timeOut.getHours()) {
-      this.auth.logout();
+      // this.auth.logout();
     }
 
   }

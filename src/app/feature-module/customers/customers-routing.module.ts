@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { CustomersComponent } from './customers.component';
+import { CustomerListComponent } from './customers-list/customer-list.component';
+import { CustomerDetailsComponent } from './customer-details/customer-details.component';
 
 const routes: Routes = [
   {
@@ -14,10 +16,11 @@ const routes: Routes = [
     children: [
       {
         path: 'list',
-        loadChildren: () =>
-          import('./customers-list/customer-list.module').then(
-            (m) => m.CustomerListModule
-          ),
+        component: CustomerListComponent
+      },
+      {
+        path: 'details/:id',
+        component: CustomerDetailsComponent
       },
       {
         path: 'add',

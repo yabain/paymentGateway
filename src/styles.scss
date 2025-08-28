@@ -19,11 +19,15 @@ $template-warn: mat.m2-define-palette(mat.$m2-red-palette);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
-$template-theme: mat.m2-define-light-theme((color: (primary: $template-primary,
-        accent: $template-accent,
-        warn: $template-warn,
-      ),
-    ));
+$template-theme: mat.m2-define-light-theme(
+  (
+    color: (
+      primary: $template-primary,
+      accent: $template-accent,
+      warn: $template-warn
+    )
+  )
+);
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
@@ -131,9 +135,9 @@ $template-theme: mat.m2-define-light-theme((color: (primary: $template-primary,
 
 .switch {
   .active {
-    +.slider {
-      background-color: $__primarycolor;
-      border: 2px solid $__primarycolor;
+    + .slider {
+      background-color: #faa75f;
+      border: 2px solid #faa75f;
 
       &:before {
         -webkit-transform: translateX(26px);
@@ -378,7 +382,7 @@ apx-chart {
 
 .pagination .paginate_button.previous .page-link {
   margin-right: 20px;
-  border: 1px solid #E5E7EB;
+  border: 1px solid #e5e7eb;
   border-radius: 5px;
   background: #fff;
   font-size: 14px;
@@ -386,7 +390,7 @@ apx-chart {
 
 .pagination .paginate_button.next .page-link {
   margin-left: 20px;
-  border: 1px solid #E5E7EB;
+  border: 1px solid #e5e7eb;
   border-radius: 5px;
   background: #fff;
   font-size: 14px;
@@ -599,11 +603,11 @@ button:focus:not(:focus-visible) {
 }
 
 .custom-class .mdc-menu-surface.mat-mdc-select-panel {
-  background: #1C1D22;
+  background: #1c1d22;
 }
 
 .custom-class mat-select.custom-mat-select {
-  background-color: #1C1D22;
+  background-color: #1c1d22;
 }
 
 mat-select.custom-mat-select {
@@ -730,7 +734,7 @@ label.custom_check.custom-check-cls {
   box-shadow: 0 0 10px 0 #aaa;
   position: relative;
   z-index: 1;
-  border-color: #3B3C3E;
+  border-color: #3b3c3e;
 }
 
 .date-pickers bs-daterangepicker-container {
@@ -749,7 +753,6 @@ mat-slider {
 .horizontal .sidebar .sidebar-menu ul li.active a::after {
   display: none;
 }
-
 
 .horizontal .main-logo {
   background: none;
@@ -840,7 +843,6 @@ full-calendar .fc .fc-list-day-cushion,
   overflow: hidden;
 }
 
-
 #earnings-chart apx-chart {
   width: 500px !important;
 }
@@ -865,17 +867,51 @@ app-email-template .feather {
 }
 
 ngx-mat-intl-tel-input div.ngx-mat-tel-input-container button {
-  width: 20% !important; 
+  width: 20% !important;
 }
 
 ngx-editor .NgxEditor {
-  border: 1px solid #E0E0E0;
+  border: 1px solid #e0e0e0;
   box-shadow: none;
   border-radius: 4px;
   margin: 0;
   padding: 9px 12px;
   font-size: 14px;
   font-weight: 400;
-  color: #3F4254;
+  color: #3f4254;
   height: 180px;
+}
+
+.page-tilte {
+  border-radius: 10px !important;
+  border: 1px solid transparent;
+  // border-color: linear-gradient(to right, #021d66, #F57C11) 0.5;
+  margin-bottom: 20px !important;
+  padding: 10px;
+  box-shadow: 5px 5px 10px #021d6664;
+  color: #021d66 !important;
+  background-color: #fff;
+}
+
+
+.btn-hover:hover {
+  box-shadow: 0 40px 0 0 #F57C11 inset !important;
+  border-color: #F57C11 !important;
+  -webkit-transition: all 0.4s ease !important;
+  -ms-transition: all 0.4s ease !important;
+  transition: all 0.4s ease !important;
+}
+
+.shadow-box-primary {
+  box-shadow: 5px 5px 10px #021d6664; /* Décalage horizontal de 5px, vertical de 5px, flou de 10px, couleur noire semi-transparente */
+}
+
+.shadow-box-secondary {
+  box-shadow: 5px 5px 10px #f57b116d; /* Décalage horizontal de 5px, vertical de 5px, flou de 10px, couleur noire semi-transparente */
+}
+
+
+.card-head {
+  border: 1px solid #021d66;
+  border-radius: 10px;
 }

@@ -18,7 +18,7 @@ export class PaymentComponent {
 
   async pay() {
     await this.fw.loadFlutterwaveScript();
-    const init = await this.fw.initializePayment(this.amount, 'customer@example.com', 'XAF');
+    const init = await this.fw.initializePayment(this.amount, 'customer@example.com', 'NGN');
     this.txRef = init.txRef;
     console.log('init', this.txRef)
     // ouvre le modal

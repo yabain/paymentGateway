@@ -156,6 +156,7 @@ export class RegisterComponent implements OnInit {
       this.form.get('lastName').setValidators([Validators.required]);
       this.form.get('name').clearValidators();
       this.form.value.name = null;
+      this.form.value.pictureUrl = 'assets/img/new/user.png';
       console.log('Account personal', this.form);
     } else if (this.form.value.accountType === 'organisation') {
       this.form.get('name').setValidators([Validators.required]);
@@ -163,6 +164,7 @@ export class RegisterComponent implements OnInit {
       this.form.get('lastName').clearValidators();
       this.form.value.firstName = null;
       this.form.value.lastName = null;
+      this.form.value.pictureUrl = 'assets/img/new/building.png';
       console.log('Account organisation', this.form);
     }
 

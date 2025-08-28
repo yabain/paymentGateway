@@ -1,0 +1,263 @@
+<div class="page-header">
+  <div class="content-page-header page-tilte">
+    <h5>{{ 'subscriptions.myList' | translate }}</h5>
+    <div class="page-content">
+      <div class="list-btn">
+        <ul class="filter-list">
+          <li>
+            <a class="btn-filters active btn-hover" data-bs-toggle="tooltip" data-bs-placement="bottom"
+              matTooltip="Grid-View"><span><i class="feather icon-grid"></i></span></a>
+          </li>
+          <li>
+            <a class="btn-filters btn-hover" data-bs-toggle="tooltip" data-bs-placement="bottom"
+              matTooltip="List-View"><span><i class="feather icon-list"></i></span></a>
+          </li>
+          <li>
+            <a class="btn-filters btn-hover" href="javascript:void(0);" data-bs-toggle="tooltip"
+              data-bs-placement="bottom" title="Refresh" matTooltip="Refresh"><span><i
+                  class="feather icon-refresh-ccw"></i></span></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /Page Header -->
+
+<div class="super-admin-list-head">
+  <div class="row">
+    <div class="col-xl-3 col-md-6 d-flex">
+      <div class="card w-100">
+        <div class="card-body">
+          <div class="grid-info-item subscription-list total-transaction">
+            <div class="grid-head-icon">
+              <i class="feather icon-shield"></i>
+            </div>
+            <div class="grid-info">
+              <span>Total Transaction</span>
+              <h4>$6,565,60</h4>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-6 d-flex">
+      <div class="card w-100">
+        <div class="card-body">
+          <div class="grid-info-item subscription-list total-subscriber">
+            <div class="grid-head-icon">
+              <i class="feather icon-users"></i>
+            </div>
+            <div class="grid-info">
+              <span>Total Subscribers</span>
+              <h4>945</h4>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-6 d-flex">
+      <div class="card w-100">
+        <div class="card-body">
+          <div class="grid-info-item subscription-list active-subscriber">
+            <div class="grid-head-icon">
+              <i class="feather icon-user-check"></i>
+            </div>
+            <div class="grid-info">
+              <span>Active Subscriber</span>
+              <h4>944</h4>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-6 d-flex">
+      <div class="card w-100">
+        <div class="card-body">
+          <div class="grid-info-item subscription-list expired-subscriber">
+            <div class="grid-head-icon">
+              <i class="feather icon-user-x"></i>
+            </div>
+            <div class="grid-info">
+              <span>Expired</span>
+              <h4>1</h4>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card-table">
+      <div class="card-body">
+        <div class="table-responsive">
+          <div class="companies-table">
+            <table matSort (matSortChange)="sortData($event)" class="table table-center table-hover datatable">
+              <thead class="thead-light">
+                <tr>
+                  <th Class="no-sort">#</th>
+                  <th mat-sort-header="subscriber">Subscriber</th>
+                  <th mat-sort-header="plan">Plan</th>
+                  <th mat-sort-header="billingCycle">Billing Cycle</th>
+                  <th mat-sort-header="paymentGateway">Payment Gateway</th>
+                  <th mat-sort-header="amount">Amount</th>
+                  <th mat-sort-header="registeredOn">Registered On</th>
+                  <th mat-sort-header="expiringOn">Expiring On</th>
+                  <th mat-sort-header="status">Status</th>
+                  <th mat-sort-header="invoice">Invoice </th>
+                  <th Class="no-sort">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (data of tableData; track data) {
+                <tr>
+                  <td>{{data.id}}</td>
+                  <td>
+                    <h2 class="table-avatar">
+                      <a [routerLink]="routes.profile" class="company-avatar avatar-md me-2 companies company-icon">
+                        <img class="avatar-img rounded-circle company" [src]="data.img" alt="Company Image"></a>
+                      <a href="javascript:void(0);">{{data.subscriber}}</a>
+                    </h2>
+                  </td>
+                  <td>{{data.plan}}</td>
+                  <td>{{data.billingCycle}}</td>
+                  <td>{{data.paymentGateway}}</td>
+                  <td>{{data.amount}}</td>
+                  <td>{{data.registeredOn}}</td>
+                  @if (data.expiringOn !== 'Expired') {
+                  <td>{{data.expiringOn}}</td>
+                  }
+                  @if (data.expiringOn === 'Expired') {
+                  <td>
+                    <span class="text-danger">{{data.expiringOn}}</span>
+                  </td>
+                  }
+                  <td>
+                    <span class="badge d-inline-flex align-items-center"
+                      [ngClass]="{'bg-success-light': data.status === 'Paid', 'bg-danger-light': data.status === 'Unpaid'}">
+                      <i class="feather me-1"
+                        [ngClass]="{'icon-check': data.status === 'Paid', 'icon-x': data.status === 'Unpaid'}">
+                      </i>
+                      {{data.status}}
+                    </span>
+                  </td>
+                  <td><a [routerLink]="routes.invoiceSubscription" class="invoice-detail"><i
+                        class="feather icon-file-text"></i></a></td>
+                  <td class="d-flex align-items-center">
+                    <div class="dropdown dropdown-action">
+                      <a href="javascript:void(0);" class=" btn-action-icon " data-bs-toggle="dropdown"
+                        aria-expanded="false"><i class="fas fa-ellipsis-v"></i></a>
+                      <div class="dropdown-menu dropdown-menu-end">
+                        <ul class="dropdown-ul">
+                          <li>
+                            <a class="dropdown-item" href="javascript:void(0);"><i
+                                class="feather icon-download me-2"></i>Download</a>
+                          </li>
+                          <li class="delete-alt">
+                            <div>
+                              <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal"
+                                data-bs-target="#delete_modal"><i class="feather icon-trash-2 me-2"></i>Delete</a>
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <app-custom-pagination></app-custom-pagination>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Vendor Modal -->
+<div class="modal custom-modal fade" id="edit_contact" role="dialog">
+  <div class="modal-dialog modal-dialog-centered modal-md">
+    <div class="modal-content">
+      <div class="modal-header border-0 pb-0">
+        <div class="form-header modal-header-title text-start mb-0">
+          <h4 class="mb-0">Edit Contact Messages</h4>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-lg-12 col-md-12">
+            <div class="input-block mb-3">
+              <label>Name</label>
+              <input type="text" class="form-control" value="John Smith" placeholder="Enter Name">
+            </div>
+          </div>
+          <div class="col-lg-12 col-md-12">
+            <div class="input-block mb-3">
+              <label>Email</label>
+              <input type="text" class="form-control" value="john@example.com" placeholder="Email">
+            </div>
+          </div>
+          <div class="col-lg-12 col-md-12">
+            <div class="input-block mb-3">
+              <label>Mobile</label>
+              <input type="text" class="form-control" value="989-438-3131" placeholder="Enter Mobile Number">
+            </div>
+          </div>
+          <div class="col-lg-12 col-md-12">
+            <div class="input-block mb-3">
+              <label>Message</label>
+              <input type="text" class="form-control" value="Lorem ipsum dolor" placeholder="message">
+            </div>
+          </div>
+          <div class="col-lg-12 col-md-12">
+            <div class="input-block mb-0">
+              <label>Date</label>
+              <input type="text" class="form-control" value="15 Dec 2023, 04:35 PM" placeholder="message">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a href="javascript:void(0);" data-bs-dismiss="modal" class="btn btn-back cancel-btn me-2">Cancel</a>
+        <a href="javascript:void(0);" data-bs-dismiss="modal" class="btn btn-primary paid-continue-btn">Update</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /Edit Vendor Modal -->
+
+<!-- Delete Items Modal -->
+<div class="modal custom-modal fade modal-delete" id="delete_modal" role="dialog">
+  <div class="modal-dialog modal-dialog-centered modal-md">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="form-header">
+          <div class="delete-modal-icon">
+            <span><i class="feather icon-check-circle"></i></span>
+          </div>
+          <h3>Are You Sure?</h3>
+          <p>You want delete plan</p>
+        </div>
+        <div class="modal-btn delete-action">
+          <div class="modal-footer justify-content-center p-0">
+            <button type="submit" data-bs-dismiss="modal" class="btn btn-primary paid-continue-btn me-2">Yes,
+              Delete</button>
+            <button type="button" data-bs-dismiss="modal" class="btn btn-back cancel-btn">No, Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /Delete Items Modal -->

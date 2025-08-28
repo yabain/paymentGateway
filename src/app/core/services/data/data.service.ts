@@ -13,7 +13,10 @@ import {
   providedIn: 'root',
 })
 export class DataService {
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+  ) {
+  }
 
   public getEvents() {
     return this.http
@@ -745,11 +748,11 @@ export class DataService {
         },
         {
           menuValue: 'cashWithdrawal',
-          route: '/dashboard',
+          route: '/withdrawal',
           hasSubRoute: false, // Show arrow after menu item title
           showSubRoute: true,
           icon: 'download',
-          base: 'cash-withdrawal',
+          base: 'withdrawal',
         },
         {
           menuValue: 'payments',
@@ -765,7 +768,7 @@ export class DataService {
           hasSubRoute: false, // Show arrow after menu item title
           showSubRoute: true,
           icon: 'repeat',
-          base: 'subscriptions',
+          base: 'subscription',
         },
         {
           menuValue: 'fundraising',
@@ -777,6 +780,9 @@ export class DataService {
         },
       ],
     },
+  ];
+
+  public sideBarMenuDigikuntzAdmin: any[] = [
     {
       tittle: 'admin',
       active: false,
@@ -784,6 +790,14 @@ export class DataService {
       showAsTab: false,
       separateRoute: false,
       menu: [
+        {
+          menuValue: 'users',
+          route: '/customer',
+          hasSubRoute: false, // Show arrow after menu item title
+          showSubRoute: true,
+          icon: 'users',
+          base: 'customer',
+        },
         {
           menuValue: 'systemSettings',
           route: routes.profileSettings,
@@ -793,20 +807,15 @@ export class DataService {
           base: 'settings',
           subMenus: [],
         },
-        {
-          menuValue: 'customers',
-          route: '/customer',
-          hasSubRoute: false, // Show arrow after menu item title
-          showSubRoute: true,
-          icon: 'users',
-          base: 'customer',
-        },
       ],
     },
-  ];
+  ]
 
   public getSideBarData: BehaviorSubject<Array<SideBarData>> =
     new BehaviorSubject<Array<SideBarData>>(this.sideBarMenuDigikuntz);
+
+  public getSideBarDataAdmin: BehaviorSubject<Array<SideBarData>> =
+    new BehaviorSubject<Array<SideBarData>>([...this.sideBarMenuDigikuntz, ...this.sideBarMenuDigikuntzAdmin]);
 
   public resetData(): void {
     this.sideBarMenuDigikuntz.map((res: SideBar) => {

@@ -19,6 +19,7 @@ import { SideMenuFourComponent } from './common/side-menus/side-menu-four/side-m
 import { TranslateModule } from '@ngx-translate/core';
 import { SendMoneyComponent } from './send-money/send-money.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { WithdrawalComponent } from './withdrawal/withdrawal.component';
 
 
 @NgModule({
@@ -37,6 +38,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     SideMenuThreeComponent,
     SideMenuFourComponent,
     SendMoneyComponent,
+    WithdrawalComponent,
   ],
   imports: [
     CommonModule,

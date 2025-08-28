@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Yaba-In: Mutuelle des étudiants UdM</title>
+  <meta name="description" content="Page d'accueil par défaut Yaba-In après création d'un plan d'hébergement." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%230B7C6C'/%3E%3Cpath d='M18 18h8l6 14 6-14h8l-14 28h-8z' fill='white'/%3E%3C/svg%3E" />
+  <style>
+    :root{
+      --bg: #0b0f14;
+      --surface: #0f1720;
+      --card: #111c27;
+      --text: #e8f1f7;
+      --muted:#9fb3c8;
+      --line:#213043;
+      --accent:#00c2a8;
+      --accent-2:#61e1d1;
+      --warn:#f59e0b;
+      --error:#ef4444;
+      --ok:#22c55e;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 14px;
+    }
+    @media (prefers-color-scheme: light){
+      :root{
+        --bg:#f6fbff; --surface:#ffffff; --card:#ffffff; --text:#0b1220; --muted:#4b5b6c; --line:#e7eef6;
+        --shadow: 0 6px 24px rgba(13,34,64,.12);
+      }
+      body::before{ opacity:.08; }
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,'Helvetica Neue',Arial,'Noto Sans',sans-serif;
+      color:var(--text); background:var(--bg);
+      letter-spacing:.1px;
+    }
+    body::before{
+      content:""; position:fixed; inset:-20% -20% auto -20%; height:70%;
+      background: radial-gradient(1200px 600px at 20% 10%, rgba(0,194,168,.25), transparent 60%),
+                  radial-gradient(900px 500px at 90% 0%, rgba(97,225,209,.18), transparent 60%),
+                  radial-gradient(800px 500px at 50% 100%, rgba(0,194,168,.12), transparent 60%);
+      pointer-events:none; z-index:-1; filter: blur(0px);
+    }
+    .wrap{max-width:1100px; margin-inline:auto; padding:32px 20px 72px}
+    header{
+      display:flex; align-items:center; justify-content:space-between; gap:16px; padding:12px 0 8px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px; text-decoration:none; color:inherit;
+    }
+    .brand .logo{
+      width:40px; height:40px; border-radius:10px; display:grid; place-items:center;
+      background:linear-gradient(135deg, var(--accent), var(--accent-2)); color:#06241f; font-weight:800;
+      box-shadow: var(--shadow);
+    }
+    .brand span{ font-weight:700; letter-spacing:.2px; font-size:18px }
+    .chip{
+      padding:8px 12px; border:1px solid var(--line); border-radius:999px; color:var(--muted); font-size:14px
+    }
+    main{
+      display:grid; grid-template-columns: 1.2fr .8fr; gap:24px; margin-top:14px;
+    }
+    @media (max-width: 980px){ main{ grid-template-columns:1fr; } }
+    .hero{
+      background:linear-gradient(180deg, var(--surface), rgba(17,28,39,.55));
+      border:1px solid var(--line); border-radius:var(--radius); padding:28px; box-shadow:var(--shadow);
+    }
+    h1{
+      margin:0 0 8px; font-size:clamp(24px, 2.6vw, 34px); line-height:1.2; letter-spacing:.2px
+    }
+    .muted{ color:var(--muted) }
+    .grid{
+      display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:14px; margin-top:18px
+    }
+    @media (max-width:680px){ .grid{ grid-template-columns:1fr } }
+    .card{
+      background: var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 16px;
+      box-shadow:var(--shadow); position:relative; overflow:hidden;
+    }
+    .card h3{ margin:0 0 6px; font-size:16px }
+    .card p{ margin:0; color:var(--muted); font-size:14px }
+    .card .row{ display:flex; align-items:center; justify-content:space-between; gap:10px }
+    .badge{
+      display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border-radius:12px; font-weight:600; font-size:13px;
+      background: #0e1621; border:1px solid var(--line);
+    }
+    .ok{ color: var(--ok) }
+    .warn{ color: var(--warn) }
+    .err{ color: var(--error) }
+    .btn{
+      appearance:none; border:0; cursor:pointer; border-radius:12px; padding:10px 14px; font-weight:700; letter-spacing:.2px;
+      background:linear-gradient(135deg,var(--accent), var(--accent-2)); color:#083a32; box-shadow:var(--shadow);
+    }
+    .btn:active{ transform: translateY(1px) }
+    .btn.secondary{
+      background:transparent; color:var(--text); border:1px solid var(--line); box-shadow:none;
+    }
+    .list{ margin:10px 0 0; padding-left:18px; color:var(--muted); font-size:14px }
+    .list li{ margin:6px 0 }
+    .aside{
+      display:grid; gap:14px; height:fit-content;
+    }
+    .footer{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between; margin-top:28px; color:var(--muted);
+      border-top:1px dashed var(--line); padding-top:18px;
+    }
+    code, .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; font-size: .95em }
+    .kpis{ display:flex; gap:10px; flex-wrap:wrap; margin-top:18px }
+    .kpis .pill{
+      background: rgba(0,0,0,.15); border:1px solid var(--line); border-radius:999px; padding:8px 12px; color:var(--muted); font-size:13px
+    }
+    .help{
+      display:grid; gap:10px; margin-top:10px
+    }
+    .help a{ text-decoration:none }
+    .help .link{
+      display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px 14px; border:1px solid var(--line);
+      border-radius:12px; color:inherit; background: var(--surface)
+    }
+    .table{
+      margin-top:10px; border-collapse: collapse; width:100%; font-size:14px
+    }
+    .table th,.table td{ border-bottom:1px solid var(--line); padding:10px 8px; text-align:left}
+    .table td:last-child{ text-align:right }
+    .hint{ font-size:12px; color:var(--muted) }
+    .fade-in{ animation: fade .5s ease both }
+    @keyframes fade{ from{opacity:0; transform: translateY(2px)} to{opacity:1; transform:none}}
+    .sr-only{ position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden }
+    /* icons */
+    .i{display:inline-block; width:16px; height:16px; vertical-align:-3px}
+    .i.ok{filter: drop-shadow(0 0 0 rgba(0,0,0,0))}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a class="brand" href="#">
+            <img src="https://avatars.githubusercontent.com/u/92252969?s=200&v=4" alt="" style="width: 40px"/>
+        <span>Yaba-In Hoster</span>
+      </a>
+      <div class="chip" id="chip-domain">Chargement du domaine…</div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <h1>Mutuelle des étudiants de l'UdM</h1>
+        <h3>Bienvenue 👋 Votre espace d'hébergement sera bientôt prêt</h3>
+        <p class="muted" id="welcome">
+          La création de votre domaine est en cours... <br />
+          <br />
+          Une fois dans votre hPanel, remplacez cette page par votre site (<span class="mono">index.html</span> / <span class="mono">index.php</span>) 
+          ou installez un CMS.
+        </p>
+
+        <div class="kpis" id="kpis">
+          <div class="pill">Protocole : <strong class="mono" id="proto">…</strong></div>
+          <div class="pill">Domaine : <strong class="mono" id="dom">…</strong></div>
+          <div class="pill">Fuseau : <strong class="mono" id="tz">…</strong></div>
+          <div class="pill">Heure serveur (navigateur) : <strong class="mono" id="now">…</strong></div>
+        </div>
+
+        <div class="grid">
+          <div class="card fade-in">
+            <div class="row">
+              <h3>Étape 1 — Sécuriser en HTTPS</h3>
+              <span class="badge" id="https-badge">Vérification…</span>
+            </div>
+            <p>Activez un certificat TLS/SSL (Let’s Encrypt) puis forcez la redirection <span class="mono">HTTP → HTTPS</span>.</p>
+            <ul class="list">
+              <li>Statut : <span id="https-status">—</span></li>
+              <li>Redirect détectée : <span id="https-redirect">—</span></li>
+            </ul>
+            <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap">
+              <button class="btn" id="btn-https">Ouvrir cette page en HTTPS</button>
+              <a class="btn secondary" href="/.well-known/" target="_blank" rel="noopener">Vérifier dossiers <span class="mono">.well-known</span></a>
+            </div>
+          </div>
+
+          <div class="card fade-in">
+            <div class="row">
+              <h3>Étape 2 — Mettre en ligne votre site</h3>
+              <span class="badge">Fichiers d’accueil : <span class="mono">index.html, index.php</span></span>
+            </div>
+            <p>Transférez vos fichiers via SFTP ou le gestionnaire de fichiers.</p>
+            <table class="table">
+              <thead><tr><th>Chemin</th><th>Accès rapide</th></tr></thead>
+              <tbody>
+                <tr><td class="mono">/public_html/</td><td><a class="btn secondary" href="/filemanager" id="fm-link">Gestionnaire</a></td></tr>
+                <!-- <tr><td class="mono">/public_html/index.html</td><td><button class="btn secondary" id="btn-starter">Télécharger un modèle</button></td></tr> -->
+              </tbody>
+            </table>
+            <p class="hint">Astuce : pour remplacer cette page, uploadez simplement un fichier <span class="mono">index.*</span> à la racine du site.</p>
+          </div>
+
+          <div class="card fade-in">
+            <div class="row">
+              <h3>Étape 3 — Installer un CMS (optionnel)</h3>
+              <span class="badge" id="cms-badge">Scan en cours…</span>
+            </div>
+            <p>Cette page tente de détecter des installateurs disponibles :</p>
+            <ul class="list" id="cms-list">
+              <li>WordPress : <span class="mono" id="wp">—</span></li>
+              <li>Joomla! : <span class="mono" id="joomla">—</span></li>
+              <li>Drupal : <span class="mono" id="drupal">—</span></li>
+            </ul>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px">
+              <a class="btn" id="btn-wp" href="/wp-admin/install.php">Installer WordPress</a>
+              <a class="btn secondary" id="btn-joomla" href="/installation/index.php">Installer Joomla!</a>
+              <a class="btn secondary" id="btn-drupal" href="/core/install.php">Installer Drupal</a>
+            </div>
+          </div>
+
+          <div class="card fade-in">
+            <div class="row">
+              <h3>Étape 4 — Panneaux & outils</h3>
+              <span class="badge" id="panel-badge">Détection…</span>
+            </div>
+            <div class="help" id="quicklinks">
+              <a class="link" href="/cpanel" id="lnk-cpanel" target="_blank" rel="noopener">
+                <span>Ouvrir cPanel</span> <span class="mono">/cpanel</span>
+              </a>
+              <a class="link" href="/plesk" id="lnk-plesk" target="_blank" rel="noopener">
+                <span>Ouvrir Plesk</span> <span class="mono">/plesk</span>
+              </a>
+              <a class="link" href="/webmail" target="_blank" rel="noopener"><span>Webmail</span> <span class="mono">/webmail</span></a>
+              <a class="link" href="/phpmyadmin" target="_blank" rel="noopener"><span>phpMyAdmin</span> <span class="mono">/phpmyadmin</span></a>
+            </div>
+            <p class="hint" id="panel-hint">Conseil : l’un de ces liens peut rediriger vers le port sécurisé de votre panneau (ex. :2083).</p>
+          </div>
+        </div>
+      </section>
+
+      <aside class="aside">
+        <div class="card">
+          <div class="row">
+            <h3>Diagnostics rapides</h3>
+            <span class="badge">Statut en direct</span>
+          </div>
+          <table class="table">
+            <tbody>
+              <tr><td>HTTPS</td><td id="diag-https">—</td></tr>
+              <tr><td>Redirection HTTP→HTTPS</td><td id="diag-redirect">—</td></tr>
+              <tr><td>cPanel</td><td id="diag-cpanel">—</td></tr>
+              <tr><td>Plesk</td><td id="diag-plesk">—</td></tr>
+              <tr><td>WordPress</td><td id="diag-wp">—</td></tr>
+              <tr><td>Joomla!</td><td id="diag-joomla">—</td></tr>
+              <tr><td>Drupal</td><td id="diag-drupal">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <div class="row"><h3>Besoin d’aide ?</h3><span class="badge">Support Yaba-In</span></div>
+          <p>Contactez notre équipe :</p>
+          <ul class="list">
+            <li>Email : <a href="mailto:contact@yaba-in.com" style="color: rgb(172, 101, 1)">contact@yaba-in.com</a></li>
+            <li>Téléphone : <a href="tel:+237691224472" style="color:rgb(172, 101, 1)">+237 691 224 472</a></li>
+            <li>Site web : <a href="https://yaba-in.com" target="_blank" style="color:rgb(172, 101, 1)">yaba-in.com</a></li>
+          </ul>
+          <p class="hint">Nous restons à votre disposition pour vos besoins IT.</p>
+        </div>
+      </aside>
+    </main>
+
+    <div class="footer">
+      <div>© <span id="year"></span> Yaba-In. Tous droits réservés.</div>
+      <div class="hint">Cette page se désactivera dès qu’un <span class="mono">index.*</span> sera présent à la racine.</div>
+    </div>
+  </div>
+
+  <template id="ok-icon">
+    <svg class="i ok" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M20 7L9 18l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </template>
+  <template id="warn-icon">
+    <svg class="i" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M12 9v4m0 4h.01M22 12A10 10 0 1 1 2 12a10 10 0 0 1 20 0Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </template>
+  <template id="err-icon">
+    <svg class="i" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M12 8v5m0 3h.01M4.93 19.07A10 10 0 1 0 19.07 4.93 10 10 0 0 0 4.93 19.07Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </template>
+
+  <script>
+    // Utilitaires
+    const $ = (sel) => document.querySelector(sel);
+    const icon = (id) => document.getElementById(id).content.cloneNode(true);
+    const setBadge = (el, text, cls) => { el.textContent = text; el.className = 'badge ' + (cls||''); };
+    const timeout = (ms) => new Promise(r => setTimeout(r, ms));
+
+    // HEAD vers un chemin (même origine uniquement)
+    async function checkPath(path, {timeoutMs=3500, redirect='follow'}={}) {
+      const ctrl = new AbortController();
+      const t = setTimeout(()=>ctrl.abort(), timeoutMs);
+      try{
+        const res = await fetch(path, { method: 'HEAD', redirect, cache: 'no-store', signal: ctrl.signal });
+        clearTimeout(t);
+        // On considère présent si 2xx ou redirection 3xx
+        if ((res.status >= 200 && res.status < 300) || (res.status >= 300 && res.status < 400)) {
+          return {present:true, status:res.status};
+        }
+        return {present:false, status:res.status};
+      }catch(e){
+        clearTimeout(t);
+        return {present:false, error:String(e)};
+      }
+    }
+
+    function setStatus(id, present, details='') {
+      const cell = $(id);
+      cell.innerHTML = '';
+      if (present) {
+        cell.append(icon('ok-icon'));
+        cell.append(' Disponible ' + (details?('(' + details + ')'):''));
+        cell.className = 'ok';
+      } else {
+        cell.append(icon('warn-icon'));
+        cell.append(' En attente ' + (details?('(' + details + ')'):''));
+        cell.className = 'warn';
+      }
+    }
+
+    // Démarrage
+    (function init(){
+      const now = new Date();
+      $('#year').textContent = String(now.getFullYear());
+      const domain = location.hostname || 'localhost';
+      $('#dom').textContent = domain;
+      $('#chip-domain').textContent = domain;
+      $('#proto').textContent = location.protocol.replace(':','');
+      try { $('#tz').textContent = Intl.DateTimeFormat().resolvedOptions().timeZone || '—'; } catch { $('#tz').textContent = '—'; }
+      $('#now').textContent = now.toLocaleString('fr-FR');
+
+      // HTTPS
+      const isHttps = location.protocol === 'https:';
+      $('#https-status').innerHTML = isHttps ? '<span class="ok">Activé</span>' : '<span class="err">Non activé</span>';
+      setBadge($('#https-badge'), isHttps ? 'Sécurisé' : 'Non sécurisé', isHttps ? 'ok' : 'err');
+      $('#diag-https').textContent = isHttps ? 'Oui' : 'Non';
+      $('#btn-https').onclick = () => {
+        if (isHttps) { location.reload(); }
+        else { location.href = 'https://' + location.host + location.pathname + location.search + location.hash; }
+      };
+
+      // Redirection HTTP -> HTTPS (heuristique simple)
+      const redirectedFromHttp = document.referrer && document.referrer.startsWith('http://') && location.protocol === 'https:';
+      $('#https-redirect').textContent = redirectedFromHttp ? 'Oui (détectée via referrer)' : (isHttps ? 'Inconnue (probablement configurée)' : 'Non');
+
+      // Panneaux (cPanel / Plesk) + outils
+      (async ()=>{
+        const [cp, pl] = await Promise.all([
+          checkPath('/cpanel', {redirect:'manual'}),
+          checkPath('/plesk',  {redirect:'manual'})
+        ]);
+        const hasCpanel = !!cp.present;
+        const hasPlesk  = !!pl.present;
+        $('#panel-badge').textContent = hasCpanel ? 'cPanel détecté' : (hasPlesk ? 'Plesk détecté' : 'Aucun panneau détecté');
+        setStatus('#diag-cpanel', hasCpanel, hasCpanel && cp.status ? 'HTTP ' + cp.status : '');
+        setStatus('#diag-plesk',  hasPlesk,  hasPlesk  && pl.status ? 'HTTP ' + pl.status : '');
+
+        if (!hasCpanel) { $('#lnk-cpanel').style.opacity = .55; }
+        if (!hasPlesk)  { $('#lnk-plesk').style.opacity  = .55; }
+      })();
+
+      // CMS (WordPress / Joomla / Drupal)
+      (async ()=>{
+        $('#cms-badge').textContent = 'Scan en cours…';
+        const [wpLogin, wpInstall, joomlaAdmin, joomlaInstall, drupalLogin, drupalInstall] = await Promise.all([
+          checkPath('/wp-login.php'),
+          checkPath('/wp-admin/install.php'),
+          checkPath('/administrator/index.php'),
+          checkPath('/installation/index.php'),
+          checkPath('/user/login'),
+          checkPath('/core/install.php')
+        ]);
+
+        const wpDetected      = wpLogin.present || wpInstall.present;
+        const joomlaDetected  = joomlaAdmin.present || joomlaInstall.present;
+        const drupalDetected  = drupalLogin.present || drupalInstall.present;
+
+        $('#wp').textContent      = wpDetected ? (wpInstall.present ? 'Installateur disponible' : 'Présent') : 'Non détecté';
+        $('#joomla').textContent  = joomlaDetected ? (joomlaInstall.present ? 'Installateur disponible' : 'Présent') : 'Non détecté';
+        $('#drupal').textContent  = drupalDetected ? (drupalInstall.present ? 'Installateur disponible' : 'Présent') : 'Non détecté';
+
+        setStatus('#diag-wp', wpDetected);
+        setStatus('#diag-joomla', joomlaDetected);
+        setStatus('#diag-drupal', drupalDetected);
+
+        $('#btn-wp').style.opacity     = wpDetected ? 1 : .55;
+        $('#btn-joomla').style.opacity = joomlaDetected ? 1 : .55;
+        $('#btn-drupal').style.opacity = drupalDetected ? 1 : .55;
+
+        $('#cms-badge').textContent = wpDetected||joomlaDetected||drupalDetected ? 'CMS détecté(s)' : 'Aucun CMS détecté';
+      })();
+
+      // Bouton "Télécharger un modèle" : génère un petit index.html starter
+      $('#btn-starter').addEventListener('click', ()=>{
+        const starter = `<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mon site — ${document.title}</title>
+<style>
+  body{font:16px/1.5 system-ui,Segoe UI,Roboto,Arial,sans-serif;margin:0;padding:32px;background:#f7fafc;color:#0b1220}
+  main{max-width:800px;margin:auto}
+  h1{font-size:32px;margin:0 0 8px}
+  p{color:#334155}
+  a{color:#0f766e}
+  code{background:#e2e8f0;padding:2px 6px;border-radius:6px}
+</style></head>
+<body><main>
+  <h1>Bonjour 👋</h1>
+  <p>Votre hébergement Yaba-In est opérationnel. Remplacez ce fichier par votre site.</p>
+  <p>Fichier actuel : <code>public_html/index.html</code></p>
+</main></body></html>`;
+        const blob = new Blob([starter], {type:'text/html;charset=utf-8'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'index.html';
+        document.body.appendChild(a);
+        a.click();
+        URL.revokeObjectURL(a.href);
+        a.remove();
+      });
+
+      // Ajuster message d’accueil selon domaine
+      if (domain === 'localhost' || domain === '') {
+        $('#welcome').innerHTML = 'Vous visualisez la page par défaut <strong>Yaba-In</strong>. Déployez votre site et il se présentera ici pour vos utilisateurs.';
+      }
+    })();
+  </script>
+</body>
+</html>

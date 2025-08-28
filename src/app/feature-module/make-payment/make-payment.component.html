@@ -93,7 +93,9 @@
                 </div>
               </div>
               <div *ngIf="loadingData" style="text-align: center !important;">
-                <img src="assets/img/new/loader.gif" width="50px" alt="" style="margin: 50px 0;">
+                <div class="d-flex justify-content-center" style="margin: 50px">
+                  <div class="spinner-border" role="status"></div>
+                </div>
               </div>
             </div>
           </form>
@@ -102,7 +104,7 @@
           <div *ngIf="!loadingData && invoiceData?.status === true && !transactionData"
             style="text-align: center !important;">
             <img src="assets/img/new/success_transaction.gif" width="250px" alt="" style="margin: 50px 0;">
-            <p style="color: #fff; font-size: large;">Cette facture a déjà été soldée.</p>
+            <p style="color: #fff; font-size: large;">Cette facture a déjà été payée.</p>
           </div>
           <div *ngIf="!loadingData && transactionData?.status == 'Pending'" style="text-align: center !important;">
             <p style="color: #fff; font-size: large;">Veuillez composer le #150*50# pour confirmer le paiement.</p><br>
@@ -201,8 +203,8 @@
                             <div class="invoice-info invoice-info-one border-0">
                               <!-- <p>ID. Facture : {{invoiceData?.id}}</p> -->
                               <p>ID transaction : {{transactionData?.id}}</p>
-                              <p>Date de facturation : {{transactionData?.date | date: 'dd/MM/yyyy hh:mm'  }}</p>
-                              <p>Date de paiement : {{transactionData?.date | date: 'dd/MM/yyyy hh:mm'  }}</p>
+                              <p>Date de facturation : {{transactionData?.date | date: 'dd/MM/yyyy hh:mm' }}</p>
+                              <p>Date de paiement : {{transactionData?.date | date: 'dd/MM/yyyy hh:mm' }}</p>
                               <br>
                               <p>Méthode de paiement : Orange Money</p>
                               <p class="mb-0">Numéro payeur : {{transactionData?.phone

@@ -49,18 +49,31 @@ export class ApiService {
       })
     );
   }
-
+  
   progressiveGetWithoutId(endpoint: string, page?: number, keyword?: string): Observable<any[]> {
-    let params = new HttpParams(); // Créer une instance de HttpParams
-    if (page !== undefined) {
-      params = params.set('page', page.toString());
-    }
-    if (keyword) {
-      params = params.set('keyword', keyword);
-    }
+  let params = new HttpParams();
 
-    return this.http.get<any[]>(`${this.apiUrl}/${endpoint}`, { params });
+  if (page !== undefined) {
+    params = params.set('page', page.toString());
   }
+  if (keyword) {
+    params = params.set('keyword', keyword);
+  }
+
+  return from(this.getToken()).pipe(
+    switchMap((token: string) => {
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      });
+
+      return this.http.get<any[]>(`${this.apiUrl}/${endpoint}`, {
+        headers: headers,
+        params: params
+      });
+    })
+  );
+}
+
 
   progressiveGetWithId(endpoint: string, id?: string, page?: number, keyword?: string): Observable<any[]> {
     let params = new HttpParams();

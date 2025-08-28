@@ -16,13 +16,13 @@
         <p>{{ 'dashboard.subTitleWelcome' | translate }}</p>
         <h3 style="color: #fff; font-weight: bolder;">00 XAF</h3>
         <div class="dash-btns">
-          <a [routerLink]="'/send-money'" class="btn view-btn">{{ 'dashboard.sendMoney' | translate }} 
-              <i class="feather icon-send" data-bs-toggle="tooltip" title="feather icon-send" ></i>
-            </a>
+          <a [routerLink]="'/send-money'" class="btn view-btn">{{ 'dashboard.sendMoney' | translate }}
+            <i class="feather icon-send" data-bs-toggle="tooltip" title="feather icon-send"></i>
+          </a>
           <a [routerLink]="routes.packages" class="btn view-package-btn">
             {{ "dashboard.cashWithdrawal" | translate }}
-              <i class="feather icon-download" data-bs-toggle="tooltip"></i>
-            </a>
+            <i class="feather icon-download" data-bs-toggle="tooltip"></i>
+          </a>
         </div>
         <div class="dash-img">
           <img src="assets/img/dashboard-card-img.png" alt="">
@@ -71,7 +71,7 @@
       </div>
     </div>
   </div>
-  <div class="row" *ngIf="currentUserData?.isAdmin === true">
+  <div class="row" *ngIf="currentUserData?.isAdmin === true" [routerLink]="'/customer/list'">
     <div class="col-xl-3 col-sm-6 col-12">
       <div class="card">
         <div class="card-body">
@@ -218,8 +218,8 @@
               </tbody>
             </table>
             <div *ngIf="gettingExchangeRate">
-              <div style="text-align: center; margin-top: 30px">
-                <img src="assets/img/new/loader.gif" width="25px" alt="">
+              <div class="d-flex justify-content-center" style="margin: 50px">
+                <div class="spinner-border" role="status"></div>
               </div>
             </div>
           </div>
@@ -235,7 +235,7 @@
             </div>
             <div class="col-auto">
               <a [routerLink]="routes.invoiceList" class="btn-right btn btn-sm btn-outline-primary"
-               *ngIf="transactionList.length > 1">
+                *ngIf="transactionList.length > 1">
                 {{ "dashboard.viewMore" | translate }}
               </a>
             </div>

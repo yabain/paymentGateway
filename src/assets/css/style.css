@@ -12317,7 +12317,7 @@ body.filter-opened {
   font-size: 18px;
 }
 .list-btn .btn-filters:hover {
-  box-shadow: 0 40px 0 0 #EADDFF inset;
+  box-shadow: 0 40px 0 0 #F57C11 inset;
   border-color: #EADDFF;
   -webkit-transition: all 0.4s ease;
   -ms-transition: all 0.4s ease;

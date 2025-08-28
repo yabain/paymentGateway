@@ -69,7 +69,7 @@
                       </option>
                     </select>
                     <span id="basic-addon1" class="form-select" *ngIf="gettingLocations">
-                      <img src="assets/img/new/loader.gif" width="15px" alt="">
+                      <div class="spinner-border" role="status"></div>
                     </span>
                   </div>
                 </div>
@@ -131,7 +131,7 @@
               </button>
               <button [disabled]="form.invalid" class="btn btn-lg btn-block btn-light w-100" type="submit" disabled
                 *ngIf="isLoading">
-                <img src="assets/img/new/loader.gif" width="30px" alt="">
+                <div class="spinner-border" role="status"></div>
               </button>
             </div>
             <div class="acc-in">

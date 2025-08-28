@@ -24,7 +24,6 @@ export class AuthService {
   register(formValue: any): Observable<any> {
     const data: User = {
       ...formValue,
-      pictureUrl: 'assets/imgs/pictures/user.png',
     };
 
     return from(this.apiService.create(`auth/signup`, data)).pipe(

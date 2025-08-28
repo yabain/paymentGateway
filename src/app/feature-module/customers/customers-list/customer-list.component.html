@@ -1,51 +1,157 @@
 <!-- Page Header -->
 <div class="page-header">
-  <div class="content-page-header">
-    <h5>Customers</h5>
+  <div class="content-page-header page-tilte">
+    <h5>{{ "users.title" | translate }}</h5>
     <div class="list-btn">
       <ul class="filter-list">
+        <li *ngIf="activeSearch">
+          <div class="form-custom">
+            <input [(ngModel)]="searchString" (input)="searchData(searchString)" type="text" class="form-control"
+              id="member_search1" placeholder="Search Customer">
+          </div>
+        </li>
+        <li *ngIf="activeSearch">
+          <a class="btn-filters btn-hover" href="javascript:void(0);" matTooltip="Close Research"
+            (click)="toggleSearch()">
+            <span><i class="feather icon-x"></i></span>
+          </a>
+        </li>
+        <li *ngIf="!activeSearch">
+          <a class="btn-filters btn-hover" href="javascript:void(0);" matTooltip="Research user"
+            (click)="toggleSearch()">
+            <span><img src="assets/img/icons/search.svg" alt="img" style="color: #021d66;"></span>
+          </a>
+        </li>
+        <li (click)="refresh()">
+          <a class="btn-filters btn-hover" href="javascript:void(0);" data-bs-toggle="tooltip"
+            data-bs-placement="bottom" title="Refresh" matTooltip="Refresh"><span><i
+                class="feather icon-refresh-ccw"></i></span></a>
+        </li>
+        <!-- <li>
+          <a (click)="openContent()" (keydown.enter)="openContent()" tabindex="0" href="javascript:void(0);"
+            class="btn btn-filters w-auto popup-toggle btn-hover" matTooltip="Filter"><span class="me-2">
+              <img src="assets/img/icons/filter-icon.svg" alt="filter" /></span>Filter
+          </a>
+        </li> -->
         <li>
-          <a (click)="openContent()"  (keydown.enter)="openContent()" tabindex="0" href="javascript:void(0);" class="btn btn-filters w-auto popup-toggle"
-            matTooltip="Filter"><span class="me-2"><img src="assets/img/icons/filter-icon.svg"
-          alt="filter" /></span>Filter
-        </a>
-      </li>
-      <li>
-        <div class="dropdown dropdown-action" matTooltip="Download">
-          <a href="javascript:void(0);" class="btn-filters" data-bs-toggle="dropdown" aria-expanded="false"><span><i
-          class="feather icon-download"></i></span></a>
-          <div class="dropdown-menu dropdown-menu-end">
-            <ul class="d-block">
-              <li>
-                <a class="d-flex align-items-center download-item" href="javascript:void(0);" download><i
-                class="far fa-file-pdf me-2"></i>PDF</a>
-              </li>
-              <li>
-                <a class="d-flex align-items-center download-item" href="javascript:void(0);" download><i
-                class="far fa-file-text me-2"></i>CVS</a>
-              </li>
-            </ul>
+          <div class="dropdown dropdown-action" matTooltip="Download">
+            <a href="javascript:void(0);" class="btn-filters btn-hover" data-bs-toggle="dropdown"
+              aria-expanded="false"><span><i class="feather icon-download"></i></span></a>
+            <div class="dropdown-menu dropdown-menu-end">
+              <ul class="d-block">
+                <li>
+                  <a class="d-flex align-items-center download-item" href="javascript:void(0);" download><i
+                      class="far fa-file-pdf me-2"></i>PDF</a>
+                </li>
+                <li>
+                  <a class="d-flex align-items-center download-item" href="javascript:void(0);" download><i
+                      class="far fa-file-text me-2"></i>CVS</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li>
+          <a class="btn-filters btn-hover" href="javascript:void(0);" matTooltip="Print"><span><i
+                class="feather icon-printer"></i></span>
+          </a>
+        </li>
+        <li>
+          <a class="btn btn-primary btn-hover" [routerLink]="routes.addCustomer">
+            <i class="fa fa-plus-circle me-2" aria-hidden="true"></i>
+            {{ "users.addUser" | translate }}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="super-admin-list-head">
+    <div class="row">
+      <div class="col-xl-3 col-md-6 d-flex">
+        <div class="card w-100">
+          <div class="card-body card-head">
+            <div class="grid-info-item subscription-list total-transaction">
+              <div class="grid-head-icon">
+                <!-- <i class="feather icon-shield"></i> -->
+                <i class="feather icon-users"></i>
+              </div>
+              <div class="grid-info">
+                <span>{{ "users.allUsers" | translate }}</span>
+                <h4 *ngIf="customers.length > 1">{{ customers.length }}</h4>
+                <p *ngIf="customers.length === 0">Loading...</p>
+              </div>
+            </div>
           </div>
         </div>
-      </li>
-      <li>
-        <a class="btn-filters" href="javascript:void(0);" matTooltip="Print"><span><i
-        class="feather icon-printer"></i></span>
-      </a>
-    </li>
-    <li>
-      <a class="btn btn-import" href="javascript:void(0);"><span><i
-      class="feather icon-check-square me-2"></i>Import
-    Customer</span></a>
-  </li>
-  <li>
-    <a class="btn btn-primary" [routerLink]="routes.addCustomer"><i class="fa fa-plus-circle me-2"
-    aria-hidden="true"></i>Add
-  Customer</a>
-</li>
-</ul>
-</div>
-</div>
+      </div>
+      <!-- <div class="col-xl-3 col-md-6 d-flex">
+        <div class="card w-100">
+          <div class="card-body">
+            <div class="grid-info-item subscription-list total-subscriber">
+              <div class="grid-head-icon">
+                <i class="feather icon-users"></i>
+              </div>
+              <div class="grid-info">
+                <span>Total Subscribers</span>
+                <h4>945</h4>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div> -->
+      <div class="col-xl-3 col-md-6 d-flex">
+        <div class="card w-100">
+          <div class="card-body card-head">
+            <div class="grid-info-item subscription-list active-subscriber">
+              <div class="grid-head-icon">
+                <i class="feather icon-user-check"></i>
+              </div>
+              <div class="grid-info">
+                <span>{{ "users.activeUsers" | translate }}</span>
+                <h4 *ngIf="customers.length > 1">{{ getActiveUsersNumber() }}</h4>
+                <p *ngIf="customers.length === 0">Loading...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-md-6 d-flex">
+        <div class="card w-100">
+          <div class="card-body card-head">
+            <div class="grid-info-item subscription-list expired-subscriber">
+              <div class="grid-head-icon">
+                <i class="feather icon-user-x"></i>
+              </div>
+              <div class="grid-info">
+                <span>{{ "users.disabledUsers" | translate }}</span>
+                <h4 *ngIf="customers.length > 1">{{ getDesctiveUsersNumber() }}</h4>
+                <p *ngIf="customers.length === 0">loading...</p>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-md-6 d-flex">
+        <div class="card w-100">
+          <div class="card-body card-head">
+            <div class="grid-info-item subscription-list expired-subscriber">
+              <div class="grid-head-icon" style="background-color: #F57C11;">
+                <i class="fa fa-universal-access"></i>
+              </div>
+              <div class="grid-info">
+                <span>{{ "users.adminUsers" | translate }}</span>
+                <h4 *ngIf="customers.length > 1">{{ getAdminUsersNumber() }}</h4>
+                <p *ngIf="customers.length === 0">loading...</p>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <!-- /Page Header -->
 
@@ -84,148 +190,183 @@
           <table matSort (matSortChange)="sortData($event)" class="table table-center table-hover datatable">
             <thead class="thead-light">
               <tr>
-                <th mat-sort-header="id">#</th>
-                <th mat-sort-header="name">Name</th>
-                <th mat-sort-header="phone">Phone</th>
-                <th mat-sort-header="balance">Balance</th>
-                <th mat-sort-header="invoice">Total Invoice</th>
-                <th mat-sort-header="created">Created</th>
+                <th mat-sort-header="name">{{ "auth.username" | translate }}</th>
+                <th mat-sort-header="phone">{{ "auth.accountType" | translate }}</th>
+                <th mat-sort-header="balance">{{ "auth.phone" | translate }}</th>
+                <th mat-sort-header="created">{{ "users.creationDate" | translate }}</th>
                 <th mat-sort-header="status">Status</th>
                 <th mat-sort-header="action">Actions</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody *ngIf="!gettingUsers">
               @for (customer of customers; track customer; let i = $index) {
-                <tr>
-                  <td>{{ customer.id }}</td>
-                  <td>
-                    <h2 class="table-avatar">
-                      <a [routerLink]="routes.profile" class="avatar avatar-md me-2"><img
-                      class="avatar-img rounded-circle" [src]="customer.img" alt="User Image" /></a>
-                      <a [routerLink]="routes.profile">{{ customer.name }} <span>{{ customer.email }}</span></a>
-                    </h2>
-                  </td>
-                  <td>{{ customer.phone }}</td>
-                  <td>{{ customer.balance }}</td>
-                  <td>{{ customer.invoice }}</td>
-                  <td>{{ customer.created }}</td>
-                  <td>
+              <tr>
+                <td>
+                  <h2 class="table-avatar">
+                    <a [routerLink]="'/customer/details/' + customer._id" class="avatar avatar-md me-2"><img
+                        class="avatar-img rounded-circle" [src]="customer.pictureUrl" alt="User Image" /></a>
+                    <a [routerLink]="'/customer/details/' + customer._id">{{ getUserName(customer) }}
+                      <b *ngIf="customer.verified === true">
+                        <i class="feather icon-check-circle" data-bs-toggle="tooltip" title="feather icon-power"
+                          style="color: #047c0c; margin-right: 5px;"></i>
+                      </b>
+                      <b *ngIf="customer.isAdmin === true">
+                        <i class="fa fa-universal-access" data-bs-toggle="tooltip" title="feather icon-power"
+                          style="color: #e89b00"></i>
+                      </b>
+                      <span>{{ customer.email }}</span>
+                    </a>
+                  </h2>
+                </td>
+                <td>
+                  {{ "users." + customer.accountType | translate }}
+                  <br><span style="color: #555454;">
+                    <img [src]="customer.countryId.flagUrl" alt="" style="width: 20px;">
+                    {{ customer.countryId.name | translate }}</span>
+                </td>
+                <td>+{{ customer.countryId.code }} {{ customer.phone }}
+                </td>
+                <td>{{ getDate(customer.createdAt) }}</td>
+                <td>
                   <span [ngClass]="{
-                      'bg-success-light': customer.status === 'Active',
-                      'bg-danger-light': customer.status === 'Deactive'
-                    }" class="badge badge-pill bg-success-light">{{ customer.status }}</span>
-                  </td>
-                  <td class="d-flex align-items-center">
-                    <a [routerLink] = "routes.addInvoice" class="btn btn-greys me-2"><i class="fa fa-plus-circle me-1"></i>
-                  Invoice</a>
-                  <a [routerLink]="routes.customerLedger" class="btn btn-greys me-2"><i
-                  class="fa-regular fa-eye me-1"></i> Ledger</a>
+                      'bg-success-light': customer.isActive != false,
+                      'bg-danger-light': customer.isActive === false
+                    }" class="badge badge-pill bg-success-light">{{ (customer.isActive === false ? 'users.disabled' :
+                    'users.enabled') | translate }}</span>
+                </td>
+                <td class="d-flex align-items-right">
+                  <div class="icons-items">
+                    <ul class="icons-list">
+                      <li data-bs-toggle="modal" data-bs-target="#enable_modal" *ngIf="customer.isActive === false"
+                        (click)="selectUser(customer)">
+                        <i class="feather icon-power" data-bs-toggle="tooltip" title="Enable user"
+                          style="color: green"></i>
+                      </li>
+                      <li data-bs-toggle="modal" data-bs-target="#disable_modal" *ngIf="customer.isActive != false"
+                        (click)="selectUser(customer)">
+                        <i class="feather icon-power" data-bs-toggle="tooltip" title="Disable user"
+                          style="color: red"></i>
+                      </li>
+                    </ul>
+                  </div>
+                  <!-- <a [routerLink]="routes.customerLedger" class="btn btn-greys me-2"><i
+                      class="fa-regular fa-eye me-1"></i> Ledger</a> -->
                   <div class="dropdown dropdown-action">
-                    <a href="javascript:void(0);" class=" btn-action-icon " data-bs-toggle="dropdown"
+                    <a href="javascript:void(0);" class="btn-action-icon" data-bs-toggle="dropdown"
                       aria-expanded="false"><i class="fas fa-ellipsis-v"></i></a>
-                      <div class="dropdown-menu dropdown-menu-end">
-                        <ul>
-                          <li>
-                            <a class="dropdown-item" [routerLink] = "routes.editCustomer"><i class="far fa-edit me-2"></i>Edit</a>
-                          </li>
-                          <li>
-                            <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal"
-                              data-bs-target="#delete_modal"><i class="far fa-trash-alt me-2"></i>Delete</a>
-                            </li>
-                            <li>
-                              <a class="dropdown-item" [routerLink] = "routes.customerdetails"><i class="far fa-eye me-2"></i>View</a>
-                            </li>
-                            <li>
-                              <a class="dropdown-item" [routerLink] = "routes.activecustomer"><i
-                              class="fa-solid fa-power-off me-2"></i>Activate</a>
-                            </li>
-                            <li>
-                              <a class="dropdown-item" [routerLink] = "routes.deactivecustomer"><i
-                              class="far fa-bell-slash me-2"></i>Deactivate</a>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                }
-              </tbody>
-            </table>
+                    <div class="dropdown-menu dropdown-menu-end">
+                      <ul>
+                        <!-- <li>
+                          <a class="dropdown-item" [routerLink]="routes.editCustomer"><i
+                              class="far fa-edit me-2"></i>Edit</a>
+                        </li> -->
+                        <li *ngIf="customer.isActive === false">
+                          <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#enable_modal"
+                            (click)="selectUser(customer)"><i class="feather icon-power"></i>{{ "users.enable" |
+                            translate }}</a>
+                        </li>
+                        <li *ngIf="customer.isActive != false">
+                          <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#disable_modal"
+                            (click)="selectUser(customer)"><i class="feather icon-power"></i>{{ "users.disable" |
+                            translate }}</a>
+                        <li>
+                          <a class="dropdown-item"
+                            (click)="selectUser(customer); changeUserVerifiedStatus(customer._id)">
+                            <i class="feather icon-check-circle"></i>Verification</a>
+                        <li *ngIf="customer.isAdmin != true">
+                          <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#setAdmin_modal"
+                            (click)="selectUser(customer)"><i
+                              class="feather icon-check-circle me-2"></i>Administration</a>
+                        </li>
+                        <li *ngIf="customer.isAdmin === true">
+                          <a class="dropdown-item" (click)="selectUser(customer); changeUserAdminStatus(customer._id)">
+                            <i class="fa fa-universal-access me-2"></i>Administration</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+          <div class="d-flex justify-content-center" *ngIf="gettingUsers" style="margin: 50px">
+            <div class="spinner-border" role="status"></div>
           </div>
         </div>
-        <app-custom-pagination></app-custom-pagination>
-
       </div>
+      <app-custom-pagination></app-custom-pagination>
+
     </div>
   </div>
+</div>
 
-  <!-- Add Asset -->
-  <div class="toggle-sidebar ledge" [ngClass]="{'open-filter' : toggleData === true}">
-    <div class="sidebar-layout-filter">
-      <div class="sidebar-header ledge">
-        <h5>PayIn</h5>
-        <a href="javascript:void(0);" (click)="openContent()"  (keydown.enter)="openContent()" tabindex="0" class="sidebar-closes"><i
-        class="fa-regular fa-circle-xmark"></i></a>
-      </div>
-      <div class="sidebar-header submenu">
-        <h6>Test Company</h6>
-        <p class="text-success-light">Balance: $400</p>
-      </div>
-      <div class="sidebar-body">
-        <form action="#" autocomplete="off">
-          <!-- Customer -->
-          <div class="accordion accordion-last" id="accordionMain1">
-            <div class="card-header-new" id="headingOne">
-              <h6 class="filter-title">
-                <a href="javascript:void(0);" class="w-100" data-bs-toggle="collapse" data-bs-target="#collapseOne"
-                  aria-expanded="true" aria-controls="collapseOne">
-                  Customers
-                  <span class="float-end"><i class="fa-solid fa-chevron-down"></i></span>
-                </a>
-              </h6>
-            </div>
+<!-- Add Asset -->
+<div class="toggle-sidebar ledge" [ngClass]="{'open-filter' : toggleData === true}">
+  <div class="sidebar-layout-filter">
+    <div class="sidebar-header ledge">
+      <h5>PayIn</h5>
+      <a href="javascript:void(0);" (click)="openContent()" (keydown.enter)="openContent()" tabindex="0"
+        class="sidebar-closes"><i class="fa-regular fa-circle-xmark"></i></a>
+    </div>
+    <div class="sidebar-header submenu">
+      <h6>Test Company</h6>
+      <p class="text-success-light">Balance: $400</p>
+    </div>
+    <div class="sidebar-body">
+      <form action="#" autocomplete="off">
+        <!-- Customer -->
+        <div class="accordion accordion-last" id="accordionMain1">
+          <div class="card-header-new" id="headingOne">
+            <h6 class="filter-title">
+              <a href="javascript:void(0);" class="w-100" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                aria-expanded="true" aria-controls="collapseOne">
+                Customers
+                <span class="float-end"><i class="fa-solid fa-chevron-down"></i></span>
+              </a>
+            </h6>
+          </div>
 
-            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample1">
-              <div class="card-body-chat">
-                <div class="row">
-                  <div class="col-md-12">
-                    <div id="checkBoxes1">
-                      <div class="form-custom">
-                        <input type="text" class="form-control" id="member_search1" placeholder="Search Customer">
-                        <span><img src="assets/img/icons/search.svg" alt="img"></span>
-                      </div>
-                      <div class="selectBox-cont">
-                        <label class="custom_check w-100">
-                          <input type="checkbox" name="username">
-                          <span class="checkmark"></span> John Smith
-                        </label>
-                        <label class="custom_check w-100">
-                          <input type="checkbox" name="username">
-                          <span class="checkmark"></span> Johnny Charles
-                        </label>
-                        <label class="custom_check w-100">
-                          <input type="checkbox" name="username">
-                          <span class="checkmark"></span> Robert George
-                        </label>
-                        <label class="custom_check w-100">
-                          <input type="checkbox" name="username">
-                          <span class="checkmark"></span> Sharonda Letha
-                        </label>
-                        <!-- View All -->
-                        <div class="view-content">
-                          <div class="viewall-One">
-                            @for (user of users; track user) {
-                              <label class="custom_check w-100"
-                                [ngClass]="{ closed: !isCollapsed, open: isCollapsed }">
-                                <input type="checkbox" name="username" [(ngModel)]="user.checked">
-                                <span class="checkmark"></span> {{ user.name }}
-                              </label>
-                            }
-                          </div>
-                          <div class="view-all">
-                            <a (click)="toggleCollapse()" href="javascript:void(0);" class="viewall-button-One"><span
-                            class="me-2">{{ isCollapsed ? "Close All" : "View All" }}</span><span><i
-                          class="fa fa-circle-chevron-down"></i></span></a>
+          <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample1">
+            <div class="card-body-chat">
+              <div class="row">
+                <div class="col-md-12">
+                  <div id="checkBoxes1">
+                    <div class="form-custom">
+                      <input type="text" class="form-control" id="member_search1" placeholder="Search Customer">
+                      <span><img src="assets/img/icons/search.svg" alt="img"></span>
+                    </div>
+                    <div class="selectBox-cont">
+                      <label class="custom_check w-100">
+                        <input type="checkbox" name="username">
+                        <span class="checkmark"></span> John Smith
+                      </label>
+                      <label class="custom_check w-100">
+                        <input type="checkbox" name="username">
+                        <span class="checkmark"></span> Johnny Charles
+                      </label>
+                      <label class="custom_check w-100">
+                        <input type="checkbox" name="username">
+                        <span class="checkmark"></span> Robert George
+                      </label>
+                      <label class="custom_check w-100">
+                        <input type="checkbox" name="username">
+                        <span class="checkmark"></span> Sharonda Letha
+                      </label>
+                      <!-- View All -->
+                      <div class="view-content">
+                        <div class="viewall-One">
+                          @for (user of users; track user) {
+                          <label class="custom_check w-100" [ngClass]="{ closed: !isCollapsed, open: isCollapsed }">
+                            <input type="checkbox" name="username" [(ngModel)]="user.checked">
+                            <span class="checkmark"></span> {{ user.name }}
+                          </label>
+                          }
+                        </div>
+                        <div class="view-all">
+                          <a (click)="toggleCollapse()" href="javascript:void(0);" class="viewall-button-One"><span
+                              class="me-2">{{ isCollapsed ? "Close All" : "View All" }}</span><span><i
+                                class="fa fa-circle-chevron-down"></i></span></a>
                         </div>
                       </div>
                       <!-- /View All -->
@@ -248,7 +389,8 @@
             <div class="input-block mb-3">
               <label for="Payment">Payment Date</label>
               <div class="cal-icon cal-icon-info">
-                <input type="text" class="datetimepicker form-control" placeholder="Select Date" bsDatepicker [bsConfig]="{ adaptivePosition: true }">
+                <input type="text" class="datetimepicker form-control" placeholder="Select Date" bsDatepicker
+                  [bsConfig]="{ adaptivePosition: true }">
               </div>
             </div>
           </div>
@@ -259,7 +401,7 @@
           <div class="modal-footer">
             <a href="javascript:void(0);" data-bs-dismiss="modal" class="btn btn-back cancel-btn me-2">Cancel</a>
             <a href="javascript:void(0);" data-bs-dismiss="modal" class="btn btn-primary paid-continue-btn">Add
-            Payment</a>
+              Payment</a>
           </div>
         </div>
       </form>
@@ -268,25 +410,27 @@
 </div>
 <!--/Add Asset -->
 
-<!-- Delete Items Modal -->
-<div class="modal custom-modal fade" id="delete_modal" role="dialog">
+<!-- Disable Items Modal -->
+<div class="modal custom-modal fade" id="disable_modal" role="dialog">
   <div class="modal-dialog modal-dialog-centered modal-md">
     <div class="modal-content">
       <div class="modal-body">
         <div class="form-header">
-          <h3>Delete Customer</h3>
-          <p>Are you sure want to delete?</p>
+          <h3>{{ "users.deactivation" | translate }}</h3>
+          <p>{{ "users.disableMessage" | translate }} <b style="color: black;">{{ selectedUser ?
+              getUserName(selectedUser) : ''}}</b> ?</p>
         </div>
         <div class="modal-btn delete-action">
           <div class="row">
             <div class="col-6">
-              <button type="reset" data-bs-dismiss="modal" class="w-100 btn btn-primary paid-continue-btn">
-                Delete
+              <button type="reset" data-bs-dismiss="modal" (click)="changeUserActiveStatus()"
+                class="w-100 btn btn-primary paid-continue-btn">
+                {{ "users.disable" | translate }}
               </button>
             </div>
             <div class="col-6">
               <button type="submit" data-bs-dismiss="modal" class="w-100 btn btn-primary paid-cancel-btn">
-                Cancel
+                {{ "users.cancel" | translate }}
               </button>
             </div>
           </div>
@@ -295,7 +439,68 @@
     </div>
   </div>
 </div>
-<!-- /Delete Items Modal -->
+
+<!-- Enable Items Modal -->
+<div class="modal custom-modal fade" id="enable_modal" role="dialog">
+  <div class="modal-dialog modal-dialog-centered modal-md">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="form-header">
+          <h3>{{ "users.activation" | translate }}</h3>
+          <p>{{ "users.enableMessage" | translate }} <b style="color: black;">{{ selectedUser ?
+              getUserName(selectedUser) : ''}}</b> ?</p>
+        </div>
+        <div class="modal-btn delete-action">
+          <div class="row">
+            <div class="col-6">
+              <button type="reset" data-bs-dismiss="modal" (click)="changeUserActiveStatus()"
+                class="w-100 btn btn-primary paid-continue-btn">
+                {{ "users.enable" | translate }}
+              </button>
+            </div>
+            <div class="col-6">
+              <button type="submit" data-bs-dismiss="modal" class="w-100 btn btn-primary paid-cancel-btn">
+                {{ "users.cancel" | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Disable Items Modal -->
+<div class="modal custom-modal fade" id="setAdmin_modal" role="dialog">
+  <div class="modal-dialog modal-dialog-centered modal-md">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="form-header">
+          <h3>Admin</h3>
+          <p>{{ "users.setAdminMsg1" | translate }} <b style="color: black;">{{ selectedUser ?
+              getUserName(selectedUser) : ''}}</b> {{ "users.setAdminMsg2" | translate }} ?</p>
+        </div>
+        <div class="modal-btn delete-action">
+          <div class="row">
+            <div class="col-6">
+              <button type="reset" data-bs-dismiss="modal" (click)="changeUserAdminStatus()"
+                class="w-100 btn btn-primary paid-continue-btn">
+                {{ "users.setAdmin" | translate }}
+              </button>
+            </div>
+            <div class="col-6">
+              <button type="submit" data-bs-dismiss="modal" class="w-100 btn btn-primary paid-cancel-btn">
+                {{ "users.cancel" | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <div class="modal custom-modal fade" id="add_ledger" role="dialog">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
@@ -319,66 +524,66 @@
                 <div class="dropdown dropdown-action" matTooltip="Download">
                   <a href="javascript:void(0);" class="btn-filters" data-bs-toggle="dropdown"
                     aria-expanded="false"><span><i class="feather icon-download"></i></span></a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                      <ul class="d-block">
-                        <li>
-                          <a class="d-flex align-items-center download-item" href="javascript:void(0);" download><i
-                          class="far fa-file-pdf me-2"></i>PDF</a>
-                        </li>
-                        <li>
-                          <a class="d-flex align-items-center download-item" href="javascript:void(0);" download><i
-                          class="far fa-file-text me-2"></i>CVS</a>
-                        </li>
-                      </ul>
-                    </div>
+                  <div class="dropdown-menu dropdown-menu-right">
+                    <ul class="d-block">
+                      <li>
+                        <a class="d-flex align-items-center download-item" href="javascript:void(0);" download><i
+                            class="far fa-file-pdf me-2"></i>PDF</a>
+                      </li>
+                      <li>
+                        <a class="d-flex align-items-center download-item" href="javascript:void(0);" download><i
+                            class="far fa-file-text me-2"></i>CVS</a>
+                      </li>
+                    </ul>
                   </div>
-                </li>
-                <li>
-                  <a class="btn-filters" href="javascript:void(0);" matTooltip="Print"><span><i
-                  class="feather icon-printer"></i></span> </a>
-                </li>
-              </ul>
-            </div>
+                </div>
+              </li>
+              <li>
+                <a class="btn-filters" href="javascript:void(0);" matTooltip="Print"><span><i
+                      class="feather icon-printer"></i></span> </a>
+              </li>
+            </ul>
           </div>
         </div>
-        <!-- Table -->
-        <div class="modal-body add">
-          <div class="addnew-modal">
-            <div class="row">
-              <div class="col-sm-12">
-                <div class="card-table">
-                  <div class="card-body">
-                    <div class="table-responsive">
-                      <div class="companies-table Ledger">
-                        <table matSort (matSortChange)="sortData($event)"
-                          class="table table-center table-hover datatable">
-                          <thead class="thead-light">
-                            <tr>
-                              <th mat-sort-header="id">#</th>
-                              <th mat-sort-header="date">Date</th>
-                              <th mat-sort-header="mode">Mode</th>
-                              <th mat-sort-header="amount">Amount</th>
-                              <th mat-sort-header="closingBalance">Closing Balance</th>
-                              <th>Action</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td>
-                                <h2 class="table-avatar">
-                                  <a> PAYOUT -2<span>Payment Out</span></a>
-                                </h2>
-                              </td>
-                              <td>16 Aug 2023</td>
-                              <td><span class="badge bg-success-light">Cash</span>
+      </div>
+      <!-- Table -->
+      <div class="modal-body add">
+        <div class="addnew-modal">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="card-table">
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <div class="companies-table Ledger">
+                      <table matSort (matSortChange)="sortData($event)"
+                        class="table table-center table-hover datatable">
+                        <thead class="thead-light">
+                          <tr>
+                            <th mat-sort-header="id">#</th>
+                            <th mat-sort-header="date">Date</th>
+                            <th mat-sort-header="mode">Mode</th>
+                            <th mat-sort-header="amount">Amount</th>
+                            <th mat-sort-header="closingBalance">Closing Balance</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>
+                              <h2 class="table-avatar">
+                                <a> PAYOUT -2<span>Payment Out</span></a>
+                              </h2>
+                            </td>
+                            <td>16 Aug 2023</td>
+                            <td><span class="badge bg-success-light">Cash</span>
                             </td>
                             <td><span class="text-danger-light">- $100</span></td>
                             <td>$400</td>
                             <td class="d-flex align-items-center">
                               <a class=" btn-action-icon me-2" href="javascript:void(0);"><i
-                              class="feather icon-edit"></i></a>
+                                  class="feather icon-edit"></i></a>
                               <a class=" btn-action-icon" href="javascript:void(0);"><i
-                              class="feather icon-trash-2"></i></a>
+                                  class="feather icon-trash-2"></i></a>
                             </td>
                           </tr>
                           <tr>
@@ -389,70 +594,70 @@
                             </td>
                             <td>14 Aug 2023</td>
                             <td><span class="badge bg-success-light">Cash</span>
-                          </td>
-                          <td><span class="text-success-light">+ $200</span></td>
-                          <td>$500</td>
-                          <td class="d-flex align-items-center">
-                            <a class=" btn-action-icon me-2" href="javascript:void(0);"><i
-                            class="feather icon-edit"></i></a>
-                            <a class=" btn-action-icon" href="javascript:void(0);"><i
-                            class="feather icon-trash-2"></i></a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <h2 class="table-avatar">
-                              <a> PAYOUT -1<span>Payment Out</span></a>
-                            </h2>
-                          </td>
-                          <td>13 Aug 2023</td>
-                          <td><span class="badge bg-success-light">Cash</span>
-                        </td>
-                        <td><span class="text-danger-light">- $200</span></td>
-                        <td>$300</td>
-                        <td class="d-flex align-items-center">
-                          <a class=" btn-action-icon me-2" href="javascript:void(0);"><i
-                          class="feather icon-edit"></i></a>
-                          <a class=" btn-action-icon" href="javascript:void(0);"><i
-                          class="feather icon-trash-2"></i></a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <h2 class="table-avatar">
-                            <a>PAYIN -1<span>Payment In</span></a>
-                          </h2>
-                        </td>
-                        <td>12 Aug 2023</td>
-                        <td><span class="badge bg-success-light">Cash</span>
-                      </td>
-                      <td><span class="text-success-light">+$500</span></td>
-                      <td>$500</td>
-                      <td class="d-flex align-items-center">
-                        <a class=" btn-action-icon me-2" href="javascript:void(0);"><i
-                        class="feather icon-edit"></i></a>
-                        <a class=" btn-action-icon" href="javascript:void(0);"><i
-                        class="feather icon-trash-2"></i></a>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                            </td>
+                            <td><span class="text-success-light">+ $200</span></td>
+                            <td>$500</td>
+                            <td class="d-flex align-items-center">
+                              <a class=" btn-action-icon me-2" href="javascript:void(0);"><i
+                                  class="feather icon-edit"></i></a>
+                              <a class=" btn-action-icon" href="javascript:void(0);"><i
+                                  class="feather icon-trash-2"></i></a>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <h2 class="table-avatar">
+                                <a> PAYOUT -1<span>Payment Out</span></a>
+                              </h2>
+                            </td>
+                            <td>13 Aug 2023</td>
+                            <td><span class="badge bg-success-light">Cash</span>
+                            </td>
+                            <td><span class="text-danger-light">- $200</span></td>
+                            <td>$300</td>
+                            <td class="d-flex align-items-center">
+                              <a class=" btn-action-icon me-2" href="javascript:void(0);"><i
+                                  class="feather icon-edit"></i></a>
+                              <a class=" btn-action-icon" href="javascript:void(0);"><i
+                                  class="feather icon-trash-2"></i></a>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <h2 class="table-avatar">
+                                <a>PAYIN -1<span>Payment In</span></a>
+                              </h2>
+                            </td>
+                            <td>12 Aug 2023</td>
+                            <td><span class="badge bg-success-light">Cash</span>
+                            </td>
+                            <td><span class="text-success-light">+$500</span></td>
+                            <td>$500</td>
+                            <td class="d-flex align-items-center">
+                              <a class=" btn-action-icon me-2" href="javascript:void(0);"><i
+                                  class="feather icon-edit"></i></a>
+                              <a class=" btn-action-icon" href="javascript:void(0);"><i
+                                  class="feather icon-trash-2"></i></a>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
+          </div>
+          <!-- /Table -->
+
+          <div class="modal-footer add">
+            <a href="javascript:void(0);" data-bs-dismiss="modal" class="btn btn-success  me-2"><i
+                class="fa-solid fa-arrow-down"></i>Credit</a>
+            <a href="javascript:void(0);" data-bs-dismiss="modal" class="btn btn-danger"><i
+                class="fa-solid fa-arrow-up"></i>Add New</a>
           </div>
         </div>
       </div>
     </div>
-    <!-- /Table -->
-
-    <div class="modal-footer add">
-      <a href="javascript:void(0);" data-bs-dismiss="modal" class="btn btn-success  me-2"><i
-      class="fa-solid fa-arrow-down"></i>Credit</a>
-      <a href="javascript:void(0);" data-bs-dismiss="modal" class="btn btn-danger"><i
-      class="fa-solid fa-arrow-up"></i>Add New</a>
-    </div>
   </div>
-</div>
-</div>
-</div>
 </div>

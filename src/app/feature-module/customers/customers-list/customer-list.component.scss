@@ -1,0 +1,21 @@
+.centree {
+    justify-content: center; /* Centrage horizontal */
+    align-items: center; /* Centrage vertical */
+    height: 200px; /* Doit avoir une hauteur */
+    padding-left: 5vw;
+}
+
+
+.shadow-box-primary {
+  box-shadow: 5px 5px 10px #021d6664; /* Décalage horizontal de 5px, vertical de 5px, flou de 10px, couleur noire semi-transparente */
+}
+
+.shadow-box-secondary {
+  box-shadow: 5px 5px 10px #f57b116d; /* Décalage horizontal de 5px, vertical de 5px, flou de 10px, couleur noire semi-transparente */
+}
+
+
+.card-head {
+  border: 1px solid #021d66;
+  border-radius: 10px;
+}

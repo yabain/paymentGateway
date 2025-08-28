@@ -110,7 +110,7 @@ export class UserService {
    * @returns An observable of all users' data.
    */
   getAllUser(): Observable<any> {
-    return this.apiService.progressiveGetWithoutId(`users`);
+    return this.apiService.progressiveGetWithoutId(`user`);
   }
 
   /**
@@ -221,6 +221,38 @@ export class UserService {
       return response;
     } catch (error) {
       console.error('Error fetching users stats:', error);
+      throw error;
+    }
+  }
+
+  
+
+  async changeStatus(userId): Promise<any> {
+    try {
+      const response = await this.apiService.update('user/update-status', userId, {}).toPromise();
+      return response;
+    } catch (error) {
+      console.error('Error to change users status:', error);
+      throw error;
+    }
+  }
+
+  async changeAdminStatus(userId): Promise<any> {
+    try {
+      const response = await this.apiService.update('user/update-adminStatus', userId, {}).toPromise();
+      return response;
+    } catch (error) {
+      console.error('Error to change admin status:', error);
+      throw error;
+    }
+  }
+
+  async changeVerifiedStatus(userId): Promise<any> {
+    try {
+      const response = await this.apiService.update('user/update-verifiedStatus', userId, {}).toPromise();
+      return response;
+    } catch (error) {
+      console.error('Error to change verified status:', error);
       throw error;
     }
   }

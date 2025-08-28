@@ -1,10 +1,36 @@
-<div class="main-title page-tilte" *ngIf="!goToProceed">
-  <h2>{{ "dashboard.sendMoney" | translate }}</h2>
+<div class="main-title" *ngIf="!goToProceed">
+  <div class="content-page-header page-tilte">
+    <h2>{{ "dashboard.cashWithdrawal" | translate }}</h2>
+    <div class="list-btn">
+      <ul class="filter-list">
+        <li (click)="refresh()">
+          <a class="btn-filters btn-hover" href="javascript:void(0);" data-bs-toggle="tooltip"
+            data-bs-placement="bottom" title="Refresh" matTooltip="Refresh"><span><i
+                class="feather icon-refresh-ccw"></i></span></a>
+        </li>
+        <li>
+          <a class="btn-filters btn-hover" href="javascript:void(0);" matTooltip="Print"><span><i
+                class="feather icon-printer"></i></span>
+          </a>
+        </li>
+        <li>
+          <a class="btn btn-primary btn-hover">
+            <i class="fa fa-plus-circle me-2" aria-hidden="true"></i>
+            {{ "payment.reset-form" | translate }}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
 </div>
 <div class="row">
-  <div class="col-md-12">
+  <div class="card-body" *ngIf="!currentUser">
+    <div class="d-flex justify-content-center" style="margin-top: 10 vh">
+      <div class="spinner-border spinner" role="status"></div>
+    </div>
+  </div>
+  <div class="col-md-8" *ngIf="!goToProceed && currentUser">
     <div class="card">
-      <div class="card-body" *ngIf="!goToProceed">
+      <div class="card-body">
         <mat-stepper #stepperTwo linear class="non-clickable-steps">
           <mat-step>
             <ng-template matStepLabel>{{ "payment.receiverInfo" | translate }}</ng-template>
@@ -19,103 +45,60 @@
                   <div class="col-md-6">
                     <h5 class="card-title">{{ "payment.personalDetails" | translate }}</h5><br>
                     <div class="input-block mb-3">
-                      <label htmlFor="label">{{ 'payment.receiverCountry' | translate }} *</label>
+                      <label htmlFor="country">{{ 'auth.country' | translate }} *</label>
                       <div class="row">
                         <div class="col-lg-12">
                           <div class="input-group">
-                            <span class="input-group-text"><img [src]="flagCountry" alt="" class="flag" slot="start"
-                                style="width: 20px" /></span>
-                            <select id="label" class="form-select" (change)="onSelect($event)" id="country"
-                              *ngIf="!waitingLocations" [value]="selectedCountry._id">
-                              <option *ngFor="let country of availableCountries" [value]="country._id">
-                                {{ country.name | translate }}
-                              </option>
-                            </select>
+                            <span class="input-group-text"><img [src]="currentUser?.countryId.flagUrl" alt=""
+                                class="flag" slot="start" style="width: 20px" /></span>
+                            <input id="name" type="text" class="form-control"
+                              value="{{ currentUser?.countryId.name | translate }}" name="name" disabled />
                           </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div class="input-block mb-3">
-                          <label htmlFor="receiverFirstName">{{ "auth.firstName" | translate }} *</label>
-                          <input id="receiverFirstName" type="text" class="form-control" [(ngModel)]="receiverFirstName"
-                            name="receiverFirstName" />
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="input-block mb-3">
-                          <label htmlFor="label">{{ "auth.lastName" | translate }} *</label>
-                          <input id="receiverLastName" type="text" class="form-control" [(ngModel)]="receiverLastName"
-                            name="receiverLastName" />
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div class="input-block mb-3">
-                          <label htmlFor="telephone">{{ 'payment.receiverContact' | translate }} *</label>
-                          <div class="row">
-                            <div class="col-lg-12">
-                              <div class="input-group">
-                                <span class="input-group-text">+{{ selectedCountry?.code }}</span>
-                                <input id="telephone" type="telephone" class="form-control"
-                                  [(ngModel)]="receiverContact" name="receiverContact" />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="input-block mb-3">
-                          <label htmlFor="receiverEmail">{{ 'payment.receiverEmail' | translate }} *</label>
-                          <input id="receiverEmail" type="email" class="form-control" placeholder="exemple@test.com"
-                            [(ngModel)]="receiverEmail" name="receiverEmail" />
                         </div>
                       </div>
                     </div>
                     <div class="row">
                       <div class="col-md-12">
                         <div class="input-block mb-3">
-                          <label htmlFor="receiverAddress">{{ 'payment.receiverAddress' | translate }} *</label>
-                          <input id="receiverAddress" type="text" class="form-control" placeholder=""
-                            [(ngModel)]="receiverAddress" name="receiverAddress" />
+                          <label htmlFor="name">{{ "auth.firstName" | translate }} *</label>
+                          <input id="name" type="text" class="form-control" [value]="getUserName(currentUser)"
+                            name="name" disabled />
                         </div>
                       </div>
                     </div>
-                    <div class="input-block mb-3">
-                      <label htmlFor="label">{{ 'payment.raisonForTransfer' | translate }} *</label>
-                      <textarea rows="5" cols="5" class="form-control" id="raisonForTransfer" placeholder="Description"
-                        [(ngModel)]="raisonForTransfer" name="raisonForTransfer"></textarea>
+                    <div class="col-md-12">
+                      <div class="input-block mb-3">
+                        <label htmlFor="telephone">{{ 'auth.phone' | translate }} *</label>
+                        <div class="row">
+                          <div class="col-lg-12">
+                            <div class="input-group">
+                              <span class="input-group-text">+{{ currentUser?.countryId?.code }}</span>
+                              <input id="telephone" type="telephone" class="form-control" [value]="currentUser?.phone"
+                                name="receiverContact" disabled />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="input-block mb-3">
+                        <label htmlFor="email">{{ 'auth.email' | translate }} *</label>
+                        <input id="email" type="email" class="form-control" placeholder="exemple@test.com"
+                          [value]="currentUser?.email" name="email" disabled />
+                      </div>
                     </div>
                   </div>
                   <div class="col-md-6">
                     <h5 class="card-title">{{ "payment.amountDetails" | translate }}</h5><br>
                     <div class="row">
-                      <div class="col-md-6">
+                      <div class="col-md-12">
                         <div class="input-block mb-3">
-                          <label htmlFor="amountToBeReceived">{{ 'payment.amountToBeReceived' | translate }} *</label>
+                          <label htmlFor="amount">{{ 'payment.amount' | translate }} *</label>
                           <div class="input-group">
-                            <input id="amountToBeReceived" id="amountToBeReceived" type="text" class="form-control"
-                              placeholder="" [(ngModel)]="amountToBeReceived" name="amountToBeReceived"
-                              style="text-align: right" (input)="formatAmount($event); convertCurrency()" />
-                            <span class="input-group-text">{{ selectedCountry?.currency }}</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="input-block mb-3">
-                          <label htmlFor="estimation">{{ 'payment.estimation' | translate }} HT</label>
-                          <div class="input-group">
-
-                            <span class="spinner-border spinner-border-sm me-2" role="status" *ngIf="watingEstimation"
-                              style="margin-left: 25vh"></span>
-
-                            <input class="form-control" placeholder="Estimation" *ngIf="!watingEstimation"
-                              style="text-align: right" type="number" id="estimation" placeholder=""
-                              [(ngModel)]="estimation" name="estimation" [disabled]="true" />
-                            <span class="input-group-text">{{ currentUser?.countryId.currency }}</span>
-
+                            <input id="amount" id="amount" type="text" class="form-control" placeholder=""
+                              [(ngModel)]="amountToBeReceived" name="amount" style="text-align: right"
+                              (input)="formatAmount($event); convertCurrency()" />
+                            <span class="input-group-text">{{ currentUser?.countryId?.currency }}</span>
                           </div>
                         </div>
                       </div>
@@ -142,7 +125,6 @@
             <mat-progress-bar mode="determinate" value="66"></mat-progress-bar>
             <form>
               <ng-template matStepLabel>{{ "payment.accountReception" | translate }}</ng-template>
-
               <div class="card-header">
                 <h4>{{ "payment.accountDetailsReception" | translate }}</h4>
                 {{ "payment.receiverSubTitle" | translate }} <br />
@@ -153,9 +135,7 @@
                     <div class="col-md-6">
                       <h5 class="card-title">{{ "payment.chooseReceptionMethod" | translate }}</h5><br>
                       <div class="step2">
-
                         <div class="payment-methods">
-
                           <div (click)="selectMethod('BANK')"
                             [ngClass]="selectedMethod === 'BANK' ? 'method-card active' : 'method-card'">
                             <div class="method-icon">
@@ -167,7 +147,8 @@
                             </div>
                           </div>
 
-                          <div class="method-card" (click)="selectMethod('OM')" *ngIf="selectedCountry?.code === '237'"
+                          <div class="method-card" (click)="selectMethod('OM')"
+                            *ngIf="currentUser.countryId.code === '237'"
                             [ngClass]="selectedMethod === 'OM' ? 'method-card active' : 'method-card'">
                             <div class="method-icon">
                               <img src="assets/img/ressorces/om.png" alt="" class="method-img">
@@ -178,7 +159,8 @@
                             </div>
                           </div>
 
-                          <div class="method-card" (click)="selectMethod('MTN')" *ngIf="selectedCountry?.code === '237'"
+                          <div class="method-card" (click)="selectMethod('MTN')"
+                            *ngIf="currentUser.countryId.code === '237'"
                             [ngClass]="selectedMethod === 'MTN' ? 'method-card active' : 'method-card'">
                             <div class="method-icon">
                               <img src="assets/img/ressorces/mtn_money.webp" alt="" class="method-img">
@@ -218,7 +200,7 @@
                               <div class="input-block mb-3">
                                 <label htmlFor="receiverMobileAccountNumber">
                                   {{ 'payment.receiverMobileAccountNumber' | translate }} *</label> +{{
-                                selectedCountry?.code }}
+                                currentUser?.countryId?.code }}
                                 <input id="receiverMobileAccountNumber" type="telephone" class="form-control"
                                   placeholder="691229122" [(ngModel)]="receiverMobileAccountNumber"
                                   name="receiverMobileAccountNumber" (input)="canNext2()" />
@@ -271,64 +253,7 @@
             <h4>{{ "payment.confirmation" | translate }}</h4>
             {{ "payment.receiverSubTitleRecap" | translate }} <br />
             <div class="row">
-              <div class="col-md-6">
-                <div class="step3">
-                  <div class="confirmation-container">
-                    <div class="confirmation-content">
-                      <div class="detail-card">
-                        <h3><i class="fas fa-user-friends"></i> {{ "payment.receiver" | translate }}</h3>
-                        <div class="detail-item">
-                          <span class="detail-label">{{ "auth.firstName" | translate }}</span>
-                          <span class="detail-value">{{ receiverFirstName }}</span>
-                        </div>
-                        <div class="detail-item">
-                          <span class="detail-label">{{ "auth.lastName" | translate }}</span>
-                          <span class="detail-value">{{ receiverLastName }} </span>
-                        </div>
-                        <div class="detail-item">
-                          <span class="detail-label">{{ "terms.email" | translate }}</span>
-                          <span class="detail-value">{{ receiverEmail }}</span>
-                        </div>
-                        <div class="detail-item">
-                          <span class="detail-label">{{ 'payment.receiverCountry' | translate }}</span>
-                          <span class="detail-value">{{ selectedCountry?.name }}</span>
-                        </div>
-                        <div class="detail-item">
-                          <span class="detail-label">{{ "terms.phone" | translate }}</span>
-                          <span class="detail-value">+{{ selectedCountry?.code }} {{ receiverContact }}</span>
-                        </div>
-                      </div>
-
-                      <div class="details-grid">
-                        <div class="detail-card">
-                          <h3><i class="fas fa-user"></i> {{ "payment.sender" | translate }}</h3>
-                          <div class="detail-item">
-                            <span class="detail-label">{{ "auth.firstName" | translate }}</span>
-                            <span class="detail-value">{{ currentUser?.firstName }}</span>
-                          </div>
-                          <div class="detail-item">
-                            <span class="detail-label">{{ "auth.lastName" | translate }}</span>
-                            <span class="detail-value">{{ currentUser?.lastName }} </span>
-                          </div>
-                          <div class="detail-item">
-                            <span class="detail-label">{{ "terms.email" | translate }}</span>
-                            <span class="detail-value">{{ currentUser?.email }}</span>
-                          </div>
-                          <div class="detail-item">
-                            <span class="detail-label">{{ "auth.country" | translate }}</span>
-                            <span class="detail-value">{{ currentUser?.countryId.name }}</span>
-                          </div>
-                          <div class="detail-item">
-                            <span class="detail-label">{{ "terms.phone" | translate }}</span>
-                            <span class="detail-value">+{{ currentUser?.countryId.code }} {{ currentUser?.phone }}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6">
+              <div class="col-md-12">
                 <div class="step3">
                   <div class="confirmation-container">
                     <div class="confirmation-content">
@@ -356,7 +281,7 @@
                         </div>
                         <div class="detail-item" *ngIf="selectedMethod != 'BANK'">
                           <span class="detail-label">{{ 'payment.receiverMobileAccountNumber' | translate }}</span>
-                          <span class="detail-value">+{{ selectedCountry.code }} {{ receiverMobileAccountNumber
+                          <span class="detail-value">+{{ currentUser.countryId.code }} {{ receiverMobileAccountNumber
                             }}</span>
                         </div>
                       </div>
@@ -365,26 +290,6 @@
                         <div class="amount-label"></div>
                         <div class="amount-main"></div>
                         <div class="amount-secondary"> </div>
-                      </div>
-
-                      <div class="fee-breakdown">
-                        <h4><i class="fas fa-receipt"></i> {{ "payment.amountDetails" | translate }}</h4>
-                        <div class="fee-item">
-                          <span>{{ "payment.amountToBeReceived" | translate }}</span>
-                          <span>{{amountToBeReceived}} {{ selectedCountry?.currency }}</span>
-                        </div>
-                        <div class="fee-item">
-                          <span>{{ "payment.equivalentTo" | translate }}</span>
-                          <span>{{estimation}} {{ currentUser?.countryId.currency }}</span>
-                        </div>
-                        <div class="fee-item">
-                          <span>{{ "payment.feeDetails" | translate }}</span>
-                          <span>{{ transactionData?.taxesAmount }} {{ currentUser?.countryId.currency }}</span>
-                        </div>
-                        <div class="fee-total">
-                          <span>{{ "payment.total" | translate }}</span>
-                          <span>{{ transactionData?.paymentWithTaxes }} {{ currentUser?.countryId.currency }}</span>
-                        </div>
                       </div>
 
                       <div class="security-notice">
@@ -410,11 +315,15 @@
           </mat-step>
         </mat-stepper>
       </div>
-      <div class="card-body" *ngIf="goToProceed">
+    </div>
+  </div>
+  <div class="col-md-12" *ngIf="goToProceed && currentUser">
+    <div class="card">
+      <div class="card-body">
         <div class="row">
           <div class="col-md-6">
             <div class="wating-msg">
-              <div class="spinner-border" role="status"></div>
+              <img src="assets/img/new/loader.gif" width="30px" alt="">
               <p style="margin-top: 50px;">
                 {{ "payment.processing-message1" | translate }}<br>
                 {{ "payment.processing-message2" | translate }}
@@ -464,6 +373,31 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4" *ngIf="!goToProceed && currentUser">
+    <div class="card">
+      <div class="card-body sold">
+        <!-- ========= Colonne de résumé ========= -->
+        <aside class="card summary" aria-live="polite">
+          <div class="inline" style="justify-content:space-between; margin-bottom:8px">
+            <b>Solde disponible</b><br>
+            <h3>230 000 XAF</h3>
+          </div>
+          <div class="amount" id="sumBalance">—</div>
+          <div class="row">
+            <span class="col-md-6">Montant du retrait</span>
+            <b class="col-md-6" style="text-align: right">{{ amountToBeReceived }} {{ currentUser?.countryId.currency
+              }}</b>
+          </div><br>
+          <div class="row">
+            <span class="col-md-5">Frais estimés</span>
+            <b class="col-md-7" style="text-align: right">{{ transactionData?.taxesAmount }} {{
+              currentUser.countryId.currency }}</b>
+          </div>
+          <div class="help" id="hint" style="margin-top:6px"></div>
+        </aside>
       </div>
     </div>
   </div>

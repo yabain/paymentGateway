@@ -124,20 +124,17 @@
     <div class="card card-table">
       <div class="card-body">
         <div class="table-responsive">
-          <table
-          datatable
-            class="table table-stripped table-hover"
-          >
+          <table datatable class="table table-stripped table-hover">
             <thead class="thead-light">
               <tr>
                 <th Class="no-sort">#</th>
                 <!-- <th >Id</th> -->
-                <th >Nom</th>
-                <th >Email</th>
-                <th >Téléphone</th>
-                <th >Montant</th>
-                <th >Reste</th>
-                <th >Status</th>
+                <th>Nom</th>
+                <th>Email</th>
+                <th>Téléphone</th>
+                <th>Montant</th>
+                <th>Reste</th>
+                <th>Status</th>
                 <th></th>
               </tr>
             </thead>
@@ -149,19 +146,21 @@
                 <td>{{ invoice.email}}</td>
                 <td>{{ invoice.phone }}</td>
                 <td>{{ invoice.payment}} {{ invoice.currency}}</td>
-                <td>{{ invoice.rest}} {{ invoice.currency}}<td>
-                  <td *ngIf="invoice.status === false" style="background-color: #4b4b4b46;">{{ invoice.status}}</td>
-                  <td *ngIf="invoice.status === true" style="background-color: #0ee52b46;">{{ invoice.status}}</td>
+                <td>{{ invoice.rest}} {{ invoice.currency}}
+                <td>
+                <td *ngIf="invoice.status === false" style="background-color: #4b4b4b46;">{{ invoice.status}}</td>
+                <td *ngIf="invoice.status === true" style="background-color: #0ee52b46;">{{ invoice.status}}</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <div *ngIf="!isLoading && tableData && tableData?.length < 1" style="padding: 30px 10px; text-align: center !important;">
+        <div *ngIf="!isLoading && tableData && tableData?.length < 1"
+          style="padding: 30px 10px; text-align: center !important;">
           <img src="assets/img/new/empty_folder.png" width="100px" alt="" style="margin: 70px 0;"><br>
           Aucune donnée à afficher.
         </div>
         <div *ngIf="isLoading" style="text-align: center !important; padding: 100px;">
-          <img src="assets/img/new/loader.gif" width="50px">
+          <div class="spinner-border" role="status"></div>
         </div>
       </div>
     </div>
@@ -353,13 +352,15 @@
               <div class="input-block mb-3">
                 <label class="form-control-label">From</label>
                 <div class="cal-icon">
-                  <input type="email" class="form-control datetimepicker" bsDatepicker [bsConfig]="{ adaptivePosition: true }" placeholder="DD-MM-YYYY">
+                  <input type="email" class="form-control datetimepicker" bsDatepicker
+                    [bsConfig]="{ adaptivePosition: true }" placeholder="DD-MM-YYYY">
                 </div>
               </div>
               <div class="input-block mb-3">
                 <label class="form-control-label">To</label>
                 <div class="cal-icon">
-                  <input type="email" class="form-control datetimepicker" bsDatepicker [bsConfig]="{ adaptivePosition: true }" placeholder="DD-MM-YYYY">
+                  <input type="email" class="form-control datetimepicker" bsDatepicker
+                    [bsConfig]="{ adaptivePosition: true }" placeholder="DD-MM-YYYY">
                 </div>
               </div>
             </div>
@@ -411,7 +412,7 @@
 <!-- /Delete Items Modal -->
 
 <!-- Add Companies Modal -->
-<div class="modal custom-modal custom-lg-modal fade p-20"  #modal  id="add_companies" role="dialog">
+<div class="modal custom-modal custom-lg-modal fade p-20" #modal id="add_companies" role="dialog">
   <div class="modal-dialog modal-dialog-centered modal-md">
     <div class="modal-content">
       <div class="modal-header border-0">
@@ -440,7 +441,8 @@
             <div class="col-md-6">
               <div class="input-block mb-3">
                 <label class="mb-2">Téléphone</label>
-                <input formControlName="phone" class="form-control" id="phone" name="phone" type="text" placeholder="Téléphone">
+                <input formControlName="phone" class="form-control" id="phone" name="phone" type="text"
+                  placeholder="Téléphone">
               </div>
             </div>
             <div class="col-md-6">
@@ -476,7 +478,8 @@
             <div class="col-md-6">
               <div class="input-block mb-3">
                 <label>Devise</label>
-                <mat-select formControlName="currency" class="select custom-mat-select" placeholder="Choisir une devise">
+                <mat-select formControlName="currency" class="select custom-mat-select"
+                  placeholder="Choisir une devise">
                   <mat-option value="FCFA" selected>FCFA</mat-option>
                   <mat-option value="USD">$</mat-option>
                   <mat-option value="EU">€</mat-option>
@@ -492,7 +495,8 @@
             <div class="col-md-6">
               <div class="input-block mb-3">
                 <label>Langue de la facture</label>
-                <mat-select formControlName="language" class="select custom-mat-select" placeholder="Choisir une langue">
+                <mat-select formControlName="language" class="select custom-mat-select"
+                  placeholder="Choisir une langue">
                   <mat-option value="fr">Frençais</mat-option>
                   <mat-option value="en">Anglais</mat-option>
                 </mat-select>
@@ -505,7 +509,8 @@
           <button type="button" data-bs-dismiss="modal" class="btn btn-back cancel-btn me-2">Annuler</button>
           <button type="submit" class="btn btn-primary paid-continue-btn" *ngIf="!isLoading">Créer</button>
           <button class="btn btn-light" disabled *ngIf="isLoading">
-            <img src="assets/img/new/loader.gif" width="30px" alt=""></button>
+            <div class="spinner-border" role="status"></div>
+          </button>
         </div>
       </form>
     </div>
@@ -524,7 +529,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
         </button>
       </div>
-      <form [formGroup]="phoneForm"> 
+      <form [formGroup]="phoneForm">
 
         <div class="modal-body">
           <div class="row">
@@ -922,7 +927,8 @@
                     <div class="input-block mb-3">
                       <label class="form-control-label">Payment Date</label>
                       <div class="cal-icon">
-                        <input type="email" class="form-control datetimepicker" bsDatepicker [bsConfig]="{ adaptivePosition: true }" placeholder="DD-MM-YYYY">
+                        <input type="email" class="form-control datetimepicker" bsDatepicker
+                          [bsConfig]="{ adaptivePosition: true }" placeholder="DD-MM-YYYY">
                       </div>
                     </div>
                   </div>
@@ -930,7 +936,8 @@
                     <div class="input-block mb-3">
                       <label class="form-control-label">Next Payment Date</label>
                       <div class="cal-icon">
-                        <input type="email" class="form-control datetimepicker" bsDatepicker [bsConfig]="{ adaptivePosition: true }" placeholder="DD-MM-YYYY">
+                        <input type="email" class="form-control datetimepicker" bsDatepicker
+                          [bsConfig]="{ adaptivePosition: true }" placeholder="DD-MM-YYYY">
                       </div>
                     </div>
                   </div>
@@ -938,7 +945,8 @@
                     <div class="input-block mb-3">
                       <label class="form-control-label">Expiring On</label>
                       <div class="cal-icon">
-                        <input type="email" class="form-control datetimepicker" bsDatepicker [bsConfig]="{ adaptivePosition: true }" placeholder="DD-MM-YYYY">
+                        <input type="email" class="form-control datetimepicker" bsDatepicker
+                          [bsConfig]="{ adaptivePosition: true }" placeholder="DD-MM-YYYY">
                       </div>
                     </div>
                   </div>

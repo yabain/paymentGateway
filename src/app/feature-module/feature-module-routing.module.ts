@@ -4,6 +4,7 @@ import { AuthGuard } from '../core/core.index';
 import { LoggedInGuard } from '../core/guards/loggedIn/logged-in.guard';
 import { FeatureModuleComponent } from './feature-module.component';
 import { SendMoneyComponent } from './send-money/send-money.component';
+import { WithdrawalComponent } from './withdrawal/withdrawal.component';
 
 const routes: Routes = [
   {
@@ -28,6 +29,10 @@ const routes: Routes = [
       {
         path: 'send-money/:id',
         component: SendMoneyComponent,
+      },
+      {
+        path: 'withdrawal',
+        component: WithdrawalComponent,
       },
       {
         path: 'customer',
@@ -350,7 +355,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    canActivate: [LoggedInGuard],
+    // canActivate: [LoggedInGuard],
     loadChildren: () =>
       import('./authentication/authentication.module').then(
         (m) => m.AuthenticationModule,

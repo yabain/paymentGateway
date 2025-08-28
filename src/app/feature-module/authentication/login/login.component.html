@@ -59,7 +59,8 @@
                     </div>
                   </div>
                   <div class="col-sm-6 text-sm-end mb-3">
-                    <span class="forgot-link" [routerLink]="routes.forgot_password">{{ 'auth.forgotPassword' | translate}} ?</span>
+                    <span class="forgot-link" [routerLink]="routes.forgot_password">{{ 'auth.forgotPassword' |
+                      translate}} ?</span>
                   </div>
                 </div>
               </div>
@@ -68,7 +69,7 @@
               </button>
               <button [disabled]="form.invalid" class="btn btn-lg btn-block btn-light w-100" type="submit" disabled
                 *ngIf="isLoading">
-                <img src="assets/img/new/loader.gif" width="30px" alt="">
+                <div class="spinner-border" role="status"></div>
               </button>
             </div>
             <div class="acc-in">

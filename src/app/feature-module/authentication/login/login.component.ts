@@ -112,7 +112,7 @@ export class LoginComponent implements OnInit {
               .subscribe((res: string) => {
                 this.showAlert(res);
               });
-            this.authService.logout();
+            // this.authService.logout();
             return;
           } else {
             this.userService.setCurrentUser(user);
@@ -139,19 +139,21 @@ export class LoginComponent implements OnInit {
             .subscribe((res: string) => {
               this.showAlert(res);
             });
-          this.authService.logout();
+          // this.authService.logout();
         }
       })
       .catch((e) => {
         this.isLoading = false;
         const err = e.error.message.message;
+        console.log('error to login: ', e.error.message.message)
         if (err.search('account is disabled') > 0) {
+          console.log('In the if')
           this.translate
             .get('auth.desabledAccountMsg')
             .subscribe((res: string) => {
-              this.showAlert(res);
+                this.toastService.presentToast('error', 'Error', res, 10000);
             });
-          this.authService.logout();
+          // this.authService.logout();
         } else {
           console.error('onSubmit catch: ', e.error.message.message);
           this.translate

@@ -4,8 +4,12 @@ import { CustomersComponent } from './customers.component';
 import { CustomersRoutingModule } from './customers-routing.module';
 
 import { SharedModule } from 'src/app/shared/shared.module';
+import { TranslateModule } from '@ngx-translate/core';
+import { CustomerListComponent } from './customers-list/customer-list.component';
+import { CustomerDetailsComponent } from './customer-details/customer-details.component';
 @NgModule({
-  declarations: [CustomersComponent],
-  imports: [CommonModule, CustomersRoutingModule, SharedModule],
+  declarations: [CustomersComponent, CustomerListComponent, CustomerDetailsComponent],
+  imports: [CommonModule, CustomersRoutingModule, SharedModule,
+      TranslateModule,],
 })
 export class CustomersModule {}

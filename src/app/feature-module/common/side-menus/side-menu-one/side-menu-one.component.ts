@@ -4,6 +4,7 @@ import { DataService, routes } from 'src/app/core/core.index';
 import { MenuItem } from 'src/app/core/models/models';
 import { SideBarService } from 'src/app/core/services/side-bar/side-bar.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { UserService } from 'src/app/services/user/user.service';
 
 interface SubMenu {
   menuValue: string;
@@ -62,7 +63,8 @@ export class SideMenuOneComponent implements OnDestroy {
     public router: Router,
     private data: DataService,
     private sideBar: SideBarService,
-    private auth: AuthService
+    private auth: AuthService,
+    private userService: UserService
   ) {
     router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -83,10 +85,20 @@ export class SideMenuOneComponent implements OnDestroy {
         this.mobileSidebar = false;
       }
     });
-    // get sidebar data as observable because data is controlled for design to expand submenus
-      this.data.getSideBarData.subscribe((res:SideBarData[]) => {
+    this.userService.getCurrentUserData()
+    .then((user: any) => {
+      if (!user) return;
+      if(user.isAdmin === true){
+        this.data.getSideBarDataAdmin.subscribe((res:SideBarData[]) => {
         this.side_bar_data = res;
     });
+      } else {
+        this.data.getSideBarData.subscribe((res:SideBarData[]) => {
+        this.side_bar_data = res;
+    });}
+    })
+    // get sidebar data as observable because data is controlled for design to expand submenus
+
   }
 
 cliclReloader() {}

@@ -1,0 +1,14 @@
+<div class="subscription-plane-head">
+  <ul>
+    <li>
+      <a [routerLink]="'/subscription/subscription'" (click)="verifyRoute()"
+      [class]="!isPackage ? 'active' : ''">{{ 'subscriptions.myList' | translate }}</a>
+    </li>
+    <li>
+      <a [routerLink]="'/subscription/packages'" (click)="verifyRoute()"
+      [class]="isPackage ? 'active' : ''">{{ 'subscriptions.myPlan' | translate }} </a>
+    </li>
+  </ul>
+</div>
+<!-- Page Header -->
+ <router-outlet></router-outlet>

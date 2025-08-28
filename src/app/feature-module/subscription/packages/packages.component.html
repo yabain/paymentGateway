@@ -1,45 +1,31 @@
-<div class="subscription-plane-head">
-    <ul>
-        <li>
-            <a [routerLink] = "routes.packages" class="active">Subscription Plans</a>
-        </li>
-        <li>
-            <a [routerLink] = "routes.subscription">Subscribers List</a>
-        </li>
-    </ul>
-</div>
-<!-- Page Header -->
 <div class="page-header">
-    <div class="content-page-header">
+    <div class="content-page-header page-tilte">
         <h5>Plans List</h5>
         <div class="page-content">
             <div class="list-btn">
                 <ul class="filter-list">
                     <li>
-                        <a class="btn-filters active" [routerLink] = "routes.packages" data-bs-toggle="tooltip"
-                            data-bs-placement="bottom" title="Grid-View" matTooltip="Grid-View"><span><i class="feather icon-grid"></i></span></a>
+                        <a class="btn-filters active btn-hover" data-bs-toggle="tooltip"
+                            data-bs-placement="bottom" matTooltip="Grid-View"><span><i
+                                    class="feather icon-grid"></i></span></a>
                     </li>
                     <li>
-                        <a class="btn-filters" [routerLink] = "routes.plansList" data-bs-toggle="tooltip"
-                            data-bs-placement="bottom" title="List-View" matTooltip="List-View"><span><i class="feather icon-list"></i></span></a>
+                        <a class="btn-filters btn-hover" data-bs-toggle="tooltip"
+                            data-bs-placement="bottom" matTooltip="List-View"><span><i
+                                    class="feather icon-list"></i></span></a>
                     </li>
                     <li>
-                        <a class="btn-filters" href="javascript:void(0);" data-bs-toggle="tooltip"
-                            data-bs-placement="bottom" title="Refresh" matTooltip="Refresh"><span><i
+                        <a class="btn-filters btn-hover" href="javascript:void(0);" data-bs-toggle="tooltip"
+                            data-bs-placement="bottom" matTooltip="Refresh"><span><i
                                     class="feather icon-refresh-ccw"></i></span></a>
-                    </li>
-                    <li>
-                        <a (click)="openContent()" class="btn btn-filters w-auto popup-toggle" data-bs-toggle="tooltip"
-                            data-bs-placement="bottom" title="Filter" matTooltip="Filter"><span class="me-2"><img
-                                    src="assets/img/icons/filter-icon.svg" alt="filter"></span>Filter
-                        </a>
                     </li>
 
                     <li>
                         <div class="dropdown dropdown-action" data-bs-toggle="tooltip" data-bs-placement="bottom"
                             title="Download" matTooltip="Download">
-                            <a href="javascript:void(0);" class="btn btn-filters" data-bs-toggle="dropdown" aria-expanded="false"><span
-                                    class="me-2"><i class="feather icon-download"></i></span>Export</a>
+                            <a href="javascript:void(0);" class="btn btn-filters btn-hover" data-bs-toggle="dropdown"
+                                aria-expanded="false"><span class="me-2"><i
+                                        class="feather icon-download btn-hover"></i></span>Export</a>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <ul class="d-block">
                                     <li>
@@ -55,14 +41,9 @@
                         </div>
                     </li>
                     <li>
-                        <a class="btn btn-filters" href="javascript:void(0);" data-bs-toggle="tooltip"
-                            data-bs-placement="bottom" title="Print" matTooltip="Print"><span class="me-2"><i
-                                    class="feather icon-printer"></i></span> Print
-                        </a>
-                    </li>
-                    <li>
-                        <a class="btn btn-primary" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#add_newpackage"><i
-                                class="fa fa-plus-circle me-2" aria-hidden="true"></i>Add Plan</a>
+                        <a class="btn btn-primary" href="javascript:void(0);" data-bs-toggle="modal"
+                            data-bs-target="#add_newpackage"><i class="fa fa-plus-circle me-2"
+                                aria-hidden="true"></i>Add Plan</a>
                     </li>
                 </ul>
             </div>
@@ -75,7 +56,7 @@
     <div class="row">
         <div class="col-xl-3 col-md-6 d-flex">
             <div class="card w-100">
-                <div class="card-body">
+                <div class="card-body card-head">
                     <div class="grid-info-item total-plane">
                         <div class="grid-info">
                             <span>Total Plan</span>
@@ -90,7 +71,7 @@
         </div>
         <div class="col-xl-3 col-md-6 d-flex">
             <div class="card w-100">
-                <div class="card-body">
+                <div class="card-body card-head">
                     <div class="grid-info-item active-plane">
                         <div class="grid-info">
                             <span>Active Plans</span>
@@ -105,7 +86,7 @@
         </div>
         <div class="col-xl-3 col-md-6 d-flex">
             <div class="card w-100">
-                <div class="card-body">
+                <div class="card-body card-head">
                     <div class="grid-info-item inactive-plane">
                         <div class="grid-info">
                             <span>Inactive Plans</span>
@@ -120,7 +101,7 @@
         </div>
         <div class="col-xl-3 col-md-6 d-flex">
             <div class="card w-100">
-                <div class="card-body">
+                <div class="card-body card-head">
                     <div class="grid-info-item total-type">
                         <div class="grid-info">
                             <span>No of Plan Types</span>
@@ -270,7 +251,8 @@
     <div class="sidebar-layout-filter">
         <div class="sidebar-header">
             <h5>Filter</h5>
-            <a (click)="openContent()" href="javascript:void(0);" class="sidebar-closes"><i class="fa-regular fa-circle-xmark"></i></a>
+            <a (click)="openContent()" href="javascript:void(0);" class="sidebar-closes"><i
+                    class="fa-regular fa-circle-xmark"></i></a>
         </div>
         <div class="sidebar-body">
             <form action="#" autocomplete="off">
@@ -381,13 +363,15 @@
                             <div class="input-block mb-3">
                                 <label class="form-control-label">From</label>
                                 <div class="cal-icon">
-                                    <input type="email" class="form-control datetimepicker" bsDatepicker [bsConfig]="{ adaptivePosition: true }" placeholder="DD-MM-YYYY">
+                                    <input type="email" class="form-control datetimepicker" bsDatepicker
+                                        [bsConfig]="{ adaptivePosition: true }" placeholder="DD-MM-YYYY">
                                 </div>
                             </div>
                             <div class="input-block mb-3">
                                 <label class="form-control-label">To</label>
                                 <div class="cal-icon">
-                                    <input type="email" class="form-control datetimepicker" bsDatepicker [bsConfig]="{ adaptivePosition: true }" placeholder="DD-MM-YYYY">
+                                    <input type="email" class="form-control datetimepicker" bsDatepicker
+                                        [bsConfig]="{ adaptivePosition: true }" placeholder="DD-MM-YYYY">
                                 </div>
                             </div>
                         </div>
