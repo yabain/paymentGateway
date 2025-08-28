@@ -1,18 +1,16 @@
 <div class="page-header">
     <div class="content-page-header page-tilte">
-        <h5>Plans List</h5>
+        <h5>{{ 'subscriptions.myPlan' | translate }}</h5>
         <div class="page-content">
             <div class="list-btn">
                 <ul class="filter-list">
                     <li>
-                        <a class="btn-filters active btn-hover" data-bs-toggle="tooltip"
-                            data-bs-placement="bottom" matTooltip="Grid-View"><span><i
-                                    class="feather icon-grid"></i></span></a>
+                        <a class="btn-filters active btn-hover" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                            matTooltip="Grid-View"><span><i class="feather icon-grid"></i></span></a>
                     </li>
                     <li>
-                        <a class="btn-filters btn-hover" data-bs-toggle="tooltip"
-                            data-bs-placement="bottom" matTooltip="List-View"><span><i
-                                    class="feather icon-list"></i></span></a>
+                        <a class="btn-filters btn-hover" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                            matTooltip="List-View"><span><i class="feather icon-list"></i></span></a>
                     </li>
                     <li>
                         <a class="btn-filters btn-hover" href="javascript:void(0);" data-bs-toggle="tooltip"
@@ -20,7 +18,7 @@
                                     class="feather icon-refresh-ccw"></i></span></a>
                     </li>
 
-                    <li>
+                    <!-- <li>
                         <div class="dropdown dropdown-action" data-bs-toggle="tooltip" data-bs-placement="bottom"
                             title="Download" matTooltip="Download">
                             <a href="javascript:void(0);" class="btn btn-filters btn-hover" data-bs-toggle="dropdown"
@@ -39,11 +37,11 @@
                                 </ul>
                             </div>
                         </div>
-                    </li>
-                    <li>
+                    </li> -->
+                    <li *ngIf="currentUser">
                         <a class="btn btn-primary" href="javascript:void(0);" data-bs-toggle="modal"
-                            data-bs-target="#add_newpackage"><i class="fa fa-plus-circle me-2"
-                                aria-hidden="true"></i>Add Plan</a>
+                            data-bs-target="#add_newpackage"><i class="fa fa-plus-circle me-2" aria-hidden="true"></i>{{
+                            'subscriptions.add' | translate }}</a>
                     </li>
                 </ul>
             </div>
@@ -59,8 +57,9 @@
                 <div class="card-body card-head">
                     <div class="grid-info-item total-plane">
                         <div class="grid-info">
-                            <span>Total Plan</span>
-                            <h4>07</h4>
+                            <span>{{ 'subscriptions.totalPlans' | translate }}</span>
+                            <h4 *ngIf="gettingStatistics">Loading...</h4>
+                            <h4 *ngIf="!gettingStatistics">{{ statistics.totalPlans }}</h4>
                         </div>
                         <div class="grid-head-icon">
                             <i class="feather icon-package"></i>
@@ -74,8 +73,9 @@
                 <div class="card-body card-head">
                     <div class="grid-info-item active-plane">
                         <div class="grid-info">
-                            <span>Active Plans</span>
-                            <h4>07</h4>
+                            <span>{{ 'subscriptions.activePlans' | translate }}</span>
+                            <h4 *ngIf="gettingStatistics">Loading...</h4>
+                            <h4 *ngIf="!gettingStatistics">{{ statistics.activePlans }}</h4>
                         </div>
                         <div class="grid-head-icon">
                             <i class="feather icon-list"></i>
@@ -89,8 +89,9 @@
                 <div class="card-body card-head">
                     <div class="grid-info-item inactive-plane">
                         <div class="grid-info">
-                            <span>Inactive Plans</span>
-                            <h4>0</h4>
+                            <span>{{ 'subscriptions.inactivePlan' | translate }}</span>
+                            <h4 *ngIf="gettingStatistics">Loading...</h4>
+                            <h4 *ngIf="!gettingStatistics">{{ statistics.inactivePlans }}</h4>
                         </div>
                         <div class="grid-head-icon">
                             <i class="feather icon-pause-circle"></i>
@@ -104,8 +105,8 @@
                 <div class="card-body card-head">
                     <div class="grid-info-item total-type">
                         <div class="grid-info">
-                            <span>No of Plan Types</span>
-                            <h4>04</h4>
+                            <span>{{ 'subscriptions.totalSubscribers' | translate }}</span>
+                            <h4>00</h4>
                         </div>
                         <div class="grid-head-icon">
                             <i class="feather icon-pocket"></i>
@@ -400,86 +401,78 @@
 
 <!-- Add New Package Modal -->
 <div class="modal custom-modal fade p-20" id="add_newpackage" role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-md">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header border-0">
                 <div class="form-header modal-header-title text-start mb-0">
-                    <h4 class="mb-0">Add New</h4>
+                    <h4 class="mb-0">{{ 'subscriptions.add' | translate }}</h4>
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                 </button>
             </div>
             <form action="#">
                 <div class="modal-body">
-                    <h5 class="form-title">Plan Image</h5>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="profile-picture">
                                 <div class="upload-profile">
                                     <div class="profile-img company-profile-img">
                                         <img id="company-img" class="img-fluid me-0"
-                                            src="assets/img/companies/company-add-img.svg" alt="profile-img">
+                                            [src]="imageUrl" alt="profile-img">
                                     </div>
                                     <div class="add-profile">
-                                        <h5>Upload a New Photo</h5>
-                                        <span>Profile-pic.jpg</span>
+                                        <h5>{{title}}</h5>
+                                        <span>{{subTitle}}</span>
                                     </div>
                                 </div>
-                                <div class="img-upload">
+                                <!-- <div class="img-upload">
                                     <label class="btn btn-upload">
                                         Upload <input type="file">
                                     </label>
                                     <a class="btn btn-remove">Remove</a>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <h5 class="form-title mb-3">Plan Info</h5>
+                            <h5 class="form-title mb-3">{{ "subscriptions.planInfo" | translate }}</h5>
                         </div>
                         <div class="col-sm-12 col-md-6">
-
                             <div class="input-block mb-3">
-                                <label>Plan Name</label>
-                                <input type="text" class="form-control" placeholder="Enter Plan Name" value="">
+                                <label>{{ "subscriptions.name" | translate }}</label>
+                                <input type="text" class="form-control" placeholder="" [(ngModel)]="title" name="title">
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-6">
                             <div class="input-block mb-3">
-                                <label>Plan Type</label>
-                                <mat-select class="select custom-mat-select" placeholder="Monthly">
-                                    <mat-option value="Monthly">Monthly</mat-option>
-                                    <mat-option value="Yearly">Yearly</mat-option>
-                                    <mat-option value="Lifetime">Lifetime</mat-option>
-                                </mat-select>
+                                <label>{{ "subscriptions.subTitle" | translate }}</label>
+                                <input type="text" class="form-control" placeholder="" [(ngModel)]="subTitle"
+                                    name="subTitle">
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-6">
                             <div class="input-block mb-3">
-                                <label>Plan Position</label>
-                                <mat-select class="select custom-mat-select" placeholder="1">
-                                    <mat-option value="1">1</mat-option>
-                                    <mat-option value="2">2</mat-option>
-                                    <mat-option value="3">3</mat-option>
-                                </mat-select>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-6">
-                            <div class="input-block mb-3">
-                                <label>Plan Currency</label>
-                                <mat-select class="select custom-mat-select" placeholder="USD">
-                                    <mat-option value="USD">USD</mat-option>
-                                    <mat-option value="$">$</mat-option>
+                                <label>Type</label>
+                                <mat-select class="select custom-mat-select" placeholder="Monthly" [(ngModel)]="cycle"
+                                    name="cycle">
+                                    <mat-option value="yearly">{{ "subscriptions.yearly" | translate }}</mat-option>
+                                    <mat-option value="monthly">{{ "subscriptions.monthly" | translate }}</mat-option>
+                                    <mat-option value="weekly">{{ "subscriptions.weekly" | translate }}</mat-option>
+                                    <mat-option value="dayly">{{ "subscriptions.dayly" | translate }}</mat-option>
                                 </mat-select>
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-6">
                             <div class="input-block mb-3">
                                 <label class="d-flex justify-content-between">
-                                    <span>Price</span>
-                                    <span class="text-primary"><i class="fa-solid fa-circle-exclamation me-2"></i>Set 0
-                                        for free</span>
+                                    <span>{{ "subscriptions.price" | translate }}</span>
+                                    <span class="text-primary"><i class="fa-solid fa-circle-exclamation me-2"></i>
+                                        {{ "subscriptions.zeroIfFree" | translate }}</span>
                                 </label>
-                                <input type="text" class="form-control" placeholder="Enter Package Price">
+                                <div class="input-group">
+                                    <input class="form-control" style="text-align: right" type="text" id="price"
+                                        placeholder="" [(ngModel)]="price" name="price" (input)="formatAmount($event)"/>
+                                    <span class="input-group-text">{{ currentUser?.countryId.currency }}</span>
+                                </div>
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-3">

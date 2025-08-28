@@ -7,6 +7,7 @@ import { SubscriptionComponent } from './subscription.component';
 import { PackagesComponent } from './packages/packages.component';
 import { SubscriptionListComponent } from './subscription-list/subscription-list.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { SubscriptionService } from 'src/app/services/subscription/subscription.service';
 
 
 @NgModule({
@@ -20,6 +21,7 @@ import { TranslateModule } from '@ngx-translate/core';
     SubscriptionRoutingModule,
     SharedModule,
     TranslateModule
-  ]
+  ],
+  providers: [SubscriptionService]
 })
 export class SubscriptionModule { }
