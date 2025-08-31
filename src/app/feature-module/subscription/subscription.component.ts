@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 
@@ -7,7 +7,7 @@ import { Subject, takeUntil } from 'rxjs';
   templateUrl: './subscription.component.html',
   styleUrls: ['./subscription.component.scss'],
 })
-export class SubscriptionComponent implements OnInit {
+export class SubscriptionComponent implements OnInit, OnDestroy {
 isPackage: boolean = false;
   private destroy$ = new Subject<void>();
 
@@ -18,7 +18,9 @@ isPackage: boolean = false;
   }
 
   ngOnInit(){
+      this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.verifyRoute();
+      });
     }
 
   togglePackageRoute(){
@@ -32,5 +34,11 @@ isPackage: boolean = false;
         this.isPackage = true
       } else this.isPackage = false;
     }, 200)
+  }
+  
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

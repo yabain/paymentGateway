@@ -10,6 +10,7 @@ import { UserService } from 'src/app/services/user/user.service';
 import { SystemService } from 'src/app/services/system/system.service';
 import { DatePipe } from '@angular/common';
 import { ToastService } from 'src/app/services/toast/toast.service';
+import { SoldeService } from 'src/app/services/solde/solde.service';
 
 import {
   FormBuilder,
@@ -60,6 +61,8 @@ export class WithdrawalComponent implements OnInit {
   bic: string = '';
   canNext2Val: boolean = false;
   goToProceed: boolean = false;
+  waittingSolde: boolean = true;
+  solde: number = 0;
 
   constructor(
     private toastService: ToastService,
@@ -72,6 +75,7 @@ export class WithdrawalComponent implements OnInit {
     private paymentService: PaymentService,
     private exchange: ExchangeService,
     private location: LocationService,
+    private soldeService: SoldeService,
   ) {
     this.estimation = 0;
   }
@@ -86,6 +90,17 @@ export class WithdrawalComponent implements OnInit {
         this.scrollToTop();
       }, 100);
     });
+  }
+
+
+  getSolde(){
+    this.waittingSolde = true;
+    this.soldeService.getSolde()
+    .subscribe((data: any) => {
+      console.log('solde: ', data)
+      this.solde = data ? data.solde : 0;
+      this.waittingSolde = false
+    })
   }
 
   getMethodName(method) {
@@ -292,6 +307,7 @@ export class WithdrawalComponent implements OnInit {
         this.waitingUserData = false;
         this.getRates();
         this.getSystemData();
+        this.getSolde();
       } else {
         this.currentUser = undefined;
         this.waitingUserData = false;

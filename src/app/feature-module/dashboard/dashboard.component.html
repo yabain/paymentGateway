@@ -14,12 +14,13 @@
           {{ 'dashboard.welcome' | translate }} {{ userName }} !
         </h4>
         <p>{{ 'dashboard.subTitleWelcome' | translate }}</p>
-        <h3 style="color: #fff; font-weight: bolder;">00 XAF</h3>
+        <h3 style="color: #fff; font-weight: bolder;" *ngIf="!waittingSolde">{{ solde || 00 }} {{ currentUserData.countryId.currency }}</h3>
+        <h6 style="color: #fff; font-weight: bolder;" *ngIf="waittingSolde"><div class="spinner-border" role="status"></div></h6>
         <div class="dash-btns">
           <a [routerLink]="'/send-money'" class="btn view-btn">{{ 'dashboard.sendMoney' | translate }}
             <i class="feather icon-send" data-bs-toggle="tooltip" title="feather icon-send"></i>
           </a>
-          <a [routerLink]="routes.packages" class="btn view-package-btn">
+          <a [routerLink]="'/withdrawal'" class="btn view-package-btn">
             {{ "dashboard.cashWithdrawal" | translate }}
             <i class="feather icon-download" data-bs-toggle="tooltip"></i>
           </a>
@@ -71,8 +72,8 @@
       </div>
     </div>
   </div>
-  <div class="row" *ngIf="currentUserData?.isAdmin === true" [routerLink]="'/customer/list'">
-    <div class="col-xl-3 col-sm-6 col-12">
+  <div class="row" *ngIf="currentUserData?.isAdmin === true">
+    <div class="col-xl-3 col-sm-6 col-12" [routerLink]="'/customer/list'">
       <div class="card">
         <div class="card-body">
           <div class="dash-widget-header">
@@ -210,7 +211,7 @@
                   </td>
                   <td>= {{exchangeTo(rate.currency)}} {{currentUserData.countryId.currency}}</td>
                   <td class="text-end">
-                    <a [routerLink]="routes.companies" class="view-companies btn">
+                    <a [routerLink]="'/send-money/' + rate._id" class="view-companies btn">
                       {{ "action.send" | translate }}
                     </a>
                   </td>

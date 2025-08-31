@@ -18,6 +18,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { routes, SideBarService } from 'src/app/core/core.index';
 import { ExchangeService } from 'src/app/services/exchange/exchange.service';
 import { LocationService } from 'src/app/services/location/location.service';
+import { SoldeService } from 'src/app/services/solde/solde.service';
 import { SystemService } from 'src/app/services/system/system.service';
 import { UserService } from 'src/app/services/user/user.service';
 
@@ -68,6 +69,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   gettingLocations: boolean = true;
   networkError: boolean = false;
   transactionList: any = [];
+  waittingSolde: boolean = true;
+  solde: number = 0;
 
   constructor(
     private sideBar: SideBarService,
@@ -77,6 +80,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private location: LocationService,
     private systemService: SystemService,
     private exchange: ExchangeService,
+    private soldeService: SoldeService,
   ) {}
 
   async ngOnInit() {
@@ -86,6 +90,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.initCharts();
     });
     this.checkNetwork();
+  }
+
+  getSolde(){
+    this.waittingSolde = true;
+    this.soldeService.getSolde()
+    .subscribe((data: any) => {
+      console.log('solde: ', data)
+      this.solde = data ? data.solde : 0;
+      this.waittingSolde = false
+    })
   }
 
   scrollToTop(): void {
@@ -116,6 +130,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
               this.userStats = this.getUsersStatistics();
             }
           }
+          this.getSolde();
           this.getExchangeRate();
           this.getLocations();
         },

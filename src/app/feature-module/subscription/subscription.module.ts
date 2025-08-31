@@ -8,13 +8,15 @@ import { PackagesComponent } from './packages/packages.component';
 import { SubscriptionListComponent } from './subscription-list/subscription-list.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { SubscriptionService } from 'src/app/services/subscription/subscription.service';
+import { ItemComponent } from './packages/item/item.component';
 
 
 @NgModule({
   declarations: [
     SubscriptionComponent,
     SubscriptionListComponent,
-    PackagesComponent
+    PackagesComponent,
+    ItemComponent,
   ],
   imports: [
     CommonModule,

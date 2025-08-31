@@ -46,6 +46,18 @@ $template-theme: mat.m2-define-light-theme(
 
 @import "./assets/scss/main.scss";
 
+  :root {
+    --primary: #021d66;
+    --primary-light: #0531a9;
+    --secondary: #F57C11;
+    --dark: #1a1a2e;
+    --light: #f8f9fa;
+    --success: #018a11;
+    --warning: #d76500;
+    --gray: #adb5bd;
+    --danger: #a10202;
+  }
+  
 .material-icons {
   font-family: "Material Icons";
   font-weight: normal;

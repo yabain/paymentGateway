@@ -29,29 +29,13 @@
     <div class="col-xl-3 col-md-6 d-flex">
       <div class="card w-100">
         <div class="card-body">
-          <div class="grid-info-item subscription-list total-transaction">
-            <div class="grid-head-icon">
-              <i class="feather icon-shield"></i>
-            </div>
-            <div class="grid-info">
-              <span>Total Transaction</span>
-              <h4>$6,565,60</h4>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-xl-3 col-md-6 d-flex">
-      <div class="card w-100">
-        <div class="card-body">
           <div class="grid-info-item subscription-list total-subscriber">
             <div class="grid-head-icon">
               <i class="feather icon-users"></i>
             </div>
             <div class="grid-info">
-              <span>Total Subscribers</span>
-              <h4>945</h4>
+              <span>{{ "subscriptions.totalSuscriptions" | translate }}</span>
+              <h4>0</h4>
             </div>
 
           </div>
@@ -66,8 +50,8 @@
               <i class="feather icon-user-check"></i>
             </div>
             <div class="grid-info">
-              <span>Active Subscriber</span>
-              <h4>944</h4>
+              <span>{{ "subscriptions.activeSuscriptions" | translate }}</span>
+              <h4>0</h4>
             </div>
 
           </div>
@@ -82,18 +66,32 @@
               <i class="feather icon-user-x"></i>
             </div>
             <div class="grid-info">
-              <span>Expired</span>
-              <h4>1</h4>
+              <span>{{ "subscriptions.inactiveSuscriptions" | translate }}</span>
+              <h4>0</h4>
             </div>
-
           </div>
         </div>
       </div>
     </div>
+    <!-- <div class="col-xl-3 col-md-6 d-flex">
+      <div class="card w-100">
+        <div class="card-body">
+          <div class="grid-info-item subscription-list total-transaction">
+            <div class="grid-head-icon">
+              <i class="feather icon-shield"></i>
+            </div>
+            <div class="grid-info">
+              <span>Total Transaction</span>
+              <h4>$6,565,60</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> -->
   </div>
 </div>
 
-<div class="row">
+<!-- <div class="row">
   <div class="col-sm-12">
     <div class="card-table">
       <div class="card-body">
@@ -180,62 +178,20 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
-<!-- Edit Vendor Modal -->
-<div class="modal custom-modal fade" id="edit_contact" role="dialog">
-  <div class="modal-dialog modal-dialog-centered modal-md">
-    <div class="modal-content">
-      <div class="modal-header border-0 pb-0">
-        <div class="form-header modal-header-title text-start mb-0">
-          <h4 class="mb-0">Edit Contact Messages</h4>
-        </div>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-lg-12 col-md-12">
-            <div class="input-block mb-3">
-              <label>Name</label>
-              <input type="text" class="form-control" value="John Smith" placeholder="Enter Name">
-            </div>
-          </div>
-          <div class="col-lg-12 col-md-12">
-            <div class="input-block mb-3">
-              <label>Email</label>
-              <input type="text" class="form-control" value="john@example.com" placeholder="Email">
-            </div>
-          </div>
-          <div class="col-lg-12 col-md-12">
-            <div class="input-block mb-3">
-              <label>Mobile</label>
-              <input type="text" class="form-control" value="989-438-3131" placeholder="Enter Mobile Number">
-            </div>
-          </div>
-          <div class="col-lg-12 col-md-12">
-            <div class="input-block mb-3">
-              <label>Message</label>
-              <input type="text" class="form-control" value="Lorem ipsum dolor" placeholder="message">
-            </div>
-          </div>
-          <div class="col-lg-12 col-md-12">
-            <div class="input-block mb-0">
-              <label>Date</label>
-              <input type="text" class="form-control" value="15 Dec 2023, 04:35 PM" placeholder="message">
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <a href="javascript:void(0);" data-bs-dismiss="modal" class="btn btn-back cancel-btn me-2">Cancel</a>
-        <a href="javascript:void(0);" data-bs-dismiss="modal" class="btn btn-primary paid-continue-btn">Update</a>
-      </div>
+<div class="row d-flex align-items-center justify-content-center">
+    <div style="display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 300px;">
+        <img src="../../../../assets/img/ressorces/nts.png" alt="" style="max-width: 150px;
+        height: auto;">
+        <br>
+        {{ "nts" | translate }}
+        <br><br>
     </div>
-  </div>
 </div>
-<!-- /Edit Vendor Modal -->
 
 <!-- Delete Items Modal -->
 <div class="modal custom-modal fade modal-delete" id="delete_modal" role="dialog">

@@ -7,8 +7,8 @@
 <div class="offcanvas offcanvas-end border-0" tabindex="-1" id="theme-settings-offcanvas">
   <div class="sidebar-headerset">
     <div class="sidebar-headersets">
-      <h2>Customizer</h2>
-      <h3>Customize your overview Page layout</h3>
+      <h2>{{ "personalizer.title" | translate }}</h2>
+      <h3>{{ "personalizer.subTitle" | translate }}</h3>
     </div>
     <div class="sidebar-headerclose">
       <a data-bs-dismiss="offcanvas" aria-label="Close"><img src="assets/img/close.png" alt="img" /></a>
@@ -17,9 +17,11 @@
   <div class="offcanvas-body p-0">
     <div data-simplebar class="h-100">
       <div class="settings-mains">
+
+        <!-- Layout -->
         <div class="layout-head">
-          <h5>Layout</h5>
-          <h6>Choose your layout</h6>
+          <h5>{{ "personalizer.layout" | translate }}</h5>
+          <h6>{{ "personalizer.chooseLayout" | translate }}</h6>
         </div>
         <div class="row">
           <div class="col-4">
@@ -32,7 +34,7 @@
                 <img src="assets/img/vertical.png" alt="img" />
               </label>
             </div>
-            <h5 class="fs-13 text-center mt-2">Vertical</h5>
+            <h5 class="fs-13 text-center mt-2">{{ "personalizer.vertical" | translate }}</h5>
           </div>
           <div class="col-4">
             <div class="form-check card-radio p-0" (click)="sideBar.changeLayout('6')"
@@ -44,7 +46,7 @@
                 <img src="assets/img/horizontal.png" alt="img" />
               </label>
             </div>
-            <h5 class="fs-13 text-center mt-2">Horizontal</h5>
+            <h5 class="fs-13 text-center mt-2">{{ "personalizer.horizontal" | translate }}</h5>
           </div>
           <div class="col-4 d-none">
             <div class="form-check card-radio p-0">
@@ -54,12 +56,14 @@
                 <img src="assets/img/two-col.png" alt="img" />
               </label>
             </div>
-            <h5 class="fs-13 text-center mt-2">Two Column</h5>
+            <h5 class="fs-13 text-center mt-2">{{ "personalizer.twoColumn" | translate }}</h5>
           </div>
         </div>
+
+        <!-- Color Scheme -->
         <div class="layout-head pt-3">
-          <h5>Color Scheme</h5>
-          <h6>Choose Light or Dark Scheme.</h6>
+          <h5>{{ "personalizer.colorScheme" | translate }}</h5>
+          <h6>{{ "personalizer.chooseColorScheme" | translate }}</h6>
         </div>
         <div class="colorscheme-cardradio">
           <div class="row">
@@ -73,7 +77,7 @@
                   <img src="assets/img/vertical.png" alt="img" />
                 </label>
               </div>
-              <h5 class="fs-13 text-center mt-2 mb-2">Blue</h5>
+              <h5 class="fs-13 text-center mt-2 mb-2">{{ "personalizer.blue" | translate }}</h5>
             </div>
             <div class="col-4">
               <div (click)="sideBar.changeColors('1')" (keydown.enter)="sideBar.changeColors('1')" tabindex="0"
@@ -85,7 +89,7 @@
                   <img src="assets/img/vertical.png" alt="img" />
                 </label>
               </div>
-              <h5 class="fs-13 text-center mt-2 mb-2">Light</h5>
+              <h5 class="fs-13 text-center mt-2 mb-2">{{ "personalizer.light" | translate }}</h5>
             </div>
             <div class="col-4">
               <div (click)="sideBar.changeColors('4');addBodyClass()"
@@ -98,7 +102,7 @@
                   <img src="assets/img/vertical.png" alt="img" />
                 </label>
               </div>
-              <h5 class="fs-13 text-center mt-2 mb-2">Dark</h5>
+              <h5 class="fs-13 text-center mt-2 mb-2">{{ "personalizer.dark" | translate }}</h5>
             </div>
             <div class="col-4 d-none">
               <div class="form-check card-radio p-0">
@@ -109,7 +113,7 @@
                   <img src="assets/img/vertical.png" alt="img" />
                 </label>
               </div>
-              <h5 class="fs-13 text-center mt-2 mb-2">Orange</h5>
+              <h5 class="fs-13 text-center mt-2 mb-2">{{ "personalizer.orange" | translate }}</h5>
             </div>
             <div class="col-4 d-none">
               <div class="form-check card-radio maroon p-0">
@@ -119,7 +123,7 @@
                   <img src="assets/img/vertical.png" alt="img" />
                 </label>
               </div>
-              <h5 class="fs-13 text-center mt-2 mb-2">Brink Pink</h5>
+              <h5 class="fs-13 text-center mt-2 mb-2">{{ "personalizer.brinkPink" | translate }}</h5>
             </div>
             <div class="col-4 d-none">
               <div class="form-check card-radio purple p-0">
@@ -129,15 +133,16 @@
                   <img src="assets/img/vertical.png" alt="img" />
                 </label>
               </div>
-              <h5 class="fs-13 text-center mt-2 mb-2">Green</h5>
+              <h5 class="fs-13 text-center mt-2 mb-2">{{ "personalizer.green" | translate }}</h5>
             </div>
           </div>
         </div>
 
+        <!-- Layout Width -->
         <div id="layout-width">
           <div class="layout-head pt-3">
-            <h5>Layout Width</h5>
-            <h6>Choose Fluid or Boxed layout.</h6>
+            <h5>{{ "personalizer.width" | translate }}</h5>
+            <h6>{{ "personalizer.chooseWidth" | translate }}</h6>
           </div>
           <div class="row">
             <div class="col-4">
@@ -150,7 +155,7 @@
                   <img src="assets/img/vertical.png" alt="img" />
                 </label>
               </div>
-              <h5 class="fs-13 text-center mt-2">Fluid</h5>
+              <h5 class="fs-13 text-center mt-2">{{ "personalizer.fluid" | translate }}</h5>
             </div>
             <div class="col-4">
               <div class="form-check card-radio p-0" (click)="boxedLayout()" (keydown.enter)="boxedLayout()"
@@ -162,29 +167,32 @@
                   <img src="assets/img/boxed.png" alt="img" />
                 </label>
               </div>
-              <h5 class="fs-13 text-center mt-2">Boxed</h5>
+              <h5 class="fs-13 text-center mt-2">{{ "personalizer.boxed" | translate }}</h5>
             </div>
           </div>
         </div>
 
+        <!-- Layout Position -->
         <div id="layout-position" class="d-none">
           <div class="layout-head pt-3">
-            <h5>Layout Position</h5>
-            <h6>Choose Fixed or Scrollable Layout Position.</h6>
+            <h5>{{ "personalizer.position" | translate }}</h5>
+            <h6>{{ "personalizer.choosePosition" | translate }}</h6>
           </div>
           <div class="btn-group bor-rad-50 overflow-hidden radio" role="group">
             <input type="radio" class="btn-check" name="data-layout-position" id="layout-position-fixed"
               value="fixed" />
-            <label class="btn btn-light w-sm" for="layout-position-fixed">Fixed</label>
+            <label class="btn btn-light w-sm" for="layout-position-fixed">{{ "personalizer.fixed" | translate }}</label>
 
             <input type="radio" class="btn-check" name="data-layout-position" id="layout-position-scrollable"
               value="scrollable" />
-            <label class="btn btn-light w-sm ms-0" for="layout-position-scrollable">Scrollable</label>
+            <label class="btn btn-light w-sm ms-0" for="layout-position-scrollable">{{ "personalizer.scrollable" | translate }}</label>
           </div>
         </div>
+
+        <!-- Topbar Color -->
         <div class="layout-head pt-3">
-          <h5>Topbar Color</h5>
-          <h6>Choose Light or Dark Topbar Color.</h6>
+          <h5>{{ "personalizer.color" | translate }}</h5>
+          <h6>{{ "personalizer.chooseColor" | translate }}</h6>
         </div>
         <div class="row">
           <div class="col-4">
@@ -196,7 +204,7 @@
                 <img src="assets/img/vertical.png" alt="img" />
               </label>
             </div>
-            <h5 class="fs-13 text-center mt-2">Light</h5>
+            <h5 class="fs-13 text-center mt-2">{{ "personalizer.light" | translate }}</h5>
           </div>
           <div class="col-4">
             <div class="form-check card-radio p-0" (click)="sideBar.changeTopcolor('2')"
@@ -207,14 +215,15 @@
                 <img src="assets/img/dark.png" alt="img" />
               </label>
             </div>
-            <h5 class="fs-13 text-center mt-2">Dark</h5>
+            <h5 class="fs-13 text-center mt-2">{{ "personalizer.dark" | translate }}</h5>
           </div>
         </div>
 
+        <!-- Sidebar Size -->
         <div id="sidebar-size">
           <div class="layout-head pt-3">
-            <h5>Sidebar Size</h5>
-            <h6>Choose a size of Sidebar.</h6>
+            <h5>{{ "personalizer.size" | translate }}</h5>
+            <h6>{{ "personalizer.chooseSize" | translate }}</h6>
           </div>
           <div class="row">
             <div class="col-4">
@@ -228,7 +237,7 @@
                   <img src="assets/img/vertical.png" alt="img" />
                 </label>
               </div>
-              <h5 class="fs-13 text-center mt-2">Default</h5>
+              <h5 class="fs-13 text-center mt-2">{{ "personalizer.default" | translate }}</h5>
             </div>
 
             <div class="col-4 d-none">
@@ -239,7 +248,7 @@
                   <img src="assets/img/compact.png" alt="img" />
                 </label>
               </div>
-              <h5 class="fs-13 text-center mt-2">Compact</h5>
+              <h5 class="fs-13 text-center mt-2">{{ "personalizer.compact" | translate }}</h5>
             </div>
             <div class="col-4">
               <div class="form-check sidebar-setting card-radio p-0" (click)="sideBar.changeSidebarSize('2')"
@@ -252,15 +261,16 @@
                   <img src="assets/img/small-hover.png" alt="img" />
                 </label>
               </div>
-              <h5 class="fs-13 text-center mt-2">Small Sidebar</h5>
+              <h5 class="fs-13 text-center mt-2">{{ "personalizer.small" | translate }}</h5>
             </div>
           </div>
         </div>
 
+        <!-- Sidebar View -->
         <div id="sidebar-view">
           <div class="layout-head pt-3">
-            <h5>Sidebar View</h5>
-            <h6>Choose Default or Detached Sidebar view.</h6>
+            <h5>{{ "personalizer.view" | translate }}</h5>
+            <h6>{{ "personalizer.chooseView" | translate }}</h6>
           </div>
           <div class="row">
             <div class="col-4">
@@ -274,7 +284,7 @@
                   <img src="assets/img/compact.png" alt="img" />
                 </label>
               </div>
-              <h5 class="fs-13 text-center mt-2">Default</h5>
+              <h5 class="fs-13 text-center mt-2">{{ "personalizer.defaultView" | translate }}</h5>
             </div>
             <div class="col-4">
               <div class="form-check sidebar-setting card-radio p-0" (click)="sideBar.changeSidebarView('2')"
@@ -287,14 +297,16 @@
                   <img src="assets/img/detached.png" alt="img" />
                 </label>
               </div>
-              <h5 class="fs-13 text-center mt-2">Detached</h5>
+              <h5 class="fs-13 text-center mt-2">{{ "personalizer.detached" | translate }}</h5>
             </div>
           </div>
         </div>
+
+        <!-- Sidebar Color -->
         <div id="sidebar-color">
           <div class="layout-head pt-3">
-            <h5>Sidebar Color</h5>
-            <h6>Choose a color of Sidebar.</h6>
+            <h5>{{ "personalizer.color" | translate }}</h5>
+            <h6>{{ "personalizer.chooseColor" | translate }}</h6>
           </div>
           <div class="row">
             <div class="col-4" (click)="sideBar.changeSidebarColor('1')"
@@ -308,7 +320,7 @@
                   <span class="bg-light bg-sidebarcolor"></span>
                 </label>
               </div>
-              <h5 class="fs-13 text-center mt-2">Light</h5>
+              <h5 class="fs-13 text-center mt-2">{{ "personalizer.light" | translate }}</h5>
             </div>
             <div class="col-4" (click)="sideBar.changeSidebarColor('2')"
               (keydown.enter)="sideBar.changeSidebarColor('2')" tabindex="0"
@@ -321,7 +333,7 @@
                   <span class="bg-darks bg-sidebarcolor"></span>
                 </label>
               </div>
-              <h5 class="fs-13 text-center mt-2">Dark</h5>
+              <h5 class="fs-13 text-center mt-2">{{ "personalizer.dark" | translate }}</h5>
             </div>
             <div class="col-4 d-none">
               <div class="form-check sidebar-setting card-radio p-0">
@@ -331,7 +343,7 @@
                   <span class="bg-gradients bg-sidebarcolor"></span>
                 </label>
               </div>
-              <h5 class="fs-13 text-center mt-2">Gradient</h5>
+              <h5 class="fs-13 text-center mt-2">{{ "personalizer.gradient" | translate }}</h5>
             </div>
             <div class="col-4 d-none">
               <button class="btn btn-link avatar-md w-100 p-0 overflow-hidden border collapsed" type="button"
@@ -354,10 +366,9 @@
                   </span>
                 </span>
               </button>
-              <h5 class="fs-13 text-center mt-2">Gradient</h5>
+              <h5 class="fs-13 text-center mt-2">{{ "personalizer.gradient" | translate }}</h5>
             </div>
           </div>
-
         </div>
 
       </div>
@@ -367,12 +378,12 @@
     <div class="row">
       <div class="col-6">
         <button (click)="showSetting()" type="button" class="btn btn-light w-100 bor-rad-50" id="reset-layout">
-          Reset
+          {{ "action.reset" | translate }}
         </button>
       </div>
       <div class="col-6">
         <a href="https://themeforest.net/item/kanakku-bootstrap-admin-html-template/29436291" target="_blank"
-          class="btn btn-primary w-100 bor-rad-50">Buy Now</a>
+          class="btn btn-primary w-100 bor-rad-50">{{ "action.save" | translate }}</a>
       </div>
     </div>
   </div>
