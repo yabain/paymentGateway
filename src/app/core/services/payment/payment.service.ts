@@ -89,12 +89,12 @@ export class PaymentService {
     };
 
     switch (res.data.state) {
-      case 'financial_transaction_pending':
+      case 'transaction_pending':
         invoiceData.status = 'Pending';
         setTimeout(() => {
           // this.checkTransactionStatus(invoiceData.ref.token)
           //   .subscribe(data => {
-          //     if (data.data.state === 'financial_transaction_success') {
+          //     if (data.data.state === 'transaction_success') {
           //       updateInvoiceStatus('Completed');
           //     }
           //     this.chekStatus(data, userId, invoiceData);
@@ -102,11 +102,11 @@ export class PaymentService {
         }, 3000);
         break;
 
-      case 'financial_transaction_success':
+      case 'transaction_success':
         updateInvoiceStatus('Completed');
         break;
 
-      case 'financial_transaction_error':
+      case 'transaction_error':
         const errorMessages: { [key: number]: string } = {
           '-201': 'Compte Orage Money introuvable',
           '-202': 'Receiver account not found',

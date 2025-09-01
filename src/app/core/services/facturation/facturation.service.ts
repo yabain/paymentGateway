@@ -134,7 +134,7 @@ export class FacturationService {
             transactionData.ref = { ref: res.data.ref, token: res.data.token };
         }
 
-        if (res.data.state === 'financial_transaction_pending') {
+        if (res.data.state === 'transaction_pending') {
             transactionData.status = 'Pending';
             console.log("Données finales de transaction à sauvegarder: ", transactionData);
 
@@ -153,7 +153,7 @@ export class FacturationService {
                 });
         }
 
-        if (res.data.state === 'financial_transaction_success') {
+        if (res.data.state === 'transaction_success') {
             transactionData.status = 'Completed';
             console.log("Données finales de transaction Completed à sauvegarder: ", transactionData);
 
@@ -171,7 +171,7 @@ export class FacturationService {
                 });
         }
 
-        if (res.data.state === 'financial_transaction_error') {
+        if (res.data.state === 'transaction_error') {
             console.log('Erreur financière détectée');
             this.handleTransactionStateError(transactionData, res);
             return Promise.resolve({ status: 'Error', data: transactionData });

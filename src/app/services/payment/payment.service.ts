@@ -7,34 +7,68 @@ import { from, Observable, of, throwError } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { ApiService } from '../api/api.service';
 import { ToastService } from '../toast/toast.service';
+import { FlutterwaveService } from '../flutterwave/flutterwave.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PaymentService {
-
+  paymentMethode = {
+    OM: 'ORANGE',
+    MTN: 'MTN',
+    PAYPAL: 'PAYPAL',
+    VISA: 'VISA',
+    BANK: 'BANK',
+  };
+  reqStatus = {
+    INITIALIZED: 'transaction_initialized',
+    PENDING: 'transaction_pending',
+    PAYIN: 'transaction_payin',
+    PAYINSUCCESS: 'transaction_payin_success',
+    PAYINERROR: 'transaction_payin_error',
+    PAYOUT: 'transaction_payout',
+    PAYOUTSUCCESS: 'transaction_payout_success',
+    PAYOUTERROR: 'transaction_payout_error',
+    ERROR: 'transaction_error',
+    SUCCESS: 'transaction_success',
+  };
+  transactionType = {
+    DEPOSITE: 'deposit',
+    WITHDRAWAL: 'withdrawal',
+    PAYMENT: 'payment',
+    TRANSFER: 'transfer',
+    FUNDRAISING: 'fundraising',
+  };
+  amount = 100;
+  status = '';
+  private txRef: string = '';
+  private pollTimer: any;
 
   constructor(
     private http: HttpClient,
     private translate: TranslateService,
     private toastService: ToastService,
-    private apiService: ApiService
-  ) {
-  }
+    private fw: FlutterwaveService,
+    private apiService: ApiService,
+  ) {}
 
   proceedPayment(data): Observable<any> {
-      return from(this.apiService.create(`transaction/new`, data))
-        .pipe(
-          map((resp) => {
-            return resp;
-          }),
-          catchError(error => of({ error }))
-        );
+    console.log('proceedPayment data: ', data)
+    return from(this.apiService.create(`payin/new`, data)).pipe(
+      map((resp) => {
+        return resp;
+      }),
+      catchError((error) => of({ error })),
+    );
   }
 
-  checkTransactionStatus(paymentRef: string, invoiceId?: string): Observable<any> {
+  checkTransactionStatus(
+    paymentRef: string,
+    invoiceId?: string,
+  ): Observable<any> {
     // console.log('paymentRef: ', paymentRef);
-    const checkDepositEndPoint = environment.backendUrl + "/payment/check/" + paymentRef;
+    const checkDepositEndPoint =
+      environment.backendUrl + '/payment/check/' + paymentRef;
 
     return this.http.get<any>(checkDepositEndPoint).pipe(
       tap((response) => {
@@ -44,7 +78,7 @@ export class PaymentService {
       catchError((error) => {
         // console.error('Error occurred while checking transaction:', error);
         return throwError(error);
-      })
+      }),
     );
   }
 
@@ -77,7 +111,6 @@ export class PaymentService {
     return s;
   }
 
-
   getTransactionData(transactionId: string): Observable<boolean> {
     return this.apiService.getById(`transaction`, transactionId).pipe(
       map((res: any) => {
@@ -89,8 +122,7 @@ export class PaymentService {
       catchError((err) => {
         console.error('Error getting favorites:', err);
         return of(false); // Emit false if there's an error
-      })
+      }),
     );
   }
-
 }

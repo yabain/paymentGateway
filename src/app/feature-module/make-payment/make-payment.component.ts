@@ -201,7 +201,7 @@ export class MakePaymentComponent {
   chekStatus(res: any) {
     console.log('le test de res 000: ', res);
     switch (res.data.state) {
-      case 'financial_transaction_pending':
+      case 'transaction_pending':
         this.transactionData.status = 'Pending';
         setTimeout(() => {
           console.log('retest');
@@ -209,7 +209,7 @@ export class MakePaymentComponent {
         }, 5000);
         break;
 
-      case 'financial_transaction_success':
+      case 'transaction_success':
         console.log('test matin: ', res);
         this.updateTransactionStatus('Completed', res);
         this.exportToPdf();
@@ -217,7 +217,7 @@ export class MakePaymentComponent {
         this.isProcessingSuccess = true;
         break;
 
-      case 'financial_transaction_error':
+      case 'transaction_error':
         const errorMessages: { [key: number]: string } = {
           '-201': 'Compte Orage Money introuvable',
           '-202': 'Receiver account not found',
@@ -243,7 +243,7 @@ export class MakePaymentComponent {
     this.paymentService.getPaymentStatus(token)
       .subscribe(response => {
         console.log('le test de res 111: ', response);
-        if (response && response.data.state === 'financial_transaction_pending') {
+        if (response && response.data.state === 'transaction_pending') {
           this.chekStatus(response);
         } else {
           this.chekStatus(response);

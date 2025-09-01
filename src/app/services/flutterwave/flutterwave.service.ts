@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 declare global {
-  interface Window { FlutterwaveCheckout: any; }
+  interface Window {
+    FlutterwaveCheckout: any;
+  }
 }
 
 @Injectable({ providedIn: 'root' })
 export class FlutterwaveService {
-  private backendUrl = 'http://localhost:3000/payments'; // adapte
-
   constructor(private http: HttpClient) {}
 
   // charge le script Flutterwave dynamiquement
@@ -26,12 +27,24 @@ export class FlutterwaveService {
 
   async initializePayment(amount: number, email?: string, currency = 'XAF') {
     // demande au backend de créer txRef
-    console.log('initialize')
-    const resp: any = await firstValueFrom(this.http.post(`${this.backendUrl}/initialize`, { amount, currency, customerEmail: email }));
+    console.log('initialize');
+    const resp: any = await firstValueFrom( 
+      this.http.post(`${environment.backendUrl}/payin/initialize`, {
+        amount,
+        currency,
+        customerEmail: email,
+      }),
+    );
     return resp; // contient txRef, publicKey, amount, currency, ...
   }
 
-  openFlutterwaveModal(opts: { txRef: string; amount: number; currency: string; customerEmail?: string; publicKey: string }) {
+  openFlutterwaveModal(opts: {
+    txRef: string;
+    amount: number;
+    currency: string;
+    customerEmail?: string;
+    publicKey: string;
+  }) {
     const { txRef, amount, currency, customerEmail, publicKey } = opts;
     // utilise FlutterwaveCheckout (doc: Inline / v3)
     (window as any).FlutterwaveCheckout({
@@ -54,6 +67,10 @@ export class FlutterwaveService {
 
   // endpoint pour vérifier le status depuis le frontend (polling)
   async checkStatus(txRef: string) {
-    return firstValueFrom(this.http.get(`${this.backendUrl}/status/${encodeURIComponent(txRef)}`));
+    return firstValueFrom(
+      this.http.get(
+        `${environment.backendUrl}/payin/status/${encodeURIComponent(txRef)}`,
+      ),
+    );
   }
 }

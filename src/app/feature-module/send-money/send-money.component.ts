@@ -19,9 +19,15 @@ import {
 } from '@angular/forms';
 
 export enum ReqStatus {
-  PENDING = 'financial_transaction_pending',
-  ERROR = 'financial_transaction_error',
-  SUCCESS = 'financial_transaction_success',
+  PENDING = 'transaction_pending',
+  PAYIN = 'transaction_payin',
+  PAYINSUCCESS = 'transaction_payin_success',
+  PAYINERROR = 'transaction_payin_error',
+  PAYOUT = 'transaction_payout',
+  PAYOUTSUCCESS = 'transaction_payout_success',
+  PAYOUTERROR = 'transaction_payout_error',
+  ERROR = 'transaction_error',
+  SUCCESS = 'transaction_success',
 }
 
 @Component({
@@ -38,7 +44,7 @@ export class SendMoneyComponent implements OnInit {
   waitingUserData: boolean = true;
   categoryId: string;
   taxesAmount: number = 0;
-  invoiceRef: any;
+  transactionRef: any;
   currentDate: any;
   loadingData: boolean = true;
   proceed: boolean = false;
@@ -102,7 +108,7 @@ export class SendMoneyComponent implements OnInit {
     this.route.paramMap.subscribe((datas: any) => {
       // console.log('datas router: ', datas);
       this.getCurrentUser();
-      this.invoiceRef = this.paymentService.generateId();
+      this.transactionRef = this.paymentService.generateId();
       this.currentDate = this.formatDate(new Date());
       setTimeout(() => {
         this.scrollToTop();
@@ -231,16 +237,12 @@ export class SendMoneyComponent implements OnInit {
           );
 
           let selectedCountry: any;
-
-          // Vérifier si idParam existe avant de filtrer
           if (this.idParam) {
-            selectedCountry = this.availableCountries.filter(
-              (e) => e._id === this.idParam,
+            this.selectedCountry = this.availableCountries.find(
+              (e) => String(e._id) === String(this.idParam),
             );
-            selectedCountry = selectedCountry[0];
           }
 
-          // Si aucun pays n'est sélectionné, utiliser le pays par défaut de l'utilisateur
           if (
             !selectedCountry &&
             this.currentUser &&
@@ -251,7 +253,7 @@ export class SendMoneyComponent implements OnInit {
             );
           }
 
-          this.setSelectedCountry(selectedCountry);
+          this.setSelectedCountry(this.selectedCountry);
           this.waitingLocations = false;
         } else {
           this.systemService.getStaticData().then(() => {
@@ -437,8 +439,8 @@ export class SendMoneyComponent implements OnInit {
   onSubmit() {
     if (!this.verifytransactionData(this.transactionData)) return;
     this.proceed = true;
-    // console.log('Payment data:', this.transactionData);
-    // return ;
+    console.log('Payment data:', this.transactionData);
+    return ;
     this.paymentService
       .proceedPayment(this.transactionData)
       .subscribe((res: any) => {
@@ -463,7 +465,7 @@ export class SendMoneyComponent implements OnInit {
 
   setTransactionData() {
     this.transactionData = {
-      invoiceRef: this.invoiceRef,
+      transactionRef: this.transactionRef,
       estimation: this.estimation,
       invoiceTaxes: this.invoiceTaxes,
       taxesAmount: this.calculateTaxesAmount(),
@@ -646,6 +648,7 @@ export class SendMoneyComponent implements OnInit {
   stepperToProceed() {
     this.goToProceed = true;
     console.log('transactionData: ', this.transactionData);
+    this.scrollToTop();
   }
 
   resetStepper() {

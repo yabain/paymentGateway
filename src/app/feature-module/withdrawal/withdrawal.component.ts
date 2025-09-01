@@ -20,9 +20,15 @@ import {
 } from '@angular/forms';
 
 export enum ReqStatus {
-  PENDING = 'financial_transaction_pending',
-  ERROR = 'financial_transaction_error',
-  SUCCESS = 'financial_transaction_success',
+  PENDING = 'transaction_pending',
+  PAYIN = 'transaction_payin',
+  PAYINSUCCESS = 'transaction_payin_success',
+  PAYINERROR = 'transaction_payin_error',
+  PAYOUT = 'transaction_payout',
+  PAYOUTSUCCESS = 'transaction_payout_success',
+  PAYOUTERROR = 'transaction_payout_error',
+  ERROR = 'transaction_error',
+  SUCCESS = 'transaction_success',
 }
 
 @Component({
@@ -38,7 +44,7 @@ export class WithdrawalComponent implements OnInit {
   currentUser: any | undefined;
   waitingUserData: boolean = true;
   taxesAmount: number = 0;
-  invoiceRef: any;
+  transactionRef: any;
   currentDate: any;
   loadingData: boolean = true;
   proceed: boolean = false;
@@ -84,7 +90,7 @@ export class WithdrawalComponent implements OnInit {
     this.route.paramMap.subscribe((datas: any) => {
       console.log('datas router: ', datas);
       this.getCurrentUser();
-      this.invoiceRef = this.paymentService.generateId();
+      this.transactionRef = this.paymentService.generateId();
       this.currentDate = this.formatDate(new Date());
       setTimeout(() => {
         this.scrollToTop();
@@ -368,7 +374,7 @@ export class WithdrawalComponent implements OnInit {
 
   setTransactionData() {
     this.transactionData = {
-      invoiceRef: this.invoiceRef,
+      transactionRef: this.transactionRef,
       estimation: this.estimation,
       invoiceTaxes: this.invoiceTaxes,
       taxesAmount: this.calculateTaxesAmount(),

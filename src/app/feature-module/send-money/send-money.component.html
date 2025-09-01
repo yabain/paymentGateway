@@ -27,7 +27,7 @@
                                 style="width: 20px" /></span>
                             <select id="label" class="form-select" (change)="onSelect($event)" id="country"
                               *ngIf="!waitingLocations" [value]="selectedCountry._id">
-                              <option *ngFor="let country of availableCountries" [value]="country._id">
+                              <option *ngFor="let country of availableCountries" [value]="country._id" [selected]="country._id === selectedCountry._id">
                                 {{ country.name | translate }}
                               </option>
                             </select>
@@ -60,7 +60,7 @@
                               <div class="input-group">
                                 <span class="input-group-text">+{{ selectedCountry?.code }}</span>
                                 <input id="telephone" type="telephone" class="form-control"
-                                  [(ngModel)]="receiverContact" name="receiverContact" />
+                                  [(ngModel)]="receiverContact" name="code" />
                               </div>
                             </div>
                           </div>
