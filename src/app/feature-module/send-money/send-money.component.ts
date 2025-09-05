@@ -17,18 +17,8 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-
-export enum ReqStatus {
-  PENDING = 'transaction_pending',
-  PAYIN = 'transaction_payin',
-  PAYINSUCCESS = 'transaction_payin_success',
-  PAYINERROR = 'transaction_payin_error',
-  PAYOUT = 'transaction_payout',
-  PAYOUTSUCCESS = 'transaction_payout_success',
-  PAYOUTERROR = 'transaction_payout_error',
-  ERROR = 'transaction_error',
-  SUCCESS = 'transaction_success',
-}
+import { FlutterwaveService } from 'src/app/services/flutterwave/flutterwave.service';
+declare var FlutterwaveCheckout: any;
 
 @Component({
   selector: 'app-send-money',
@@ -80,6 +70,11 @@ export class SendMoneyComponent implements OnInit {
   bic: string = '';
   canNext2Val: boolean = false;
   goToProceed: boolean = false;
+  txRef: string;
+  redirect_url: string = '';
+  showRetry: boolean = false;
+  modalClosed: boolean = false;
+  reOpen: boolean = false;
 
   firstFormGroup = this._formBuilder.group({
     firstCtrl: ['', Validators.required],
@@ -100,6 +95,7 @@ export class SendMoneyComponent implements OnInit {
     private paymentService: PaymentService,
     private exchange: ExchangeService,
     private location: LocationService,
+    private fw: FlutterwaveService,
   ) {
     this.estimation = 0;
   }
@@ -436,20 +432,85 @@ export class SendMoneyComponent implements OnInit {
     return this.userService.showName(userData);
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (!this.verifytransactionData(this.transactionData)) return;
     this.proceed = true;
     console.log('Payment data:', this.transactionData);
-    return ;
+    // return ;
+
+    await this.fw.loadFlutterwaveScript();
     this.paymentService
       .proceedPayment(this.transactionData)
       .subscribe((res: any) => {
-        // console.log('the end of the transaction: ', res);
-        if (res.success != true) {
+        console.log('res of proceedPayment: ', res);
+        if (!res) {
           this.proceed = false;
           this.toastService.presentToast('error', 'Error', res.message);
-        } else if (res && res.success === true) {
-          // this.handleRequest(res.transactionData);
+        } else {
+          this.txRef = res.txRef;
+          this.redirect_url = res.redirect_url;
+          this.handleRequest();
+        }
+      });
+  }
+
+  openModal() {
+    this.showRetry = false;
+    setTimeout(() => {
+      this.showRetry = true;
+      this.reOpen = false;
+    }, 10000);
+    return window.open(this.redirect_url, '_blank', 'width=800,height=800');
+  }
+
+  handleRequest() {
+    if (this.redirect_url) {
+      const payWin = this.openModal();
+      if (!payWin) {
+        location.href = this.redirect_url;
+        return;
+      }
+
+      // 3) optionnel : surveiller la fermeture et faire une vérif côté serveur
+      const timer = setInterval(async () => {
+        if (payWin.closed) {
+          clearInterval(timer);
+          // petite vérification pour mettre l’UI à jour (statut PENDING/ABANDONED)
+          try {
+            this.modalClosed = true;
+            this.verifyAndClosePayin();
+            console.log('FW gateway closed!');
+          } catch {}
+          // TODO: afficher un message "paiement annulé" ou rafraîchir l’état
+        }
+      }, 600);
+    } else {
+      this.toastService.presentToast('error', 'Error', '');
+    }
+  }
+
+  openPayin() {
+    this.reOpen = true;
+    this.paymentService.openPayin(this.txRef).subscribe((res: any) => {
+      console.log('res of openPayin: ', res);
+      if (res && res.status === 'pending') {
+        return this.handleRequest();
+      }
+      return this.toastService.presentToast('error', 'Error', '');
+    });
+  }
+  verifyAndClosePayin() {
+    this.paymentService
+      .verifyAndClosePayin(this.txRef)
+      .subscribe((res: any) => {
+        console.log('res of verifyAndClosePayin: ', res);
+        if (res) {
+          console.log('Transaction res: ', res);
+          // this.proceed = false;
+          // this.toastService.presentToast('warning', 'Transaction', res.message);
+          // this.router.navigate(['/tabs']);
+        } else {
+          this.toastService.presentToast('error', 'Error', res.message);
         }
       });
   }
@@ -479,6 +540,7 @@ export class SendMoneyComponent implements OnInit {
       senderCurrency: this.currentUser.countryId.currency,
 
       raisonForTransfer: this.raisonForTransfer,
+      userId: this.currentUser._id,
 
       receiverName: this.receiverName,
       receiverEmail: this.receiverEmail,
@@ -493,7 +555,8 @@ export class SendMoneyComponent implements OnInit {
       bankAccountNumber: this.bankAccountNumber,
       bic: this.bic,
 
-      paymentStatus: ReqStatus.PENDING,
+      status: this.paymentService.status.INITIALIZED,
+      paymentType: this.paymentService.transactionType.TRANSFER,
     };
     // console.log('transactionData: ', this.transactionData);
   }
@@ -649,6 +712,9 @@ export class SendMoneyComponent implements OnInit {
     this.goToProceed = true;
     console.log('transactionData: ', this.transactionData);
     this.scrollToTop();
+    setTimeout(() => {
+      this.onSubmit();
+    }, 2000);
   }
 
   resetStepper() {

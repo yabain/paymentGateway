@@ -421,7 +421,8 @@
     "processing-message1": "Le traitement de votre demande est en cours.",
     "processing-message2": "Confirmez le paiement via notre portail flutterwave.",
     "reset-form": "Vider le formulaire",
-    "processing-message4": ""
+    "processing-message4": "Si une fenètre de paiement ne s'ouvre pas, Cliquez",
+    "hereToRetry": "ici pour réessayer"
   },
   "whatsapp": {
     "title": "WhatsApp",

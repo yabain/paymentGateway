@@ -20,17 +20,18 @@ export class PaymentService {
     VISA: 'VISA',
     BANK: 'BANK',
   };
-  reqStatus = {
+  status = {
     INITIALIZED: 'transaction_initialized',
-    PENDING: 'transaction_pending',
-    PAYIN: 'transaction_payin',
+
+    PAYINPENDING: 'transaction_payin_pending',
     PAYINSUCCESS: 'transaction_payin_success',
     PAYINERROR: 'transaction_payin_error',
-    PAYOUT: 'transaction_payout',
+    PAYINCLOSED: 'transaction_payin_closed',
+
+    PAYOUTPENDING: 'transaction_payout_pending',
     PAYOUTSUCCESS: 'transaction_payout_success',
     PAYOUTERROR: 'transaction_payout_error',
-    ERROR: 'transaction_error',
-    SUCCESS: 'transaction_success',
+    PAYOUTCLOSED: 'transaction_payout_closed',
   };
   transactionType = {
     DEPOSITE: 'deposit',
@@ -40,7 +41,6 @@ export class PaymentService {
     FUNDRAISING: 'fundraising',
   };
   amount = 100;
-  status = '';
   private txRef: string = '';
   private pollTimer: any;
 
@@ -53,12 +53,57 @@ export class PaymentService {
   ) {}
 
   proceedPayment(data): Observable<any> {
-    console.log('proceedPayment data: ', data)
-    return from(this.apiService.create(`payin/new`, data)).pipe(
+    console.log('proceedPayment data: ', data);
+    return from(this.apiService.create(`fw/payin`, data)).pipe(
       map((resp) => {
         return resp;
       }),
       catchError((error) => of({ error })),
+    );
+  }
+
+  verifyAndClosePayin(txRef): Observable<any> {
+    return this.apiService.getById(`fw/verify-close-payin`, txRef).pipe(
+      map((res: any) => {
+        if (res) {
+          return res;
+        }
+        return false;
+      }),
+      catchError((err) => {
+        console.error('Error getting favorites:', err);
+        return of(false); // Emit false if there's an error
+      }),
+    );
+  }
+
+  openPayin(txRef): Observable<any> {
+    return this.apiService.getById(`fw/open-payin`, txRef).pipe(
+      map((res: any) => {
+        if (res) {
+          return res;
+        }
+        return false;
+      }),
+      catchError((err) => {
+        console.error('Error getting favorites:', err);
+        return of(false); // Emit false if there's an error
+      }),
+    );
+  }
+
+  verifyAndOpenPayin(txRef): Observable<any> {
+    return this.apiService.getById(`fw/verify-open`, txRef).pipe(
+      map((res: any) => {
+        if (res) {
+          return res;
+        }
+        return false;
+      }),
+      catchError((err) => {
+        console.error('Error getting favorites:', err);
+        return of(false); // Emit false if there's an error
+      }),
     );
   }
 

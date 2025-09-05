@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { firstValueFrom } from 'rxjs';
+import { catchError, firstValueFrom, from, map, Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { ApiService } from '../api/api.service';
 
 declare global {
   interface Window {
@@ -11,7 +12,7 @@ declare global {
 
 @Injectable({ providedIn: 'root' })
 export class FlutterwaveService {
-  constructor(private http: HttpClient) {}
+  constructor(private apiService: ApiService) {}
 
   // charge le script Flutterwave dynamiquement
   loadFlutterwaveScript(): Promise<void> {
@@ -25,17 +26,25 @@ export class FlutterwaveService {
     });
   }
 
-  async initializePayment(amount: number, email?: string, currency = 'XAF') {
+  initializePayment(
+    amount: number,
+    email?: string,
+    currency = 'XAF',
+  ): Observable<any> {
     // demande au backend de créer txRef
     console.log('initialize');
-    const resp: any = await firstValueFrom( 
-      this.http.post(`${environment.backendUrl}/payin/initialize`, {
+    return from(
+      this.apiService.create(`payin/initialize`, {
         amount,
         currency,
         customerEmail: email,
       }),
+    ).pipe(
+      map((resp) => {
+        return resp; // contient txRef, publicKey, amount, currency, ...
+      }),
+      catchError((error) => of({ error })),
     );
-    return resp; // contient txRef, publicKey, amount, currency, ...
   }
 
   openFlutterwaveModal(opts: {
@@ -66,11 +75,50 @@ export class FlutterwaveService {
   }
 
   // endpoint pour vérifier le status depuis le frontend (polling)
-  async checkStatus(txRef: string) {
-    return firstValueFrom(
-      this.http.get(
-        `${environment.backendUrl}/payin/status/${encodeURIComponent(txRef)}`,
-      ),
+  checkStatus(txRef: string): Observable<any> {
+    return this.apiService
+      .getWithoutId(`payin/status/${encodeURIComponent(txRef)}`)
+      .pipe(
+        map((res: any) => {
+          if (res) {
+            return res;
+          }
+          return false;
+        }),
+        catchError((err) => {
+          console.error('Error getting favorites:', err);
+          return of(false); // Emit false if there's an error
+        }),
+      );
+  }
+
+  getApplicationBalance(): Observable<any> {
+    return this.apiService.getWithoutId(`fw/balance`).pipe(
+      map((res: any) => {
+        if (res) {
+          return res;
+        }
+        return false;
+      }),
+      catchError((err) => {
+        console.error('Error getting favorites:', err);
+        return of(false); // Emit false if there's an error
+      }),
+    );
+  }
+
+  listTransactions(countryCode: string = 'CMR'): Observable<any> {
+    return this.apiService.getById(`fw/transactions`, countryCode).pipe(
+      map((res: any) => {
+        if (res) {
+          return res;
+        }
+        return false;
+      }),
+      catchError((err) => {
+        console.error('Error getting favorites:', err);
+        return of(false); // Emit false if there's an error
+      }),
     );
   }
 }

@@ -414,12 +414,17 @@
         <div class="row">
           <div class="col-md-6">
             <div class="wating-msg">
-              <div class="spinner-border" role="status"></div>
-              <p style="margin-top: 50px;">
+              <div class="spinner-border" role="status" *ngIf="!modalClosed"></div>
+              <p style="margin-top: 50px;" *ngIf="!modalClosed">
                 {{ "payment.processing-message1" | translate }}<br>
                 {{ "payment.processing-message2" | translate }}
               </p>
               <img src="assets/img/ressorces/flutterwave.png" alt="" style="max-width: 100px;;">
+              <p style="margin-top: 50px;" *ngIf="showRetry">
+                {{ "payment.processing-message4" | translate }} 
+                <span class="retry" (click)="openPayin()" *ngIf="!reOpen">{{ "payment.hereToRetry" | translate }}.</span>
+                <span *ngIf="reOpen">{{ "payment.hereToRetry" | translate }}. Opening...</span>
+              </p>
             </div>
           </div>
           <div class="col-md-6">
