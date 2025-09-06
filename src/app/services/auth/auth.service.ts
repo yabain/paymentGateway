@@ -99,6 +99,10 @@ export class AuthService {
     console.log('logout action initiated');
     this.storage.removeStorage(environment.user_key);
     this.storage.removeStorage(environment.user_data);
+    this.storage.removeStorage(environment.countries_data);
+    this.storage.removeStorage(environment.cities_data);
+    this.storage.removeStorage(environment.memory_link);
+    this.storage.removeStorage(environment.categories_data);
     this.storage.removeStorage('authenticated');
     this.storage.removeStorage('timeOut');
     setTimeout(() => {

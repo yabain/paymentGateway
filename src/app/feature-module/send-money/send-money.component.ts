@@ -63,11 +63,14 @@ export class SendMoneyComponent implements OnInit {
   rates: any;
   raisonForTransfer: string = '';
   waitingSystemData: boolean = true;
+  bankList: any;
+  selectedBank: any;
+  waitingBankList: boolean = true;
 
   statusErrorMsg: any = [];
   methodName: string = 'Bank transfer';
   bankAccountNumber: string = '';
-  bic: string = '';
+  bankCode: string = '';
   canNext2Val: boolean = false;
   goToProceed: boolean = false;
   txRef: string;
@@ -75,6 +78,9 @@ export class SendMoneyComponent implements OnInit {
   showRetry: boolean = false;
   modalClosed: boolean = false;
   reOpen: boolean = false;
+  transactionSucceded: boolean = false;
+  transactionFailed: boolean = false;
+  private pollTimer: any;
 
   firstFormGroup = this._formBuilder.group({
     firstCtrl: ['', Validators.required],
@@ -134,6 +140,56 @@ export class SendMoneyComponent implements OnInit {
     }
     this.bankAccountNumber = value;
     this.canNext2();
+  }
+
+  startPolling() {
+    if (!this.txRef) return;
+    if (this.pollTimer) clearInterval(this.pollTimer);
+
+    this.pollTimer = setInterval(async () => {
+      try {
+        this.fw.checkStatus(this.txRef)
+        .subscribe((resp: any) => {
+        const status =
+          resp?.data?.data?.status ||
+          resp?.data?.status ||
+          resp?.status ||
+          'pending';
+        // this.status = status;
+        console.log('status', resp);
+        if (['successful', 'success'].includes(status.toLowerCase())) {
+          this.transactionSucceded = true;
+          this.transactionFailed = false;
+          clearInterval(this.pollTimer);
+        }
+        if (
+          ['cancelled'].includes(status.toLowerCase())
+        ) {
+          this.transactionSucceded = false;
+          this.transactionFailed = true;
+          clearInterval(this.pollTimer);
+        }
+        if (
+          ['failed'].includes(status.toLowerCase())
+        ) {
+          this.transactionSucceded = false;
+          this.transactionFailed = true;
+          // clearInterval(this.pollTimer);
+        }
+      });
+      } catch (err) {
+        console.warn('polling error', err);
+      }
+    }, 5000);
+  }
+
+  getBanksList(countryId){
+    this.waitingBankList = true;
+    this.fw.getBanksList(countryId).subscribe((res: any) => {
+      console.log('banks list: ', res);
+      this.waitingBankList = false;
+      this.bankList = res;
+    })
   }
 
   formatAmount(event: any) {
@@ -299,10 +355,11 @@ export class SendMoneyComponent implements OnInit {
     this.receiverName = this.receiverFirstName + ' ' + this.receiverLastName;
     // return true;
     if (
-      this.estimation < 1000 ||
+      this.estimation < 50 ||
       this.watingEstimation ||
       this.waitingUserData ||
-      this.waitingExchangeRate
+      this.waitingExchangeRate ||
+      this.estimation > 500000
     )
       return false;
     if (
@@ -325,10 +382,11 @@ export class SendMoneyComponent implements OnInit {
   }
 
   canNext2(): boolean {
+    console.log('bank code: ', this.bankCode, this.bankAccountNumber);
     if (!this.canNext()) return false;
     this.setTransactionData();
     if (this.selectedMethod === 'BANK') {
-      if (this.bankAccountNumber && this.bic) return (this.canNext2Val = true);
+      if (this.bankAccountNumber && this.bankCode) return (this.canNext2Val = true);
     } else {
       if (!this.receiverMobileAccountNumber) this.canNext2Val = false;
       if (
@@ -460,6 +518,7 @@ export class SendMoneyComponent implements OnInit {
       this.showRetry = true;
       this.reOpen = false;
     }, 10000);
+    this.startPolling();
     return window.open(this.redirect_url, '_blank', 'width=800,height=800');
   }
 
@@ -491,6 +550,8 @@ export class SendMoneyComponent implements OnInit {
 
   openPayin() {
     this.reOpen = true;
+    this.transactionSucceded = false;
+    this.transactionFailed = false;
     this.paymentService.openPayin(this.txRef).subscribe((res: any) => {
       console.log('res of openPayin: ', res);
       if (res && res.status === 'pending') {
@@ -499,6 +560,7 @@ export class SendMoneyComponent implements OnInit {
       return this.toastService.presentToast('error', 'Error', '');
     });
   }
+
   verifyAndClosePayin() {
     this.paymentService
       .verifyAndClosePayin(this.txRef)
@@ -506,6 +568,17 @@ export class SendMoneyComponent implements OnInit {
         console.log('res of verifyAndClosePayin: ', res);
         if (res) {
           console.log('Transaction res: ', res);
+          if (res.status === 'successful' || res.status === 'success') {
+            this.transactionSucceded = true;
+            this.transactionFailed = false
+          } else if (res.status === 'failed'){
+            this.transactionSucceded = false;
+            this.transactionFailed = true
+          }
+          else {
+            this.transactionSucceded = false;
+            this.transactionFailed = false;
+          }
           // this.proceed = false;
           // this.toastService.presentToast('warning', 'Transaction', res.message);
           // this.router.navigate(['/tabs']);
@@ -525,6 +598,13 @@ export class SendMoneyComponent implements OnInit {
   }
 
   setTransactionData() {
+    if(this.selectedMethod === 'MTN') {
+      this.bankAccountNumber = this.selectedCountry.code + this.receiverMobileAccountNumber;
+      this.bankCode = 'MTN';
+    } else if (this.selectedMethod === 'OM') {
+      this.bankAccountNumber = this.selectedCountry.code + this.receiverMobileAccountNumber;
+      this.bankCode = 'ORANGEMONEY';
+    }
     this.transactionData = {
       transactionRef: this.transactionRef,
       estimation: this.estimation,
@@ -552,8 +632,8 @@ export class SendMoneyComponent implements OnInit {
 
       paymentMethod: this.selectedMethod,
       receiverMobileAccountNumber: this.receiverMobileAccountNumber,
-      bankAccountNumber: this.bankAccountNumber,
-      bic: this.bic,
+      bankAccountNumber: this.bankAccountNumber?.replaceAll(' ', '') || undefined,
+      bankCode: this.bankCode,
 
       status: this.paymentService.status.INITIALIZED,
       paymentType: this.paymentService.transactionType.TRANSFER,
@@ -600,6 +680,7 @@ export class SendMoneyComponent implements OnInit {
 
   // Phone number verification
   isValidPhoneNumber(phone: string): boolean {
+    if(this.selectedCountry.code !== '237') return true;
     // Chech if string has exactly 9 numbers
     const isNineDigits = /^\d{9}$/.test(phone);
     return isNineDigits;
@@ -607,6 +688,7 @@ export class SendMoneyComponent implements OnInit {
 
   // Phone number verification: Orange Cameroon
   isValidOrangePhoneNumber(phone: string): boolean {
+    if(this.selectedCountry.code !== '237') return true;
     // Check if string start with 655, 656, 657, 658, 659 or 69*
     const orangeRegex = /^6((55|56|57|58|59|86|87|88|89)|9[0-9])\d{6}$/;
     // console.log('Test OM: ', orangeRegex.test(phone));
@@ -621,6 +703,7 @@ export class SendMoneyComponent implements OnInit {
 
   // Phone number verification: MTN Cameroon
   isValidMTNPhoneNumber(phone: string): boolean {
+    if(this.selectedCountry.code !== '237') return true;
     // Check if string start with 650, 651, 652, 653, 654, 67* or 680*
     const mtnRegex = /^6((50|51|52|53|54)|7[0-9]|8[0-5])\d{6}$/;
     // console.log('Test MTN: ', mtnRegex.test(phone));
@@ -662,7 +745,7 @@ export class SendMoneyComponent implements OnInit {
     }
     this.selectedMethod = method;
     this.getMethodName(method);
-    this.bic = undefined;
+    this.bankCode = undefined;
     this.bankAccountNumber = undefined;
     this.receiverMobileAccountNumber = undefined;
     this.setTransactionData();
@@ -751,6 +834,21 @@ export class SendMoneyComponent implements OnInit {
     this.setSelectedCountry(selectedCountry[0]);
   }
 
+  /**
+   * Filters cities based on selected country.
+   * @param bank The selected country object.
+   */
+  onSelectBank(event: Event) {
+    const bankCode = (event.target as HTMLSelectElement).value;
+    console.log('selected code: ', bankCode);
+    const selected = this.bankList.filter(
+      (e) => e.code === bankCode,
+    );
+    this.selectedBank = selected[0];
+    console.log('selected bank: ', this.selectedBank);
+    this.bankCode = this.selectedBank?.code || '';
+  }
+
   setSelectedCountry(countryData: any) {
     if (!countryData) {
       console.warn(
@@ -773,15 +871,28 @@ export class SendMoneyComponent implements OnInit {
       this.flagCountry = countryData.flagUrl || 'assets/ressorces/flag.png';
       this.receiverCurrency = countryData.currency || '--';
     }
+    console.log('selected country: ', this.selectedCountry);
+    this.bankList = [];
+    this.selectedBank = undefined;
+    this.bankCode = undefined;
+    this.bankAccountNumber = undefined;
+    this.receiverMobileAccountNumber = undefined;
+    if (this.selectedCountry) this.getBanksList(this.selectedCountry.code);
 
     this.convertCurrency();
   }
 
+  navigateTo(route){
+    this.ngOnDestroy();
+    this.router.navigate([route]);
+  }
   /**
    * Cleans up data when the component is destroyed.
    */
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    clearInterval(this.pollTimer);
   }
+
 }

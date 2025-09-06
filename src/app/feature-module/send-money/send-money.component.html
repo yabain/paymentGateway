@@ -27,7 +27,8 @@
                                 style="width: 20px" /></span>
                             <select id="label" class="form-select" (change)="onSelect($event)" id="country"
                               *ngIf="!waitingLocations" [value]="selectedCountry._id">
-                              <option *ngFor="let country of availableCountries" [value]="country._id" [selected]="country._id === selectedCountry._id">
+                              <option *ngFor="let country of availableCountries" [value]="country._id"
+                                [selected]="country._id === selectedCountry._id">
                                 {{ country.name | translate }}
                               </option>
                             </select>
@@ -179,7 +180,7 @@
                           </div>
 
                           <div class="method-card" (click)="selectMethod('MTN')" *ngIf="selectedCountry?.code === '237'"
-                            [ngClass]="selectedMethod === 'MTN' ? 'method-card active' : 'method-card'">
+                            [ngClass]="selectedMethod === 'MTN' ? 'method-card active' : 'method-card'" disabled>
                             <div class="method-icon">
                               <img src="assets/img/ressorces/mtn_money.webp" alt="" class="method-img">
                             </div>
@@ -228,19 +229,23 @@
                           <div class="col-md-12" *ngIf="selectedMethod === 'BANK'">
                             <div class="col-md-12">
                               <div class="input-block mb-3">
-                                <label htmlFor="bankAccountNumber">{{ 'payment.accountNumber' | translate }} *</label>
-                                <input id="bankAccountNumber" type="text" class="form-control"
-                                  placeholder="FR76 1234 5678 9012 3456 7890 123" [(ngModel)]="bankAccountNumber"
-                                  name="bankAccountNumber" (input)="formatAccountNumber($event)" />
+                                <label htmlFor="bankCode">BANK *</label>
+                                <select id="label" class="form-select" (change)="onSelectBank($event)" id="country"
+                                  *ngIf="!waitingLocations">
+                                  <option *ngFor="let bank of bankList" [value]="bank.code">
+                                    {{ bank.name | translate }}
+                                  </option>
+                                </select>
                               </div>
                             </div>
                           </div>
                           <div class="col-md-12" *ngIf="selectedMethod === 'BANK'">
                             <div class="col-md-12">
                               <div class="input-block mb-3">
-                                <label htmlFor="bic">BIC/SWIFT *</label>
-                                <input id="bic" type="text" class="form-control" placeholder="BNPAFRPPXXX"
-                                  [(ngModel)]="bic" name="bic" (input)="canNext2()" />
+                                <label htmlFor="bankAccountNumber">{{ 'payment.accountNumber' | translate }} *</label>
+                                <input id="bankAccountNumber" type="text" class="form-control" placeholder="10 Digits"
+                                  [(ngModel)]="bankAccountNumber" name="bankAccountNumber"
+                                  (input)="formatAccountNumber($event)" />
                               </div>
                             </div>
                           </div>
@@ -320,7 +325,8 @@
                           </div>
                           <div class="detail-item">
                             <span class="detail-label">{{ "terms.phone" | translate }}</span>
-                            <span class="detail-value">+{{ currentUser?.countryId.code }} {{ currentUser?.phone }}</span>
+                            <span class="detail-value">+{{ currentUser?.countryId.code }} {{ currentUser?.phone
+                              }}</span>
                           </div>
                         </div>
                       </div>
@@ -351,8 +357,8 @@
                           <span class="detail-value">{{ bankAccountNumber }}</span>
                         </div>
                         <div class="detail-item" *ngIf="selectedMethod === 'BANK'">
-                          <span class="detail-label">BIC/SWIFT</span>
-                          <span class="detail-value">{{ bic }}</span>
+                          <span class="detail-label">Bank code</span>
+                          <span class="detail-value">{{ bankCode }}</span>
                         </div>
                         <div class="detail-item" *ngIf="selectedMethod != 'BANK'">
                           <span class="detail-label">{{ 'payment.receiverMobileAccountNumber' | translate }}</span>
@@ -414,17 +420,43 @@
         <div class="row">
           <div class="col-md-6">
             <div class="wating-msg">
-              <div class="spinner-border" role="status" *ngIf="!modalClosed"></div>
-              <p style="margin-top: 50px;" *ngIf="!modalClosed">
+              <div class="spinner-border" role="status" *ngIf="!modalClosed && !transactionSucceded && !transactionFailed"></div>
+              <p style="margin-top: 50px;" *ngIf="!modalClosed && !transactionSucceded && !transactionFailed">
                 {{ "payment.processing-message1" | translate }}<br>
                 {{ "payment.processing-message2" | translate }}
               </p>
-              <img src="assets/img/ressorces/flutterwave.png" alt="" style="max-width: 100px;;">
-              <p style="margin-top: 50px;" *ngIf="showRetry">
-                {{ "payment.processing-message4" | translate }} 
-                <span class="retry" (click)="openPayin()" *ngIf="!reOpen">{{ "payment.hereToRetry" | translate }}.</span>
-                <span *ngIf="reOpen">{{ "payment.hereToRetry" | translate }}. Opening...</span>
+
+
+              <img src="../../../assets/img/ressorces/tfailed.gif" alt="" style="max-width: 100px;;"
+                *ngIf="!reOpen && transactionFailed">
+                <br>
+                <span style="color: red !important" *ngIf="!reOpen && transactionFailed">Transaction failed</span>
+              <p style="margin-top: 50px;" *ngIf="!reOpen && transactionFailed">
+                Click
+                <span class="retry" (click)="openPayin()" *ngIf="!reOpen && transactionFailed">{{
+                  "payment.hereToRetry" | translate
+                  }}.</span>
+                <span *ngIf="reOpen && transactionFailed">{{ "payment.hereToRetry" | translate }}. Opening...</span>
               </p>
+
+              <img src="assets/img/ressorces/flutterwave.png" alt="" style="max-width: 100px;;"
+                *ngIf="!transactionSucceded && !transactionFailed">
+              <p style="margin-top: 50px;" *ngIf="showRetry && !transactionSucceded && !transactionFailed">
+                {{ "payment.processing-message4" | translate }}
+                <span class="retry" (click)="openPayin()" *ngIf="!reOpen && !transactionSucceded">{{
+                  "payment.hereToRetry" | translate
+                  }}.</span>
+                <span *ngIf="reOpen && !transactionSucceded">{{ "payment.hereToRetry" | translate }}. Opening...</span>
+              </p>
+
+              <img src="assets/img/ressorces/paymentDone.gif" alt="" style="max-width: 250px;;"
+                *ngIf="transactionSucceded && !transactionFailed">
+              <p style="margin-top: 50px;" *ngIf="transactionSucceded">{{ 'payment.paymentSuccess' | translate }}<br>
+                {{ 'payment.fundsWillReceive' | translate }}</p>
+                
+                <br>
+              <button class="btn btn-primary" *ngIf="showRetry || transactionSucceded"
+                (click)="navigateTo('/dashbiard')"> Back to home </button>
             </div>
           </div>
           <div class="col-md-6">
@@ -433,8 +465,9 @@
               <div class="hero-sidebar">
                 <div class="hero-pattern"></div>
                 <div class="hero-content">
-                  <div class="hero-badge" style="color: #F57C11;">
-                    <i class="fas fa-rocket"></i> {{ "payment.instantTransfer" | translate }}
+                  <div class="hero-badge" style="color: #F57C11 !important;">
+                    <i class="fas fa-rocket" style="color: #F57C11 !important;"></i> {{ "payment.instantTransfer" |
+                    translate }}
                   </div>
                   <h1 class="hero-title">{{ "payment.hero-title" | translate }}</h1>
                   <p class="hero-subtitle">{{ "payment.hero-subTitle" | translate }}</p>

@@ -422,7 +422,10 @@
     "processing-message2": "Confirmez le paiement via notre portail flutterwave.",
     "reset-form": "Vider le formulaire",
     "processing-message4": "Si une fenètre de paiement ne s'ouvre pas, Cliquez",
-    "hereToRetry": "ici pour réessayer"
+    "hereToRetry": "ici pour réessayer",
+    "paymentSuccess": "Paiement effectué avec succès !",
+    "paymentFailed": "Le paiement a échoué",
+    "fundsWillReceive": "Le bénéficiaire recevra les fonds d'ici peut."
   },
   "whatsapp": {
     "title": "WhatsApp",

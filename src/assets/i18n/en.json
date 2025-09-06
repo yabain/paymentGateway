@@ -422,7 +422,10 @@
     "processing-message2": "Confirm payment through our flutterwave portal.",
     "reset-form": "Reset form",
     "processing-message4": "If a payment window does not open, click",
-    "hereToRetry": "here to retry"
+    "hereToRetry": "here to retry",
+    "paymentSuccess": "Payment successful !",
+    "paymentFailed": "Payment failed",
+    "fundsWillReceive": "The beneficiary will receive the funds shortly."
   },
   "whatsapp": {
     "title": "WhatsApp center",

@@ -77,7 +77,7 @@ export class FlutterwaveService {
   // endpoint pour vérifier le status depuis le frontend (polling)
   checkStatus(txRef: string): Observable<any> {
     return this.apiService
-      .getWithoutId(`payin/status/${encodeURIComponent(txRef)}`)
+      .getById(`fw/verify-payin`, encodeURIComponent(txRef))
       .pipe(
         map((res: any) => {
           if (res) {
@@ -105,6 +105,23 @@ export class FlutterwaveService {
         return of(false); // Emit false if there's an error
       }),
     );
+  }
+
+  getBanksList(countryCode): Observable<any> {
+    return this.apiService
+      .getById(`fw/get-bank`, encodeURIComponent(countryCode))
+      .pipe(
+        map((res: any) => {
+          if (res) {
+            return res;
+          }
+          return false;
+        }),
+        catchError((err) => {
+          console.error('Error getting favorites:', err);
+          return of(false); // Emit false if there's an error
+        }),
+      );
   }
 
   listTransactions(countryCode: string = 'CMR'): Observable<any> {

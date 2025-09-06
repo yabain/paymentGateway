@@ -20,6 +20,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { SendMoneyComponent } from './send-money/send-money.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WithdrawalComponent } from './withdrawal/withdrawal.component';
+import { CdkStepperModule } from '@angular/cdk/stepper';
 
 
 @NgModule({
@@ -46,7 +47,7 @@ import { WithdrawalComponent } from './withdrawal/withdrawal.component';
     TranslateModule,
     SharedModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
 })
 export class FeatureModuleModule {}
