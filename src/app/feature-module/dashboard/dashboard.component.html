@@ -32,7 +32,7 @@
     </div>
     <div class="col-xl-7 d-flex p-0">
       <div class="row dash-company-row w-100 m-0">
-        <div class="col-lg-4 col-sm-6 d-flex">
+        <div class="col-lg-4 col-sm-6 d-flex" [routerLink]="'/instant-list'">
           <div class="company-detail-card w-100 element-shadow-box-secondary">
             <div class="company-icon">
               <!-- <img src="assets/img/icons/dash-card-icon-01.svg" alt=""> -->
@@ -57,7 +57,7 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-4 col-sm-6 d-flex">
+        <div class="col-lg-4 col-sm-6 d-flex" [routerLink]="'/fundraisings'">
           <div class="company-detail-card w-100 element-shadow-box-secondary">
             <div class="company-icon">
               <img src="assets/img/ressorces/icon_fundraising.png" alt="" style="width: 60px; height: 60px;">
@@ -104,7 +104,7 @@
         </div>
       </div>
     </div>
-    <div class="col-xl-3 col-sm-6 col-12">
+    <div class="col-xl-3 col-sm-6 col-12" [routerLink]="'/admin-payments'">
       <div class="card">
         <div class="card-body">
           <div class="dash-widget-header">
@@ -129,7 +129,7 @@
         </div>
       </div>
     </div>
-    <div class="col-xl-3 col-sm-6 col-12">
+    <div class="col-xl-3 col-sm-6 col-12" [routerLink]="'/admin-subscription'">
       <div class="card">
         <div class="card-body">
           <div class="dash-widget-header">
@@ -139,22 +139,25 @@
             <div class="dash-count">
               <div class="dash-title">{{ "dashboard.allSubscriptions" | translate }}</div>
               <div class="dash-counts">
-                <p>0</p>
+                <p>{{ plansStats.totalPlans }} </p>
               </div>
             </div>
           </div>
           <div class="progress progress-sm mt-3">
-            <div class="progress-bar bg-5" role="progressbar" style="width: 0%" aria-valuenow="75" aria-valuemin="0"
-              aria-valuemax="100"></div>
+            <div class="progress-bar bg-6" role="progressbar" aria-valuemax="100"
+              [style]="'width: ' + plansStats?.pourcentage +'%'" aria-valuenow="75" aria-valuemin="0"></div>
           </div>
           <p class="text-muted mt-3 mb-0">
-            <span class="text-danger me-1"><i class="fas fa-arrow-down me-1"></i>0%</span>
+            <img src="assets/img/new/loader.gif" width="15px" alt="" *ngIf="gettingPlansStats">
+            <span *ngIf="!gettingUserStats"
+              [ngClass]="plansStats?.pourcentage > 0 ? 'text-success me-1' : 'text-danger me-1'">{{plansStats.pourcentage}}%<i
+                class="feather icon-chevrons-up"></i></span>
             {{ "dashboard.sinceLastWeek" | translate }}
           </p>
         </div>
       </div>
     </div>
-    <div class="col-xl-3 col-sm-6 col-12">
+    <div class="col-xl-3 col-sm-6 col-12" [routerLink]="'/admin-fundraising'">
       <div class="card">
         <div class="card-body">
           <div class="dash-widget-header">

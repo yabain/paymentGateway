@@ -4,12 +4,12 @@ import { Subject, takeUntil } from 'rxjs';
 import { Location } from '@angular/common';
 
 @Component({
-  selector: 'app-subscription',
-  templateUrl: './subscription.component.html',
-  styleUrls: ['./subscription.component.scss'],
+  selector: 'app-messaging',
+  templateUrl: './messaging.component.html',
+  styleUrls: ['./messaging.component.scss'],
 })
-export class SubscriptionComponent implements OnInit, OnDestroy {
-  isPackage: boolean = false;
+export class MessagingComponent implements OnInit, OnDestroy {
+  isMail: boolean = false;
   isAdminRoute: boolean = false;
 
   private destroy$ = new Subject<void>();
@@ -31,20 +31,20 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
 
   getId() {
     const url = this.location.path();
-    this.isAdminRoute = url.includes('admin-subscription');
+    this.isAdminRoute = url.includes('admin-massaging');
     console.log("isAdminRoute: ", this.isAdminRoute)
   }
 
   togglePackageRoute() {
-    this.isPackage = !this.isPackage;
+    this.isMail = !this.isMail;
   }
 
   verifyRoute() {
     setTimeout(() => {
       const page = this.router.url;
-      if (page.split('subscription/')[1] === 'packages') {
-        this.isPackage = true;
-      } else this.isPackage = false;
+      if (page.split('admin-massaging/')[1] === 'mail') {
+        this.isMail = true;
+      } else this.isMail = false;
     }, 200);
   }
 

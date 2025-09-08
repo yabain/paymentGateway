@@ -45,7 +45,6 @@ export class MakePaymentComponent {
   getId(): void {
     let idParam: any = this.router.url;
     idParam = idParam.split('/')[3]
-    console.log('idParam', idParam);
     if (!idParam) {
       this.router.navigate(['/tabs']);
     }

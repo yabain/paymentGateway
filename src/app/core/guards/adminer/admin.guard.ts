@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root',
 })
-export class LoggedInGuard {
+export class AdminGuard {
   constructor(private router: Router) {}
 
   canActivate(
@@ -21,7 +21,9 @@ export class LoggedInGuard {
       this.router.navigate([routes.dashboard]);
       return false;
     } else {
-      return true;
+      const user = JSON.parse(localStorage.getItem(environment.user_data));
+      if(user.isAdmin) return true
+      else return true;
     }
   }
 }

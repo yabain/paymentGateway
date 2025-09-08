@@ -2,15 +2,16 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { Location } from '@angular/common';
+import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-subscription',
-  templateUrl: './subscription.component.html',
-  styleUrls: ['./subscription.component.scss'],
+  selector: 'app-flutterwave',
+  templateUrl: './flutterwave.component.html',
+  styleUrls: ['./flutterwave.component.scss'],
 })
-export class SubscriptionComponent implements OnInit, OnDestroy {
-  isPackage: boolean = false;
-  isAdminRoute: boolean = false;
+export class FlutterwaveComponent implements OnInit, OnDestroy {
+  countriesData: any[] = [];
+  selectedCountry: any;
 
   private destroy$ = new Subject<void>();
 
@@ -19,7 +20,11 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     private router: Router,
     private location: Location,
   ) {
-    this.getId();
+    this.countriesData = JSON.parse(localStorage.getItem(environment.countries_data));
+  }
+
+  selectCountry(country: any) {
+    this.selectedCountry = country;
   }
 
   ngOnInit() {
@@ -28,23 +33,13 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     });
   }
 
-
-  getId() {
-    const url = this.location.path();
-    this.isAdminRoute = url.includes('admin-subscription');
-    console.log("isAdminRoute: ", this.isAdminRoute)
-  }
-
-  togglePackageRoute() {
-    this.isPackage = !this.isPackage;
-  }
-
   verifyRoute() {
     setTimeout(() => {
       const page = this.router.url;
-      if (page.split('subscription/')[1] === 'packages') {
-        this.isPackage = true;
-      } else this.isPackage = false;
+      if (page.split('page')[1]) {
+        const countryId = page.split('page/')[1];
+        this.selectedCountry = this.countriesData.find(c => c._id === countryId);
+      } else this.selectedCountry = this.countriesData[0];
     }, 200);
   }
 

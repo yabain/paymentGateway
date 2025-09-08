@@ -1,0 +1,48 @@
+<div class="page-header">
+    <div class="content-page-header page-tilte">
+        <h5>{{ 'sideMenu.mail' | translate }}</h5>
+        <div class="page-content">
+            <div class="list-btn">
+                <ul class="filter-list">
+                    <li *ngIf="status === true"
+                        style="background-color: #04850e; color: #fff; padding: 3px 5px; border-radius: 3px;">
+                        {{ "users.enabled" | translate }}
+                    </li>
+                    <li *ngIf="status != true"
+                        style="background-color: #850404; color: #fff; padding: 3px 5px; border-radius: 3px;">
+                        {{ "users.disabled" | translate }}
+                    </li>
+                    <li (click)="changeUserActiveStatus()" *ngIf="status != true">
+                        <a class="btn-filters btn-hover" href="javascript:void(0);" data-bs-toggle="tooltip"
+                            data-bs-placement="bottom" matTooltip="Enable"><span><i class="feather icon-power"
+                                    style="color: #04c714"></i></span></a>
+                    </li>
+                    <li (click)="changeUserActiveStatus()" *ngIf="status === true">
+                        <a class="btn-filters btn-hover" href="javascript:void(0);" data-bs-toggle="tooltip"
+                            data-bs-placement="bottom" matTooltip="Disable"><span><i class="feather icon-power"
+                                    style="color: #df0404"></i></span></a>
+                    </li>
+                    <li>
+                        <a class="btn-filters btn-hover" href="javascript:void(0);" data-bs-toggle="tooltip"
+                            data-bs-placement="bottom" matTooltip="Refresh" (click)="refresh()"><span><i
+                                    class="feather icon-refresh-ccw"></i></span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Page Header -->
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body"></div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body"></div>
+        </div>
+    </div>
+</div>

@@ -10,6 +10,7 @@ import { routes } from 'src/app/core/core.index';
 import { SubscriptionService } from 'src/app/services/subscription/subscription.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
+import { Location } from '@angular/common';
 
 interface data {
   value: string;
@@ -38,8 +39,14 @@ export class PackagesComponent implements OnInit {
   watingCreation: boolean = false;
   watingPlansList: boolean = true;
   plansList: any;
+  plansListBackup: any;
   selectedPlan: any;
   wattingStatus: boolean = false;
+  isAdmin: boolean = false;
+  isAdminRoute: boolean = false;
+  activeSearch: boolean = false;
+  
+  searchString: string = '';
 
   public routes = routes;
   public selectedValue1 = '';
@@ -56,39 +63,94 @@ export class PackagesComponent implements OnInit {
     private userService: UserService,
     private toastService: ToastService,
     private fb: FormBuilder,
+    private location: Location,
   ) {}
 
   ngOnInit(): void {
+    this.getId();
     this.scrollToTop();
     this.getCurrentUser();
     this.planForm();
+  }
+
+  getId() {
+    const url = this.location.path();
+    this.isAdminRoute = url.includes('admin-subscription');
   }
 
   selectPlan(plan: any) {
     this.selectedPlan = plan;
   }
 
+  public searchData(value: string): void {
+    if(value){
+    value = value.trim().toLowerCase();
+    this.plansList = this.plansListBackup.filter((plan: any) =>
+      plan.title.toLowerCase().includes(value) ||
+      plan.subTitle.toLowerCase().includes(value)
+    );
+    } else return this.plansList = this.plansListBackup;
+  }
+
+  filterByPrice(value: number){
+    if(value){
+    this.plansList = this.plansListBackup.filter((plan: any) =>
+      plan.price.toString().toLowerCase().includes(value)
+    );
+    } else return this.plansList = this.plansListBackup;
+  }
+
+  public filterByPeriod(value: string): void {
+    if(value){
+    value = value.trim().toLowerCase();
+    this.plansList = this.plansListBackup.filter((plan: any) =>
+      plan.cycle.toLowerCase().includes(value)
+    );
+    } else return this.plansList = this.plansListBackup;
+  }
+
   getMyStat() {
     this.gettingStatistics = true;
-    this.subscriptionService.getMyPlanStatistics().subscribe((data: any) => {
-      this.statistics = data;
-      // console.log('statistics du backend: ', data);
-      this.gettingStatistics = false;
-    });
+    if (this.isAdmin) {
+      this.subscriptionService.getPlanStatistics().subscribe((data: any) => {
+        this.statistics = data;
+        this.gettingStatistics = false;
+      });
+    } else {
+      this.subscriptionService.getMyPlanStatistics().subscribe((data: any) => {
+        this.statistics = data;
+        this.gettingStatistics = false;
+      });
+    }
   }
 
   selectImg(imageUrl) {
     this.imageUrl = imageUrl;
   }
 
+  toggleSearch(){
+    this.activeSearch = !this.activeSearch;
+    this.plansList = this.plansListBackup;
+  }
+
   getMyPlansList() {
     this.watingPlansList = true;
+    if (this.isAdmin) {
     this.subscriptionService
-      .getPlansList(this.currentUser._id)
+      .getAllPlansList()
+      .subscribe((data: any) => {
+        this.watingPlansList = false;
+        this.plansList = data;
+        this.plansListBackup = data;
+      });
+    } else {
+    this.subscriptionService
+      .getMyPlansList(this.currentUser._id)
       .subscribe((data: any) => {
         this.watingPlansList = false;
         this.plansList = data;
       });
+    }
   }
 
   refresh() {
@@ -101,6 +163,7 @@ export class PackagesComponent implements OnInit {
     this.userService.getCurrentUser().then((user: any) => {
       if (!user) return 'No user';
       this.currentUser = user;
+      if (this.isAdminRoute && user.isAdmin) this.isAdmin = true;
       this.currency = user.countryId.currency;
       return this.refresh();
     });

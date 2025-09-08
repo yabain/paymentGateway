@@ -5,6 +5,7 @@ import { LoggedInGuard } from '../core/guards/loggedIn/logged-in.guard';
 import { FeatureModuleComponent } from './feature-module.component';
 import { SendMoneyComponent } from './send-money/send-money.component';
 import { WithdrawalComponent } from './withdrawal/withdrawal.component';
+import { AdminGuard } from '../core/guards/adminer/admin.guard';
 
 const routes: Routes = [
   {
@@ -35,10 +36,47 @@ const routes: Routes = [
         component: WithdrawalComponent,
       },
       {
+        path: 'subscription',
+        loadChildren: () =>
+          import('./subscription/subscription.module').then(
+            (m) => m.SubscriptionModule,
+          ),
+      },
+      {
+        path: 'admin-massaging',
+        loadChildren: () =>
+          import('./messaging/messaging.module').then(
+            (m) => m.MessagingModule,
+          ),
+      },
+
+      // --- Admin route ----
+      {
         path: 'customer',
         loadChildren: () =>
           import('./customers/customers.module').then((m) => m.CustomersModule),
       },
+      {
+        path: 'admin-subscription',
+        canActivate: [AdminGuard],
+        loadChildren: () =>
+          import('./subscription/subscription.module').then(
+            (m) => m.SubscriptionModule,
+          ),
+      },
+      {
+        path: 'flutterwave-wallets',
+        canActivate: [AdminGuard],
+        loadChildren: () =>
+          import('./flutterwave/flutterwave.module').then(
+            (m) => m.FlutterwaveModule,
+          ),
+      },
+
+
+
+
+      ///
       {
         path: 'base-ui',
         loadChildren: () =>
@@ -283,7 +321,6 @@ const routes: Routes = [
             (m) => m.PaymentSummaryModule,
           ),
       },
-
       {
         path: 'permission',
         loadChildren: () =>
@@ -340,13 +377,6 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'subscription',
-        loadChildren: () =>
-          import('./subscription/subscription.module').then(
-            (m) => m.SubscriptionModule,
-          ),
-      },
-      {
         path: 'report',
         loadChildren: () =>
           import('./report/report.module').then((m) => m.ReportModule),
@@ -355,7 +385,6 @@ const routes: Routes = [
   },
   {
     path: '',
-    // canActivate: [LoggedInGuard],
     loadChildren: () =>
       import('./authentication/authentication.module').then(
         (m) => m.AuthenticationModule,

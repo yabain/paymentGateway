@@ -132,6 +132,7 @@ export class CustomerListComponent {
 
   toggleSearch(){
     this.activeSearch = !this.activeSearch;
+    this.searchData('');
   }
 
   changeUserActiveStatus(userId?: string){

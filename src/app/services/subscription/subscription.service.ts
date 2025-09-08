@@ -61,8 +61,20 @@ export class SubscriptionService {
   }
 
 
-  getPlansList(userId): Observable<any | undefined> {
-    return this.apiService.getWithToken('plans/planList/' + userId).pipe(
+  getMyPlansList(userId): Observable<any | undefined> {
+    return this.apiService.getById('plans/planList', userId).pipe(
+      map((data) => {
+        return data;
+      }),
+      catchError((error) => {
+        console.error('Error fetching plan statistics:', error);
+        return of([]);
+      }),
+    );
+  }
+  
+  getAllPlansList(): Observable<any | undefined> {
+    return this.apiService.progressiveGetWithoutId('plans').pipe(
       map((data) => {
         return data;
       }),
@@ -82,4 +94,13 @@ export class SubscriptionService {
     );
   }
 
+  async getPlansStatistics(): Promise<any> {
+    try {
+      const response = await this.apiService.getWithoutId('plans/get-statistics').toPromise();
+      return response;
+    } catch (error) {
+      console.error('Error fetching users stats:', error);
+      throw error;
+    }
+  }
 }

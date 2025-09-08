@@ -317,6 +317,32 @@
       </div>
     </div>
   </div>
+  <div class="col-md-4" *ngIf="!goToProceed && currentUser">
+    <div class="card">
+      <div class="card-body sold">
+        <!-- ========= Colonne de résumé ========= -->
+        <aside class="card summary" aria-live="polite">
+          <div class="inline" style="justify-content:space-between; margin-bottom:8px">
+            <b>Solde disponible</b><br>
+            <h3 *ngIf="!waittingSolde">{{ solde || 00 }} {{ currentUser.countryId.currency }}</h3>
+            <h6 *ngIf="waittingSolde"><div class="spinner-border" role="status"></div></h6>
+          </div>
+          <div class="amount" id="sumBalance">—</div>
+          <div class="row">
+            <span class="col-md-6">Montant du retrait</span>
+            <b class="col-md-6" style="text-align: right">{{ amountToBeReceived }} {{ currentUser?.countryId.currency
+              }}</b>
+          </div><br>
+          <div class="row">
+            <span class="col-md-5">Frais estimés</span>
+            <b class="col-md-7" style="text-align: right">{{ transactionData?.taxesAmount }} {{
+              currentUser.countryId.currency }}</b>
+          </div>
+          <div class="help" id="hint" style="margin-top:6px"></div>
+        </aside>
+      </div>
+    </div>
+  </div>
   <div class="col-md-12" *ngIf="goToProceed && currentUser">
     <div class="card">
       <div class="card-body">
@@ -373,32 +399,6 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-4" *ngIf="!goToProceed && currentUser">
-    <div class="card">
-      <div class="card-body sold">
-        <!-- ========= Colonne de résumé ========= -->
-        <aside class="card summary" aria-live="polite">
-          <div class="inline" style="justify-content:space-between; margin-bottom:8px">
-            <b>Solde disponible</b><br>
-            <h3 *ngIf="!waittingSolde">{{ solde || 00 }} {{ currentUser.countryId.currency }}</h3>
-            <h6 *ngIf="waittingSolde"><div class="spinner-border" role="status"></div></h6>
-          </div>
-          <div class="amount" id="sumBalance">—</div>
-          <div class="row">
-            <span class="col-md-6">Montant du retrait</span>
-            <b class="col-md-6" style="text-align: right">{{ amountToBeReceived }} {{ currentUser?.countryId.currency
-              }}</b>
-          </div><br>
-          <div class="row">
-            <span class="col-md-5">Frais estimés</span>
-            <b class="col-md-7" style="text-align: right">{{ transactionData?.taxesAmount }} {{
-              currentUser.countryId.currency }}</b>
-          </div>
-          <div class="help" id="hint" style="margin-top:6px"></div>
-        </aside>
       </div>
     </div>
   </div>

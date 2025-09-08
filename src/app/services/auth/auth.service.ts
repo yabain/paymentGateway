@@ -59,7 +59,6 @@ export class AuthService {
             localStorage.setItem('timeOut', Date());
             localStorage.setItem('layoutPosition', '1');
             if (user) {
-              console.log('token: ', user.token);
               this.storage.setStorage(environment.user_key, user.userData._id);
               this.storage.setStorage('token', user.token);
               resolve(user.userData); // Résoudre la Promise avec user.userData
@@ -96,7 +95,6 @@ export class AuthService {
    * @returns A promise that resolves once the logout and redirect are complete.
    */
   async logout() {
-    console.log('logout action initiated');
     this.storage.removeStorage(environment.user_key);
     this.storage.removeStorage(environment.user_data);
     this.storage.removeStorage(environment.countries_data);
@@ -107,7 +105,7 @@ export class AuthService {
     this.storage.removeStorage('timeOut');
     setTimeout(() => {
       this.router.navigateByUrl('/auth/login', { replaceUrl: true });
-      // window.location.reload();
+      window.location.reload();
     }, 2000);
     try {
       this.apiService

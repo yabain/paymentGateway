@@ -1,0 +1,15 @@
+
+<div class="subscription-plane-head">
+  <ul>
+    <li>
+      <a [routerLink]="'/admin-massaging/mail'" (click)="verifyRoute()"
+      [class]="isMail ? 'active' : ''">{{ 'sideMenu.mail' | translate }} </a>
+    </li>
+    <li>
+      <a [routerLink]="'/admin-massaging/whatsapp'" (click)="verifyRoute()"
+      [class]="!isMail ? 'active' : ''">{{ 'sideMenu.whatsapp' | translate }}</a>
+    </li>
+  </ul>
+</div>
+<!-- Page Header -->
+ <router-outlet></router-outlet>

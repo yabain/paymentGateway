@@ -1,4 +1,4 @@
-<div class="subscription-plane-head">
+<div class="subscription-plane-head" *ngIf="!isAdminRoute">
   <ul>
     <li>
       <a [routerLink]="'/subscription/packages'" (click)="verifyRoute()"
@@ -7,6 +7,18 @@
     <li>
       <a [routerLink]="'/subscription/subscription'" (click)="verifyRoute()"
       [class]="!isPackage ? 'active' : ''">{{ 'subscriptions.myList' | translate }}</a>
+    </li>
+  </ul>
+</div>
+<div class="subscription-plane-head" *ngIf="isAdminRoute">
+  <ul>
+    <li>
+      <a [routerLink]="'/admin-subscription/packages'" (click)="verifyRoute()"
+      [class]="isPackage ? 'active' : ''">{{ 'subscriptions.allSystemPlan' | translate }} </a>
+    </li>
+    <li>
+      <a [routerLink]="'/admin-subscription/subscription'" (click)="verifyRoute()"
+      [class]="!isPackage ? 'active' : ''">{{ 'subscriptions.allSystemList' | translate }}</a>
     </li>
   </ul>
 </div>

@@ -19,6 +19,7 @@ import { routes, SideBarService } from 'src/app/core/core.index';
 import { ExchangeService } from 'src/app/services/exchange/exchange.service';
 import { LocationService } from 'src/app/services/location/location.service';
 import { SoldeService } from 'src/app/services/solde/solde.service';
+import { SubscriptionService } from 'src/app/services/subscription/subscription.service';
 import { SystemService } from 'src/app/services/system/system.service';
 import { UserService } from 'src/app/services/user/user.service';
 
@@ -71,10 +72,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
   transactionList: any = [];
   waittingSolde: boolean = true;
   solde: number = 0;
+  plansStats: any = 0;
+  gettingPlansStats: boolean = true;
 
   constructor(
     private sideBar: SideBarService,
     private userService: UserService,
+    private planService: SubscriptionService,
     private router: Router,
     private route: ActivatedRoute,
     private location: LocationService,
@@ -96,7 +100,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.waittingSolde = true;
     this.soldeService.getSolde()
     .subscribe((data: any) => {
-      console.log('solde: ', data)
       this.solde = data ? data.solde : 0;
       this.waittingSolde = false
     })
@@ -128,6 +131,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             if (this.currentUserData.isAdmin === true) {
               this.gettingUserStats = true;
               this.userStats = this.getUsersStatistics();
+              this.plansStats = this.getPlansStatistics();
             }
           }
           this.getSolde();
@@ -156,6 +160,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
     } catch (error) {
       console.error('Error fetching users stats:', error);
       this.gettingUserStats = false;
+    }
+  }
+
+  async getPlansStatistics(){
+    try {
+      const response = await this.planService.getPlansStatistics();
+      if (response) {
+        this.plansStats = response;
+        this.gettingPlansStats = false;
+      } else {
+        console.error('No data found in response');
+        this.gettingPlansStats = false;
+      }
+    } catch (error) {
+      console.error('Error fetching plans stats:', error);
+      this.gettingPlansStats = false;
     }
   }
 

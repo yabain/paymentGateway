@@ -490,7 +490,17 @@
     "cashWithdrawal": "Retirer de l'argent",
     "users": "Utilisateurs",
     "admin": "Espace Administrateur",
-    "systemSettings": "Paramètres Système"
+    "systemSettings": "Paramètres Système",
+    "flutterwaveWallets": "Flutterwave",
+    "whatsapp": "Centre WhatsApp",
+    "mail": "Centre Mail",
+    "messageCenter": "Centre de messages",
+    "payin": "Encaissements",
+    "payout": "Décaissements"
+  },
+  "flutterwave": {
+    "otherCurrencyBalances": "Solde d'autres devises disponible",
+    "fwBalance": "Solde Flutterwave en"
   },
   "users": {
     "title": "Utilisateurs",
@@ -523,8 +533,10 @@
     "subTitle": "Sous titre",
     "plan": "Plans d'abonnements",
     "myPlan": "Mes Plans",
+    "allSystemPlan": "Tous le Planss du système",
     "list": "Liste d'abonnements",
     "myList": "Mes abonnements",
+    "allSystemList": "Tous les abonnements du système",
     "totalPlans": "Total des plans",
     "totalSuscriptions": "Total abonnements",
     "activeSuscriptions": "Abonnements actif",

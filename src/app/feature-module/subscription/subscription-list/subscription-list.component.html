@@ -1,6 +1,7 @@
 <div class="page-header">
   <div class="content-page-header page-tilte">
-    <h5>{{ 'subscriptions.myList' | translate }}</h5>
+    <h5 *ngIf="!isAdminRoute">{{ 'subscriptions.myList' | translate }}</h5>
+    <h5 *ngIf="isAdminRoute">{{ 'subscriptions.allSystemList' | translate }}</h5>
     <div class="page-content">
       <div class="list-btn">
         <ul class="filter-list">
@@ -181,16 +182,17 @@
 </div> -->
 
 <div class="row d-flex align-items-center justify-content-center">
-    <div style="display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 300px;">
-        <img src="../../../../assets/img/ressorces/nts.png" alt="" style="max-width: 150px;
-        height: auto;">
-        <br>
-        {{ "nts" | translate }}
-        <br><br>
-    </div>
+  <div class="col-md-12" style="display: flex;
+                                justify-content: center;
+                                align-items: center;">
+    <img src="../../../../assets/img/ressorces/nts.png" alt="" style="max-width: 150px;
+                                    height: auto;">
+  </div>
+  <div class="col-md-12" style="display: flex;
+                                justify-content: center;
+                                align-items: center;">
+    {{ "nts" | translate }}
+  </div>
 </div>
 
 <!-- Delete Items Modal -->

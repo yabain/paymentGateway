@@ -66,7 +66,6 @@ export class CustomerDetailsComponent implements OnInit, OnDestroy {
   getId(): void {
     let idParam: any = this.router.url;
     idParam = idParam.split('/')[3];
-    console.log('idParam', idParam);
     if (!idParam) {
       this.router.navigate(['/dashboard']);
     }
@@ -80,7 +79,6 @@ export class CustomerDetailsComponent implements OnInit, OnDestroy {
   }
 
   getUserData(userId) {
-    console.log('getting user data: ', userId);
     this.gettingUserData = true;
     this.userService
       .getUser(userId)
@@ -97,7 +95,6 @@ export class CustomerDetailsComponent implements OnInit, OnDestroy {
       )
       .subscribe((user: any) => {
         this.userData = user;
-        console.log('userData: ', user);
         this.gettingUserData = false;
       });
   }

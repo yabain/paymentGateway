@@ -26,6 +26,106 @@ export class FlutterwaveService {
     });
   }
 
+
+  // endpoint pour vérifier le status depuis le frontend (polling)
+  checkStatus(txRef: string): Observable<any> {
+    return this.apiService
+      .getById(`fw/verify-payin`, encodeURIComponent(txRef))
+      .pipe(
+        map((res: any) => {
+          if (res) {
+            return res;
+          }
+          return false;
+        }),
+        catchError((err) => {
+          console.error('Error getting favorites:', err);
+          return of(false); // Emit false if there's an error
+        }),
+      );
+  }
+
+  getApplicationBalance(countryWallet: string = 'CM'): Observable<any> {
+    return this.apiService.getById(`fw/balance`, countryWallet).pipe(
+      map((res: any) => {
+        if (res) {
+          return res;
+        }
+        return false;
+      }),
+      catchError((err) => {
+        console.error('Error getting favorites:', err);
+        return of(false); // Emit false if there's an error
+      }),
+    );
+  }
+
+
+  getPayinList(countryWallet: string = 'CM'): Observable<any> {
+    return this.apiService.getById(`fw/payin-transactons`, countryWallet).pipe(
+      map((res: any) => {
+        if (res) {
+          return res;
+        }
+        return false;
+      }),
+      catchError((err) => {
+        console.error('Error getting favorites:', err);
+        return of(false); // Emit false if there's an error
+      }),
+    );
+  }
+
+
+  getPayoutList(countryWallet: string = 'CM'): Observable<any> {
+    return this.apiService.getById(`fw/payout-transactons`, countryWallet).pipe(
+      map((res: any) => {
+        if (res) {
+          return res;
+        }
+        return false;
+      }),
+      catchError((err) => {
+        console.error('Error getting favorites:', err);
+        return of(false); // Emit false if there's an error
+      }),
+    );
+  }
+
+  getBanksList(countryIso2): Observable<any> {
+    return this.apiService
+      .getById(`fw/get-bank`, encodeURIComponent(countryIso2))
+      .pipe(
+        map((res: any) => {
+          if (res) {
+            return res;
+          }
+          return false;
+        }),
+        catchError((err) => {
+          console.error('Error getting favorites:', err);
+          return of(false); // Emit false if there's an error
+        }),
+      );
+  }
+
+  listTransactions(countryCode: string = 'CMR'): Observable<any> {
+    return this.apiService.getById(`fw/transactions`, countryCode).pipe(
+      map((res: any) => {
+        if (res) {
+          return res;
+        }
+        return false;
+      }),
+      catchError((err) => {
+        console.error('Error getting favorites:', err);
+        return of(false); // Emit false if there's an error
+      }),
+    );
+  }
+
+  // Not used
+
   initializePayment(
     amount: number,
     email?: string,
@@ -74,68 +174,4 @@ export class FlutterwaveService {
     });
   }
 
-  // endpoint pour vérifier le status depuis le frontend (polling)
-  checkStatus(txRef: string): Observable<any> {
-    return this.apiService
-      .getById(`fw/verify-payin`, encodeURIComponent(txRef))
-      .pipe(
-        map((res: any) => {
-          if (res) {
-            return res;
-          }
-          return false;
-        }),
-        catchError((err) => {
-          console.error('Error getting favorites:', err);
-          return of(false); // Emit false if there's an error
-        }),
-      );
-  }
-
-  getApplicationBalance(): Observable<any> {
-    return this.apiService.getWithoutId(`fw/balance`).pipe(
-      map((res: any) => {
-        if (res) {
-          return res;
-        }
-        return false;
-      }),
-      catchError((err) => {
-        console.error('Error getting favorites:', err);
-        return of(false); // Emit false if there's an error
-      }),
-    );
-  }
-
-  getBanksList(countryCode): Observable<any> {
-    return this.apiService
-      .getById(`fw/get-bank`, encodeURIComponent(countryCode))
-      .pipe(
-        map((res: any) => {
-          if (res) {
-            return res;
-          }
-          return false;
-        }),
-        catchError((err) => {
-          console.error('Error getting favorites:', err);
-          return of(false); // Emit false if there's an error
-        }),
-      );
-  }
-
-  listTransactions(countryCode: string = 'CMR'): Observable<any> {
-    return this.apiService.getById(`fw/transactions`, countryCode).pipe(
-      map((res: any) => {
-        if (res) {
-          return res;
-        }
-        return false;
-      }),
-      catchError((err) => {
-        console.error('Error getting favorites:', err);
-        return of(false); // Emit false if there's an error
-      }),
-    );
-  }
 }

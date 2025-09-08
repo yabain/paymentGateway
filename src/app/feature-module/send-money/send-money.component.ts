@@ -104,11 +104,18 @@ export class SendMoneyComponent implements OnInit {
     private fw: FlutterwaveService,
   ) {
     this.estimation = 0;
+    this.getSolde();
+  }
+
+  getSolde(){
+    this.fw.getApplicationBalance('NGN')
+    .subscribe((resp: any) => {
+    console.log('wallet NGN: ', resp);
+    })
   }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((datas: any) => {
-      // console.log('datas router: ', datas);
       this.getCurrentUser();
       this.transactionRef = this.paymentService.generateId();
       this.currentDate = this.formatDate(new Date());
@@ -155,8 +162,6 @@ export class SendMoneyComponent implements OnInit {
           resp?.data?.status ||
           resp?.status ||
           'pending';
-        // this.status = status;
-        console.log('status', resp);
         if (['successful', 'success'].includes(status.toLowerCase())) {
           this.transactionSucceded = true;
           this.transactionFailed = false;
@@ -183,10 +188,9 @@ export class SendMoneyComponent implements OnInit {
     }, 5000);
   }
 
-  getBanksList(countryId){
+  getBanksList(countryIso2){
     this.waitingBankList = true;
-    this.fw.getBanksList(countryId).subscribe((res: any) => {
-      console.log('banks list: ', res);
+    this.fw.getBanksList(countryIso2).subscribe((res: any) => {
       this.waitingBankList = false;
       this.bankList = res;
     })
@@ -329,7 +333,6 @@ export class SendMoneyComponent implements OnInit {
 
   // calculateSubtotal(): number {
   //   this.newPayment + this.taxesValueCalculation();
-  //   console.log(this.newPayment + this.taxesValueCalculation());
 
   //   return this.aroundValue(this.newPayment + this.taxesValueCalculation());
   // }
@@ -339,7 +342,6 @@ export class SendMoneyComponent implements OnInit {
   }
 
   calculateTaxesAmount(): number {
-    // console.log('calculateTaxesAmount: ', this.estimation, this.invoiceTaxes);
     return this.aroundValue(this.estimation * (this.invoiceTaxes / 100));
   }
 
@@ -382,7 +384,6 @@ export class SendMoneyComponent implements OnInit {
   }
 
   canNext2(): boolean {
-    console.log('bank code: ', this.bankCode, this.bankAccountNumber);
     if (!this.canNext()) return false;
     this.setTransactionData();
     if (this.selectedMethod === 'BANK') {
@@ -400,7 +401,6 @@ export class SendMoneyComponent implements OnInit {
       )
         return (this.canNext2Val = true);
     }
-    // console.log('transaction data: ', this.transactionData);
     return (this.canNext2Val = false);
   }
 
@@ -427,7 +427,6 @@ export class SendMoneyComponent implements OnInit {
     this.userService.getCurrentUserData().then((user: any) => {
       if (user) {
         this.currentUser = user;
-        // console.log('user: ', user);
         this.waitingUserData = false;
         this.getId();
         this.getRates();
@@ -448,8 +447,6 @@ export class SendMoneyComponent implements OnInit {
 
   getId() {
     const idParam = this.route.snapshot.paramMap.get('id');
-    // console.log('idParam00: ', idParam);
-    // console.log('currentUser countryId: ', this.currentUser.countryId._id);
 
     // Vérifier si idParam existe et n'est pas null/undefined
     if (idParam && idParam !== 'null' && idParam !== 'undefined') {
@@ -469,7 +466,6 @@ export class SendMoneyComponent implements OnInit {
       }
     }
 
-    // console.log('idParam final: ', this.idParam);
     return this.getLocations();
   }
 
@@ -493,14 +489,11 @@ export class SendMoneyComponent implements OnInit {
   async onSubmit() {
     if (!this.verifytransactionData(this.transactionData)) return;
     this.proceed = true;
-    console.log('Payment data:', this.transactionData);
-    // return ;
 
     await this.fw.loadFlutterwaveScript();
     this.paymentService
       .proceedPayment(this.transactionData)
       .subscribe((res: any) => {
-        console.log('res of proceedPayment: ', res);
         if (!res) {
           this.proceed = false;
           this.toastService.presentToast('error', 'Error', res.message);
@@ -538,7 +531,6 @@ export class SendMoneyComponent implements OnInit {
           try {
             this.modalClosed = true;
             this.verifyAndClosePayin();
-            console.log('FW gateway closed!');
           } catch {}
           // TODO: afficher un message "paiement annulé" ou rafraîchir l’état
         }
@@ -553,7 +545,6 @@ export class SendMoneyComponent implements OnInit {
     this.transactionSucceded = false;
     this.transactionFailed = false;
     this.paymentService.openPayin(this.txRef).subscribe((res: any) => {
-      console.log('res of openPayin: ', res);
       if (res && res.status === 'pending') {
         return this.handleRequest();
       }
@@ -565,9 +556,7 @@ export class SendMoneyComponent implements OnInit {
     this.paymentService
       .verifyAndClosePayin(this.txRef)
       .subscribe((res: any) => {
-        console.log('res of verifyAndClosePayin: ', res);
         if (res) {
-          console.log('Transaction res: ', res);
           if (res.status === 'successful' || res.status === 'success') {
             this.transactionSucceded = true;
             this.transactionFailed = false
@@ -591,7 +580,6 @@ export class SendMoneyComponent implements OnInit {
   getSystemData() {
     this.waitingSystemData = true;
     this.systemService.getSystemData().subscribe((resp: any) => {
-      // console.log('system data: ', resp);
       this.invoiceTaxes = resp ? resp.invoiceTaxes : 0;
       this.waitingSystemData = false;
     });
@@ -638,7 +626,6 @@ export class SendMoneyComponent implements OnInit {
       status: this.paymentService.status.INITIALIZED,
       paymentType: this.paymentService.transactionType.TRANSFER,
     };
-    // console.log('transactionData: ', this.transactionData);
   }
 
   verifytransactionData(transactionData): boolean {
@@ -691,7 +678,7 @@ export class SendMoneyComponent implements OnInit {
     if(this.selectedCountry.code !== '237') return true;
     // Check if string start with 655, 656, 657, 658, 659 or 69*
     const orangeRegex = /^6((55|56|57|58|59|86|87|88|89)|9[0-9])\d{6}$/;
-    // console.log('Test OM: ', orangeRegex.test(phone));
+
     const res = orangeRegex.test(phone);
     // if (this.isValidPhoneNumber(phone) && !res) {
     //   this.translate.get('payment.notOmNumber').subscribe((res: string) => {
@@ -706,7 +693,7 @@ export class SendMoneyComponent implements OnInit {
     if(this.selectedCountry.code !== '237') return true;
     // Check if string start with 650, 651, 652, 653, 654, 67* or 680*
     const mtnRegex = /^6((50|51|52|53|54)|7[0-9]|8[0-5])\d{6}$/;
-    // console.log('Test MTN: ', mtnRegex.test(phone));
+
     const res = mtnRegex.test(phone);
     // if (this.isValidPhoneNumber(phone) && !res) {
     //   this.translate.get('payment.notMTNNumber').subscribe((res: string) => {
@@ -779,21 +766,18 @@ export class SendMoneyComponent implements OnInit {
 
     if (this.step <= 3) {
       this.step++;
-      // console.log("Passage à l'étape:", this.step);
     }
   }
 
   previousStep() {
     if (this.step > 1) {
       this.step--;
-      // console.log("Retour à l'étape:", this.step);
     }
   }
 
   // Méthode pour réinitialiser le stepper
   stepperToProceed() {
     this.goToProceed = true;
-    console.log('transactionData: ', this.transactionData);
     this.scrollToTop();
     setTimeout(() => {
       this.onSubmit();
@@ -804,9 +788,8 @@ export class SendMoneyComponent implements OnInit {
     this.step = 1;
     this.firstFormGroup.reset();
     this.secondFormGroup.reset();
-    // console.log("Stepper réinitialisé à l'étape:", this.step);
   }
-  // Méthode pour vérifier si on peut passer à l'étape suivante
+
   canProceedToNextStep(): boolean {
     switch (this.step) {
       case 1:
@@ -840,12 +823,10 @@ export class SendMoneyComponent implements OnInit {
    */
   onSelectBank(event: Event) {
     const bankCode = (event.target as HTMLSelectElement).value;
-    console.log('selected code: ', bankCode);
     const selected = this.bankList.filter(
       (e) => e.code === bankCode,
     );
     this.selectedBank = selected[0];
-    console.log('selected bank: ', this.selectedBank);
     this.bankCode = this.selectedBank?.code || '';
   }
 
@@ -871,13 +852,12 @@ export class SendMoneyComponent implements OnInit {
       this.flagCountry = countryData.flagUrl || 'assets/ressorces/flag.png';
       this.receiverCurrency = countryData.currency || '--';
     }
-    console.log('selected country: ', this.selectedCountry);
     this.bankList = [];
     this.selectedBank = undefined;
     this.bankCode = undefined;
     this.bankAccountNumber = undefined;
     this.receiverMobileAccountNumber = undefined;
-    if (this.selectedCountry) this.getBanksList(this.selectedCountry.code);
+    if (this.selectedCountry) this.getBanksList(this.selectedCountry.iso2);
 
     this.convertCurrency();
   }

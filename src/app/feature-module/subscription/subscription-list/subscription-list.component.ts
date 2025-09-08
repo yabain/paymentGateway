@@ -9,6 +9,7 @@ import {
   apiResultFormat,
 } from 'src/app/core/models/models';
 import { PaginationService, tablePageSize } from 'src/app/shared/sharedIndex';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-subscription-list',
@@ -25,19 +26,35 @@ export class SubscriptionListComponent {
   showFilter = false;
   dataSource!: MatTableDataSource<any>;
   public searchDataValue = '';
+
+  isAdmin: boolean = false;
+  isAdminRoute: boolean = false;
   // pagination variables end
 
   constructor(
     private data: DataService,
     private pagination: PaginationService,
     private router: Router,
+    private location: Location,
   ) {
+    this.getId();
+    this.scrollToTop();
     this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
       if (this.router.url == this.routes.subscription) {
         this.getTableData({ skip: res.skip, limit: res.limit });
         this.pageSize = res.pageSize;
       }
     });
+  }
+
+  scrollToTop(): void {
+    setTimeout(() => {
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      });
+    }, 100);
   }
 
   private getTableData(pageOption: pageSelection): void {
@@ -62,6 +79,11 @@ export class SubscriptionListComponent {
         serialNumberArray: this.serialNumberArray,
       });
     });
+  }
+
+  getId() {
+    const url = this.location.path();
+    this.isAdminRoute = url.includes('admin-subscription');
   }
 
   public sortData(sort: Sort) {

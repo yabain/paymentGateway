@@ -44,8 +44,8 @@ export class ApiService {
         const headers = new HttpHeaders({
           'Authorization': `Bearer ${token}`
         });
-        if (id) return this.http.get<any[]>(`${this.apiUrl}/${endpoint}/${id}`, { headers: headers });
-        else return this.http.get<any[]>(`${this.apiUrl}/${endpoint}`, { headers: headers });
+        if (id) return this.http.get<any[]>(`${this.apiUrl}/${endpoint}/${id}`, { headers });
+        else return this.http.get<any[]>(`${this.apiUrl}/${endpoint}`, { headers });
       })
     );
   }
@@ -99,26 +99,25 @@ export class ApiService {
     return this.http.get<any[]>(`${this.apiUrl}/${endpoint}/${id}`, { params });
   }
 
-  getById(endpoint: string, id: any): Observable<any> {
+  getById(endpoint: string, id: any, params?): Observable<any> {
     return from(this.getToken()).pipe(
       switchMap((token: string) => {
-        // console.log('le token: ', token)
         const headers = new HttpHeaders({
           'Authorization': `Bearer ${token}`
         });
-        return this.http.get<any>(`${this.apiUrl}/${endpoint}/${id}`, { headers: headers });
+        return this.http.get<any>(`${this.apiUrl}/${endpoint}/${id}`, { headers, params });
       })
     );
   }
 
-  getWithoutId(endpoint: string): Observable<any> {
+  getWithoutId(endpoint: string, params?): Observable<any> {
     return from(this.getToken()).pipe(
       switchMap((token: string) => {
         // console.log('le token: ', token)
         const headers = new HttpHeaders({
           'Authorization': `Bearer ${token}`
         });
-        return this.http.get<any>(`${this.apiUrl}/${endpoint}`, { headers: headers });
+        return this.http.get<any>(`${this.apiUrl}/${endpoint}`, { headers, params });
       })
     );
   }
@@ -129,8 +128,7 @@ export class ApiService {
         const headers = new HttpHeaders({
           'Authorization': `Bearer ${token}`
         });
-        console.log('token: ', token);
-        return this.http.post<any>(`${this.apiUrl}/${endpoint}`, data, { headers: headers });
+        return this.http.post<any>(`${this.apiUrl}/${endpoint}`, data, { headers });
       })
     );
   }
@@ -145,7 +143,7 @@ export class ApiService {
         const headers = new HttpHeaders({
           'Authorization': `Bearer ${token}`
         });
-        return this.http.post<any>(`${this.apiUrl}/${endpoint}`, { headers: headers });
+        return this.http.post<any>(`${this.apiUrl}/${endpoint}`, { headers });
       })
     );
   }
@@ -158,7 +156,7 @@ export class ApiService {
           'Authorization': `Bearer ${token}`
         });
         // console.log('apiUpdate: ', endpoint);
-        return this.http.put<any>(`${this.apiUrl}/${endpoint}/${id}`, data, { headers: headers });
+        return this.http.put<any>(`${this.apiUrl}/${endpoint}/${id}`, data, { headers });
       })
     );
   }
@@ -170,7 +168,7 @@ export class ApiService {
           'Authorization': `Bearer ${token}`
         });
         // console.log('apiUpdate: ', endpoint);
-        return this.http.put<any>(`${this.apiUrl}/${endpoint}`, data, { headers: headers });
+        return this.http.put<any>(`${this.apiUrl}/${endpoint}`, data, { headers });
       })
     );
   }
@@ -182,7 +180,7 @@ export class ApiService {
           'Authorization': `Bearer ${token}`
         });
         // console.log('apiUpdate: ', endpoint);
-        return this.http.put<any>(`${this.apiUrl}/${endpoint}`, data, { headers: headers });
+        return this.http.put<any>(`${this.apiUrl}/${endpoint}`, data, { headers });
       })
     );
   }
@@ -205,7 +203,7 @@ export class ApiService {
         const headers = new HttpHeaders({
           'Authorization': `Bearer ${token}`
         });
-        return this.http.delete<void>(`${this.apiUrl}/${endpoint}/${id}`, { headers: headers });
+        return this.http.delete<void>(`${this.apiUrl}/${endpoint}/${id}`, { headers });
       })
     );
   }

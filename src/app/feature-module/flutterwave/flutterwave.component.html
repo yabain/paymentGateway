@@ -1,0 +1,11 @@
+
+<div class="subscription-plane-head">
+  <ul>
+    <li *ngFor="let country of countriesData" (click)="selectCountry(country)">
+      <a [routerLink]="'/flutterwave-wallets/page/' + country._id" (click)="verifyRoute()"
+      [class]="country._id === selectedCountry?._id ? 'active' : ''">{{ country.name | translate }} </a>
+    </li>
+  </ul>
+</div>
+<!-- Page Header -->
+ <router-outlet></router-outlet>

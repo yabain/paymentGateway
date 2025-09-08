@@ -103,7 +103,6 @@ export class WithdrawalComponent implements OnInit {
     this.waittingSolde = true;
     this.soldeService.getSolde()
     .subscribe((data: any) => {
-      console.log('solde: ', data)
       this.solde = data ? data.solde : 0;
       this.waittingSolde = false
     })

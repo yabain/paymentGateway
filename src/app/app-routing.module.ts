@@ -27,7 +27,6 @@ const routes: Routes = [
   },
   {
     path: '',
-    // canActivate: [LoggedInGuard],
     loadChildren: () =>
       import('./feature-module/feature-module.module').then(
         (m) => m.FeatureModuleModule

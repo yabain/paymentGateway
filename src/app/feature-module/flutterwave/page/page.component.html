@@ -1,0 +1,200 @@
+<div class="page-header">
+    <div class="content-page-header page-tilte">
+        <h5>
+            <img src="assets/img/ressorces/flutterwave2.png" alt="" style="max-width: 50px; margin-right: 10px;">
+            Flutterwave {{ selectedCountry?.name | translate }}
+        </h5>
+        <div class="page-content">
+            <div class="list-btn">
+                <ul class="filter-list">
+                    <li *ngIf="status === true"
+                        style="background-color: #04850e; color: #fff; padding: 3px 5px; border-radius: 3px;">
+                        {{ "users.enabled" | translate }}
+                    </li>
+                    <li *ngIf="status != true"
+                        style="background-color: #850404; color: #fff; padding: 3px 5px; border-radius: 3px;">
+                        {{ "users.disabled" | translate }}
+                    </li>
+                    <li (click)="changeUserActiveStatus()" *ngIf="status != true">
+                        <a class="btn-filters btn-hover" href="javascript:void(0);" data-bs-toggle="tooltip"
+                            data-bs-placement="bottom" matTooltip="Enable"><span><i class="feather icon-power"
+                                    style="color: #04c714"></i></span></a>
+                    </li>
+                    <li (click)="changeUserActiveStatus()" *ngIf="status === true">
+                        <a class="btn-filters btn-hover" href="javascript:void(0);" data-bs-toggle="tooltip"
+                            data-bs-placement="bottom" matTooltip="Disable"><span><i class="feather icon-power"
+                                    style="color: #df0404"></i></span></a>
+                    </li>
+                    <li>
+                        <a class="btn-filters btn-hover" href="javascript:void(0);" data-bs-toggle="tooltip"
+                            data-bs-placement="bottom" matTooltip="Refresh" (click)="refresh()"><span><i
+                                    class="feather icon-refresh-ccw"></i></span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Page Header -->
+
+<div class="card customer-details-group">
+    <div class="card-body">
+        <div *ngIf="gettingSolde">
+            <div class="d-flex justify-content-center">
+                <img src="assets/img/ressorces/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;">
+                <!-- <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div> -->
+            </div>
+        </div>
+        <div class="row align-items-center" *ngIf="!gettingSolde">
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12">
+                <div class="customer-details">
+                    <div class="d-flex align-items-center">
+                        <span class="customer-widget-img d-inline-flex">
+                            <img class="rounded-circle" [src]="selectedCountry?.flagUrl" alt="image">
+                        </span>
+                        <div class="customer-details-cont">
+                            <h6>
+                                {{ selectedCountry?.currency }} {{ solde | number:'1.2-2' }}
+                            </h6>
+                            <p style="font-size: 0.5rem;">
+                                <b>
+                                    Solde Flutterwave {{ selectedCountry?.name | translate }}
+                                </b>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <h6 *ngIf="!gettingSolde" style="margin-bottom: 10px;">{{ "flutterwave.otherCurrencyBalances" | translate }}
+        </h6>
+        <div class="row align-items-center" *ngIf="!gettingSolde">
+            <div class="col-xl-2 col-lg-2 col-md-6 col-12" *ngFor="let os of otherSolde">
+                <div class="customer-details">
+                    <div class="d-flex align-items-center">
+                        <div class="customer-details-cont">
+                            <h6>
+                                {{ os.currency }} {{ os.available_balance | number:'1.2-2' }}
+                            </h6>
+                            <p style="font-size: 0.5rem;">
+                                <b>
+                                    {{ "flutterwave.fwBalance" | translate }} {{ os.currency }}
+                                </b>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">{{ "sideMenu.payin" | translate }}</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table mb-0" *ngIf="!gettingPayinTransactions && payoutList.length > 0">
+                        <thead>
+                            <tr>
+                                <th>{{ "subscriptions.name" | translate }}</th>
+                                <th>{{ "payment.amount" | translate }}</th>
+                                <th>{{ "payment.bank" | translate }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let p of payinList" [ngClass]="{
+                                'table-success': p.status === 'SUCCESSFUL',
+                                'table-light': p.status === 'PENDING',
+                                'table-danger': p.status === 'FAILED'
+                                }">
+                                <td>{{ p.full_name}}</td>
+                                <td>{{ p.amount | number:'1.2-2' }} {{ p.currency }}</td>
+                                <td>{{ p.bank_name }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div *ngIf="gettingPayinTransactions" class="row d-flex align-items-cente justify-content-center">
+                        <!-- <img src="assets/img/ressorces/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;"> -->
+                        <div class="spinner-border text-primary" role="status" style="margin: 20px;">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+
+                    <div *ngIf="!gettingPayinTransactions && payinList.length < 1"
+                        class="row d-flex align-items-center justify-content-center">
+                        <div class="col-md-12" style="display: flex;
+                                justify-content: center;
+                                align-items: center;">
+                            <img src="../../../../assets/img/ressorces/nts.png" alt="" style="max-width: 150px;
+                                    height: auto;">
+                        </div>
+                        <div class="col-md-12" style="display: flex;
+                                justify-content: center;
+                                align-items: center;">
+                            {{ "nts" | translate }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">{{ "sideMenu.payout" | translate }}</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table mb-0" *ngIf="!gettingPayoutTransactions && payoutList.length > 0">
+                        <thead>
+                            <tr>
+                                <th>{{ "subscriptions.name" | translate }}</th>
+                                <th>{{ "payment.amount" | translate }}</th>
+                                <th>{{ "payment.bank" | translate }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let p of payoutList" [ngClass]="{
+                                'table-success': p.status === 'SUCCESSFUL',
+                                'table-light': p.status === 'PENDING',
+                                'table-danger': p.status === 'FAILED'
+                                }">
+                                <td>{{ p.full_name}}</td>
+                                <td>{{ p.amount | number:'1.2-2' }} {{ p.currency }}</td>
+                                <td>{{ p.bank_name }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div *ngIf="gettingPayoutTransactions" class="row d-flex align-items-cente justify-content-center">
+                        <!-- <img src="assets/img/ressorces/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;"> -->
+                        <div class="spinner-border text-primary" role="status" style="margin: 20px;">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+
+                    <div *ngIf="!gettingPayoutTransactions && payoutList.length < 1"
+                        class="row d-flex align-items-center justify-content-center">
+                        <div class="col-md-12" style="display: flex;
+                                justify-content: center;
+                                align-items: center;">
+                            <img src="../../../../assets/img/ressorces/nts.png" alt="" style="max-width: 150px;
+                                    height: auto;">
+                        </div>
+                        <div class="col-md-12" style="display: flex;
+                                justify-content: center;
+                                align-items: center;">
+                            {{ "nts" | translate }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
