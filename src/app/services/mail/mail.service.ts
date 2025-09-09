@@ -3,9 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, catchError, tap } from 'rxjs/operators';
 import { from, Observable, of, throwError } from 'rxjs';
-import { ToastService } from '../toast.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ApiService } from '../api/api.service';
+import { ToastService } from '../toast/toast.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,59 +21,84 @@ export class MailService {
   ) {
   }
 
-  getMailerStatus(): Observable<boolean> {
-    return this.apiService.getWithoutId('whatsapp/get-client-status').pipe(
+  getSmtpData(): Observable<boolean> {
+    return this.apiService.getWithoutId('smtp').pipe(
       map((res: any) => {
         if (res) {
-          return res.status;
+          return res;
         }
         return false;
       }),
       catchError((err) => {
-        console.error('Error getting client status:', err);
-        this.toastService.presentToast(this.translate.instant('whatsapp.statusError') + ': ' + err, 'top', 'danger');
-        return of(false); // Emit false if there's an error
+        console.error('Error getting smtp settings:', err);
+        this.toastService.presentToast('error', 'Error', 'Error to get data', 7000);
+        return of(false);
       })
     );
   }
 
-  updateMail(code: string, phone: string): Observable<any> {
-    return this.apiService.updateWithoutId('whatsapp/update-contact', { code, phone }).pipe(
+  updateSmtp(smtpData): Observable<any> {
+    return this.apiService.updateWithoutId('smtp/update', smtpData).pipe(
       map((res: any) => {
-        if (res && res.status) {
-          this.toastService.presentToast('Whatsapp contact for alert update', 'top', 'success');
+        if (res) {
+          this.toastService.presentToast('success', 'Done!', 'SMTP settings updated', 7000);
           return res;
-        } else {
-          this.toastService.presentToast('Unable to update the Whatsapp admin contact for alert', 'top', 'danger');
-          return false;
-        }
+        } 
       }),
       catchError((err) => {
         console.error('Error updating contact:', err);
-        this.toastService.presentToast(this.translate.instant('whatsapp.contactUpdateError') + ': ' + err, 'top', 'danger');
+        this.toastService.presentToast('error', 'Error', 'Error to update data', 7000);
         return throwError(err); // Propagate the error
       })
     );
   }
 
-  sendTestMail(code: string, to: string, message: string): Observable<any> {
-    return this.apiService.create('whatsapp/send', { to, message, code }).pipe(
+  sendTestMail(to: string, subject: string, message: string): Observable<any> {
+    return this.apiService.create('email/send-test', { to, subject, message }).pipe(
       map((res: any) => {
-        console.log('res', res);
-        if (res && res.success) {
-          this.toastService.presentToast('Test message sent !', 'top', 'success');
+        if (res) {
+          this.toastService.presentToast('success', 'Success!', 'Test mail sent !', 7000);
           return res;
-        } else {
-          this.toastService.presentToast('Unable to send test message', 'top', 'danger');
-          return false;
-        }
+        } 
       }),
       catchError((err) => {
         console.error('Error updating contact:', err);
-        this.toastService.presentToast('Error to send test message' + ': ' + err, 'top', 'danger');
+        this.toastService.presentToast('error', 'Error', 'Error to send test email', 7000);
         return throwError(err); // Propagate the error
       })
     );
   }
 
+  resetSmtp(): Observable<boolean> {
+    return this.apiService.getWithoutId('smtp/reset').pipe(
+      map((res: any) => {
+        if (res) {
+          this.toastService.presentToast('success', 'Done!', 'SMTP factory reset.', 7000);
+          return res;
+        }
+        return false;
+      }),
+      catchError((err) => {
+        console.error('Error getting smtp settings:', err);
+        this.toastService.presentToast('error', 'Error', 'Error to get data', 7000);
+        return of(false);
+      })
+    );
+  }
+
+  getOutputMails(): Observable<boolean> {
+    return this.apiService.getWithoutId('email/output').pipe(
+      map((res: any) => {
+        if (res) {
+          return res;
+        }
+        return false;
+      }),
+      catchError((err) => {
+        console.error('Error getting smtp settings:', err);
+        this.toastService.presentToast('error', 'Error', 'Error to get output emails', 7000);
+        return of(false);
+      })
+    );
+  }
 }

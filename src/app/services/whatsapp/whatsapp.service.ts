@@ -4,9 +4,9 @@ import { Injectable } from '@angular/core';
 import { map, catchError, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { from, Observable, of, throwError } from 'rxjs';
-import { ToastService } from '../toast.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ApiService } from '../api/api.service';
+import { ToastService } from '../toast/toast.service';
 
 @Injectable({
   providedIn: 'root'

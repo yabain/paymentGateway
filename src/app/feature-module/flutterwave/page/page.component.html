@@ -42,9 +42,6 @@
         <div *ngIf="gettingSolde">
             <div class="d-flex justify-content-center">
                 <img src="assets/img/ressorces/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;">
-                <!-- <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div> -->
             </div>
         </div>
         <div class="row align-items-center" *ngIf="!gettingSolde">
@@ -97,26 +94,36 @@
         <div class="card">
             <div class="card-header">
                 <h5 class="card-title">{{ "sideMenu.payin" | translate }}</h5>
+                <select id="label" class="form-select" (change)="onSelectInPeriode($event)" id="country"
+                    *ngIf="!gettingPayinTransactions" [value]="periodePayin">
+                    <option value="1">Le mois dernier</option>
+                    <option value="6">6 derniers mois</option>
+                    <option value="12">12 derniers mois</option>
+                    <option value="24">24 derniers mois</option>
+                </select>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table mb-0" *ngIf="!gettingPayinTransactions && payoutList.length > 0">
+                    <table class="table mb-0" *ngIf="!gettingPayinTransactions && payinList.length > 0">
                         <thead>
                             <tr>
                                 <th>{{ "subscriptions.name" | translate }}</th>
                                 <th>{{ "payment.amount" | translate }}</th>
-                                <th>{{ "payment.bank" | translate }}</th>
+                                <th>{{ "payment.taxes" | translate }}</th>
+                                <th>Date</th>
                             </tr>
                         </thead>
+                        .
                         <tbody>
                             <tr *ngFor="let p of payinList" [ngClass]="{
-                                'table-success': p.status === 'SUCCESSFUL',
-                                'table-light': p.status === 'PENDING',
-                                'table-danger': p.status === 'FAILED'
+                                'table-success': p.status === 'successful',
+                                'table-light': p.status === 'pending',
+                                'table-danger': p.status === 'failed'
                                 }">
-                                <td>{{ p.full_name}}</td>
+                                <td>{{ p.customer.name}}</td>
                                 <td>{{ p.amount | number:'1.2-2' }} {{ p.currency }}</td>
-                                <td>{{ p.bank_name }}</td>
+                                <td>{{ p.app_fee | number:'1.2-2' }} {{ p.currency }}</td>
+                                <td>{{ p.created_at | date: 'dd/MM/yyyy'}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -132,7 +139,7 @@
                         <div class="col-md-12" style="display: flex;
                                 justify-content: center;
                                 align-items: center;">
-                            <img src="../../../../assets/img/ressorces/nts.png" alt="" style="max-width: 150px;
+                            <img src="assets/img/ressorces/nts.png" alt="" style="max-width: 150px;
                                     height: auto;">
                         </div>
                         <div class="col-md-12" style="display: flex;
@@ -149,6 +156,13 @@
         <div class="card">
             <div class="card-header">
                 <h5 class="card-title">{{ "sideMenu.payout" | translate }}</h5>
+                <select id="label" class="form-select" (change)="onSelectOutPeriode($event)" id="country"
+                    *ngIf="!gettingPayinTransactions" [value]="periodePayout">
+                    <option value="1">Le mois dernier</option>
+                    <option value="6">6 derniers mois</option>
+                    <option value="12">12 derniers mois</option>
+                    <option value="24">24 derniers mois</option>
+                </select>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -158,8 +172,10 @@
                                 <th>{{ "subscriptions.name" | translate }}</th>
                                 <th>{{ "payment.amount" | translate }}</th>
                                 <th>{{ "payment.bank" | translate }}</th>
+                                <th>Date</th>
                             </tr>
                         </thead>
+                        .
                         <tbody>
                             <tr *ngFor="let p of payoutList" [ngClass]="{
                                 'table-success': p.status === 'SUCCESSFUL',
@@ -169,6 +185,7 @@
                                 <td>{{ p.full_name}}</td>
                                 <td>{{ p.amount | number:'1.2-2' }} {{ p.currency }}</td>
                                 <td>{{ p.bank_name }}</td>
+                                <td>{{ p.created_at | date:'dd/MM/yyyy' }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -184,7 +201,7 @@
                         <div class="col-md-12" style="display: flex;
                                 justify-content: center;
                                 align-items: center;">
-                            <img src="../../../../assets/img/ressorces/nts.png" alt="" style="max-width: 150px;
+                            <img src="assets/img/ressorces/nts.png" alt="" style="max-width: 150px;
                                     height: auto;">
                         </div>
                         <div class="col-md-12" style="display: flex;

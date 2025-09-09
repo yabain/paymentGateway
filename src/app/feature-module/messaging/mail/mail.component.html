@@ -37,12 +37,174 @@
 <div class="row">
     <div class="col-md-6">
         <div class="card">
-            <div class="card-body"></div>
+            <div class="card-header">
+                <h5 class="card-title">SMTP Settings</h5>
+            </div>
+            <div class="card-body">
+                <form action="#">
+                    <div class="row">
+                        <div class="col-md-12" *ngIf="!waitingData && smtpData">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="input-block mb-3">
+                                        <label htmlFor="label">Serveur SMTP *</label>
+                                        <input id="label" type="text" [(ngModel)]="smtpHost" name="smtpHost"
+                                            class="form-control" placeholder="ex: smtp.gmail.com"
+                                            [disabled]="!edition" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="input-block mb-3">
+                                        <label htmlFor="label">Port *</label>
+                                        <input id="label" type="number" [(ngModel)]="smtpPort" name="smtpPort"
+                                            class="form-control" placeholder="ex: 465" [disabled]="!edition" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="input-block mb-3">
+                                        <label htmlFor="label">Email *</label>
+                                        <input id="label" type="email" [(ngModel)]="smtpUser" name="smtpUser"
+                                            class="form-control" [disabled]="!edition" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="input-block mb-3">
+                                        <label htmlFor="label">Password *</label>
+                                        <input id="label" type="password" [(ngModel)]="smtpPassword" name="smtpPassword"
+                                            class="form-control" [disabled]="!edition" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="input-block mb-3">
+                                        <label htmlFor="label">Secure *</label>
+                                        <select id="label" class="form-select" [(ngModel)]="smtpSecure"
+                                            name="smtpSecure" [disabled]="!edition">
+                                            <option [value]="true">true</option>
+                                            <option [value]="false">false</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="input-block mb-3">
+                                        <label htmlFor="label">Encription</label>
+                                        <select id="label" class="form-select" [(ngModel)]="smtpEncription"
+                                            name="smtpEncription" [disabled]="!edition">
+                                            <option [value]="'SSL/TLS'">SSL/TLS</option>
+                                            <option [value]="'STARTTLS'">STARTTLS</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="waitingData">
+                            <div class="row d-flex align-items-cente justify-content-center">
+                                <!-- <img src="assets/img/ressorces/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;"> -->
+                                <div class="spinner-border text-primary" role="status" style="margin: 20px;">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-end" *ngIf="!waitingData && smtpData">
+                        <button type="submit" class="btn btn-block btn-outline-secondary" style="margin-right: 10px;"
+                            *ngIf="!edition" (click)="resetSmtp()">Reset Settings</button>
+                        <button type="submit" class="btn btn-block btn-outline-secondary" (click)="cancel()"
+                            style="margin-right: 10px;" *ngIf="edition">{{ 'action.cancel' | translate }}</button>
+                        <button type="submit" class="btn btn-primary" *ngIf="edition" (click)="save()">{{ 'action.save'
+                            | translate }}</button>
+                        <button type="submit" class="btn btn-primary" *ngIf="!edition" (click)="toggleEdition()">{{
+                            'action.edit' | translate }}</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
     <div class="col-md-6">
         <div class="card">
-            <div class="card-body"></div>
+            <div class="card-header">
+                <h5 class="card-title">Test a test mail</h5>
+            </div>
+            <div class="card-body">
+                <form action="#" *ngIf="!waitingData && smtpData">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="input-block mb-3">
+                                <label htmlFor="label">Email</label>
+                                <input id="label" type="text" class="form-control" [(ngModel)]="email" name="email" />
+                            </div>
+                            <div class="input-block mb-3">
+                                <label htmlFor="label">Object</label>
+                                <input id="label" type="text" class="form-control" [(ngModel)]="subject"
+                                    name="subject" />
+                            </div>
+                            <div class="input-block mb-3">
+                                <label htmlFor="label">Your Message</label>
+                                <textarea rows="1" cols="1" class="form-control" [(ngModel)]="message" name="message"
+                                    placeholder="Enter message"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary" *ngIf="!sending" (click)="send()">{{ 'action.send'
+                            | translate}}</button>
+                        <button type="submit" class="btn btn-outline-secondary" *ngIf="sending" disabled>
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </button>
+                    </div>
+                </form>
+                <div *ngIf="waitingData">
+                    <div class="row d-flex align-items-cente justify-content-center">
+                        <!-- <img src="assets/img/ressorces/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;"> -->
+                        <div class="spinner-border text-primary" role="status" style="margin: 20px;">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Email output</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped mb-0">
+                        <thead>
+                            <tr>
+                                <th>Address</th>
+                                <th>Subject</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let o of outputList">
+                                <td>{{ o.to }}</td>
+                                <td>{{ o.subject }}</td>
+                                <td>{{ o.createdAt | date:'dd-MM-yyyy HH:mm:ss'}}</td>
+                                <td>
+                                    <button class="btn btn-block btn-outline-success" disabled
+                                        *ngIf="o.status === true">Success</button>
+                                    <button class="btn btn-block btn-outline-danger" disabled
+                                        *ngIf="o.status === false">Error</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>

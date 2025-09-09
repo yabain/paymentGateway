@@ -107,11 +107,10 @@ export class SendMoneyComponent implements OnInit {
     this.getSolde();
   }
 
-  getSolde(){
-    this.fw.getApplicationBalance('NGN')
-    .subscribe((resp: any) => {
-    console.log('wallet NGN: ', resp);
-    })
+  getSolde() {
+    this.fw.getApplicationBalance('NGN').subscribe((resp: any) => {
+      console.log('wallet NGN: ', resp);
+    });
   }
 
   ngOnInit(): void {
@@ -152,48 +151,45 @@ export class SendMoneyComponent implements OnInit {
   startPolling() {
     if (!this.txRef) return;
     if (this.pollTimer) clearInterval(this.pollTimer);
+    this.transactionSucceded = false;
+    this.transactionFailed = false;
 
     this.pollTimer = setInterval(async () => {
       try {
-        this.fw.checkStatus(this.txRef)
-        .subscribe((resp: any) => {
-        const status =
-          resp?.data?.data?.status ||
-          resp?.data?.status ||
-          resp?.status ||
-          'pending';
-        if (['successful', 'success'].includes(status.toLowerCase())) {
-          this.transactionSucceded = true;
-          this.transactionFailed = false;
-          clearInterval(this.pollTimer);
-        }
-        if (
-          ['cancelled'].includes(status.toLowerCase())
-        ) {
-          this.transactionSucceded = false;
-          this.transactionFailed = true;
-          clearInterval(this.pollTimer);
-        }
-        if (
-          ['failed'].includes(status.toLowerCase())
-        ) {
-          this.transactionSucceded = false;
-          this.transactionFailed = true;
-          // clearInterval(this.pollTimer);
-        }
-      });
+        this.fw.checkStatus(this.txRef).subscribe((resp: any) => {
+          const status =
+            resp?.data?.data?.status ||
+            resp?.data?.status ||
+            resp?.status ||
+            'pending';
+          if (['successful', 'success'].includes(status.toLowerCase())) {
+            this.transactionSucceded = true;
+            this.transactionFailed = false;
+            clearInterval(this.pollTimer);
+          }
+          if (['cancelled'].includes(status.toLowerCase())) {
+            this.transactionSucceded = false;
+            this.transactionFailed = true;
+            clearInterval(this.pollTimer);
+          }
+          if (['failed'].includes(status.toLowerCase())) {
+            this.transactionSucceded = false;
+            this.transactionFailed = true;
+            // clearInterval(this.pollTimer);
+          }
+        });
       } catch (err) {
         console.warn('polling error', err);
       }
     }, 5000);
   }
 
-  getBanksList(countryIso2){
+  getBanksList(countryIso2) {
     this.waitingBankList = true;
     this.fw.getBanksList(countryIso2).subscribe((res: any) => {
       this.waitingBankList = false;
       this.bankList = res;
-    })
+    });
   }
 
   formatAmount(event: any) {
@@ -387,7 +383,8 @@ export class SendMoneyComponent implements OnInit {
     if (!this.canNext()) return false;
     this.setTransactionData();
     if (this.selectedMethod === 'BANK') {
-      if (this.bankAccountNumber && this.bankCode) return (this.canNext2Val = true);
+      if (this.bankAccountNumber && this.bankCode)
+        return (this.canNext2Val = true);
     } else {
       if (!this.receiverMobileAccountNumber) this.canNext2Val = false;
       if (
@@ -527,6 +524,8 @@ export class SendMoneyComponent implements OnInit {
       const timer = setInterval(async () => {
         if (payWin.closed) {
           clearInterval(timer);
+          this.transactionSucceded = false;
+          this.transactionFailed = false;
           // petite vérification pour mettre l’UI à jour (statut PENDING/ABANDONED)
           try {
             this.modalClosed = true;
@@ -559,12 +558,11 @@ export class SendMoneyComponent implements OnInit {
         if (res) {
           if (res.status === 'successful' || res.status === 'success') {
             this.transactionSucceded = true;
-            this.transactionFailed = false
-          } else if (res.status === 'failed'){
+            this.transactionFailed = false;
+          } else if (res.status === 'failed') {
             this.transactionSucceded = false;
-            this.transactionFailed = true
-          }
-          else {
+            this.transactionFailed = true;
+          } else {
             this.transactionSucceded = false;
             this.transactionFailed = false;
           }
@@ -586,11 +584,13 @@ export class SendMoneyComponent implements OnInit {
   }
 
   setTransactionData() {
-    if(this.selectedMethod === 'MTN') {
-      this.bankAccountNumber = this.selectedCountry.code + this.receiverMobileAccountNumber;
+    if (this.selectedMethod === 'MTN') {
+      this.bankAccountNumber =
+        this.selectedCountry.code + this.receiverMobileAccountNumber;
       this.bankCode = 'MTN';
     } else if (this.selectedMethod === 'OM') {
-      this.bankAccountNumber = this.selectedCountry.code + this.receiverMobileAccountNumber;
+      this.bankAccountNumber =
+        this.selectedCountry.code + this.receiverMobileAccountNumber;
       this.bankCode = 'ORANGEMONEY';
     }
     this.transactionData = {
@@ -620,7 +620,8 @@ export class SendMoneyComponent implements OnInit {
 
       paymentMethod: this.selectedMethod,
       receiverMobileAccountNumber: this.receiverMobileAccountNumber,
-      bankAccountNumber: this.bankAccountNumber?.replaceAll(' ', '') || undefined,
+      bankAccountNumber:
+        this.bankAccountNumber?.replaceAll(' ', '') || undefined,
       bankCode: this.bankCode,
 
       status: this.paymentService.status.INITIALIZED,
@@ -667,7 +668,7 @@ export class SendMoneyComponent implements OnInit {
 
   // Phone number verification
   isValidPhoneNumber(phone: string): boolean {
-    if(this.selectedCountry.code !== '237') return true;
+    if (this.selectedCountry.code !== '237') return true;
     // Chech if string has exactly 9 numbers
     const isNineDigits = /^\d{9}$/.test(phone);
     return isNineDigits;
@@ -675,7 +676,7 @@ export class SendMoneyComponent implements OnInit {
 
   // Phone number verification: Orange Cameroon
   isValidOrangePhoneNumber(phone: string): boolean {
-    if(this.selectedCountry.code !== '237') return true;
+    if (this.selectedCountry.code !== '237') return true;
     // Check if string start with 655, 656, 657, 658, 659 or 69*
     const orangeRegex = /^6((55|56|57|58|59|86|87|88|89)|9[0-9])\d{6}$/;
 
@@ -690,7 +691,7 @@ export class SendMoneyComponent implements OnInit {
 
   // Phone number verification: MTN Cameroon
   isValidMTNPhoneNumber(phone: string): boolean {
-    if(this.selectedCountry.code !== '237') return true;
+    if (this.selectedCountry.code !== '237') return true;
     // Check if string start with 650, 651, 652, 653, 654, 67* or 680*
     const mtnRegex = /^6((50|51|52|53|54)|7[0-9]|8[0-5])\d{6}$/;
 
@@ -823,9 +824,7 @@ export class SendMoneyComponent implements OnInit {
    */
   onSelectBank(event: Event) {
     const bankCode = (event.target as HTMLSelectElement).value;
-    const selected = this.bankList.filter(
-      (e) => e.code === bankCode,
-    );
+    const selected = this.bankList.filter((e) => e.code === bankCode);
     this.selectedBank = selected[0];
     this.bankCode = this.selectedBank?.code || '';
   }
@@ -862,7 +861,7 @@ export class SendMoneyComponent implements OnInit {
     this.convertCurrency();
   }
 
-  navigateTo(route){
+  navigateTo(route) {
     this.ngOnDestroy();
     this.router.navigate([route]);
   }
@@ -874,5 +873,4 @@ export class SendMoneyComponent implements OnInit {
     this.destroy$.complete();
     clearInterval(this.pollTimer);
   }
-
 }

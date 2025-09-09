@@ -807,6 +807,15 @@ export class DataService {
           base: 'admin-subscription',
         },
         {
+          menuValue: 'flutterwaveWallets',
+          route: '/flutterwave-wallets',
+          hasSubRoute: false,
+          showSubRoute: false,
+          icon: 'activity',
+          base: 'flutterwave-wallets',
+          subMenus: [],
+        },
+        {
           menuValue: 'payin',
           route: '/admin-payin',
           hasSubRoute: false,
@@ -831,15 +840,6 @@ export class DataService {
           showSubRoute: false,
           icon: 'message-circle',
           base: 'admin-massaging',
-          subMenus: [],
-        },
-        {
-          menuValue: 'flutterwaveWallets',
-          route: '/flutterwave-wallets',
-          hasSubRoute: false,
-          showSubRoute: false,
-          icon: 'activity',
-          base: 'flutterwave-wallets',
           subMenus: [],
         },
         {

@@ -25,6 +25,8 @@ export class PageComponent implements OnInit, OnDestroy {
   gettingPayoutTransactions: boolean = true;
   payinList: any[] = [];
   payoutList: any[] = [];
+  periodePayin: string = '1';
+  periodePayout: string = '1';
 
   constructor(
     private route: ActivatedRoute,
@@ -38,7 +40,10 @@ export class PageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+    this.periodePayin = '1';
+    this.periodePayout = '1';
       this.verifyRoute();
+      this.refresh();
     });
   }
 
@@ -68,7 +73,9 @@ export class PageComponent implements OnInit, OnDestroy {
           (s) => s.currency === this.selectedCountry.currency,
         );
         this.solde = this.solde ? this.solde.available_balance : 0;
-        this.otherSolde = this.soldeListe.filter((s) => s.available_balance > 0)
+        this.otherSolde = this.soldeListe.filter(
+          (s) => s.available_balance > 0,
+        );
         this.gettingSolde = false;
       },
       error: (err) => {
@@ -78,9 +85,9 @@ export class PageComponent implements OnInit, OnDestroy {
     });
   }
 
-  getPayinList() {
+  getPayinList(periode: number = 1) {
     this.gettingPayinTransactions = true;
-    this.fw.getPayinList(this.selectedCountry.iso2).subscribe({
+    this.fw.getPayinList(this.selectedCountry.iso2, periode).subscribe({
       next: (res: any) => {
         this.payinList = res.data;
         this.gettingPayinTransactions = false;
@@ -92,9 +99,19 @@ export class PageComponent implements OnInit, OnDestroy {
     });
   }
 
-  getPayoutList() {
+  onSelectInPeriode(event) {
+    this.periodePayin = (event.target as HTMLSelectElement).value;
+    this.getPayinList(Number(this.periodePayin));
+  }
+
+  onSelectOutPeriode(event) {
+    this.periodePayout = (event.target as HTMLSelectElement).value;
+    this.getPayoutList(Number(this.periodePayout));
+  }
+
+  getPayoutList(periode: number = 1) {
     this.gettingPayoutTransactions = true;
-    this.fw.getPayoutList(this.selectedCountry.iso2).subscribe({
+    this.fw.getPayoutList(this.selectedCountry.iso2, periode).subscribe({
       next: (res: any) => {
         this.payoutList = res.data;
         this.gettingPayoutTransactions = false;
@@ -113,6 +130,8 @@ export class PageComponent implements OnInit, OnDestroy {
   changeUserActiveStatus() {}
 
   refresh() {
+    this.periodePayin = '1';
+    this.periodePayout = '1';
     this.getData();
   }
 
