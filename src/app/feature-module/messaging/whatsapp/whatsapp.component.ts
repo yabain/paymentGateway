@@ -137,7 +137,7 @@ export class WhatsappComponent implements OnInit {
   }
 
   sendTestMessage() {
-    console.log('Saving contact with phone:', this.phone, 'and country code:', this.countryCode);
+    // console.log('Saving contact with phone:', this.phone, 'and country code:', this.countryCode);
     if (!this.testPhone || !this.testCountryCode || !this.testMessage) {
       this.toastService.presentToast('warning', 'Error form!', 'Invalid contact form',);
       return;
@@ -185,7 +185,6 @@ export class WhatsappComponent implements OnInit {
   }
 
   getClientStatus() {
-    console.log('getting status')
     this.whatsappService.getClienStatus()
       .pipe(
         catchError(error => of({ error }))
@@ -218,7 +217,6 @@ export class WhatsappComponent implements OnInit {
       )
       .subscribe({
         next: (resp: any) => {
-          // console.log('Initialisation response:', resp);
           if (resp.status === true) {
             this.toastService.presentToast('Initialisation started !', 'top', 'success');
             this.refreshQr();
