@@ -55,6 +55,7 @@ export class WhatsappService {
   getClienStatus(): Observable<boolean> {
     return this.apiService.getWithoutId('whatsapp/get-client-status').pipe(
       map((res: any) => {
+        console.log('res getClienStatus: ', res)
         if (res) {
           return res.status;
         }
@@ -92,10 +93,10 @@ export class WhatsappService {
       map((res: any) => {
         console.log('res', res);
         if (res && res.success) {
-          this.toastService.presentToast('Test message sent !', 'top', 'success');
+          this.toastService.presentToast('success', 'Message was send', 'Test message sent !');
           return res;
         } else {
-          this.toastService.presentToast('Unable to send test message', 'top', 'danger');
+          this.toastService.presentToast('error', 'Error', 'Unable to send test message');
           return false;
         }
       }),

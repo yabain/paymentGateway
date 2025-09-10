@@ -7,7 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MessagingComponent } from './messaging.component';
 import { WhatsappComponent } from './whatsapp/whatsapp.component';
 import { MailComponent } from './mail/mail.component';
-
+import { QRCodeModule } from 'angularx-qrcode';
 
 @NgModule({
   declarations: [
@@ -19,7 +19,8 @@ import { MailComponent } from './mail/mail.component';
     CommonModule,
     MessagingRoutingModule,
     SharedModule,
-    TranslateModule
+    TranslateModule,
+    QRCodeModule
   ],
   providers: []
 })

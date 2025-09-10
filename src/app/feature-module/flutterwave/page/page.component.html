@@ -157,7 +157,7 @@
             <div class="card-header">
                 <h5 class="card-title">{{ "sideMenu.payout" | translate }}</h5>
                 <select id="label" class="form-select" (change)="onSelectOutPeriode($event)" id="country"
-                    *ngIf="!gettingPayinTransactions" [value]="periodePayout">
+                    *ngIf="!gettingPayoutTransactions" [value]="periodePayout">
                     <option value="1">Le mois dernier</option>
                     <option value="6">6 derniers mois</option>
                     <option value="12">12 derniers mois</option>

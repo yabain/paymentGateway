@@ -816,6 +816,15 @@ export class DataService {
           subMenus: [],
         },
         {
+          menuValue: 'messageCenter',
+          route: '/admin-massaging',
+          hasSubRoute: false,
+          showSubRoute: false,
+          icon: 'message-circle',
+          base: 'admin-massaging',
+          subMenus: [],
+        },
+        {
           menuValue: 'payin',
           route: '/admin-payin',
           hasSubRoute: false,
@@ -831,15 +840,6 @@ export class DataService {
           showSubRoute: false,
           icon: 'credit-card',
           base: 'admin-payout',
-          subMenus: [],
-        },
-        {
-          menuValue: 'messageCenter',
-          route: '/admin-massaging',
-          hasSubRoute: false,
-          showSubRoute: false,
-          icon: 'message-circle',
-          base: 'admin-massaging',
           subMenus: [],
         },
         {

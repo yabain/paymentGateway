@@ -1,6 +1,8 @@
 <div class="page-header">
     <div class="content-page-header page-tilte">
-        <h5>{{ 'sideMenu.mail' | translate }}</h5>
+        <h5>
+            <img src="assets/img/ressorces/gmail.png" alt="" style="width: 30px; margin-right: 10px;">
+            {{ 'sideMenu.mail' | translate }}</h5>
         <div class="page-content">
             <div class="list-btn">
                 <ul class="filter-list">
@@ -126,7 +128,7 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <h5 class="card-title">Test a test mail</h5>
+                <h5 class="card-title">Send a test mail</h5>
             </div>
             <div class="card-body">
                 <form action="#" *ngIf="!waitingData && smtpData">
