@@ -72,6 +72,14 @@ const routes: Routes = [
             (m) => m.FlutterwaveModule,
           ),
       },
+      {
+        path: 'admin-payout',
+        canActivate: [AdminGuard],
+        loadChildren: () =>
+          import('./payout/payout.module').then(
+            (m) => m.PayoutModule,
+          ),
+      },
 
 
 

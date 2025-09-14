@@ -189,6 +189,7 @@ export class SendMoneyComponent implements OnInit {
     this.fw.getBanksList(countryIso2).subscribe((res: any) => {
       this.waitingBankList = false;
       this.bankList = res;
+      console.log('bank list: ', res)
     });
   }
 
@@ -625,7 +626,7 @@ export class SendMoneyComponent implements OnInit {
       bankCode: this.bankCode,
 
       status: this.paymentService.status.INITIALIZED,
-      paymentType: this.paymentService.transactionType.TRANSFER,
+      transactionType: this.paymentService.transactionType.TRANSFER,
     };
   }
 

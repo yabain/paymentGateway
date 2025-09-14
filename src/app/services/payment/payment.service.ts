@@ -77,6 +77,63 @@ export class PaymentService {
     );
   }
 
+  getStatistics(): Observable<any | undefined> {
+    return this.apiService.getWithToken('transaction/get-statistics').pipe(
+      map((data) => {
+        return data;
+      }),
+      catchError((error) => {
+        console.error('Error fetching transactions statistics:', error);
+        return of([]);
+      }),
+    );
+  }
+  
+  getTransactionList(page: number = 1): Observable<any> {
+    return this.apiService.getWithoutId(`transaction` + '?page=' + page).pipe(
+      map((res: any) => {
+        if (res) {
+          return res;
+        }
+        return false;
+      }),
+      catchError((err) => {
+        console.error('Error getting favorites:', err);
+        return of(false); // Emit false if there's an error
+      }),
+    );
+  }
+  
+  acceptPayment(transactionId): Observable<any> {
+    return this.apiService.getById(`fw/payout`, transactionId).pipe(
+      map((res: any) => {
+        if (res) {
+          return res;
+        }
+        return false;
+      }),
+      catchError((err) => {
+        console.error('Error getting favorites:', err);
+        return of(false); // Emit false if there's an error
+      }),
+    );
+  }
+
+  getTransactionListByStatus(status: string, page: number = 1): Observable<any> {
+    return this.apiService.getWithoutId(`transaction/get-payout-list/${status}` + '?page=' + page).pipe(
+      map((res: any) => {
+        if (res) {
+          return res;
+        }
+        return false;
+      }),
+      catchError((err) => {
+        console.error('Error getting favorites:', err);
+        return of(false); // Emit false if there's an error
+      }),
+    );
+  }
+
   openPayin(txRef): Observable<any> {
     return this.apiService.getById(`fw/open-payin`, txRef).pipe(
       map((res: any) => {

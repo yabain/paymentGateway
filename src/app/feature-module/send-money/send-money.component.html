@@ -200,6 +200,18 @@
                               <span class="coming-soon">{{ "payment.comingSoon" | translate }}</span>
                             </div>
                           </div>
+
+
+                          <div class="method-card" style="opacity: 0.6;">
+                            <div class="method-icon" style="color: #003087;">
+                              <img src="assets/img/ressorces/icon.jpg" alt="" class="method-img">
+                            </div>
+                            <div class="method-info">
+                              <h3>Digikuntz account</h3>
+                              <p>Instant payment</p>
+                              <span class="coming-soon">{{ "payment.comingSoon" | translate }}</span>
+                            </div>
+                          </div>
                         </div>
                       </div>
 
@@ -218,11 +230,13 @@
                             <div class="col-md-12">
                               <div class="input-block mb-3">
                                 <label htmlFor="receiverMobileAccountNumber">
-                                  {{ 'payment.receiverMobileAccountNumber' | translate }} *</label> +{{
-                                selectedCountry?.code }}
+                                  {{ 'payment.receiverMobileAccountNumber' | translate }} *</label>
+                                <div class="input-group">
+                                  <span class="input-group-text">+{{ selectedCountry?.code }}</span>
                                 <input id="receiverMobileAccountNumber" type="telephone" class="form-control"
                                   placeholder="691229122" [(ngModel)]="receiverMobileAccountNumber"
                                   name="receiverMobileAccountNumber" (input)="canNext2()" />
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -249,6 +263,8 @@
                               </div>
                             </div>
                           </div>
+                          <div class="fee-breakdown"><h4><i class="feather icon-triangle"></i> Warning !</h4>
+                            {{ "payment.sureBankAccountNumberMessage" | translate }}</div>
                         </div>
 
                       </div>

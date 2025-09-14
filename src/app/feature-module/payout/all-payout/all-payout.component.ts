@@ -5,11 +5,11 @@ import { FlutterwaveService } from 'src/app/services/flutterwave/flutterwave.ser
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-page',
-  templateUrl: './page.component.html',
-  styleUrls: ['./page.component.scss'],
+  selector: 'app-all-payout',
+  templateUrl: './all-payout.component.html',
+  styleUrls: ['./all-payout.component.scss'],
 })
-export class PageComponent implements OnInit, OnDestroy {
+export class AllPayoutComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   @Input() country: any;
   status: boolean = true;

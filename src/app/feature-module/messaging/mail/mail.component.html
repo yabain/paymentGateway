@@ -40,7 +40,7 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <h5 class="card-title">SMTP Settings</h5>
+                <h5 class="card-title">{{ "mail.settings" | translate }}</h5>
             </div>
             <div class="card-body">
                 <form action="#">
@@ -49,7 +49,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="input-block mb-3">
-                                        <label htmlFor="label">Serveur SMTP *</label>
+                                        <label htmlFor="label">{{ "mail.server" | translate }} *</label>
                                         <input id="label" type="text" [(ngModel)]="smtpHost" name="smtpHost"
                                             class="form-control" placeholder="ex: smtp.gmail.com"
                                             [disabled]="!edition" />
@@ -57,7 +57,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="input-block mb-3">
-                                        <label htmlFor="label">Port *</label>
+                                        <label htmlFor="label">{{ "mail.port" | translate }} *</label>
                                         <input id="label" type="number" [(ngModel)]="smtpPort" name="smtpPort"
                                             class="form-control" placeholder="ex: 465" [disabled]="!edition" />
                                     </div>
@@ -66,14 +66,14 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="input-block mb-3">
-                                        <label htmlFor="label">Email *</label>
+                                        <label htmlFor="label">{{ "mail.email" | translate }} *</label>
                                         <input id="label" type="email" [(ngModel)]="smtpUser" name="smtpUser"
                                             class="form-control" [disabled]="!edition" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="input-block mb-3">
-                                        <label htmlFor="label">Password *</label>
+                                        <label htmlFor="label">{{ "mail.password" | translate }} *</label>
                                         <input id="label" type="password" [(ngModel)]="smtpPassword" name="smtpPassword"
                                             class="form-control" [disabled]="!edition" />
                                     </div>
@@ -82,17 +82,17 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="input-block mb-3">
-                                        <label htmlFor="label">Secure *</label>
+                                        <label htmlFor="label">{{ "mail.secure" | translate }} *</label>
                                         <select id="label" class="form-select" [(ngModel)]="smtpSecure"
                                             name="smtpSecure" [disabled]="!edition">
-                                            <option [value]="true">true</option>
-                                            <option [value]="false">false</option>
+                                            <option [value]="true">{{ "mail.enabled" | translate }}</option>
+                                            <option [value]="false">{{ "mail.disabled" | translate }}</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="input-block mb-3">
-                                        <label htmlFor="label">Encription</label>
+                                        <label htmlFor="label">{{ "mail.encription" | translate }}</label>
                                         <select id="label" class="form-select" [(ngModel)]="smtpEncription"
                                             name="smtpEncription" [disabled]="!edition">
                                             <option [value]="'SSL/TLS'">SSL/TLS</option>
@@ -106,7 +106,7 @@
                             <div class="row d-flex align-items-cente justify-content-center">
                                 <!-- <img src="assets/img/ressorces/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;"> -->
                                 <div class="spinner-border text-primary" role="status" style="margin: 20px;">
-                                    <span class="visually-hidden">Loading...</span>
+                                    <span class="visually-hidden">{{ "loading" | translate }}...</span>
                                 </div>
                             </div>
                         </div>
@@ -128,25 +128,25 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <h5 class="card-title">Send a test mail</h5>
+                <h5 class="card-title">{{ "mail.sendTest" | translate }}</h5>
             </div>
             <div class="card-body">
                 <form action="#" *ngIf="!waitingData && smtpData">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="input-block mb-3">
-                                <label htmlFor="label">Email</label>
+                                <label htmlFor="label">{{ "mail.email" | translate }}</label>
                                 <input id="label" type="text" class="form-control" [(ngModel)]="email" name="email" />
                             </div>
                             <div class="input-block mb-3">
-                                <label htmlFor="label">Object</label>
+                                <label htmlFor="label">{{ "mail.subject" | translate }}</label>
                                 <input id="label" type="text" class="form-control" [(ngModel)]="subject"
                                     name="subject" />
                             </div>
                             <div class="input-block mb-3">
-                                <label htmlFor="label">Your Message</label>
+                                <label htmlFor="label">{{ "mail.message" | translate }}</label>
                                 <textarea rows="1" cols="1" class="form-control" [(ngModel)]="message" name="message"
-                                    placeholder="Enter message"></textarea>
+                                    placeholder="Message"></textarea>
                             </div>
                         </div>
                     </div>
@@ -155,7 +155,7 @@
                             | translate}}</button>
                         <button type="submit" class="btn btn-outline-secondary" *ngIf="sending" disabled>
                             <div class="spinner-border text-primary" role="status">
-                                <span class="visually-hidden">Loading...</span>
+                                <span class="visually-hidden">{{ "loading" | translate }}...</span>
                             </div>
                         </button>
                     </div>
@@ -164,7 +164,7 @@
                     <div class="row d-flex align-items-cente justify-content-center">
                         <!-- <img src="assets/img/ressorces/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;"> -->
                         <div class="spinner-border text-primary" role="status" style="margin: 20px;">
-                            <span class="visually-hidden">Loading...</span>
+                            <span class="visually-hidden">{{ "loading" | translate }}...</span>
                         </div>
                     </div>
                 </div>
@@ -178,17 +178,17 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <h5 class="card-title">Email output</h5>
+                <h5 class="card-title">{{ "mail.output" | translate }} </h5>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-striped mb-0">
                         <thead>
                             <tr>
-                                <th>Address</th>
-                                <th>Subject</th>
-                                <th>Date</th>
-                                <th>Status</th>
+                                <th>{{ "mail.address" | translate }}</th>
+                                <th>{{ "mail.subject" | translate }}</th>
+                                <th>{{ "mail.date" | translate }}</th>
+                                <th>{{ "mail.status" | translate }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -198,9 +198,9 @@
                                 <td>{{ o.createdAt | date:'dd-MM-yyyy HH:mm:ss'}}</td>
                                 <td>
                                     <button class="btn btn-block btn-outline-success" disabled
-                                        *ngIf="o.status === true">Success</button>
+                                        *ngIf="o.status === true">{{ "mail.success" | translate }}</button>
                                     <button class="btn btn-block btn-outline-danger" disabled
-                                        *ngIf="o.status === false">Error</button>
+                                        *ngIf="o.status === false">{{ "mail.error" | translate }}</button>
                                 </td>
                             </tr>
                         </tbody>

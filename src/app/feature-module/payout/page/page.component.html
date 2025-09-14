@@ -1,0 +1,374 @@
+<div class="page-header">
+    <div class="content-page-header page-tilte">
+        <h5>
+            {{ "payment.pendingPayout" | translate }}
+        </h5>
+        <div class="page-content">
+            <div class="list-btn">
+                <ul class="filter-list">
+                    <li>
+                        <a class="btn btn-rounded btn-outline-success me-1" href="javascript:void(0);"
+                            data-bs-toggle="tooltip" data-bs-placement="bottom" matTooltip="Accept all payments"
+                            (click)="acceptAll()"><span>
+                                {{ "payment.payAll" | translate }}</span></a>
+                    </li>
+                    <li>
+                        <a class="btn btn-rounded btn-outline-danger me-1" href="javascript:void(0);"
+                            data-bs-toggle="tooltip" data-bs-placement="bottom" matTooltip="Reject all payments"
+                            (click)="rejectAll()"><span>
+                                {{ "payment.rejectAll" | translate }}
+                            </span></a>
+                    </li>
+                    <li>
+                        <a class="btn-filters btn-hover" href="javascript:void(0);" data-bs-toggle="tooltip"
+                            data-bs-placement="bottom" matTooltip="Refresh" (click)="refresh()"><span><i
+                                    class="feather icon-refresh-ccw"></i></span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Page Header -->
+
+<div class="super-admin-list-head">
+    <div class="row">
+        <div class="col-xl-3 col-md-6 d-flex">
+            <div class="card w-100">
+                <div class="card-body card-head c-hover" (click)="selectSection('all')"
+                    [ngClass]="sectionSelected === 'all' ? 'active' :  ''">
+                    <div class="grid-info-item total-type">
+                        <div class="grid-info">
+                            <span>{{ 'payment.allPayout' | translate }}</span>
+                            <h4 *ngIf="gettingStatistics">{{ "loading" | translate }}...</h4>
+                            <h4 *ngIf="!gettingStatistics">{{ statistics?.totalTransaction }}</h4>
+                        </div>
+                        <div class="grid-head-icon">
+                            <i class="feather icon-list"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6 d-flex">
+            <div class="card w-100">
+                <div class="card-body card-head c-hover" (click)="selectSection('pending')"
+                    [ngClass]="sectionSelected === 'pending' ? 'active' :  ''">
+                    <div class="grid-info-item total-plane">
+                        <div class="grid-info">
+                            <span>{{ 'payment.pendingPayout' | translate }}</span>
+                            <h4 *ngIf="gettingStatistics">{{ "loading" | translate }}...</h4>
+                            <h4 *ngIf="!gettingStatistics">{{ statistics?.pendingTransaction }}</h4>
+                        </div>
+                        <div class="grid-head-icon">
+                            <i class="feather icon-pause-circle"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6 d-flex">
+            <div class="card w-100">
+                <div class="card-body card-head c-hover" (click)="selectSection('accepted')"
+                    [ngClass]="sectionSelected === 'accepted' ? 'active' :  ''">
+                    <div class="grid-info-item active-plane">
+                        <div class="grid-info">
+                            <span>{{ 'payment.acceptedPayout' | translate }}</span>
+                            <h4 *ngIf="gettingStatistics">{{ "loading" | translate }}...</h4>
+                            <h4 *ngIf="!gettingStatistics">{{ statistics?.endedTransaction }}</h4>
+                        </div>
+                        <div class="grid-head-icon">
+                            <i class="feather icon-pocket"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6 d-flex">
+            <div class="card w-100">
+                <div class="card-body card-head c-hover" (click)="selectSection('rejected')"
+                    [ngClass]="sectionSelected === 'rejected' ? 'active' :  ''">
+                    <div class="grid-info-item inactive-plane">
+                        <div class="grid-info">
+                            <span>{{ 'payment.rejectedPayout' | translate }}</span>
+                            <h4 *ngIf="gettingStatistics">{{ "loading" | translate }}...</h4>
+                            <h4 *ngIf="!gettingStatistics">{{ statistics?.rejectedTransaction }}</h4>
+                        </div>
+                        <div class="grid-head-icon">
+                            <i class="feather icon-pause-circle"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title" *ngIf="sectionSelected === 'rejected'">{{ 'payment.rejectedPayout' | translate }}
+                </h5>
+                <h5 class="card-title" *ngIf="sectionSelected === 'accepted'">{{ 'payment.acceptedPayout' | translate }}
+                </h5>
+                <h5 class="card-title" *ngIf="sectionSelected === 'pending'">{{ 'payment.pendingPayout' | translate }}
+                </h5>
+                <h5 class="card-title" *ngIf="sectionSelected === 'all'">{{ 'payment.allPayout' | translate }}</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped mb-0" *ngIf="!gettingTransactions && transactionList?.length > 0">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Date</th>
+                                <th>{{ "payment.amount" | translate }}</th>
+                                <th>{{ "payment.taxes" | translate }}</th>
+                                <th>{{ "payment.sender" | translate }}</th>
+                                <th>{{ "payment.receiverName" | translate }}</th>
+                                <th>{{ "payment.amountToBeReceived" | translate }}</th>
+                                <th *ngIf="sectionSelected !== 'pending'">{{ "mail.status" | translate }}</th>
+                                <th *ngIf="sectionSelected === 'pending'">Action</th>
+                            </tr>
+                        </thead>
+                        .
+                        <tbody>
+                            <tr *ngFor="let t of transactionList" [ngClass]="{
+                                'table-success': t.status === 'successful',
+                                'table-light': t.status === 'pending',
+                                'table-danger': t.status === 'failed'
+                                }" (click)="selectTransaction(t)" href="javascript:void(0);" data-bs-toggle="modal"
+                                data-bs-target="#payout_transaction_details">
+
+                                <td *ngIf="t?.transactionType === 'transfer'">{{ "payment.transfer" | translate }}</td>
+                                <td *ngIf="t?.transactionType === 'withdrawal'">{{ "payment.withdrawal" | translate }}
+                                </td>
+                                <td>{{ t?.createdAt | date:'dd-MM-yyyy HH:mm:ss'}}</td>
+                                <td>{{ t?.estimation | number:'1.2-2' }} {{ t?.senderCurrency }}</td>
+                                <td>{{ t?.taxesAmount | number:'1.2-2' }} {{ t?.senderCurrency }}</td>
+                                <td>{{ t?.senderName }} ( {{ t?.senderCountry | translate }} )</td>
+                                <td>{{ t?.receiverName }} ( {{ t?.senderCountry | translate }} )</td>
+                                <td>{{ t?.receiverAmount | number:'1.2-2' }} {{ t?.receiverCurrency }}</td>
+                                <td *ngIf="sectionSelected !== 'pending'">{{ t?.status }}</td>
+                                <td *ngIf="sectionSelected === 'pending'">
+                                    <button class="btn btn-rounded btn-outline-success me-1" href="javascript:void(0);"
+                                        data-bs-toggle="tooltip" data-bs-placement="bottom" matTooltip="accept Payment"
+                                        (click)="acceptPayment(t?._id)"><span>
+                                            {{ "payment.accept" | translate }}</span></button>
+
+                                    <button class="btn btn-rounded btn-outline-danger me-1" href="javascript:void(0);"
+                                        data-bs-toggle="tooltip" data-bs-placement="bottom" matTooltip="Reject Payment"
+                                        (click)="rejectAll()"><span>
+                                            {{ "payment.reject" | translate }}
+                                        </span></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table><br>
+                    <div *ngIf="!gettingTransactions && transactionList?.length > 0">
+                        <button class="btn btn-block btn-outline-light active"
+                        (click)="previousPage()" *ngIf="page !== 1"> << </button>
+                         <button class="btn btn-block btn-outline-light active">Page: {{ page }}</button>
+                         <button class="btn btn-block btn-outline-light active" (click)="nextPage()"
+                                    *ngIf="transactionList?.length === 10"> >> </button>
+                    </div>
+                    <div *ngIf="gettingTransactions" class="row d-flex align-items-cente justify-content-center">
+                        <!-- <img src="assets/img/ressorces/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;"> -->
+                        <div class="spinner-border text-primary" role="status" style="margin: 20px;">
+                            <span class="visually-hidden">{{ "loading" | translate }}...</span>
+                        </div>
+                    </div>
+
+                    <div *ngIf="!gettingTransactions && transactionList?.length < 1"
+                        class="row d-flex align-items-center justify-content-center">
+                        <div class="col-md-12" style="display: flex;
+                                justify-content: center;
+                                align-items: center;">
+                            <img src="assets/img/ressorces/nts.png" alt="" style="max-width: 150px;
+                                    height: auto;">
+                        </div>
+                        <div class="col-md-12" style="display: flex;
+                                justify-content: center;
+                                align-items: center;">
+                            {{ "nts" | translate }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 
+
+<div class="modal custom-modal fade p-20" id="payout_transaction_details" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <div class="form-header modal-header-title text-start mb-0">
+                    <h4 class="mb-0">{{ 'payment.transactionDetails' | translate }}</h4>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="img-upload">
+                                <div class="profile-img company-profile-img"
+                                    *ngIf="selectedTransaction?.status === 'successful'">
+                                    <button class="btn btn-rounded btn-outline-success me-1">{{ "payment.success" |
+                                        translate }} </button>
+                                </div>
+                                <div class="profile-img company-profile-img"
+                                    *ngIf="selectedTransaction?.status === 'failed'">
+                                    <button class="btn btn-rounded btn-outline-danger me-1">{{ "payment.error" |
+                                        translate }} </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="profile-picture">
+                                <div class="upload-profile">
+                                    <div class="profile-img company-profile-img">
+                                        <img id="company-img" class="img-fluid me-0" [src]="selectedCountry?.flagUrl"
+                                            alt="profile-img">
+                                    </div>
+                                    <div class="add-profile">
+                                        <h5>{{ selectedTransaction?.charged_amount }} {{
+                                            selectedTransaction?.currency }}</h5>
+                                        <span>
+                                            {{ "payment.amount" | translate }}: {{ selectedTransaction?.amount }}
+                                            {{
+                                            selectedTransaction?.currency }} |
+                                            {{ "payment.taxes" | translate }}: {{ selectedTransaction?.app_fee }}
+                                            {{
+                                            selectedTransaction?.currency }}</span>
+                                    </div>
+                                </div>
+                                <div class="img-upload">
+                                    <label class="btn btn-upload">
+                                    <a class="btn btn-remove">Poceed</a>
+                                    </label>
+                                    <a class="btn btn-remove">Remove</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <h5 class="form-title mb-3">{{ "subscriptions.planInfo" | translate }}</h5>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="input-block mb-3">
+                                <label>ID</label>
+                                <input type="text" class="form-control" placeholder=""
+                                    [value]="selectedTransaction?.id" disabled>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="input-block mb-3">
+                                <label>Ref</label>
+                                <input type="text" class="form-control" placeholder=""
+                                    [value]="selectedTransaction?.tx_ref" disabled>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="input-block mb-3">
+                                <label>Flutterwave ref</label>
+                                <input type="text" class="form-control" placeholder=""
+                                    [value]="selectedTransaction?.flw_ref" disabled>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="input-block mb-3">
+                                <label>Ip</label>
+                                <input type="text" class="form-control" placeholder=""
+                                    [value]="selectedTransaction?.ip" disabled>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="input-block mb-3">
+                                <label>Type</label>
+                                <input type="text" class="form-control" placeholder=""
+                                    [value]="selectedTransaction?.payment_type" disabled>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="input-block mb-3">
+                                <label>{{ "user.creationDate" | translate }}</label>
+                                <input type="text" class="form-control" placeholder=""
+                                    [value]="selectedTransaction?.created_at" disabled>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-12">
+                            <div class="input-block mb-3">
+                                <label>Narration</label>
+                                <input type="text" class="form-control" placeholder=""
+                                    [value]="selectedTransaction?.narration" disabled>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-12">
+                            <div class="input-block mb-3">
+                                <label>System Message</label>
+                                <textarea type="text" class="form-control" placeholder=""
+                                    [value]="selectedTransaction?.processor_response" disabled></textarea>
+                            </div>
+                        </div>
+                        <h6>Customer</h6>
+                        <div class="col-sm-12 col-md-12">
+                            <div class="option-space">
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-6">
+                                        <div class="input-block mb-3">
+                                            <label>Id</label>
+                                            <input type="text" class="form-control" placeholder=""
+                                                [value]="customerPayinTransaction?.id" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6">
+                                        <div class="input-block mb-3">
+                                            <label>{{ "user.name" | translate }} </label>
+                                            <input type="text" class="form-control" placeholder=""
+                                                [value]="customerPayinTransaction?.name" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6">
+                                        <div class="input-block mb-3">
+                                            <label>Date</label>
+                                            <input type="text" class="form-control" placeholder=""
+                                                [value]="customerPayinTransaction?.created_at" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6">
+                                        <div class="input-block mb-3">
+                                            <label>{{ "user.phone "}} </label>
+                                            <input type="text" class="form-control" placeholder=""
+                                                [value]="customerPayinTransaction?.phone_number" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6">
+                                        <div class="input-block mb-3">
+                                            <label>Sender mobile number</label>
+                                            <input type="text" class="form-control" placeholder=""
+                                                [value]="customerPayinTransaction?.phone_number" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <br>
+            <div class="modal-body">
+                Brut datas:
+                <div class="col-sm-12 col-md-12">
+                    <div class="option-space">
+                        <pre
+                            style="padding: 10px; background-color: black; color: white;"> {{ selectedTransaction | json }} </pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->

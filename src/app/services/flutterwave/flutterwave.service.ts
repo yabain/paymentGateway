@@ -61,8 +61,8 @@ export class FlutterwaveService {
   }
 
 
-  getPayinList(countryWallet: string = 'CM', periode: number = 1): Observable<any> {
-    return this.apiService.getWithoutId(`fw/payin-transactons/` + countryWallet + '?periode=' + periode).pipe(
+  getPayinList(countryWallet: string = 'CM', periode: number = 1, page: number = 1): Observable<any> {
+    return this.apiService.getWithoutId(`fw/payin-transactons/` + countryWallet + '?periode=' + periode + '&page=' + page).pipe(
       map((res: any) => {
         if (res) {
           return res;
@@ -77,8 +77,8 @@ export class FlutterwaveService {
   }
 
 
-  getPayoutList(countryWallet: string = 'CM', periode: number = 1): Observable<any> {
-    return this.apiService.getWithoutId(`fw/payout-transactons/` + countryWallet + '?periode=' + periode).pipe(
+  getPayoutList(countryWallet: string = 'CM', periode: number = 1, page: number = 1): Observable<any> {
+    return this.apiService.getWithoutId(`fw/payout-transactons/` + countryWallet + '?periode=' + periode + '&page=' + page).pipe(
       map((res: any) => {
         if (res) {
           return res;

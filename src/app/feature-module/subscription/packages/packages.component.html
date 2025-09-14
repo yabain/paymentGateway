@@ -85,7 +85,7 @@
                     <div class="grid-info-item total-plane">
                         <div class="grid-info">
                             <span>{{ 'subscriptions.totalPlans' | translate }}</span>
-                            <h4 *ngIf="gettingStatistics">Loading...</h4>
+                            <h4 *ngIf="gettingStatistics">{{ "loading" | translate }}...</h4>
                             <h4 *ngIf="!gettingStatistics">{{ statistics.totalPlans }}</h4>
                         </div>
                         <div class="grid-head-icon">
@@ -101,7 +101,7 @@
                     <div class="grid-info-item active-plane">
                         <div class="grid-info">
                             <span>{{ 'subscriptions.activePlans' | translate }}</span>
-                            <h4 *ngIf="gettingStatistics">Loading...</h4>
+                            <h4 *ngIf="gettingStatistics">{{ "loading" | translate }}...</h4>
                             <h4 *ngIf="!gettingStatistics">{{ statistics.activePlans }}</h4>
                         </div>
                         <div class="grid-head-icon">
@@ -117,7 +117,7 @@
                     <div class="grid-info-item inactive-plane">
                         <div class="grid-info">
                             <span>{{ 'subscriptions.inactivePlan' | translate }}</span>
-                            <h4 *ngIf="gettingStatistics">Loading...</h4>
+                            <h4 *ngIf="gettingStatistics">{{ "loading" | translate }}...</h4>
                             <h4 *ngIf="!gettingStatistics">{{ statistics.inactivePlans }}</h4>
                         </div>
                         <div class="grid-head-icon">
@@ -303,7 +303,7 @@
                                 </div>
                             </div>
                         </div>
-                        <h6>{{ "suscriptions.optionTitle" | translate }}</h6>
+                        <h6>{{ "subscriptions.optionTitle" | translate }}</h6>
                         <div class="col-sm-12 col-md-12" formArrayName="options">
                             <div class="option-space" *ngFor="let option of optionsList.controls; let i = index"
                                 [formGroupName]="i">
