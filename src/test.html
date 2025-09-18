@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Github Stats — Flambel SANOU</title>
+    <style>
+        :root {
+            color-scheme: light dark;
+        }
+
+        /* Palette par défaut (dark) */
+        :root {
+            --bg: #0f1320;
+            --panel: #1f2433;
+            --panel-2: #23283a;
+            --text: #f6f7fb;
+            --muted: #aab0c3;
+            --accent: #ff6297;
+            --ring-bg: #3a3f55;
+            --ts: #4d8df7;
+            --js: #ffd43b;
+            --scss: #ff5ea8;
+            --go: #38c0e7;
+            --html: #ff6a3d;
+            --shadow: 0 10px 30px rgba(0, 0, 0, .35);
+        }
+
+        /* Mode clair */
+        @media (prefers-color-scheme: light) {
+            :root {
+                --bg: #f5f7fb;
+                --panel: #ffffff;
+                --panel-2: #ffffff;
+                --text: #111321;
+                --muted: #596078;
+                --ring-bg: #e6e9f3;
+                --shadow: 0 10px 30px rgba(15, 19, 32, .08);
+            }
+        }
+
+        html,
+        body {
+            height: 100%
+        }
+
+        body {
+            margin: 0;
+            font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .wrap {
+            max-width: 1060px;
+            margin: 40px auto;
+            /* centre horizontalement */
+            padding: 0 18px 40px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+        }
+
+        .card {
+            background: linear-gradient(180deg, var(--panel), var(--panel-2));
+            /* border-radius: 14px; */
+            box-shadow: var(--shadow);
+            padding: 10px 15px;
+            opacity: 0;
+            transform: translateY(10px) scale(.98);
+            animation: fadeInUp .6s ease-out forwards;
+        }
+
+        .card:nth-child(2) {
+            animation-delay: .15s;
+        }
+
+        h2 {
+            margin: 0 0 10px;
+            font-size: clamp(20px, 1.2vw, 18px);
+            letter-spacing: .2px;
+            color: var(--accent);
+        }
+
+        /* --- Carte de gauche (liste + donut) --- */
+        .stats {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .stats-list {
+            flex: 1 1 auto;
+            display: grid;
+            gap: 12px;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 26px 1fr auto;
+            align-items: center;
+            gap: 12px;
+            /* background: color-mix(in oklab, var(--panel), rgba(255,255,255,.04)); */
+            /* border: 1px solid color-mix(in oklab, var(--panel), rgba(255,255,255,.08)); */
+            /* padding: 12px 14px; */
+            /* border-radius: 12px; */
+        }
+
+        .row .label {
+            color: var(--text);
+            font-size: 0.8rem;
+        }
+
+        .row .value {
+            font-weight: 700;
+            letter-spacing: .3px;
+        }
+
+        .ico {
+            width: 20px;
+            height: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+        }
+
+        .donut {
+            width: 230px;
+            min-width: 230px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .donut-wrap {
+            position: relative;
+            width: 170px;
+            height: 170px;
+            display: grid;
+            place-items: center;
+        }
+
+        .donut svg {
+            width: 170px;
+            height: 170px;
+            transform: rotate(-90deg);
+        }
+
+        .track {
+            stroke: var(--ring-bg);
+            stroke-width: 5;
+            fill: none;
+        }
+
+        .progress {
+            stroke: var(--accent);
+            stroke-linecap: round;
+            stroke-width: 5;
+            fill: none;
+            filter: drop-shadow(0 4px 10px rgba(0, 0, 0, .15));
+        }
+
+        .grade {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            font-weight: 350;
+            font-size: 44px;
+            letter-spacing: .5px;
+            transform: none;
+            /* centré via grid */
+            color: var(--text);
+            pointer-events: none;
+        }
+
+        .donut small {
+            margin-top: 10px;
+            color: var(--muted);
+        }
+
+        /* --- Carte de droite (barre empilée + légende) --- */
+        .stackbar {
+            position: relative;
+            height: 16px;
+            border-radius: 999px;
+            overflow: hidden;
+            background: var(--ring-bg);
+            margin: 8px 0 16px;
+        }
+
+        .seg {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 0;
+        }
+
+        .seg.ts {
+            background: var(--ts);
+        }
+
+        .seg.js {
+            background: var(--js);
+        }
+
+        .seg.scss {
+            background: var(--scss);
+        }
+
+        .seg.go {
+            background: var(--go);
+        }
+
+        .seg.html {
+            background: var(--html);
+        }
+
+        .legend {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--muted);
+        }
+
+        .dot.ts {
+            background: var(--ts);
+        }
+
+        .dot.js {
+            background: var(--js);
+        }
+
+        .dot.scss {
+            background: var(--scss);
+        }
+
+        .dot.go {
+            background: var(--go);
+        }
+
+        .dot.html {
+            background: var(--html);
+        }
+
+        .muted {
+            color: var(--muted);
+        }
+
+        /* Anim apparition */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(14px) scale(.98)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1)
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .donut {
+                margin-top: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="grid">
+
+            <!-- Colonne gauche -->
+            <section class="card">
+                <h2>Flambel SANOU’s Github Stats</h2>
+                <div class="stats">
+                    <div class="stats-list">
+                        <div class="row">
+                            <span class="ico" aria-hidden="true">
+                                <!-- star -->
+                                <svg xmlns="http://www.w3.org/2000/svg" data-testid="icon" class="icon"
+                                    viewBox="0 0 16 16" version="1.1" width="16" height="16"
+                                    style="color: var(--accent) !important">
+                                    <path fill-rule="evenodd"
+                                        d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25zm0 2.445L6.615 5.5a.75.75 0 01-.564.41l-3.097.45 2.24 2.184a.75.75 0 01.216.664l-.528 3.084 2.769-1.456a.75.75 0 01.698 0l2.77 1.456-.53-3.084a.75.75 0 01.216-.664l2.24-2.183-3.096-.45a.75.75 0 01-.564-.41L8 2.694v.001z" />
+                                </svg>
+                            </span>
+                            <span class="label">Total Stars Earned:</span>
+                            <span class="value" data-count="43">0</span>
+                        </div>
+                        <div class="row">
+                            <span class="ico" aria-hidden="true">
+                                <!-- clock -->
+                                <svg xmlns="http://www.w3.org/2000/svg" data-testid="icon" class="icon"
+                                    viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                                    <path fill-rule="evenodd"
+                                        d="M1.643 3.143L.427 1.927A.25.25 0 000 2.104V5.75c0 .138.112.25.25.25h3.646a.25.25 0 00.177-.427L2.715 4.215a6.5 6.5 0 11-1.18 4.458.75.75 0 10-1.493.154 8.001 8.001 0 101.6-5.684zM7.75 4a.75.75 0 01.75.75v2.992l2.028.812a.75.75 0 01-.557 1.392l-2.5-1A.75.75 0 017 8.25v-3.5A.75.75 0 017.75 4z" />
+                                </svg>
+                            </span>
+                            <span class="label">Total Commits (2025):</span>
+                            <span class="value" data-count="728">0</span>
+                        </div>
+                        <div class="row">
+                            <span class="ico" aria-hidden="true">
+                                <!-- merge -->
+                                <svg xmlns="http://www.w3.org/2000/svg" data-testid="icon" class="icon"
+                                    viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                                    <path fill-rule="evenodd"
+                                        d="M7.177 3.073L9.573.677A.25.25 0 0110 .854v4.792a.25.25 0 01-.427.177L7.177 3.427a.25.25 0 010-.354zM3.75 2.5a.75.75 0 100 1.5.75.75 0 000-1.5zm-2.25.75a2.25 2.25 0 113 2.122v5.256a2.251 2.251 0 11-1.5 0V5.372A2.25 2.25 0 011.5 3.25zM11 2.5h-1V4h1a1 1 0 011 1v5.628a2.251 2.251 0 101.5 0V5A2.5 2.5 0 0011 2.5zm1 10.25a.75.75 0 111.5 0 .75.75 0 01-1.5 0zM3.75 12a.75.75 0 100 1.5.75.75 0 000-1.5z" />
+                                </svg>
+                            </span>
+                            <span class="label">Total PRs:</span>
+                            <span class="value" data-count="504">0</span>
+                        </div>
+                        <div class="row">
+                            <span class="ico" aria-hidden="true">
+                                <!-- info -->
+                                <svg xmlns="http://www.w3.org/2000/svg" data-testid="icon" class="icon"
+                                    viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                                    <path fill-rule="evenodd"
+                                        d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8zm9 3a1 1 0 11-2 0 1 1 0 012 0zm-.25-6.25a.75.75 0 00-1.5 0v3.5a.75.75 0 001.5 0v-3.5z" />
+                                </svg>
+                            </span>
+                            <span class="label">Total Issues:</span>
+                            <span class="value" data-count="89">0</span>
+                        </div>
+                        <div class="row">
+                            <span class="ico" aria-hidden="true">
+                                <!-- repo -->
+                                <svg xmlns="http://www.w3.org/2000/svg" data-testid="icon" class="icon"
+                                    viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                                    <path fill-rule="evenodd"
+                                        d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8zM5 12.25v3.25a.25.25 0 00.4.2l1.45-1.087a.25.25 0 01.3 0L8.6 15.7a.25.25 0 00.4-.2v-3.25a.25.25 0 00-.25-.25h-3.5a.25.25 0 00-.25.25z" />
+                                </svg>
+                            </span>
+                            <span class="label">Contributed to (last year):</span>
+                            <span class="value" data-count="16">0</span>
+                        </div>
+                    </div>
+
+                    <div class="donut">
+                        <div class="donut-wrap">
+                            <svg viewBox="0 0 120 120" aria-hidden="true">
+                                <circle class="track" cx="60" cy="60" r="40"></circle>
+                                <circle class="progress" id="ring" cx="60" cy="60" r="40" stroke-dasharray="0 314">
+                                </circle>
+                            </svg>
+                            <div class="grade" id="grade">A+</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Colonne droite -->
+            <section class="card">
+                <h2 style="margin-bottom: 20px;">Most Used Languages</h2>
+                <div class="stackbar" style="margin-top: 10px;" id="stackbar" data-ts="51.16" data-js="22.39" data-scss="12.50" data-go="1.99"
+                    data-html="11.96">
+                    <div class="seg ts" data-key="ts" title="TypeScript"></div>
+                    <div class="seg js" data-key="js" title="JavaScript"></div>
+                    <div class="seg scss" data-key="scss" title="SCSS"></div>
+                    <div class="seg go" data-key="go" title="Go"></div>
+                    <div class="seg html" data-key="html" title="HTML"></div>
+                </div>
+
+                <div class="legend">
+                    <div class="item" style="margin-bottom: 7px;"><span class="dot ts"></span> TypeScript <span class="muted"
+                            id="p-ts">51.16%</span></div>
+                    <div class="item" style="margin-bottom: 7px;"><span class="dot go"></span> Go <span class="muted" id="p-go">1.99%</span></div>
+                    <div class="item" style="margin-bottom: 7px;"><span class="dot js"></span> JavaScript <span class="muted"
+                            id="p-js" style="margin-bottom: 7px;">22.39%</span></div>
+                    <div class="item" style="margin-bottom: 7px;"><span class="dot html"></span> HTML <span class="muted" id="p-html">11.96%</span>
+                    </div>
+                    <div class="item" style="margin-bottom: 7px;"><span class="dot scss"></span> SCSS <span class="muted" id="p-scss">12.50%</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const DURATION = 2000; // 2s
+
+            /** Compteurs **/
+            const counters = document.querySelectorAll('.value[data-count]');
+            counters.forEach(el => animateNumber(el, Number(el.dataset.count), DURATION));
+
+            function animateNumber(el, end, duration) {
+                const startTime = performance.now();
+                const step = (now) => {
+                    const t = Math.min(1, (now - startTime) / duration);
+                    const eased = easeOutCubic(t);
+                    const value = end * eased;
+                    el.textContent = Math.round(value).toLocaleString('en-US');
+                    if (t < 1) requestAnimationFrame(step);
+                };
+                requestAnimationFrame(step);
+            }
+
+            /** Donut **/
+            const ring = document.getElementById('ring');
+            const r = 50, C = 2 * Math.PI * r;
+            ring.setAttribute('stroke-dasharray', C + ' ' + C);
+            ring.setAttribute('stroke-dashoffset', C);
+            const targetPercent = 0.88; // 88% ≈ note A
+            animateDashoffset(ring, C, targetPercent, DURATION);
+
+            function animateDashoffset(circle, circumference, percent, duration) {
+                const startTime = performance.now();
+                const from = circumference;
+                const to = circumference * (1 - percent);
+                const step = (now) => {
+                    const t = Math.min(1, (now - startTime) / duration);
+                    const eased = easeOutCubic(t);
+                    const value = from + (to - from) * eased;
+                    circle.setAttribute('stroke-dashoffset', value);
+                    if (t < 1) requestAnimationFrame(step);
+                };
+                requestAnimationFrame(step);
+            }
+
+            /** Barre empilée **/
+            const bar = document.getElementById('stackbar');
+            const order = ['ts', 'js', 'scss', 'go', 'html'];
+            const totals = order.map(k => Number(bar.dataset[k]));
+            const total = totals.reduce((a, b) => a + b, 0);
+            const percents = totals.map(v => v / total * 100);
+
+            let cumLeft = 0;
+            order.forEach((key, idx) => {
+                const seg = bar.querySelector('.seg.' + key);
+                seg.style.left = cumLeft + '%';
+                const finalWidth = percents[idx];
+                animateWidth(seg, finalWidth, DURATION);
+                cumLeft += finalWidth;
+                const txt = document.getElementById('p-' + key);
+                if (txt) { countPercent(txt, finalWidth, DURATION); }
+            });
+
+            function animateWidth(el, finalPercent, duration) {
+                const startTime = performance.now();
+                const step = (now) => {
+                    const t = Math.min(1, (now - startTime) / duration);
+                    const eased = easeOutCubic(t);
+                    el.style.width = (finalPercent * eased) + '%';
+                    if (t < 1) requestAnimationFrame(step);
+                };
+                requestAnimationFrame(step);
+            }
+
+            function countPercent(node, end, duration) {
+                const startTime = performance.now();
+                const step = (now) => {
+                    const t = Math.min(1, (now - startTime) / duration);
+                    const eased = easeOutCubic(t);
+                    node.textContent = (end * eased).toFixed(2) + '%';
+                    if (t < 1) requestAnimationFrame(step);
+                };
+                requestAnimationFrame(step);
+            }
+
+            function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+        })();
+    </script>
+</body>
+
+</html>

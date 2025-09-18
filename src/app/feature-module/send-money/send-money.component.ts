@@ -104,13 +104,6 @@ export class SendMoneyComponent implements OnInit {
     private fw: FlutterwaveService,
   ) {
     this.estimation = 0;
-    this.getSolde();
-  }
-
-  getSolde() {
-    this.fw.getApplicationBalance('NGN').subscribe((resp: any) => {
-      console.log('wallet NGN: ', resp);
-    });
   }
 
   ngOnInit(): void {
@@ -758,6 +751,7 @@ export class SendMoneyComponent implements OnInit {
     // Vérifier la validité du formulaire avant de passer à l'étape suivante
     if (this.step === 1 && !this.firstFormGroup.valid) {
       this.markFormGroupTouched(this.firstFormGroup);
+      if (this.selectedCountry) this.getBanksList(this.selectedCountry.iso2);
       return;
     }
 
@@ -857,7 +851,6 @@ export class SendMoneyComponent implements OnInit {
     this.bankCode = undefined;
     this.bankAccountNumber = undefined;
     this.receiverMobileAccountNumber = undefined;
-    if (this.selectedCountry) this.getBanksList(this.selectedCountry.iso2);
 
     this.convertCurrency();
   }

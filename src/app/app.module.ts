@@ -23,6 +23,7 @@ import { TermsComponent } from './shared/terms/terms.component';
 import { PaymentComponent } from './payment/payment.component';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ToastService } from './services/toast/toast.service';
+import { DataTablesModule } from 'angular-datatables';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -51,7 +52,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
-    AngularFirestoreModule
+    AngularFirestoreModule,
+    DataTablesModule
   ],
   providers: [ { provide: LOCALE_ID, useValue: "fr-FR" },
     AuthService, UserService, CryptService, ShareLinkService, SystemService, DatePipe,

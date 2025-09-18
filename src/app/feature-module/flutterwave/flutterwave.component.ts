@@ -20,7 +20,8 @@ export class FlutterwaveComponent implements OnInit, OnDestroy {
     private router: Router,
     private location: Location,
   ) {
-    this.countriesData = JSON.parse(localStorage.getItem(environment.countries_data));
+    const countriesData = JSON.parse(localStorage.getItem(environment.countries_data));
+    this.countriesData = countriesData.filter((e) => e.flutterwave === true);
   }
 
   selectCountry(country: any) {

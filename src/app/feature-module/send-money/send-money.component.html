@@ -233,9 +233,9 @@
                                   {{ 'payment.receiverMobileAccountNumber' | translate }} *</label>
                                 <div class="input-group">
                                   <span class="input-group-text">+{{ selectedCountry?.code }}</span>
-                                <input id="receiverMobileAccountNumber" type="telephone" class="form-control"
-                                  placeholder="691229122" [(ngModel)]="receiverMobileAccountNumber"
-                                  name="receiverMobileAccountNumber" (input)="canNext2()" />
+                                  <input id="receiverMobileAccountNumber" type="telephone" class="form-control"
+                                    placeholder="691229122" [(ngModel)]="receiverMobileAccountNumber"
+                                    name="receiverMobileAccountNumber" (input)="canNext2()" />
                                 </div>
                               </div>
                             </div>
@@ -245,11 +245,13 @@
                               <div class="input-block mb-3">
                                 <label htmlFor="bankCode">BANK *</label>
                                 <select id="label" class="form-select" (change)="onSelectBank($event)" id="country"
-                                  *ngIf="!waitingLocations">
+                                  *ngIf="!waitingLocations && !waitingBankList">
                                   <option *ngFor="let bank of bankList" [value]="bank.code">
                                     {{ bank.name | translate }}
                                   </option>
                                 </select>
+                                <span class="spinner-border spinner-border-sm me-2" role="status"
+                                  *ngIf="waitingBankList" style="margin-left: 25vh"></span>
                               </div>
                             </div>
                           </div>
@@ -263,8 +265,10 @@
                               </div>
                             </div>
                           </div>
-                          <div class="fee-breakdown"><h4><i class="feather icon-triangle"></i> Warning !</h4>
-                            {{ "payment.sureBankAccountNumberMessage" | translate }}</div>
+                          <div class="fee-breakdown">
+                            <h4><i class="feather icon-triangle"></i> Warning !</h4>
+                            {{ "payment.sureBankAccountNumberMessage" | translate }}
+                          </div>
                         </div>
 
                       </div>
@@ -437,7 +441,7 @@
           <div class="col-md-6">
             <div class="wating-msg">
               <img src="assets/img/ressorces/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;"
-               *ngIf="!modalClosed && !transactionSucceded && !transactionFailed">
+                *ngIf="!modalClosed && !transactionSucceded && !transactionFailed">
               <!-- <div class="spinner-border" role="status" *ngIf="!modalClosed && !transactionSucceded && !transactionFailed"></div> -->
               <p style="margin-top: 50px;" *ngIf="!modalClosed && !transactionSucceded && !transactionFailed">
                 {{ "payment.processing-message1" | translate }}<br>
@@ -447,8 +451,8 @@
 
               <img src="../../../assets/img/ressorces/tfailed.gif" alt="" style="max-width: 100px;;"
                 *ngIf="!reOpen && transactionFailed">
-                <br>
-                <span style="color: red !important" *ngIf="!reOpen && transactionFailed">Transaction failed</span>
+              <br>
+              <span style="color: red !important" *ngIf="!reOpen && transactionFailed">Transaction failed</span>
               <p style="margin-top: 50px;" *ngIf="!reOpen && transactionFailed">
                 Click
                 <span class="retry" (click)="openPayin()" *ngIf="!reOpen && transactionFailed">{{
@@ -469,10 +473,11 @@
 
               <img src="assets/img/ressorces/paymentDone.gif" alt="" style="max-width: 250px;;"
                 *ngIf="transactionSucceded && !transactionFailed">
-              <p style="margin-top: 50px;" *ngIf="transactionSucceded && !transactionFailed">{{ 'payment.paymentSuccess' | translate }}<br>
+              <p style="margin-top: 50px;" *ngIf="transactionSucceded && !transactionFailed">{{ 'payment.paymentSuccess'
+                | translate }}<br>
                 {{ 'payment.fundsWillReceive' | translate }}</p>
-                
-                <br>
+
+              <br>
               <button class="btn btn-primary" *ngIf="showRetry || transactionSucceded"
                 (click)="navigateTo('/dashbiard')"> Back to home </button>
             </div>
@@ -524,3 +529,206 @@
     </div>
   </div>
 </div>
+
+
+<!-- Invoices Preview Modal -->
+<div class="modal custom-modal fade invoices-preview" id="invoices_preview" role="dialog">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="row justify-content-center">
+          <div class="col-lg-12">
+            <div class="card invoice-info-card">
+              <div class="card-body pb-0">
+                <div class="invoice-item invoice-item-one">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="invoice-logo">
+                        <img src="assets/img/new/y_nkap.jpeg" alt="logo">
+                        <h2>Digikuntz Payments</h2>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="invoice-info">
+                        <div class="invoice-head">
+                          <h2 class="text-primary">Reçu {{transactionData?.schoolName}}</h2>
+                          <p>No. : {{transactionData?.invoiceRef}}</p>
+                          <p style="color: #14660a;" *ngIf="transactionData?.status === 'Completed'"><b>PAYED</b>
+                          </p>
+                          <p style="color: #9f6d00;" *ngIf="transactionData?.status === 'Pending'"><b>PENDING</b>
+                          </p>
+                          <p style="color: #bf1f03;" *ngIf="transactionData?.status === 'Rejected'"><b>REJECTED</b>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Invoice Item -->
+                <div class="invoice-item invoice-item-bg">
+                  <div class="invoice-circle-img">
+                    <img src="assets/img/invoice-circle1.png" alt="" class="invoice-circle1">
+                    <img src="assets/img/invoice-circle2.png" alt="" class="invoice-circle2">
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-4 col-md-12">
+                      <div class="invoice-info">
+                        <strong class="customer-text-one">Payeur</strong>
+                        <h6 class="invoice-name">{{transactionData?.clientName}}</h6>
+                        <p class="invoice-details invoice-details-two">
+                          {{transactionData?.clientPhone}} <br>
+                          {{transactionData?.clientEmail}} <br>
+                          {{transactionData?.clientAddress}} <br>
+                        </p>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-12">
+                      <div class="invoice-info">
+                        <strong class="customer-text-one">Apprenant</strong>
+                        <h6 class="invoice-name">{{transactionData?.studentMatricule}}</h6>
+                        <h6 class="invoice-name">{{transactionData?.studentName}}</h6>
+                        <p class="invoice-details invoice-details-two">
+                          {{transactionData?.classAbreviation}} <br>
+                        </p>
+                        <strong class="customer-text-one">Montant déjà versé:</strong>
+                        <p class="invoice-details invoice-details-two">
+                          {{transactionData?.alreadyPaid}} FCFA<br>
+                        </p>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-12">
+                      <div class="invoice-info invoice-info-one border-0">
+                        <p>No. Reçu : {{transactionData?.invoiceRef}}</p>
+                        <p>Date de facturation : {{transactionData?.facturationDate }}</p>
+                        <p>Date de paiement : {{transactionData?.paymentDate }}</p>
+                        <br>
+                        <p>Méthode de paiement : {{transactionData?.paymentMethode }}</p>
+                        <p class="mb-0">Numéro payeur : {{transactionData?.paymentMethodeNumber
+                          }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- /Invoice Item -->
+
+                <!-- Invoice Item -->
+                <div class="invoice-item invoice-table-wrap">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="table-responsive">
+                        <table class="invoice-table table table-center mb-0">
+                          <thead>
+                            <tr>
+                              <th>Désignation</th>
+                              <th>Apprenant</th>
+                              <th>Classe</th>
+                              <th>Montant</th>
+                              <th>Versement</th>
+                              <th class="text-end">Reste à payer</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>{{transactionData?.designation}}</td>
+                              <td>{{transactionData?.studentName}}</td>
+                              <td>{{transactionData?.classAbreviation}}</td>
+                              <th>{{transactionData?.classPrice}} FCFA</th>
+                              <th>{{transactionData?.payment}} FCFA</th>
+                              <td class="text-end">{{transactionData?.leftToPay }} FCFA
+                              </td>
+                            </tr>
+                            <tr>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <th></th>
+                              <th></th>
+                              <td></td>
+                            </tr>
+                            <tr>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <th></th>
+                              <th></th>
+                              <td></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- /Invoice Item -->
+
+                <div class="row align-items-center justify-content-center">
+                  <div class="col-lg-6 col-md-6">
+                    <div class="invoice-payment-box">
+                      <h4>Références Bancaires de l'établissement</h4>
+                      <div class="payment-details">
+                        <p>
+                          Banque: {{transactionData?.name}} <br>
+                          No de compte: {{transactionData?.accountNumber}} <br>
+                          RIB: {{transactionData?.rib}} <br>
+                          IBAN: {{transactionData?.iban}}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 col-md-6">
+                    <div class="invoice-total-card">
+                      <div class="invoice-total-box">
+                        <div class="invoice-total-inner">
+                          <p>Somme :<span>{{transactionData?.payment}} FCFA</span></p>
+                          <p>Taxes service en ligne ({{transactionData?.taxes}}%)
+                            :<span>{{transactionData?.taxesAmount}} FCFA</span></p>
+                        </div>
+                        <div class="invoice-total-footer">
+                          <h4>Montant total <span>{{transactionData?.paymentWithTaxes}}
+                              FCFA</span>
+                          </h4>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="invoice-sign-box">
+                  <div class="row">
+                    <div class="col-lg-8 col-md-8">
+                      <div class="invoice-terms" *ngIf="transactionData?.notes && transactionData?.notes != ''">
+                        <h6>Notes:</h6>
+                        <p class="mb-0">{{transactionData?.notes}}</p>
+                      </div>
+                      <div class="invoice-terms mb-0" *ngIf="transactionData?.terms && transactionData?.terms != ''">
+                        <h6>Termes et Conditions:</h6>
+                        <p class="mb-0">{{transactionData?.terms}}</p>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                      <div class="invoice-sign text-end">
+                        <!-- <img class="img-fluid d-inline-block"
+													src="{{transactionData?.signatureUrl}}" alt="sign">
+												<span class="d-block">{{transactionData?.signatureName}}</span> -->
+                        <p style="color: #14660a; font-size: 2em;" *ngIf="transactionData?.status === 'Completed'">
+                          <b>PAYED</b>
+                        </p>
+                        <p style="color: #9f6d00; font-size: 2em;" *ngIf="transactionData?.status === 'Pending'">
+                          <b>PENDING</b>
+                        </p>
+                        <p style="color: #bf1f03; font-size: 2em;" *ngIf="transactionData?.status === 'Rejected'">
+                          <b>REJECTED</b>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /Invoices Preview Modal -->

@@ -28,7 +28,7 @@ export const environment = {
   categories_data: 'dk_categories_data',
   memory_link: 'memory-link',
 
-  // Url for download app
+  // Url for download application
   downloadAppUrl: 'https://digikuntz.com/app',
 
   // Keys for send mails via MailJs

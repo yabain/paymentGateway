@@ -7,9 +7,21 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { CustomerListComponent } from './customers-list/customer-list.component';
 import { CustomerDetailsComponent } from './customer-details/customer-details.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 @NgModule({
-  declarations: [CustomersComponent, CustomerListComponent, CustomerDetailsComponent],
-  imports: [CommonModule, CustomersRoutingModule, SharedModule,
-      TranslateModule,],
+  declarations: [
+    CustomersComponent,
+    CustomerListComponent,
+    CustomerDetailsComponent,
+  ],
+  imports: [
+    CommonModule,
+    CustomersRoutingModule,
+    SharedModule,
+    FormsModule,
+    ReactiveFormsModule,
+    TranslateModule,
+  ],
 })
 export class CustomersModule {}

@@ -6046,6 +6046,9 @@ table .badge {
 [data-layout-mode=dark] body .bg-light-gray {
   background: rgba(243, 243, 243, 0.1);
 }
+[data-layout-mode=dark] body .bg-light-light {
+  background: #fff;
+}
 [data-layout-mode=dark] body .ribbon-secondary {
   background: rgba(247, 49, 100, 0.3);
   color: #AAAAAA;
