@@ -60,6 +60,7 @@
     "ngx-owl-carousel-o": "^18.0.0",
     "ngx-scrollbar": "^13.0.3",
     "ngx-toastr": "^18.0.0",
+    "prismjs": "^1.30.0",
     "rxjs": "~7.8.1",
     "swiper": "^8.3.2",
     "tslib": "^2.6.2",

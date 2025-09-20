@@ -182,7 +182,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-striped mb-0">
+                    <table class="table table-striped mb-0" *ngIf="!gettingtOutputMails && emailList.length > 0">
                         <thead>
                             <tr>
                                 <th>{{ "mail.address" | translate }}</th>
@@ -192,7 +192,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let o of outputList">
+                            <tr *ngFor="let o of emailList">
                                 <td>{{ o.to }}</td>
                                 <td>{{ o.subject }}</td>
                                 <td>{{ o.createdAt | date:'dd-MM-yyyy HH:mm:ss'}}</td>
@@ -204,7 +204,35 @@
                                 </td>
                             </tr>
                         </tbody>
-                    </table>
+                    </table><br>
+                    <div *ngIf="!gettingtOutputMails && emailList?.length > 0">
+                        <button class="btn btn-block btn-outline-light active" (click)="previousEmailPage()"
+                            [disabled]="emailPage === 1">
+                            << </button>
+                                <button class="btn btn-block btn-outline-light active">{{ emailPage }}</button>
+                                <button class="btn btn-block btn-outline-light active" (click)="nextEmailPage()"
+                                    [disabled]="emailList?.length < 10"> >> </button>
+                    </div>
+                    <div *ngIf="gettingtOutputMails" class="row d-flex align-items-cente justify-content-center">
+                        <!-- <img src="assets/img/ressorces/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;"> -->
+                        <div class="spinner-border text-primary" role="status" style="margin: 20px;">
+                            <span class="visually-hidden">{{ "loading" | translate }}...</span>
+                        </div>
+                    </div>
+                    <div *ngIf="!gettingtOutputMails && emailList?.length < 1"
+                        class="row d-flex align-items-center justify-content-center">
+                        <div class="col-md-12" style="display: flex;
+                                justify-content: center;
+                                align-items: center;">
+                            <img src="assets/img/ressorces/nts.png" alt="" style="max-width: 150px;
+                                    height: auto;">
+                        </div>
+                        <div class="col-md-12" style="display: flex;
+                                justify-content: center;
+                                align-items: center;">
+                            {{ "nts" | translate }}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

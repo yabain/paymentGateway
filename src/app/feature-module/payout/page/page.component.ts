@@ -50,6 +50,7 @@ export class PageComponent implements OnInit, OnDestroy {
 
   selectTransaction(transaction){
     this.selectedTransaction = transaction;
+    console.log('selectedTransaction: ', this.selectedTransaction)
   }
 
   getTransaction(){
@@ -122,6 +123,8 @@ export class PageComponent implements OnInit, OnDestroy {
     })
   }
 
+  rejectPayment(){}
+  
   getData() {
     this.getStat();
     if(this.sectionSelected === 'all') return this.getTransactionList();

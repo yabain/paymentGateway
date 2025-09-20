@@ -19,7 +19,9 @@ export class UserService {
     private storage: StorageService,
     private authService: AuthService,
     private apiService: ApiService
-  ) { }
+  ) { 
+    
+  }
 
   /**
    * Retrieves the current user data from storage.

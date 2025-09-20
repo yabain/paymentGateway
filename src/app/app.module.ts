@@ -24,6 +24,8 @@ import { PaymentComponent } from './payment/payment.component';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ToastService } from './services/toast/toast.service';
 import { DataTablesModule } from 'angular-datatables';
+// import { TransactionDetailsComponent } from './feature-module/common/transaction-details/transaction-details.component';
+import { JsonViewerComponent } from './feature-module/common/json-viewer/json-viewer.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -35,7 +37,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppComponent,
     WelcomeComponent,
     TermsComponent,
-    PaymentComponent
+    PaymentComponent,
+    // TransactionDetailsComponent,
+    JsonViewerComponent
   ],
   imports: [
     BrowserModule,

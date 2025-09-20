@@ -206,10 +206,6 @@
                     <a [routerLink]="'/customer/details/' + customer._id" class="avatar avatar-md me-2"><img
                         class="avatar-img rounded-circle" [src]="customer.pictureUrl" alt="User Image" /></a>
                     <a [routerLink]="'/customer/details/' + customer._id">{{ getUserName(customer) }}
-                      <b *ngIf="customer.verified === true">
-                        <i class="feather icon-check-circle" data-bs-toggle="tooltip" title="feather icon-power"
-                          style="color: #047c0c; margin-right: 5px;"></i>
-                      </b>
                       <span>{{ customer.email }}</span>
                     </a>
                   </h2>
@@ -228,10 +224,14 @@
                       'bg-success-light': customer.isActive != false,
                       'bg-danger-light': customer.isActive === false
                     }" class="badge badge-pill bg-success-light">{{ (customer.isActive === false ? 'users.disabled' :
-                    'users.enabled') | translate }}</span><br>
-                  <span class="badge badge-pill bg-light-light" *ngIf="customer.isAdmin === true" style="color: #e89b00">
+                    'users.enabled') | translate }}</span><br *ngIf="customer.isAdmin === true">
+                  <span class="badge badge-pill bg-warning-light" *ngIf="customer.isAdmin === true" style="color: #e89b00">
                           <!-- <i class="fa fa-universal-access" data-bs-toggle="tooltip" title="feather icon-power"></i> -->
                     Admin
+                  </span><br *ngIf="customer.verified === true">
+                  <span class="badge badge-pill bg-info-light" *ngIf="customer.verified === true" style="color: #063ac0">
+                          <!-- <i class="fa fa-universal-access" data-bs-toggle="tooltip" title="feather icon-power"></i> -->
+                    verified
                   </span>
                 </td>
                 <td class="d-flex align-items-right">

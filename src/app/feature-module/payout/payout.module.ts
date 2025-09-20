@@ -7,13 +7,17 @@ import { PayoutComponent } from './payout.component';
 import { PageComponent } from './page/page.component';
 import { AllPayoutComponent } from './all-payout/all-payout.component';
 import { PayoutRoutingModule } from './payout-routing.module';
+import { JsonViewerComponent } from '../common/json-viewer/json-viewer.component';
+import { TransactionDetailsComponent } from '../common/transaction-details/transaction-details.component';
 
 
 @NgModule({
   declarations: [
     PageComponent,
     PayoutComponent,
-    AllPayoutComponent
+    AllPayoutComponent,
+    JsonViewerComponent,
+    TransactionDetailsComponent
   ],
   imports: [
     CommonModule,

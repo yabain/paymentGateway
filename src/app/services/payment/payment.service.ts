@@ -227,4 +227,22 @@ export class PaymentService {
       }),
     );
   }
+
+  getPayinTransactionStatus(transaction){
+    if(transaction?.status === 'transaction_initialized') return 'PENDING';
+    else if(transaction?.status === 'transaction_payin_pending') return 'PENDING';
+    else if(transaction?.status === 'transaction_payin_success') return 'SUCCESS';
+    else if(transaction?.status === 'transaction_payin_error') return 'ERROR';
+    else if(transaction?.status === 'transaction_payin_closed') return 'CANCELED';
+    else return 'UNKNOW'
+  }
+
+  getPayoutTransactionStatus(transaction){
+    if(transaction?.status === 'transaction_payout_rejected') return 'REJECTED';
+    else if(transaction?.status === 'transaction_payout_pending') return 'PENDING';
+    else if(transaction?.status === 'transaction_payout_success') return 'SUCCESS';
+    else if(transaction?.status === 'transaction_payout_error') return 'ERROR';
+    else if(transaction?.status === 'transaction_payout_closed') return 'CANCELED';
+    else return 'UNKNOW';
+  }
 }

@@ -160,7 +160,7 @@
 
                                     <button class="btn btn-rounded btn-outline-danger me-1" href="javascript:void(0);"
                                         data-bs-toggle="tooltip" data-bs-placement="bottom" matTooltip="Reject Payment"
-                                        (click)="rejectAll()"><span>
+                                        (click)="rejectPayment()"><span>
                                             {{ "payment.reject" | translate }}
                                         </span></button>
                                 </td>
@@ -200,176 +200,11 @@
         </div>
     </div>
 </div>
-<!-- 
+
+
 
 <div class="modal custom-modal fade p-20" id="payout_transaction_details" role="dialog">
     <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header border-0">
-                <div class="form-header modal-header-title text-start mb-0">
-                    <h4 class="mb-0">{{ 'payment.transactionDetails' | translate }}</h4>
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                </button>
-            </div>
-            <form>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="img-upload">
-                                <div class="profile-img company-profile-img"
-                                    *ngIf="selectedTransaction?.status === 'successful'">
-                                    <button class="btn btn-rounded btn-outline-success me-1">{{ "payment.success" |
-                                        translate }} </button>
-                                </div>
-                                <div class="profile-img company-profile-img"
-                                    *ngIf="selectedTransaction?.status === 'failed'">
-                                    <button class="btn btn-rounded btn-outline-danger me-1">{{ "payment.error" |
-                                        translate }} </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="profile-picture">
-                                <div class="upload-profile">
-                                    <div class="profile-img company-profile-img">
-                                        <img id="company-img" class="img-fluid me-0" [src]="selectedCountry?.flagUrl"
-                                            alt="profile-img">
-                                    </div>
-                                    <div class="add-profile">
-                                        <h5>{{ selectedTransaction?.charged_amount }} {{
-                                            selectedTransaction?.currency }}</h5>
-                                        <span>
-                                            {{ "payment.amount" | translate }}: {{ selectedTransaction?.amount }}
-                                            {{
-                                            selectedTransaction?.currency }} |
-                                            {{ "payment.taxes" | translate }}: {{ selectedTransaction?.app_fee }}
-                                            {{
-                                            selectedTransaction?.currency }}</span>
-                                    </div>
-                                </div>
-                                <div class="img-upload">
-                                    <label class="btn btn-upload">
-                                    <a class="btn btn-remove">Poceed</a>
-                                    </label>
-                                    <a class="btn btn-remove">Remove</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <h5 class="form-title mb-3">{{ "subscriptions.planInfo" | translate }}</h5>
-                        </div>
-                        <div class="col-sm-12 col-md-6">
-                            <div class="input-block mb-3">
-                                <label>ID</label>
-                                <input type="text" class="form-control" placeholder=""
-                                    [value]="selectedTransaction?.id" disabled>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-6">
-                            <div class="input-block mb-3">
-                                <label>Ref</label>
-                                <input type="text" class="form-control" placeholder=""
-                                    [value]="selectedTransaction?.tx_ref" disabled>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-6">
-                            <div class="input-block mb-3">
-                                <label>Flutterwave ref</label>
-                                <input type="text" class="form-control" placeholder=""
-                                    [value]="selectedTransaction?.flw_ref" disabled>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-6">
-                            <div class="input-block mb-3">
-                                <label>Ip</label>
-                                <input type="text" class="form-control" placeholder=""
-                                    [value]="selectedTransaction?.ip" disabled>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-6">
-                            <div class="input-block mb-3">
-                                <label>Type</label>
-                                <input type="text" class="form-control" placeholder=""
-                                    [value]="selectedTransaction?.payment_type" disabled>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-6">
-                            <div class="input-block mb-3">
-                                <label>{{ "user.creationDate" | translate }}</label>
-                                <input type="text" class="form-control" placeholder=""
-                                    [value]="selectedTransaction?.created_at" disabled>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-12">
-                            <div class="input-block mb-3">
-                                <label>Narration</label>
-                                <input type="text" class="form-control" placeholder=""
-                                    [value]="selectedTransaction?.narration" disabled>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-12">
-                            <div class="input-block mb-3">
-                                <label>System Message</label>
-                                <textarea type="text" class="form-control" placeholder=""
-                                    [value]="selectedTransaction?.processor_response" disabled></textarea>
-                            </div>
-                        </div>
-                        <h6>Customer</h6>
-                        <div class="col-sm-12 col-md-12">
-                            <div class="option-space">
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-6">
-                                        <div class="input-block mb-3">
-                                            <label>Id</label>
-                                            <input type="text" class="form-control" placeholder=""
-                                                [value]="customerPayinTransaction?.id" disabled>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-6">
-                                        <div class="input-block mb-3">
-                                            <label>{{ "user.name" | translate }} </label>
-                                            <input type="text" class="form-control" placeholder=""
-                                                [value]="customerPayinTransaction?.name" disabled>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-6">
-                                        <div class="input-block mb-3">
-                                            <label>Date</label>
-                                            <input type="text" class="form-control" placeholder=""
-                                                [value]="customerPayinTransaction?.created_at" disabled>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-6">
-                                        <div class="input-block mb-3">
-                                            <label>{{ "user.phone "}} </label>
-                                            <input type="text" class="form-control" placeholder=""
-                                                [value]="customerPayinTransaction?.phone_number" disabled>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-6">
-                                        <div class="input-block mb-3">
-                                            <label>Sender mobile number</label>
-                                            <input type="text" class="form-control" placeholder=""
-                                                [value]="customerPayinTransaction?.phone_number" disabled>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
-            <br>
-            <div class="modal-body">
-                Brut datas:
-                <div class="col-sm-12 col-md-12">
-                    <div class="option-space">
-                        <pre
-                            style="padding: 10px; background-color: black; color: white;"> {{ selectedTransaction | json }} </pre>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <app-transaction-details [transactionData]="selectedTransaction"></app-transaction-details>
     </div>
-</div> -->
+</div>

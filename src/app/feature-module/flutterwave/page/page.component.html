@@ -274,7 +274,8 @@
                                         <h5>{{ selectedPayoutTransaction?.amount }} {{
                                             selectedPayoutTransaction?.currency }}</h5>
                                         <span>
-                                            {{ "payment.amount" | translate }}: {{ selectedPayoutTransaction?.amount }} {{
+                                            {{ "payment.amount" | translate }}: {{ selectedPayoutTransaction?.amount }}
+                                            {{
                                             selectedPayoutTransaction?.currency }} |
                                             {{ "payment.taxes" | translate }}: {{ selectedPayoutTransaction?.fee }}
                                             {{
@@ -328,7 +329,7 @@
                         </div>
                         <div class="col-sm-12 col-md-6">
                             <div class="input-block mb-3">
-                                <label>{{ "user.creationDate" | translate }}</label>
+                                <label>{{ "users.creationDate" | translate }}</label>
                                 <input type="text" class="form-control" placeholder=""
                                     [value]="selectedPayoutTransaction?.created_at" disabled>
                             </div>
@@ -401,11 +402,11 @@
             </form>
             <br>
             <div class="modal-body">
-                Brut datas:
+                {{ "rawData" | translate }}:
                 <div class="col-sm-12 col-md-12">
                     <div class="option-space">
-                        <pre
-                            style="padding: 10px; background-color: black; color: white;"> {{ selectedPayoutTransaction | json }} </pre>
+                        <app-json-viewer [data]="selectedPayoutTransaction"
+                            *ngIf="selectedPayoutTransaction"></app-json-viewer>
                     </div>
                 </div>
             </div>
@@ -453,7 +454,8 @@
                                         <h5>{{ selectedPayinTransaction?.charged_amount }} {{
                                             selectedPayinTransaction?.currency }}</h5>
                                         <span>
-                                            {{ "payment.amount" | translate }}: {{ selectedPayinTransaction?.amount }} {{
+                                            {{ "payment.amount" | translate }}: {{ selectedPayinTransaction?.amount }}
+                                            {{
                                             selectedPayinTransaction?.currency }} |
                                             {{ "payment.taxes" | translate }}: {{ selectedPayinTransaction?.app_fee }}
                                             {{
@@ -508,7 +510,7 @@
                         </div>
                         <div class="col-sm-12 col-md-6">
                             <div class="input-block mb-3">
-                                <label>{{ "user.creationDate" | translate }}</label>
+                                <label>{{ "users.creationDate" | translate }}</label>
                                 <input type="text" class="form-control" placeholder=""
                                     [value]="selectedPayinTransaction?.created_at" disabled>
                             </div>
@@ -554,7 +556,7 @@
                                     </div>
                                     <div class="col-sm-12 col-md-6">
                                         <div class="input-block mb-3">
-                                            <label>{{ "user.phone "}} </label>
+                                            <label>{{ "users.phone "}} </label>
                                             <input type="text" class="form-control" placeholder=""
                                                 [value]="customerPayinTransaction?.phone_number" disabled>
                                         </div>
@@ -574,11 +576,12 @@
             </form>
             <br>
             <div class="modal-body">
-                Brut datas:
+                {{ "rawData" | translate }}:
                 <div class="col-sm-12 col-md-12">
                     <div class="option-space">
-                        <pre
-                            style="padding: 10px; background-color: black; color: white;"> {{ selectedPayinTransaction | json }} </pre>
+                        <app-json-viewer [data]="selectedPayinTransaction"
+                            *ngIf="selectedPayinTransaction"></app-json-viewer>
+
                     </div>
                 </div>
             </div>

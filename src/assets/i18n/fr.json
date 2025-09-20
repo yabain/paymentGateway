@@ -430,6 +430,7 @@
     "fundsWillReceive": "Le bénéficiaire recevra les fonds d'ici peut.",
     "success": "Éffectué",
     "error": "Echec",
+    "pending": "En cours",
     "sureBankAccountNumberMessage": "Assurez-vous que le nom de la banque et le numéro de compte sont correctes.",
     "pendingPayout": "Décaissements en attente",
     "allPayout": "Tous les Décaissements",
@@ -646,6 +647,7 @@
     "pink": "Rose vif",
     "green": "Vert"
   },
+  "rawData": "Données brutes",
   "tool": "Outil",
   "meetUrl": "Lien de la Visio",
   "Cameroon": "Cameroun",

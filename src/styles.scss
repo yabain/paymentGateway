@@ -922,6 +922,62 @@ ngx-editor .NgxEditor {
   box-shadow: 5px 5px 10px #f57b116d; /* Décalage horizontal de 5px, vertical de 5px, flou de 10px, couleur noire semi-transparente */
 }
 
+/* Fond et style global */
+pre {
+  background: #1e1e1e;   /* fond sombre style VS Code */
+  color: #d4d4d4;        /* couleur texte par défaut */
+  padding: 10px;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-family: "Fira Code", Consolas, Monaco, monospace;
+  font-size: 14px;
+}
+
+/* Couleur des clés */
+pre .json-key {
+  color: #9cdcfe; /* bleu clair */
+}
+
+/* Couleur des chaînes */
+pre .json-string {
+  color: #ce9178; /* orangé */
+}
+
+/* Couleur des nombres */
+pre .json-number {
+  color: #b5cea8; /* vert pâle */
+}
+
+/* Couleur des booléens */
+pre .json-boolean {
+  color: #569cd6; /* bleu */
+}
+
+/* Couleur du null */
+pre .json-null {
+  color: #569cd6; /* bleu */
+}
+
+/* JSON viewer style - thème sombre type VS Code */
+.json-pre {
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 14px;
+  border-radius: 6px;
+  overflow: auto;
+  font-family: "Fira Code", "Consolas", "Monaco", monospace;
+  font-size: 13px;
+  line-height: 1.45;
+  white-space: pre;
+}
+
+/* classes générées par le composant */
+.json-key { color: #9cdcfe; }     /* keys (bleu clair) */
+.json-string { color: #ce9178; }  /* strings (orangé) */
+.json-number { color: #b5cea8; }  /* numbers (vert pâle) */
+.json-boolean { color: #569cd6; } /* boolean (bleu) */
+.json-null { color: #569cd6; }    /* null (bleu) */
+
 
 .card-head {
   border: 1px solid #021d66;

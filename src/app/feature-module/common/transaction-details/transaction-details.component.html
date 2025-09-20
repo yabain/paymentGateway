@@ -1,0 +1,291 @@
+<div class="modal-content">
+    <div class="modal-header border-0">
+        <div class="form-header modal-header-title text-start mb-0">
+            <h4 class="mb-0">{{ 'payment.transactionDetails' |
+                translate }}</h4>
+            <h6 class="mb-0" *ngIf="transactionData?.transactionType === 'transfer'">{{ 'payment.moneyTransfer' |
+                translate }}</h6>
+            <h6 class="mb-0" *ngIf="transactionData?.transactionType === 'withdrawal'">{{ 'payment.withdrawal' |
+                translate }}</h6>
+        </div>
+        <div class="form-header modal-header-title text-start mb-0" style="text-align: right;">
+            <button class="btn btn-rounded btn-outline-success me-1"
+                *ngIf="payinStatus === 'SUCCESS' && payoutStatus === 'SUCCESS'">{{
+                "payment.success" |
+                translate }} </button>
+            <button class="btn btn-rounded btn-outline-danger me-1"
+                *ngIf="payinStatus === 'ERROR' || payoutStatus === 'ERROR'">{{
+                "payment.error" |
+                translate }} </button>
+            <button class="btn btn-rounded btn-outline-danger me-1"
+                *ngIf="payinStatus === 'PENDING' || payoutStatus === 'PENDING'">{{
+                "payment.pending" |
+                translate }} </button>
+            <button class="btn btn-rounded btn-outline-danger me-1"
+                *ngIf="payinStatus === 'REJECTED' || payoutStatus === 'REJECTED'">{{
+                "payment.rejected" |
+                translate }} </button>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        </button>
+    </div>
+    <form>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="img-upload">
+                        <div class="profile-img company-profile-img" *ngIf="transactionData?.status === 'successful'">
+                            <button class="btn btn-rounded btn-outline-success me-1">{{ "payment.success" |
+                                translate }} </button>
+                        </div>
+                        <div class="profile-img company-profile-img" *ngIf="transactionData?.status === 'failed'">
+                            <button class="btn btn-rounded btn-outline-danger me-1">{{ "payment.error" |
+                                translate }} </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="profile-picture">
+                        <div class="upload-profile">
+                            <!-- <div class="profile-img company-profile-img">
+                                <img id="company-img" class="img-fluid me-0" [src]="selectedCountry?.flagUrl"
+                                    alt="profile-img">
+                            </div> -->
+                            <div class="add-profile">
+                                <h5>{{ transactionData?.charged_amount }} {{
+                                    transactionData?.currency }}</h5>
+                                <span>
+                                    {{ "payment.amount" | translate }}: {{ transactionData?.amount }}
+                                    {{
+                                    transactionData?.currency }} |
+                                    {{ "payment.taxes" | translate }}: {{ transactionData?.app_fee }}
+                                    {{
+                                    transactionData?.currency }}</span>
+                            </div>
+                        </div>
+                        <div class="img-upload">
+                            <!-- <label class="btn btn-upload">
+                                        Upload <input type="file">
+                                    </label>
+                                    <a class="btn btn-remove">Remove</a> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <h5 class="form-title mb-3">{{ "subscriptions.planInfo" | translate }}</h5>
+                </div>
+                <div class="col-sm-12 col-md-6" *ngIf="transactionData?.id">
+                    <div class="input-block mb-3">
+                        <label>ID</label>
+                        <input type="text" class="form-control" placeholder="" [value]="transactionData?._id" disabled>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6" *ngIf="transactionData?.id">
+                    <div class="input-block mb-3">
+                        <label>Date</label>
+                        <input type="text" class="form-control" placeholder=""
+                            [value]="transactionData?.createdAt | date : 'dd/MM/yyyy'" disabled>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6" *ngIf="transactionData?.id">
+                    <div class="input-block mb-3">
+                        <label>Flutterwave ref</label>
+                        <input type="text" class="form-control" placeholder="" [value]="transactionData?.flw_ref"
+                            disabled>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6" *ngIf="transactionData?.id">
+                    <div class="input-block mb-3">
+                        <label>Ip</label>
+                        <input type="text" class="form-control" placeholder="" [value]="transactionData?.ip" disabled>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6" *ngIf="transactionData?.id">
+                    <div class="input-block mb-3">
+                        <label>Type</label>
+                        <input type="text" class="form-control" placeholder="" [value]="transactionData?.payment_type"
+                            disabled>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <div class="input-block mb-3">
+                        <label>{{ "users.creationDate" | translate }}</label>
+                        <input type="text" class="form-control" placeholder="" [value]="transactionData?.created_at"
+                            disabled>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12">
+                    <div class="input-block mb-3">
+                        <label>Narration</label>
+                        <input type="text" class="form-control" placeholder="" [value]="transactionData?.narration"
+                            disabled>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12" *ngIf="transactionData?.id">
+                    <div class="input-block mb-3">
+                        <label>System Message</label>
+                        <textarea type="text" class="form-control" placeholder=""
+                            [value]="transactionData?.processor_response" disabled></textarea>
+                    </div>
+                </div>
+                <h6 *ngIf="customer">{{ "payment.card" | translate }}</h6>
+                <div class="col-sm-12 col-md-12" *ngIf="customer && currentUser?.isAdmin">
+                    <div class="option-space">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <div class="input-block mb-3">
+                                    <label>Id</label>
+                                    <input type="text" class="form-control" placeholder="" [value]="customer?.id"
+                                        disabled>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="input-block mb-3">
+                                    <label>{{ "users.name" | translate }} </label>
+                                    <input type="text" class="form-control" placeholder="" [value]="customer?.name"
+                                        disabled>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="input-block mb-3">
+                                    <label>{{ "users.email" | translate }} </label>
+                                    <input type="text" class="form-control" placeholder="" [value]="customer?.email"
+                                        disabled>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="input-block mb-3">
+                                    <label>Date</label>
+                                    <input type="text" class="form-control" placeholder=""
+                                        [value]="customer?.created_at" disabled>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="input-block mb-3">
+                                    <label>{{ "users.phone "}} </label>
+                                    <input type="text" class="form-control" placeholder=""
+                                        [value]="customer?.phone_number" disabled>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="input-block mb-3">
+                                    <label>{{ "users.creationDate" | translate }} </label>
+                                    <input type="text" class="form-control" placeholder=""
+                                        [value]="customer?.created_at" disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h6 *ngIf="customer && currentUser?.isAdmin">{{ "payment.card" | translate }}</h6>
+                <div class="col-sm-12 col-md-12" *ngIf="customer && currentUser?.isAdmin">
+                    <div class="option-space">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <div class="input-block mb-3">
+                                    <label>Id</label>
+                                    <input type="text" class="form-control" placeholder="" [value]="customer?.id"
+                                        disabled>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="input-block mb-3">
+                                    <label>{{ "users.name" | translate }} </label>
+                                    <input type="text" class="form-control" placeholder="" [value]="customer?.name"
+                                        disabled>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="input-block mb-3">
+                                    <label>{{ "users.email" | translate }} </label>
+                                    <input type="text" class="form-control" placeholder="" [value]="customer?.email"
+                                        disabled>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="input-block mb-3">
+                                    <label>Date</label>
+                                    <input type="text" class="form-control" placeholder=""
+                                        [value]="customer?.created_at" disabled>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="input-block mb-3">
+                                    <label>{{ "users.phone "}} </label>
+                                    <input type="text" class="form-control" placeholder=""
+                                        [value]="customer?.phone_number" disabled>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="input-block mb-3">
+                                    <label>{{ "users.creationDate" | translate }} </label>
+                                    <input type="text" class="form-control" placeholder=""
+                                        [value]="customer?.created_at" disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h6 *ngIf="customer && currentUser?.isAdmin">Customer</h6>
+                <div class="col-sm-12 col-md-12" *ngIf="customer && currentUser?.isAdmin">
+                    <div class="option-space">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <div class="input-block mb-3">
+                                    <label>Id</label>
+                                    <input type="text" class="form-control" placeholder="" [value]="customer?.id"
+                                        disabled>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="input-block mb-3">
+                                    <label>{{ "users.name" | translate }} </label>
+                                    <input type="text" class="form-control" placeholder="" [value]="customer?.name"
+                                        disabled>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="input-block mb-3">
+                                    <label>{{ "users.email" | translate }} </label>
+                                    <input type="text" class="form-control" placeholder="" [value]="customer?.email"
+                                        disabled>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="input-block mb-3">
+                                    <label>Date</label>
+                                    <input type="text" class="form-control" placeholder=""
+                                        [value]="customer?.created_at" disabled>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="input-block mb-3">
+                                    <label>{{ "users.phone "}} </label>
+                                    <input type="text" class="form-control" placeholder=""
+                                        [value]="customer?.phone_number" disabled>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="input-block mb-3">
+                                    <label>{{ "users.creationDate" | translate }} </label>
+                                    <input type="text" class="form-control" placeholder=""
+                                        [value]="customer?.created_at" disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <br>
+    <div class="modal-body" *ngIf="currentUser?.isAdmin">
+        {{ "rawData" | translate }}:
+        <div class="col-sm-12 col-md-12">
+            <div class="option-space">
+                <app-json-viewer [data]="transactionData" *ngIf="transactionData"></app-json-viewer>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -33,13 +33,15 @@ export class MailComponent implements OnInit {
   status: boolean = true;
   waitingData: boolean = false;
   smtpData: any;
+  gettingtOutputMails: boolean = false;
 
   email: string;
   subject: string = 'Test email';
   message: string = 'This is the body of test email';
   sending: boolean = false;
 
-  outputList: any;
+  emailList: any;
+  emailPage: number = 1;
 
   constructor(private mailService: MailService) {}
 
@@ -88,15 +90,38 @@ export class MailComponent implements OnInit {
     this.getOutputMails();
   }
 
-  getOutputMails() {
-    this.mailService.getOutputMails().subscribe({
+  getOutputMails(page: number = 1, keyword?: string) {
+    this.gettingtOutputMails = true
+    this.mailService.getOutputMails(page, keyword ? keyword : '')
+    .subscribe({
       next: (res: any) => {
-        this.outputList = res;
+        this.emailList = res;
+        this.gettingtOutputMails = false
       },
       error: (err) => {
+        this.emailList = [];
+        this.gettingtOutputMails = false;
         console.log(err);
       },
     });
+  }
+
+
+  previousEmailPage(){
+    if(this.emailPage < 2){
+      this.emailPage = 1;
+      return false;
+    }
+    this.emailPage -=1;
+    return this.getOutputMails(this.emailPage);
+  }
+
+  nextEmailPage(){
+    if(this.emailList.length < 10){
+      return false;
+    }
+    this.emailPage +=1;
+    return this.getOutputMails(this.emailPage);
   }
 
   save() {

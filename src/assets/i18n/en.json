@@ -430,6 +430,7 @@
     "fundsWillReceive": "The beneficiary will receive the funds shortly.",
     "success": "Done",
     "error": "Failed",
+    "pending": "Pending",
     "sureBankAccountNumberMessage": "Make sure the bank name and account number are correct.",
     "pendingPayout": "Pending Payout",
     "allPayout": "All Payout",
@@ -647,6 +648,7 @@
     "pink": "Hot pink",
     "green": "Green"
   },
+  "rawData": "Raw data",
   "tool": "Tool",
   "meetUrl": "Visio URL",
   "Cameroon": "Cameroon",
