@@ -125,8 +125,8 @@
                                 <th>Type</th>
                                 <th>Date</th>
                                 <th>{{ "payment.amount" | translate }}</th>
-                                <th>{{ "payment.taxes" | translate }}</th>
-                                <th>{{ "payment.sender" | translate }}</th>
+                                <!-- <th>{{ "payment.taxes" | translate }}</th>
+                                <th>{{ "payment.sender" | translate }}</th> -->
                                 <th>{{ "payment.receiverName" | translate }}</th>
                                 <th>{{ "payment.amountToBeReceived" | translate }}</th>
                                 <th *ngIf="sectionSelected !== 'pending'">{{ "mail.status" | translate }}</th>
@@ -146,14 +146,62 @@
                                 <td *ngIf="t?.transactionType === 'withdrawal'">{{ "payment.withdrawal" | translate }}
                                 </td>
                                 <td>{{ t?.createdAt | date:'dd-MM-yyyy HH:mm:ss'}}</td>
-                                <td>{{ t?.estimation | number:'1.2-2' }} {{ t?.senderCurrency }}</td>
-                                <td>{{ t?.taxesAmount | number:'1.2-2' }} {{ t?.senderCurrency }}</td>
+                                <!-- <td>{{ t?.estimation | number:'1.2-2' }} {{ t?.senderCurrency }}</td>
+                                <td>{{ t?.taxesAmount | number:'1.2-2' }} {{ t?.senderCurrency }}</td> -->
                                 <td>{{ t?.senderName }} ( {{ t?.senderCountry | translate }} )</td>
                                 <td>{{ t?.receiverName }} ( {{ t?.senderCountry | translate }} )</td>
                                 <td>{{ t?.receiverAmount | number:'1.2-2' }} {{ t?.receiverCurrency }}</td>
-                                <td *ngIf="sectionSelected !== 'pending'">{{ t?.status }}</td>
+                                <td *ngIf="sectionSelected !== 'pending'">
+                                    <div class="form-header modal-header-title text-start mb-0">
+
+                                        <span *ngIf="t?.status === 'transaction_initialized' || t?.status === 'transaction_payin_closed'">
+                                            <button class="btn btn-rounded btn-outline-dark me-1" disabled>
+                                                {{ "status." + t?.status | translate }}
+                                            </button>
+                                        </span>
+
+                                        <button class="btn btn-block btn-outline-dannger" *ngIf="t?.status === 'transaction_payin_error'
+                                        || t?.status === 'transaction_payout_rejected'
+                                        || t?.status === 'transaction_payout_error'
+                                        || t?.status === 'transaction_payout_closed'"
+                                        disabled>{{ "status." + t?.status | translate }} </button>
+
+                                        <span *ngIf="t?.status === 'transaction_payout_success'">
+                                            <button class="btn btn-rounded btn-outline-success me-1" disabled>
+                                                {{ "status." + t?.status | translate }}
+                                            </button>
+                                        </span>
+
+                                        <span *ngIf="t?.status === 'transaction_payin_success'">
+                                            <button class="btn btn-rounded btn-outline-primary me-1" disabled
+                                            *ngIf="t?.transactionType === 'transfer' || t?.transactionType === 'withdrawal'">
+                                                {{ "status.waitingConfirmation" | translate }}
+                                            </button>
+                                            <button class="btn btn-rounded btn-outline-success me-1" disabled
+                                            *ngIf="t?.transactionType !== 'transfer' && t?.transactionType !== 'withdrawal'">
+                                                {{ "status." + t?.status | translate }}
+                                            </button>
+                                        </span>
+                                        <button class="btn btn-rounded btn-outline-success me-1" disabled
+                                        *ngIf="t?.status === 'transaction_payout_success'">
+                                            {{ "status." + t?.status | translate }}
+                                        </button>
+
+                                        <span>
+                                            <button class="btn btn-rounded btn-outline-warning me-1" *ngIf="t?.status === 'transaction_payin_pending'
+                                                || t?.status === 'transaction_payout_pending'" disabled style="color: #F57C11">
+                                                <span role="status" class="spinner-border spinner-border-sm me-2"></span>
+                                                {{ "status." + t?.status | translate }}
+                                            </button>
+                                        </span>
+                                    </div>
+                                </td>
                                 <td *ngIf="sectionSelected === 'pending'">
-                                    <button class="btn btn-rounded btn-outline-success me-1" href="javascript:void(0);"
+                                    <button class="btn btn-rounded btn-outline-primary me-1" href="javascript:void(0);"
+                                        data-bs-toggle="tooltip" data-bs-placement="bottom"><span>
+                                        {{ "status.waitingConfirmation" | translate }}</span></button>
+
+                                    <!-- <button class="btn btn-rounded btn-outline-success me-1" href="javascript:void(0);"
                                         data-bs-toggle="tooltip" data-bs-placement="bottom" matTooltip="accept Payment"
                                         (click)="acceptPayment(t?._id)"><span>
                                             {{ "payment.accept" | translate }}</span></button>
@@ -162,16 +210,17 @@
                                         data-bs-toggle="tooltip" data-bs-placement="bottom" matTooltip="Reject Payment"
                                         (click)="rejectPayment()"><span>
                                             {{ "payment.reject" | translate }}
-                                        </span></button>
+                                        </span></button> -->
                                 </td>
                             </tr>
                         </tbody>
                     </table><br>
                     <div *ngIf="!gettingTransactions && transactionList?.length > 0">
-                        <button class="btn btn-block btn-outline-light active"
-                        (click)="previousPage()" *ngIf="page !== 1"> << </button>
-                         <button class="btn btn-block btn-outline-light active">Page: {{ page }}</button>
-                         <button class="btn btn-block btn-outline-light active" (click)="nextPage()"
+                        <button class="btn btn-block btn-outline-light active" (click)="previousPage()"
+                            *ngIf="page !== 1">
+                            << </button>
+                                <button class="btn btn-block btn-outline-light active">Page: {{ page }}</button>
+                                <button class="btn btn-block btn-outline-light active" (click)="nextPage()"
                                     *ngIf="transactionList?.length === 10"> >> </button>
                     </div>
                     <div *ngIf="gettingTransactions" class="row d-flex align-items-cente justify-content-center">
@@ -200,7 +249,6 @@
         </div>
     </div>
 </div>
-
 
 
 <div class="modal custom-modal fade p-20" id="payout_transaction_details" role="dialog">

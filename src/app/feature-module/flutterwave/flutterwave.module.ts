@@ -6,20 +6,20 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FlutterwaveComponent } from './flutterwave.component';
 import { PageComponent } from './page/page.component';
 import { FlutterwaveRoutingModule } from './flutterwave-routing.module';
-import { JsonViewerComponent } from '../common/json-viewer/json-viewer.component';
+import { CommonItemModule } from '../common/common-item.module';
 
 
 @NgModule({
   declarations: [
     PageComponent,
     FlutterwaveComponent,
-    JsonViewerComponent,
   ],
   imports: [
     CommonModule,
     FlutterwaveRoutingModule,
     SharedModule,
-    TranslateModule
+    TranslateModule,
+    CommonItemModule
   ],
   providers: []
 })

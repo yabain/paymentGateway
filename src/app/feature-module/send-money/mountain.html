@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>IFAV – Incubateur Francophone Africain Virtuel (démo dynamique)</title>
+<meta name="description" content="Démo autonome d'une page dynamique inspirée des captures fournies. Tout en un seul fichier.">
+<style>
+  /* --- Reset & base --- */
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  :root{
+    --bg:#f4f8ff;
+    --ink:#14314a;
+    --ink-2:#274c77;
+    --brand:#2f5ee6;
+    --brand-2:#67a1ff;
+    --accent:#ffb200;
+    --muted:#6c7a92;
+    --card:#ffffff;
+    --nav:#0f2740;
+    --shadow:0 10px 30px rgba(16,40,80,.15);
+    --radius:16px;
+  }
+  body{font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,sans-serif;color:var(--ink);background:linear-gradient(180deg,#f7fbff 0%,#eef4ff 40%,#f7fbff 100%)}
+  h1,h2,h3,h4{margin:0 0 .5rem 0;line-height:1.2;color:#0f2740}
+  h1{font-size:clamp(28px,3.4vw,56px);letter-spacing:.2px}
+  h2{font-size:clamp(24px,2.6vw,36px)}
+  p{margin:.25rem 0 1rem 0;color:#334967}
+  a{color:var(--brand);text-decoration:none}
+  .btn{display:inline-flex;align-items:center;gap:.6rem;background:var(--brand);color:#fff;padding:.85rem 1.25rem;border-radius:999px;font-weight:700;box-shadow:var(--shadow);transition:.2s transform,.2s box-shadow}
+  .btn:hover{transform:translateY(-1px);box-shadow:0 12px 36px rgba(47,94,230,.3)}
+  .btn--light{background:#fff;color:var(--ink);border:1px solid #e5ecff}
+  .badge{display:inline-flex;align-items:center;gap:.5rem;background:#e8f0ff;color:#0f2b58;padding:.45rem .9rem;border-radius:999px;font-weight:700;font-size:.9rem}
+  .container{max-width:1200px;margin:0 auto;padding:0 20px}
+  section{padding:64px 0;position:relative;overflow:hidden}
+  .grid{display:grid;gap:24px}
+  .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:28px}
+
+  /* --- Header --- */
+  header{position:sticky;top:0;z-index:50;background:rgba(14,31,56,.75);backdrop-filter:saturate(130%) blur(8px);border-bottom:1px solid rgba(255,255,255,.06)}
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:12px 0;color:#fff}
+  .brand{display:flex;align-items:center;gap:.75rem;font-weight:800;color:#fff}
+  .brand svg{width:28px;height:28px;filter:drop-shadow(0 2px 6px rgba(0,0,0,.2))}
+  .menu a{color:#eaf2ff;margin:0 14px;font-weight:600;opacity:.85}
+  .menu a.active,.menu a:hover{opacity:1}
+  .menu .cta{margin-left:12px}
+
+  /* --- Hero --- */
+  #hero{padding-top:72px}
+  .hero-wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:32px;align-items:center}
+  .hero-bubble{position:absolute;right:-120px;top:-120px;width:520px;height:520px;background:radial-gradient(50% 50% at 50% 50%, rgba(111,156,255,.25) 0%, rgba(111,156,255,0) 70%);}
+  .hero-title span{color:var(--brand)}
+  .kpis{display:flex;gap:16px;flex-wrap:wrap;margin:18px 0}
+  .kpi{background:#fff;border:1px solid #eaf0ff;border-radius:14px;padding:10px 14px;font-weight:800;color:#0f2b58;box-shadow:var(--shadow)}
+  .slider{position:relative;aspect-ratio:4/5;border-radius:22px;overflow:hidden;box-shadow:0 25px 60px rgba(14,31,56,.25)}
+  .slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transform:scale(1.02);transition:opacity .8s ease, transform .8s ease;will-change:transform,opacity}
+  .slide.active{opacity:1;transform:scale(1)}
+  .slide::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(0,0,0,.25))}
+  .slider-dots{position:absolute;left:0;right:0;bottom:10px;display:flex;gap:8px;justify-content:center;z-index:3}
+  .dot{width:8px;height:8px;border-radius:999px;background:rgba(255,255,255,.55);transition:.2s}
+  .dot.active{width:24px;background:#fff}
+
+  /* --- Features --- */
+  .features{grid-template-columns:repeat(3,1fr)}
+  .feature i{display:inline-grid;place-items:center;width:62px;height:62px;border-radius:16px;background:linear-gradient(135deg,#1f3860,#3f66c9);color:#fff;font-style:normal;font-weight:900;box-shadow:var(--shadow);margin-bottom:10px}
+
+  /* --- Journey timeline --- */
+  .timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:22px;align-items:flex-start;position:relative}
+  .timeline::before{content:'';position:absolute;left:8%;right:8%;top:68%;height:6px;background:linear-gradient(90deg,#e4ebff,#c5d6ff);border-radius:6px}
+  .step{text-align:center}
+  .step i{display:inline-grid;place-items:center;width:92px;height:92px;border-radius:999px;background:linear-gradient(135deg,#1f3860,#3f66c9);color:#fff;font-weight:900;box-shadow:var(--shadow);margin-bottom:10px;font-style:normal}
+  .progress-bar{position:absolute;left:8%;top:68%;height:6px;background:linear-gradient(90deg,#4f7df6,#7fb0ff);border-radius:6px;width:0%}
+
+  /* --- Stats / program --- */
+  .stats{grid-template-columns:repeat(4,1fr)}
+  .stat{text-align:center;padding:28px;border-radius:18px;background:#203a5f;color:#cfe0ff;box-shadow:var(--shadow)}
+  .stat b{display:block;color:#7fb1ff;font-size:42px}
+
+  /* --- Partners carousel --- */
+  .partners-track{display:flex;gap:24px;animation:scroll 30s linear infinite;will-change:transform}
+  .partner{min-width:320px}
+  @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  /* --- African network grid --- */
+  .cards{grid-template-columns:repeat(4,1fr)}
+  .cards .card{padding:22px;display:grid;place-items:center;text-align:center;gap:.5rem;transition:.3s transform,.3s box-shadow}
+  .cards .card:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(14,31,56,.2)}
+
+  /* --- Footer --- */
+  footer{background:#14283f;color:#c7d6ef;margin-top:60px}
+  footer .cols{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:20px}
+  footer a{color:#c7d6ef;opacity:.9}
+
+  /* --- Utilities --- */
+  .muted{color:var(--muted)}
+  .center{text-align:center}
+  .pill{display:inline-flex;align-items:center;gap:.4rem;padding:.45rem .9rem;border-radius:999px;background:#fff;color:#0f2b58;border:1px solid #e5ecff;font-weight:700}
+  .sticky-cta{position:fixed;right:18px;bottom:18px;z-index:60}
+
+  /* --- Responsive --- */
+  @media (max-width: 980px){
+    .hero-wrap{grid-template-columns:1fr}
+    .features{grid-template-columns:1fr}
+    .timeline{grid-template-columns:1fr 1fr}
+    .stats{grid-template-columns:1fr 1fr}
+    .cards{grid-template-columns:1fr 1fr}
+    footer .cols{grid-template-columns:1fr}
+    .partner{min-width:240px}
+  }
+</style>
+</head>
+<body>
+<header id="top">
+  <div class="container nav">
+    <a class="brand" href="#hero" aria-label="IFAV">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 12a8 8 0 1 1 8 8h-1l-3.2 2a1 1 0 0 1-1.52-.85V20A8 8 0 0 1 4 12Zm6-4a1 1 0 0 0 0 2h6a1 1 0 1 0 0-2h-6Zm-1 4a1 1 0 0 1 1-1h7a1 1 0 1 1 0 2h-7a1 1 0 0 1-1-1Zm-2 3a1 1 0 0 0 1 1h9a1 1 0 1 0 0-2H8a1 1 0 0 0-1 1Z"/></svg>
+      IFAV
+    </a>
+    <nav class="menu">
+      <a href="#caracteristiques">Caractéristiques</a>
+      <a href="#parcours">Processus</a>
+      <a href="#programme">Impact</a>
+      <a href="#partenaires">Partenaires</a>
+      <a class="btn cta btn--light" href="#candidater">Candidater</a>
+    </nav>
+  </div>
+</header>
+
+<section id="hero">
+  <div class="hero-bubble" aria-hidden="true"></div>
+  <div class="container hero-wrap">
+    <div>
+      <span class="badge">Programme 100% en ligne</span>
+      <h1 class="hero-title">Incubateur <span>Francophone</span><br/>Africain Virtuel</h1>
+      <p>Rejoignez une communauté de 30 entrepreneurs innovants et transformez votre idée en startup à impact social et environnemental.</p>
+      <div class="kpis">
+        <div class="kpi"><span data-counter="30">0</span> Startups</div>
+        <div class="kpi"><span data-counter="100">0</span>% en ligne</div>
+        <div class="kpi"><span data-counter="20">0</span>+ Pays</div>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <a class="btn" href="#candidater">Candidater maintenant →</a>
+        <span class="pill">Candidatez avant le 1er septembre 2025</span>
+      </div>
+    </div>
+
+    <!-- Diaporama : 3 slides avec les captures intégrées en base64 -->
+    <div class="slider" aria-label="Diaporama">
+      <div class="slide active" style="background-image:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA')"></div>
+      <div class="slide" style="background-image:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA')"></div>
+      <div class="slide" style="background-image:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA')"></div>
+      <div class="slider-dots" role="tablist" aria-label="Contrôle diaporama"></div>
+    </div>
+  </div>
+</section>
+
+<section id="caracteristiques">
+  <div class="container center">
+    <span class="pill">Programme complet</span>
+    <h2>Un Accompagnement d'Excellence</h2>
+    <p class="muted">Porté par l'Agence Universitaire de la Francophonie (AUF) et mis en œuvre par l'incubateur Bidaya</p>
+    <div class="grid features" style="margin-top:28px">
+      <div class="card feature">
+        <i>🎓</i>
+        <h3>Formation Complète</h3>
+        <p>Modules adaptés aux réalités entrepreneuriales africaines, conçus par des experts du continent.</p>
+      </div>
+      <div class="card feature">
+        <i>🎯</i>
+        <h3>Mentorat Personnalisé</h3>
+        <p>Accompagnement individuel par des mentors expérimentés à chaque étape.</p>
+      </div>
+      <div class="card feature">
+        <i>🌍</i>
+        <h3>Réseau Panafricain</h3>
+        <p>Connectez-vous avec des entrepreneurs de plus de 20 pays et créez des partenariats stratégiques.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="parcours">
+  <div class="container center">
+    <span class="pill">Parcours Structuré</span>
+    <h2>Votre Voyage Entrepreneurial</h2>
+    <p class="muted">Un accompagnement étape par étape pour concrétiser votre vision</p>
+
+    <div class="timeline" style="margin-top:26px">
+      <div class="progress-bar" aria-hidden="true"></div>
+      <div class="step">
+        <i>🧠</i>
+        <h3>Idéation</h3>
+        <p class="muted">Affinez votre idée et votre proposition de valeur.</p>
+      </div>
+      <div class="step">
+        <i>🧪</i>
+        <h3>Validation</h3>
+        <p class="muted">Étudiez votre marché et validez la pertinence.</p>
+      </div>
+      <div class="step">
+        <i>⚙️</i>
+        <h3>Modélisation</h3>
+        <p class="muted">Construisez un business model viable et durable.</p>
+      </div>
+      <div class="step">
+        <i>🛠️</i>
+        <h3>Prototypage</h3>
+        <p class="muted">Développez votre MVP et testez votre solution.</p>
+      </div>
+      <div class="step">
+        <i>🏁</i>
+        <h3>Lancement</h3>
+        <p class="muted">Préparez votre stratégie de mise sur le marché.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="programme" style="background:#203a5f linear-gradient(180deg,#1b2f4a, #203a5f)">
+  <div class="container">
+    <h2 class="center" style="color:#fff">Programme IFAV 2025</h2>
+    <p class="center" style="color:#cfe0ff">Chiffres des éditions passées :</p>
+    <div class="grid stats" style="margin-top:22px">
+      <div class="stat"><b data-counter="6">0</b> Ans d'expérience</div>
+      <div class="stat"><b data-counter="1200">0</b> Candidatures annuelles</div>
+      <div class="stat"><b data-counter="180">0</b> Entrepreneur·e·s accompagné·e·s (50% Femmes)</div>
+      <div class="stat"><b data-counter="180">0</b> Projets touchant 17 ODD</div>
+    </div>
+  </div>
+</section>
+
+<section id="partenaires">
+  <div class="container center">
+    <span class="pill">Nos Partenaires</span>
+    <h2>Partenariat Stratégique</h2>
+    <p class="muted">Une initiative conjointe d'acteurs académiques & de l'écosystème entrepreneurial africain.</p>
+    <div class="card" style="overflow:hidden">
+      <div class="partners-track">
+        <!-- Remplace ou duplique des logos/visuels ici au besoin -->
+        <div class="partner card">AUF / Bidaya / Mare Nostrum</div>
+        <div class="partner card">Programme IFAV cartes</div>
+        <div class="partner card">Bloc CTA</div>
+        <div class="partner card">Réseau Africain</div>
+        <div class="partner card">Footer</div>
+        <div class="partner card">AUF / Bidaya / Mare Nostrum (bis)</div>
+        <div class="partner card">Programme IFAV cartes (bis)</div>
+        <div class="partner card">Bloc CTA (bis)</div>
+        <div class="partner card">Réseau Africain (bis)</div>
+        <div class="partner card">Footer (bis)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="reseau">
+  <div class="container center">
+    <span class="pill">Réseau</span>
+    <h2>Réseau Africain</h2>
+    <p class="muted">Un réseau de 14 structures d'accompagnement, incubateurs et accélérateurs partenaires de l'IFAV en Afrique :</p>
+    <div class="grid cards" style="margin-top:20px">
+      <div class="card"><b>Bidaya Groupe SOS Maroc</b><span class="muted">(Maroc)</span></div>
+      <div class="card"><b>MCISE</b><span class="muted">(Maroc)</span></div>
+      <div class="card"><b>La Startup Station</b><span class="muted">(Maroc)</span></div>
+      <div class="card"><b>Akewa accélérateur</b><span class="muted">(Gabon & Cameroun)</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="candidater">
+  <div class="container">
+    <div class="card" style="background:linear-gradient(135deg,#24446a,#4f80f6);color:#fff;border-radius:26px;padding:46px;box-shadow:0 40px 80px rgba(24,48,88,.35)">
+      <h2 class="center" style="color:#fff;font-size:clamp(24px,3vw,44px)">Prêts à Transformer Votre Idée en Impact ?</h2>
+      <p class="center" style="color:#eaf2ff">Les candidatures sont ouvertes pour la cohorte 2025. Ne manquez pas cette opportunité !</p>
+      <p class="center" style="margin:10px 0 24px 0"><span class="pill" style="background:#ffeaac;border:none">🟡 Candidatez avant le 1er septembre 2025</span></p>
+      <p class="center"><a class="btn btn--light" href="#top">Candidater Maintenant</a></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container" style="padding:36px 20px">
+    <div class="cols">
+      <div>
+        <h3 style="color:#fff">IFAV</h3>
+        <p>L'Incubateur Francophone Africain Virtuel accompagne les entrepreneurs africains dans la création de startups à impact social et environnemental.</p>
+      </div>
+      <div>
+        <h4 style="color:#fff">Programme</h4>
+        <p><a href="#caracteristiques">Caractéristiques</a><br><a href="#parcours">Processus</a><br><a href="#programme">Impact</a><br><a href="#partenaires">Partenaires</a></p>
+      </div>
+      <div>
+        <h4 style="color:#fff">Contact</h4>
+        <p><a href="mailto:afrique-nord@auf.org">afrique-nord@auf.org</a><br><a href="mailto:contact@bidaya.io">contact@bidaya.io</a></p>
+      </div>
+    </div>
+    <p class="muted" style="margin-top:12px">© 2025 IFAV – Démo autonome. Tous droits réservés.</p>
+  </div>
+</footer>
+
+<a class="btn sticky-cta" href="#candidater" aria-label="Candidater">Candidater</a>
+
+<script>
+  /* --- Helpers --- */
+  const qs = (s,scope=document)=>scope.querySelector(s);
+  const qsa= (s,scope=document)=>Array.from(scope.querySelectorAll(s));
+
+  /* --- Hero counters --- */
+  const counters = qsa('[data-counter]');
+  const animateCount = (el)=>{
+    const target = +el.getAttribute('data-counter');
+    const duration = 1200 + Math.random()*600;
+    const start = performance.now();
+    const step = (t)=>{
+      const p = Math.min((t-start)/duration,1);
+      const eased = 1-Math.pow(1-p,3);
+      el.textContent = Math.round(target*eased);
+      if(p<1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+  const onView = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ animateCount(e.target); onView.unobserve(e.target); } });
+  },{threshold:.6});
+  counters.forEach(c=>onView.observe(c));
+
+  /* --- Slider --- */
+  const slider = qs('.slider');
+  const slides = qsa('.slide', slider);
+  const dots = qs('.slider-dots', slider);
+  slides.forEach((_,i)=>{
+    const d = document.createElement('span'); d.className='dot'+(i===0?' active':''); d.setAttribute('role','button'); d.setAttribute('aria-label','Aller à la diapositive '+(i+1));
+    d.addEventListener('click',()=> setSlide(i,true));
+    dots.appendChild(d);
+  });
+  let cur = 0, timer = null;
+  function setSlide(i,manual=false){
+    slides[cur].classList.remove('active');
+    dots.children[cur].classList.remove('active');
+    cur = (i+slides.length)%slides.length;
+    slides[cur].classList.add('active');
+    dots.children[cur].classList.add('active');
+    if(manual) restart();
+  }
+  function next(){ setSlide(cur+1); }
+  function restart(){
+    if(timer) clearInterval(timer);
+    timer = setInterval(next, 3500);
+  }
+  restart();
+  slider.addEventListener('mouseenter',()=>clearInterval(timer));
+  slider.addEventListener('mouseleave',restart);
+
+  /* --- Timeline progress animation on view --- */
+  const progress = qs('.progress-bar');
+  const timeline = qs('.timeline');
+  const obs = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        let w = 0;
+        const id = setInterval(()=>{ w += 2; progress.style.width = Math.min(w,84)+'%'; if(w>=84) clearInterval(id); }, 30);
+        obs.unobserve(timeline);
+      }
+    });
+  },{threshold:.5});
+  obs.observe(timeline);
+
+  /* --- Smooth scroll for in-page anchors --- */
+  qsa('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{
+    const id = a.getAttribute('href');
+    if(id.length>1){ e.preventDefault(); document.querySelector(id).scrollIntoView({behavior:'smooth',block:'start'}); }
+  }));
+
+  /* --- Active menu on scroll --- */
+  const sections = ['hero','caracteristiques','parcours','programme','partenaires','candidater'].map(id=>qs('#'+id));
+  const links = qsa('.menu a');
+  const spy = new IntersectionObserver((ents)=>{
+    ents.forEach(ent=>{
+      if(ent.isIntersecting){
+        links.forEach(l=>l.classList.toggle('active', l.getAttribute('href')==='#'+ent.target.id));
+      }
+    });
+  },{rootMargin:'-45% 0px -45% 0px',threshold:0});
+  sections.forEach(s=>spy.observe(s));
+
+  /* --- Accessibility niceties --- */
+  document.addEventListener('keydown', (e)=>{
+    if(e.key==='ArrowRight') next();
+    if(e.key==='ArrowLeft') setSlide(cur-1,true);
+  });
+</script>
+</body>
+</html>

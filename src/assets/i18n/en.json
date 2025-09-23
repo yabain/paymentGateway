@@ -441,8 +441,8 @@
     "reject": "Reject",
     "accept": "Accept",
     "transfer": "Transfer",
-    "withdrawal": "Withdrawal"
-
+    "withdrawal": "Withdrawal",
+    "narration": "Narration"
   },
   "whatsapp": {
     "title": "WhatsApp center",
@@ -647,6 +647,20 @@
     "orange": "Orange",
     "pink": "Hot pink",
     "green": "Green"
+  },
+  "status": {
+    "title": "Status",
+    "transaction_initialized": "Transaction initialized",
+    "transaction_payin_pending": "Collection Awaiting",
+    "transaction_payin_success": "Collection Completed",
+    "transaction_payin_error": "Payment Error",
+    "transaction_payin_closed": "Payment Cancelled",
+    "transaction_payout_pending": "Transfer Pending",
+    "transaction_payout_success": "Transfer Completed",
+    "transaction_payout_rejected": "Transfer Rejected",
+    "transaction_payout_error": "Transfer Error",
+    "transaction_payout_closed": "Transfer Cancelled",
+    "waitingConfirmation": "Waiting confirmation"
   },
   "rawData": "Raw data",
   "tool": "Tool",

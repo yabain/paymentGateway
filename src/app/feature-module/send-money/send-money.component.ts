@@ -610,6 +610,7 @@ export class SendMoneyComponent implements OnInit {
       receiverAddress: this.receiverAddress,
       receiverCountry: this.selectedCountry.name,
       receiverCurrency: this.selectedCountry.currency,
+      receiverAccountType: this.getreceiverAccountType(),
       receiverAmount: this.getCleanAmount(),
 
       paymentMethod: this.selectedMethod,
@@ -621,6 +622,12 @@ export class SendMoneyComponent implements OnInit {
       status: this.paymentService.status.INITIALIZED,
       transactionType: this.paymentService.transactionType.TRANSFER,
     };
+  }
+
+  getreceiverAccountType(){
+    if(this.selectedMethod === 'OM' || this.selectedMethod === 'MTN') return 'mobile_money';
+    else if(this.selectedMethod === 'BANK') return 'bank';
+    else return 'wallet'
   }
 
   verifytransactionData(transactionData): boolean {

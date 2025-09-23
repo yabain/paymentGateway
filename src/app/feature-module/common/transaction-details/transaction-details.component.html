@@ -7,30 +7,65 @@
                 translate }}</h6>
             <h6 class="mb-0" *ngIf="transactionData?.transactionType === 'withdrawal'">{{ 'payment.withdrawal' |
                 translate }}</h6>
-        </div>
-        <div class="form-header modal-header-title text-start mb-0" style="text-align: right;">
-            <button class="btn btn-rounded btn-outline-success me-1"
-                *ngIf="payinStatus === 'SUCCESS' && payoutStatus === 'SUCCESS'">{{
-                "payment.success" |
-                translate }} </button>
-            <button class="btn btn-rounded btn-outline-danger me-1"
-                *ngIf="payinStatus === 'ERROR' || payoutStatus === 'ERROR'">{{
-                "payment.error" |
-                translate }} </button>
-            <button class="btn btn-rounded btn-outline-danger me-1"
-                *ngIf="payinStatus === 'PENDING' || payoutStatus === 'PENDING'">{{
-                "payment.pending" |
-                translate }} </button>
-            <button class="btn btn-rounded btn-outline-danger me-1"
-                *ngIf="payinStatus === 'REJECTED' || payoutStatus === 'REJECTED'">{{
-                "payment.rejected" |
-                translate }} </button>
+
+
+            <!-- <h6 class="mb-0" *ngIf="transactionData?.transactionType === 'deposit'">{{ 'payment.withdrawal' |
+                translate }}</h6> -->
+            <h6 class="mb-0" *ngIf="transactionData?.transactionType === 'payment'">{{ 'payment.title' |
+                translate }}</h6>
+            <h6 class="mb-0" *ngIf="transactionData?.transactionType === 'subscription'">{{ 'subscriptions.title' |
+                translate }}</h6>
+            <h6 class="mb-0" *ngIf="transactionData?.transactionType === 'fundraising'">{{ 'dashboard.fundraising' |
+                translate }}</h6>
         </div>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
         </button>
     </div>
     <form>
         <div class="modal-body">
+            <div class="form-header modal-header-title text-start mb-0">
+
+                <span *ngIf="transactionData?.status === 'transaction_initialized' || transactionData?.status === 'transaction_payin_closed'">
+                    <button class="btn btn-rounded btn-outline-dark me-1" disabled>
+                        {{ "status." + transactionData?.status | translate }}
+                    </button>
+                </span>
+
+                <button class="btn btn-block btn-outline-dannger" *ngIf="transactionData?.status === 'transaction_payin_error'
+                || transactionData?.status === 'transaction_payout_rejected'
+                || transactionData?.status === 'transaction_payout_error'
+                || transactionData?.status === 'transaction_payout_closed'"
+                 disabled>{{ "status." + transactionData?.status | translate }} </button>
+
+                <span *ngIf="transactionData?.status === 'transaction_payout_success'">
+                    <button class="btn btn-rounded btn-outline-success me-1" disabled>
+                        {{ "status." + transactionData?.status | translate }}
+                    </button>
+                </span>
+
+                <span *ngIf="transactionData?.status === 'transaction_payin_success'">
+                    <button class="btn btn-rounded btn-outline-primary me-1" disabled
+                    *ngIf="transactionData?.transactionType === 'transfer' || transactionData?.transactionType === 'withdrawal'">
+                        {{ "status.waitingConfirmation" | translate }}
+                    </button>
+                    <button class="btn btn-rounded btn-outline-success me-1" disabled
+                    *ngIf="transactionData?.transactionType !== 'transfer' && transactionData?.transactionType !== 'withdrawal'">
+                        {{ "status." + transactionData?.status | translate }}
+                    </button>
+                </span>
+                <button class="btn btn-rounded btn-outline-success me-1" disabled
+                *ngIf="transactionData?.status === 'transaction_payout_success'">
+                    {{ "status." + transactionData?.status | translate }}
+                </button>
+
+                <span>
+                    <button class="btn btn-rounded btn-outline-warning me-1" *ngIf="transactionData?.status === 'transaction_payin_pending'
+                        || transactionData?.status === 'transaction_payout_pending'" disabled style="color: #F57C11">
+                        <span role="status" class="spinner-border spinner-border-sm me-2"></span>
+                        {{ "status." + transactionData?.status | translate }}
+                    </button>
+                </span>
+            </div>
             <div class="row">
                 <div class="col-md-12">
                     <div class="img-upload">
@@ -51,7 +86,7 @@
                                 <img id="company-img" class="img-fluid me-0" [src]="selectedCountry?.flagUrl"
                                     alt="profile-img">
                             </div> -->
-                            <div class="add-profile">
+                            <div class="add-profile" *ngIf="transactionData?.id">
                                 <h5>{{ transactionData?.charged_amount }} {{
                                     transactionData?.currency }}</h5>
                                 <span>
@@ -63,28 +98,52 @@
                                     transactionData?.currency }}</span>
                             </div>
                         </div>
-                        <div class="img-upload">
-                            <!-- <label class="btn btn-upload">
-                                        Upload <input type="file">
-                                    </label>
-                                    <a class="btn btn-remove">Remove</a> -->
-                        </div>
+                        <!-- <div class="img-upload">
+                            <label class="btn btn-upload">
+                                Upload <input type="file">
+                            </label>
+                            <a class="btn btn-remove">Remove</a>
+                        </div> -->
                     </div>
                 </div>
                 <div class="col-md-12">
-                    <h5 class="form-title mb-3">{{ "subscriptions.planInfo" | translate }}</h5>
+                    <h5 class="form-title mb-3">{{ "subscriptions.details" | translate }}</h5>
                 </div>
-                <div class="col-sm-12 col-md-6" *ngIf="transactionData?.id">
+                <div class="col-sm-12 col-md-6" *ngIf="transactionData?._id && currentUser?.isAdmin">
+                    <label>Amount</label>
                     <div class="input-block mb-3">
-                        <label>ID</label>
-                        <input type="text" class="form-control" placeholder="" [value]="transactionData?._id" disabled>
+                        <h5>{{ transactionData?.paymentWithTaxes }} {{
+                            transactionData?.currency }}</h5>
+                        <span>
+                            {{ "payment.amount" | translate }}: {{ transactionData?.estimation }}
+                            {{
+                            transactionData?.currency }} |
+                            {{ "payment.taxes" | translate }}: {{ transactionData?.invoiceTaxes }}
+                            {{
+                            transactionData?.currency }}</span>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-6" *ngIf="transactionData?.id">
+                <div class="col-sm-12 col-md-6">
+                    <div class="input-block mb-3">
+                        <label>ID</label>
+                        <input type="text" class="form-control" placeholder="" [value]="transactionData?.id" disabled
+                            *ngIf="transactionData?.id">
+                        <input type="text" class="form-control" placeholder="" [value]="transactionData?._id" disabled
+                            *ngIf="transactionData?._id">
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6" *ngIf="transactionData?._id">
+                    <div class="input-block mb-3">
+                        <label>Ref</label>
+                        <input type="text" class="form-control" placeholder="" [value]="transactionData?.transactionRef"
+                            disabled>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
                     <div class="input-block mb-3">
                         <label>Date</label>
                         <input type="text" class="form-control" placeholder=""
-                            [value]="transactionData?.createdAt | date : 'dd/MM/yyyy'" disabled>
+                            [value]="transactionData?.createdAt | date : 'dd/MM/yyyy HH:mm:ss'" disabled>
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-6" *ngIf="transactionData?.id">
@@ -107,18 +166,14 @@
                             disabled>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-6">
-                    <div class="input-block mb-3">
-                        <label>{{ "users.creationDate" | translate }}</label>
-                        <input type="text" class="form-control" placeholder="" [value]="transactionData?.created_at"
-                            disabled>
-                    </div>
-                </div>
                 <div class="col-sm-12 col-md-12">
                     <div class="input-block mb-3">
-                        <label>Narration</label>
-                        <input type="text" class="form-control" placeholder="" [value]="transactionData?.narration"
-                            disabled>
+                        <label>{{ "payment.narration" | translate }}</label>
+                        <input type="text" class="form-control" placeholder=""
+                            [value]="transactionData?.raisonForTransfer" disabled
+                            *ngIf="transactionData?._id && transactionData?.transactionType === 'transfer'">
+                        <input type="text" class="form-control" placeholder=""
+                            [value]="transactionData?.raisonForTransfer" disabled *ngIf="transactionData?.id">
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-12" *ngIf="transactionData?.id">
@@ -128,148 +183,148 @@
                             [value]="transactionData?.processor_response" disabled></textarea>
                     </div>
                 </div>
-                <h6 *ngIf="customer">{{ "payment.card" | translate }}</h6>
-                <div class="col-sm-12 col-md-12" *ngIf="customer && currentUser?.isAdmin">
+                <h6 *ngIf="transactionData?.customer">{{ "payment.card" | translate }}</h6>
+                <div class="col-sm-12 col-md-12" *ngIf="transactionData?.customer && currentUser?.isAdmin">
                     <div class="option-space">
                         <div class="row">
                             <div class="col-sm-12 col-md-6">
                                 <div class="input-block mb-3">
                                     <label>Id</label>
-                                    <input type="text" class="form-control" placeholder="" [value]="customer?.id"
-                                        disabled>
+                                    <input type="text" class="form-control" placeholder=""
+                                        [value]="transactionData?.customer.id" disabled>
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-6">
                                 <div class="input-block mb-3">
                                     <label>{{ "users.name" | translate }} </label>
-                                    <input type="text" class="form-control" placeholder="" [value]="customer?.name"
-                                        disabled>
+                                    <input type="text" class="form-control" placeholder=""
+                                        [value]="transactionData?.customer.name" disabled>
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-6">
                                 <div class="input-block mb-3">
                                     <label>{{ "users.email" | translate }} </label>
-                                    <input type="text" class="form-control" placeholder="" [value]="customer?.email"
-                                        disabled>
+                                    <input type="text" class="form-control" placeholder=""
+                                        [value]="transactionData?.customer.email" disabled>
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-6">
                                 <div class="input-block mb-3">
                                     <label>Date</label>
                                     <input type="text" class="form-control" placeholder=""
-                                        [value]="customer?.created_at" disabled>
+                                        [value]="transactionData?.customer.created_at" disabled>
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-6">
                                 <div class="input-block mb-3">
                                     <label>{{ "users.phone "}} </label>
                                     <input type="text" class="form-control" placeholder=""
-                                        [value]="customer?.phone_number" disabled>
+                                        [value]="transactionData?.customer.phone_number" disabled>
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-6">
                                 <div class="input-block mb-3">
                                     <label>{{ "users.creationDate" | translate }} </label>
                                     <input type="text" class="form-control" placeholder=""
-                                        [value]="customer?.created_at" disabled>
+                                        [value]="transactionData?.customer.created_at" disabled>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <h6 *ngIf="customer && currentUser?.isAdmin">{{ "payment.card" | translate }}</h6>
-                <div class="col-sm-12 col-md-12" *ngIf="customer && currentUser?.isAdmin">
+                <h6 *ngIf="transactionData?.customer && currentUser?.isAdmin">{{ "payment.card" | translate }}</h6>
+                <div class="col-sm-12 col-md-12" *ngIf="transactionData?.customer && currentUser?.isAdmin">
                     <div class="option-space">
                         <div class="row">
                             <div class="col-sm-12 col-md-6">
                                 <div class="input-block mb-3">
                                     <label>Id</label>
-                                    <input type="text" class="form-control" placeholder="" [value]="customer?.id"
-                                        disabled>
+                                    <input type="text" class="form-control" placeholder=""
+                                        [value]="transactionData?.customer.id" disabled>
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-6">
                                 <div class="input-block mb-3">
                                     <label>{{ "users.name" | translate }} </label>
-                                    <input type="text" class="form-control" placeholder="" [value]="customer?.name"
-                                        disabled>
+                                    <input type="text" class="form-control" placeholder=""
+                                        [value]="transactionData?.customer.name" disabled>
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-6">
                                 <div class="input-block mb-3">
                                     <label>{{ "users.email" | translate }} </label>
-                                    <input type="text" class="form-control" placeholder="" [value]="customer?.email"
-                                        disabled>
+                                    <input type="text" class="form-control" placeholder=""
+                                        [value]="transactionData?.customer.email" disabled>
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-6">
                                 <div class="input-block mb-3">
                                     <label>Date</label>
                                     <input type="text" class="form-control" placeholder=""
-                                        [value]="customer?.created_at" disabled>
+                                        [value]="transactionData?.customer.created_at" disabled>
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-6">
                                 <div class="input-block mb-3">
                                     <label>{{ "users.phone "}} </label>
                                     <input type="text" class="form-control" placeholder=""
-                                        [value]="customer?.phone_number" disabled>
+                                        [value]="transactionData?.customer.phone_number" disabled>
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-6">
                                 <div class="input-block mb-3">
                                     <label>{{ "users.creationDate" | translate }} </label>
                                     <input type="text" class="form-control" placeholder=""
-                                        [value]="customer?.created_at" disabled>
+                                        [value]="transactionData?.customer.created_at" disabled>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <h6 *ngIf="customer && currentUser?.isAdmin">Customer</h6>
-                <div class="col-sm-12 col-md-12" *ngIf="customer && currentUser?.isAdmin">
+                <h6 *ngIf="transactionData?.customer && currentUser?.isAdmin">Customer</h6>
+                <div class="col-sm-12 col-md-12" *ngIf="transactionData?.customer && currentUser?.isAdmin">
                     <div class="option-space">
                         <div class="row">
                             <div class="col-sm-12 col-md-6">
                                 <div class="input-block mb-3">
                                     <label>Id</label>
-                                    <input type="text" class="form-control" placeholder="" [value]="customer?.id"
-                                        disabled>
+                                    <input type="text" class="form-control" placeholder=""
+                                        [value]="transactionData?.customer.id" disabled>
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-6">
                                 <div class="input-block mb-3">
                                     <label>{{ "users.name" | translate }} </label>
-                                    <input type="text" class="form-control" placeholder="" [value]="customer?.name"
-                                        disabled>
+                                    <input type="text" class="form-control" placeholder=""
+                                        [value]="transactionData?.customer.name" disabled>
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-6">
                                 <div class="input-block mb-3">
                                     <label>{{ "users.email" | translate }} </label>
-                                    <input type="text" class="form-control" placeholder="" [value]="customer?.email"
-                                        disabled>
+                                    <input type="text" class="form-control" placeholder=""
+                                        [value]="transactionData?.customer.email" disabled>
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-6">
                                 <div class="input-block mb-3">
                                     <label>Date</label>
                                     <input type="text" class="form-control" placeholder=""
-                                        [value]="customer?.created_at" disabled>
+                                        [value]="transactionData?.customer.created_at" disabled>
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-6">
                                 <div class="input-block mb-3">
                                     <label>{{ "users.phone "}} </label>
                                     <input type="text" class="form-control" placeholder=""
-                                        [value]="customer?.phone_number" disabled>
+                                        [value]="transactionData?.customer.phone_number" disabled>
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-6">
                                 <div class="input-block mb-3">
                                     <label>{{ "users.creationDate" | translate }} </label>
                                     <input type="text" class="form-control" placeholder=""
-                                        [value]="customer?.created_at" disabled>
+                                        [value]="transactionData?.customer.created_at" disabled>
                                 </div>
                             </div>
                         </div>
@@ -278,6 +333,28 @@
             </div>
         </div>
     </form>
+    <br>
+    <div class="modal-body">
+        <div class="form-header modal-header-title text-start mb-0"
+            *ngIf="currentUser?.isAdmin && transactionData?._id">
+            <span
+                *ngIf="transactionData?.transactionType === 'transfer' && transactionData?.status === 'transaction_payin_success'
+                || transactionData?.transactionType === 'withdrawal' && transactionData?.status === 'transaction_payin_success'">
+                <button class="btn btn-rounded btn-outline-success me-1" href="javascript:void(0);"
+                    data-bs-toggle="tooltip" data-bs-placement="bottom" matTooltip="accept Payment"
+                    (click)="acceptPayment(transactionData?._id)"><span>
+                        {{ "payment.accept" | translate }}</span>
+                </button>
+
+                <button class="btn btn-rounded btn-outline-danger me-1" href="javascript:void(0);"
+                    data-bs-toggle="tooltip" data-bs-placement="bottom" matTooltip="Reject Payment"
+                    (click)="rejectPayment(transactionData)"><span>
+                        {{ "payment.reject" | translate }}
+                    </span>
+                </button>
+            </span>
+        </div>
+    </div>
     <br>
     <div class="modal-body" *ngIf="currentUser?.isAdmin">
         {{ "rawData" | translate }}:

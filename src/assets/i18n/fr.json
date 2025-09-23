@@ -441,7 +441,8 @@
     "reject": "Rejeter",
     "accept": "Accepter",
     "transfer": "Transfert",
-    "withdrawal": "Retrait"
+    "withdrawal": "Retrait",
+    "narration": "Raison du transfert"
   },
   "whatsapp": {
     "title": "WhatsApp",
@@ -646,6 +647,20 @@
     "orange": "Orange",
     "pink": "Rose vif",
     "green": "Vert"
+  },
+  "status": {
+    "title": "Statuts",
+    "transaction_initialized": "Transaction initialisée",
+    "transaction_payin_pending": "Attente encaissement",
+    "transaction_payin_success": "Encaissement effectué",
+    "transaction_payin_error": "Erreur de paiement",
+    "transaction_payin_closed": "Paiement annulé",
+    "transaction_payout_pending": "Virement en attente",
+    "transaction_payout_success": "Virement effectué",
+    "transaction_payout_rejected": "Virement rejeté",
+    "transaction_payout_error": "Erreur de virement",
+    "transaction_payout_closed": "Virement annulé",
+    "waitingConfirmation": "Attente confirmation"
   },
   "rawData": "Données brutes",
   "tool": "Outil",

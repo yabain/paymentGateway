@@ -14,35 +14,40 @@ export class TransactionDetailsComponent implements OnInit {
   card: any;
   meta: any;
   currentUser: any;
-  payinStatus: string;
-  payoutStatus: string;
+  status: string = 'transaction_initialized';
 
   constructor(
     private userService: UserService,
     private paymentService: PaymentService,
   ) {
-    if(this.transactionData?.customer) this.customer = this.transactionData.customer;
-    if(this.transactionData?.card) this.card = this.transactionData.card;
-    if(this.transactionData?.meta) this.meta = this.transactionData.meta;
+    this.getCurrentUser();
+    console.log("transactionData", this.transactionData);
   }
 
   ngOnInit(): void {
-    this.getCurrentUser();
-    this.getPayinStatus();
-    this.getPayoutStatus();
+    this.getTransactionStatus();
   }
+
   async getCurrentUser(){
     this.currentUser = await this.userService.getCurrentUser();
     console.log("currentUser", this.currentUser);
   }
 
-  getPayinStatus(){
-    this.payinStatus = this.paymentService.getPayinTransactionStatus(this.transactionData);
-    console.log("payinStatus", this.payinStatus);
+  getTransactionStatus(){
+    // this.status = this.paymentService.getTransactionStatus(this.transactionData);
+    // this.status = this.transactionData?.status;
+    console.log("getTransactionStatus", this.status);
+    if(this.transactionData?.customer) this.customer = this.transactionData.customer;
+    if(this.transactionData?.card) this.card = this.transactionData.card;
+    if(this.transactionData?.meta) this.meta = this.transactionData.meta;
+    console.log("les meta: ", this.customer, this.card, this.meta);
   }
 
-  getPayoutStatus(){
-    this.payoutStatus = this.paymentService.getPayoutTransactionStatus(this.transactionData);
-    console.log("payoutStatus", this.payoutStatus)
+  acceptPayment(transactionId){
+    this.paymentService.acceptPayment(transactionId)
+    .subscribe((resp: any) => {
+    })
   }
+
+  rejectPayment(transactionId){}
 }

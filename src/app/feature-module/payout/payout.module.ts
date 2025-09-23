@@ -7,8 +7,7 @@ import { PayoutComponent } from './payout.component';
 import { PageComponent } from './page/page.component';
 import { AllPayoutComponent } from './all-payout/all-payout.component';
 import { PayoutRoutingModule } from './payout-routing.module';
-import { JsonViewerComponent } from '../common/json-viewer/json-viewer.component';
-import { TransactionDetailsComponent } from '../common/transaction-details/transaction-details.component';
+import { CommonItemModule } from '../common/common-item.module';
 
 
 @NgModule({
@@ -16,14 +15,13 @@ import { TransactionDetailsComponent } from '../common/transaction-details/trans
     PageComponent,
     PayoutComponent,
     AllPayoutComponent,
-    JsonViewerComponent,
-    TransactionDetailsComponent
   ],
   imports: [
     CommonModule,
     PayoutRoutingModule,
     SharedModule,
-    TranslateModule
+    TranslateModule,
+    CommonItemModule
   ],
   providers: []
 })

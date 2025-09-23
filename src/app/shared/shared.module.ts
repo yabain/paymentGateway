@@ -20,6 +20,7 @@ import { CarouselModule } from 'ngx-owl-carousel-o';
 import { NgxMatIntlTelInputComponent } from 'ngx-mat-intl-tel-input';
 import { CustomPaginationModule } from './custom-pagination/custom-pagination.module';
 import { NgxEditorModule } from 'ngx-editor';
+import { CommonItemModule } from '../feature-module/common/common-item.module';
 
 
 @NgModule({ exports: [
@@ -65,5 +66,7 @@ import { NgxEditorModule } from 'ngx-editor';
         BsDatepickerConfig,
         { provide: HTTP_INTERCEPTORS, useClass: SpinnerInterceptor, multi: true },
         provideHttpClient(withInterceptorsFromDi()),
+
+        CommonItemModule,
     ] })
 export class SharedModule {}

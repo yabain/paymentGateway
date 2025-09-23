@@ -34,7 +34,7 @@ export class PayoutComponent implements OnInit, OnDestroy {
         console.log('endP: ', endP)
         this.page = endP === 'payout' ? endP : 'all-payout';
       } else this.page = "payout";
-      console.log("page: ", this.page)
+      // console.log("page: ", this.page)
     }, 200);
   }
 
