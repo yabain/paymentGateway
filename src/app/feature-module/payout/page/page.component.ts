@@ -71,6 +71,7 @@ export class PageComponent implements OnInit, OnDestroy {
       return false;
     }
     this.page +=1;
+    if(this.sectionSelected !== 'all') return this.getTransactionListByStatus(this.sectionSelected, this.page);
     return this.getTransactionList(this.page);
   }
 
@@ -80,6 +81,7 @@ export class PageComponent implements OnInit, OnDestroy {
       return false;
     }
     this.page -=1;
+    if(this.sectionSelected !== 'all') return this.getTransactionListByStatus(this.sectionSelected, this.page);
     return this.getTransactionList(this.page);
   }
 

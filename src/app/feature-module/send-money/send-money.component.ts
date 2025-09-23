@@ -610,7 +610,8 @@ export class SendMoneyComponent implements OnInit {
       receiverAddress: this.receiverAddress,
       receiverCountry: this.selectedCountry.name,
       receiverCurrency: this.selectedCountry.currency,
-      receiverAccountType: this.getreceiverAccountType(),
+      receiverCountryCode: this.selectedCountry.code,
+      // receiverAccountType: this.getreceiverAccountType(),
       receiverAmount: this.getCleanAmount(),
 
       paymentMethod: this.selectedMethod,

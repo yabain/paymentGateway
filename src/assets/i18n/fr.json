@@ -655,7 +655,7 @@
     "transaction_payin_success": "Encaissement effectué",
     "transaction_payin_error": "Erreur de paiement",
     "transaction_payin_closed": "Paiement annulé",
-    "transaction_payout_pending": "Virement en attente",
+    "transaction_payout_pending": "Virement en cours",
     "transaction_payout_success": "Virement effectué",
     "transaction_payout_rejected": "Virement rejeté",
     "transaction_payout_error": "Erreur de virement",
