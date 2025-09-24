@@ -34,7 +34,8 @@
     "skip": "Skip",
     "start": "Start",
     "reset": "Reset",
-    "add": "Add"
+    "add": "Add",
+    "retry": "Retry"
   },
   "auth": {
     "login": "Log in",
@@ -84,7 +85,7 @@
     "loginSuccess": "Login successful",
     "personal": "Personal",
     "organisation": "Organisation",
-    "country": "Your country",
+    "country": "Country",
     "city": "Your city",
     "phone": "Phone",
     "address": "Your address",

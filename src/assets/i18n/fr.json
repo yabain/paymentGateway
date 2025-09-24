@@ -34,7 +34,8 @@
     "skip": "Passer",
     "start": "Commencer",
     "reset": "Réinitialiser",
-    "add": "Add"
+    "add": "Add",
+    "retry": "Réessayer"
   },
   "auth": {
     "login": "Se connecter",
@@ -84,7 +85,7 @@
     "loginSuccess": "Connexion réussie",
     "personal": "Personnel",
     "organisation": "Organisation",
-    "country": "Votre pays",
+    "country": "Pays",
     "city": "Ville",
     "phone": "Numéro de téléphone",
     "address": "Votre adresse",
@@ -408,7 +409,7 @@
     "warningMessage": "Le montant estimatif correspond à la valeur en votre votre monaie. Il n'inclut pas les frais de transfert éventuellement appliqués lors de l'envoi de fonds.",
     "equivalentTo": "Equivalent à",
     "comingSoon": "Bientôt disponible",
-    "sender": "Expéditeur",
+    "sender": "Émétteur",
     "receiver": "Bénéficiaire",
     "secureMessage": "Vos informations sont sécurisées et cryptées. Ce transfert est protégé par notre partenaire Flutterwave.",
     "feeDetails": "Frais de transaction",
@@ -658,7 +659,7 @@
     "transaction_payout_pending": "Virement en cours",
     "transaction_payout_success": "Virement effectué",
     "transaction_payout_rejected": "Virement rejeté",
-    "transaction_payout_error": "Erreur de virement",
+    "transaction_payout_error": "Echec de virement",
     "transaction_payout_closed": "Virement annulé",
     "waitingConfirmation": "Attente confirmation"
   },

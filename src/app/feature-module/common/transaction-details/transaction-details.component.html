@@ -18,24 +18,27 @@
             <h6 class="mb-0" *ngIf="transactionData?.transactionType === 'fundraising'">{{ 'dashboard.fundraising' |
                 translate }}</h6>
         </div>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeModal>
         </button>
     </div>
     <form>
         <div class="modal-body">
             <div class="form-header modal-header-title text-start mb-0">
 
-                <span *ngIf="transactionData?.status === 'transaction_initialized' || transactionData?.status === 'transaction_payin_closed'">
+                <span
+                    *ngIf="transactionData?.status === 'transaction_initialized' || transactionData?.status === 'transaction_payin_closed'">
                     <button class="btn btn-rounded btn-outline-dark me-1" disabled>
                         {{ "status." + transactionData?.status | translate }}
                     </button>
                 </span>
 
-                <button class="btn btn-block btn-outline-dannger" *ngIf="transactionData?.status === 'transaction_payin_error'
+                <button class="btn btn-rounded btn-outline-dannger"
+                *ngIf="transactionData?.status === 'transaction_payin_error'
                 || transactionData?.status === 'transaction_payout_rejected'
                 || transactionData?.status === 'transaction_payout_error'
-                || transactionData?.status === 'transaction_payout_closed'"
-                 disabled>{{ "status." + transactionData?.status | translate }} </button>
+                || transactionData?.status === 'transaction_payout_closed'" disabled
+                style="color: #a00000;">{{ "status." +
+                    transactionData?.status | translate }} </button>
 
                 <span *ngIf="transactionData?.status === 'transaction_payout_success'">
                     <button class="btn btn-rounded btn-outline-success me-1" disabled>
@@ -45,16 +48,16 @@
 
                 <span *ngIf="transactionData?.status === 'transaction_payin_success'">
                     <button class="btn btn-rounded btn-outline-primary me-1" disabled
-                    *ngIf="transactionData?.transactionType === 'transfer' || transactionData?.transactionType === 'withdrawal'">
+                        *ngIf="transactionData?.transactionType === 'transfer' || transactionData?.transactionType === 'withdrawal'">
                         {{ "status.waitingConfirmation" | translate }}
                     </button>
                     <button class="btn btn-rounded btn-outline-success me-1" disabled
-                    *ngIf="transactionData?.transactionType !== 'transfer' && transactionData?.transactionType !== 'withdrawal'">
+                        *ngIf="transactionData?.transactionType !== 'transfer' && transactionData?.transactionType !== 'withdrawal'">
                         {{ "status." + transactionData?.status | translate }}
                     </button>
                 </span>
                 <button class="btn btn-rounded btn-outline-success me-1" disabled
-                *ngIf="transactionData?.status === 'transaction_payout_success'">
+                    *ngIf="transactionData?.status === 'transaction_payout_success'">
                     {{ "status." + transactionData?.status | translate }}
                 </button>
 
@@ -107,20 +110,20 @@
                     </div>
                 </div>
                 <div class="col-md-12">
-                    <h5 class="form-title mb-3">{{ "subscriptions.details" | translate }}</h5>
+                    <h5 class="form-title mb-3">{{ "payment.details" | translate }}</h5>
                 </div>
                 <div class="col-sm-12 col-md-6" *ngIf="transactionData?._id && currentUser?.isAdmin">
                     <label>Amount</label>
                     <div class="input-block mb-3">
-                        <h5>{{ transactionData?.paymentWithTaxes }} {{
-                            transactionData?.currency }}</h5>
+                        <h5>{{ transactionData?.receiverAmount }} {{
+                            transactionData?.receiverCurrency }}</h5>
                         <span>
                             {{ "payment.amount" | translate }}: {{ transactionData?.estimation }}
                             {{
-                            transactionData?.currency }} |
+                            transactionData?.senderCurrency }} |
                             {{ "payment.taxes" | translate }}: {{ transactionData?.invoiceTaxes }}
                             {{
-                            transactionData?.currency }}</span>
+                            transactionData?.senderCurrency }}</span>
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-6">
@@ -183,7 +186,83 @@
                             [value]="transactionData?.processor_response" disabled></textarea>
                     </div>
                 </div>
-                <h6 *ngIf="transactionData?.customer">{{ "payment.card" | translate }}</h6>
+                <div class="col-sm-12 col-md-12" *ngIf="transactionData?.receiverEmail">
+                    <div class="option-space-op">
+                        <h6 *ngIf="transactionData?.receiverEmail">
+                            <i class="fas fa-user"></i> {{ "payment.sender" | translate }}</h6>
+                        <br>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <div class="input-block mb-3">
+                                    <label>{{ "subscriptions.name" | translate }}</label>
+                                    <input type="text" class="form-control" placeholder=""
+                                        [value]="transactionData?.senderName" disabled>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="input-block mb-3">
+                                    <label>{{ "auth.country" | translate }} </label>
+                                    <input type="text" class="form-control" placeholder=""
+                                        [value]="transactionData?.senderCountry" disabled>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="input-block mb-3">
+                                    <label>{{ "terms.phone" | translate }} </label>
+                                    <input type="text" class="form-control" placeholder=""
+                                        [value]="transactionData?.senderContact"
+                                        disabled>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="input-block mb-3">
+                                    <label>{{ "terms.email" | translate }}</label>
+                                    <input type="text" class="form-control" placeholder=""
+                                        [value]="transactionData?.senderEmail" disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12" *ngIf="transactionData?.receiverEmail">
+                    <div class="option-space-op">
+                        <h6 *ngIf="transactionData?.receiverEmail">
+                            <i class="fas fa-user"></i> {{ "payment.receiver" | translate }}</h6>
+                        <br>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <div class="input-block mb-3">
+                                    <label>{{ "payment.receiverName" | translate }}</label>
+                                    <input type="text" class="form-control" placeholder=""
+                                        [value]="transactionData?.receiverName" disabled>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="input-block mb-3">
+                                    <label>{{ "payment.receiverCountry" | translate }} </label>
+                                    <input type="text" class="form-control" placeholder=""
+                                        [value]="transactionData?.receiverCountry" disabled>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="input-block mb-3">
+                                    <label>{{ "payment.receiverContact" | translate }} </label>
+                                    <input type="text" class="form-control" placeholder=""
+                                        [value]="'+' + transactionData?.receiverCountryCode + transactionData?.receiverContact"
+                                        disabled>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="input-block mb-3">
+                                    <label>{{ "payment.receiverEmail" | translate }}</label>
+                                    <input type="text" class="form-control" placeholder=""
+                                        [value]="transactionData?.receiverEmail" disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h6 *ngIf="transactionData?.customer && currentUser?.isAdmin">{{ "payment.card" | translate }}</h6>
                 <div class="col-sm-12 col-md-12" *ngIf="transactionData?.customer && currentUser?.isAdmin">
                     <div class="option-space">
                         <div class="row">
@@ -336,7 +415,23 @@
     <br>
     <div class="modal-body">
         <div class="form-header modal-header-title text-start mb-0"
-            *ngIf="currentUser?.isAdmin && transactionData?._id">
+            *ngIf="currentUser?.isAdmin && transactionData?._id && !processing">
+            <span
+                    *ngIf="transactionData?.transactionType === 'transfer' && transactionData?.status === 'transaction_payout_error'
+                || transactionData?.transactionType === 'withdrawal' && transactionData?.status === 'transaction_payout_error'">
+
+                <button class="btn btn-rounded btn-outline-success me-1" href="javascript:void(0);"
+                    data-bs-toggle="tooltip" data-bs-placement="bottom" matTooltip="accept Payment"
+                    (click)="retryPayment(transactionData?._id)"><span>
+                        {{ "action.retry" | translate }}</span>
+                </button>
+                <button class="btn btn-rounded btn-outline-danger me-1" href="javascript:void(0);"
+                    data-bs-toggle="tooltip" data-bs-placement="bottom" matTooltip="Reject Payment"
+                    (click)="rejectPayment(transactionData)"><span>
+                        {{ "payment.reject" | translate }}
+                    </span>
+                </button>
+            </span>
             <span
                 *ngIf="transactionData?.transactionType === 'transfer' && transactionData?.status === 'transaction_payin_success'
                 || transactionData?.transactionType === 'withdrawal' && transactionData?.status === 'transaction_payin_success'">
@@ -345,7 +440,6 @@
                     (click)="acceptPayment(transactionData?._id)"><span>
                         {{ "payment.accept" | translate }}</span>
                 </button>
-
                 <button class="btn btn-rounded btn-outline-danger me-1" href="javascript:void(0);"
                     data-bs-toggle="tooltip" data-bs-placement="bottom" matTooltip="Reject Payment"
                     (click)="rejectPayment(transactionData)"><span>
@@ -353,6 +447,10 @@
                     </span>
                 </button>
             </span>
+        </div>
+        <div class="form-header modal-header-title text-start mb-0"
+            *ngIf="currentUser?.isAdmin && processing">
+            <span role="status" class="spinner-border spinner-border-sm me-2"></span>
         </div>
     </div>
     <br>
