@@ -130,7 +130,7 @@
                                 <th>{{ "payment.receiverName" | translate }}</th>
                                 <th>{{ "payment.amountToBeReceived" | translate }}</th>
                                 <th *ngIf="sectionSelected !== 'pending'">{{ "mail.status" | translate }}</th>
-                                <th *ngIf="sectionSelected === 'pending'">Action</th>
+                                <th *ngIf="sectionSelected === 'pending'"></th>
                             </tr>
                         </thead>
                         .
@@ -182,10 +182,10 @@
                                                 {{ "status." + t?.status | translate }}
                                             </button>
                                         </span>
-                                        <button class="btn btn-rounded btn-outline-success me-1" disabled
+                                        <!-- <button class="btn btn-rounded btn-outline-success me-1" disabled
                                         *ngIf="t?.status === 'transaction_payout_success'">
                                             {{ "status." + t?.status | translate }}
-                                        </button>
+                                        </button> -->
 
                                         <span>
                                             <button class="btn btn-rounded btn-outline-warning me-1" *ngIf="t?.status === 'transaction_payin_pending'
