@@ -156,23 +156,23 @@
                     data-bs-toggle="modal" data-bs-target="#package_details">
                     <i class="feather icon-menu"></i>
                 </button>
-                <button type="button" *ngIf="currentUser._id === plan.author._id || currentUser.isAdmin"
+                <button type="button" *ngIf="currentUser._id === plan.author || isAdmin"
                     (click)="selectPlan(plan)" class="btn btn-rounded btn-outline-primary me-1"
                     href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#edit_package">
                     <i class="feather icon-edit"></i>
                 </button>
-                <button type="button" *ngIf="currentUser._id === plan.author._id || currentUser.isAdmin"
+                <button type="button" *ngIf="currentUser._id === plan.author || isAdmin"
                     (click)="toggleActivation(plan._id)" class="btn btn-rounded btn-outline-primary me-1"
                     href="javascript:void(0);">
                     <i class="feather icon-power"></i>
                 </button>
-                <button type="button" *ngIf="currentUser._id === plan.author._id || currentUser.isAdmin"
+                <button type="button" *ngIf="currentUser._id === plan.author || isAdmin"
                     (click)="selectPlan(plan)" class="btn btn-rounded btn-outline-danger me-1"
                     href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete_modal">
                     <i class="feather icon-trash-2"></i>
                 </button>
             </div>
-            <div class="d-flex justify-content-center" *ngIf="currentUser._id != plan.author._id && plan.isActive">
+            <div class="d-flex justify-content-center" *ngIf="currentUser._id != plan.author && plan.isActive">
                 <button class="btn btn-rounded btn-primary me-1" style="margin-top: 20px;" (click)="selectPlan(plan)">{{
                     'subscriptions.subscribe' | translate }}</button>
             </div>

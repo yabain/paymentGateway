@@ -142,6 +142,7 @@ export class PackagesComponent implements OnInit {
         this.watingPlansList = false;
         this.plansList = data;
         this.plansListBackup = data;
+        console.log('plan list: ', data);
       });
     } else {
     this.subscriptionService
@@ -149,6 +150,7 @@ export class PackagesComponent implements OnInit {
       .subscribe((data: any) => {
         this.watingPlansList = false;
         this.plansList = data;
+        console.log('plan list: ', data);
       });
     }
   }
@@ -161,8 +163,9 @@ export class PackagesComponent implements OnInit {
 
   getCurrentUser() {
     this.userService.getCurrentUser().then((user: any) => {
-      if (!user) return 'No user';
+      if (!user) return console.log('No user');
       this.currentUser = user;
+      console.log('current user: ', user)
       if (this.isAdminRoute && user.isAdmin) this.isAdmin = true;
       this.currency = user.countryId.currency;
       return this.refresh();
