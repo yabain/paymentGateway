@@ -45,7 +45,7 @@ export class PackagesComponent implements OnInit {
   isAdmin: boolean = false;
   isAdminRoute: boolean = false;
   activeSearch: boolean = false;
-  
+  optionsData: any = [];
   searchString: string = '';
 
   public routes = routes;
@@ -78,8 +78,15 @@ export class PackagesComponent implements OnInit {
     this.isAdminRoute = url.includes('admin-subscription');
   }
 
+  isAuthor(plan: any, user: any = this.currentUser) {
+    return user._id.toString() === plan.author._id.toString() ? true : false;
+  }
+
   selectPlan(plan: any) {
+    console.log('selected plan: ', plan)
     this.selectedPlan = plan;
+    this.optionsData = plan ? plan.options : [];
+    console.log('options: ', plan)
   }
 
   public searchData(value: string): void {

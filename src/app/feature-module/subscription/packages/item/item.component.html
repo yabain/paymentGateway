@@ -16,13 +16,13 @@
         <p>{{ plan.subTitle }} </p>
         <h2 *ngIf="plan.price > 0">{{ plan.price }} {{ plan.currency }}</h2>
         <h2 *ngIf="plan.price === 0">{{ "item.free" | translate }}</h2>
-        <h6>{{ 'subscriptions.WhatIncluded' | translate }}</h6>
+        <!-- <h6>{{ 'subscriptions.WhatIncluded' | translate }}</h6>
         <ul>
             <li *ngFor="let option of optionsData">
                 <span *ngIf="option.isActive"><i class="fa-solid fa-circle-check"></i>{{ option.title }}</span>
                 <span *ngIf="!option.isActive"><i class="feather icon-x-circle"></i><s>{{ option.title }}</s></span>
             </li>
-        </ul>
+        </ul> -->
     </div>
 
 

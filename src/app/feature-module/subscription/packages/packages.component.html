@@ -156,24 +156,24 @@
                     data-bs-toggle="modal" data-bs-target="#package_details">
                     <i class="feather icon-menu"></i>
                 </button>
-                <button type="button" *ngIf="currentUser._id === plan.author || isAdmin"
-                    (click)="selectPlan(plan)" class="btn btn-rounded btn-outline-primary me-1"
-                    href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#edit_package">
+                <button type="button" *ngIf="isAuthor(plan) || isAdmin" (click)="selectPlan(plan)"
+                    class="btn btn-rounded btn-outline-primary me-1" href="javascript:void(0);" data-bs-toggle="modal"
+                    data-bs-target="#edit_package">
                     <i class="feather icon-edit"></i>
                 </button>
-                <button type="button" *ngIf="currentUser._id === plan.author || isAdmin"
-                    (click)="toggleActivation(plan._id)" class="btn btn-rounded btn-outline-primary me-1"
-                    href="javascript:void(0);">
+                <button type="button" *ngIf="isAuthor(plan) || isAdmin" (click)="toggleActivation(plan._id)"
+                    class="btn btn-rounded btn-outline-primary me-1" href="javascript:void(0);">
                     <i class="feather icon-power"></i>
                 </button>
-                <button type="button" *ngIf="currentUser._id === plan.author || isAdmin"
-                    (click)="selectPlan(plan)" class="btn btn-rounded btn-outline-danger me-1"
-                    href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete_modal">
+                <button type="button" *ngIf="isAuthor(plan) || isAdmin" (click)="selectPlan(plan)"
+                    class="btn btn-rounded btn-outline-danger me-1" href="javascript:void(0);" data-bs-toggle="modal"
+                    data-bs-target="#delete_modal">
                     <i class="feather icon-trash-2"></i>
                 </button>
             </div>
-            <div class="d-flex justify-content-center" *ngIf="currentUser._id != plan.author && plan.isActive">
-                <button class="btn btn-rounded btn-primary me-1" style="margin-top: 20px;" (click)="selectPlan(plan)">{{
+            <div class="d-flex justify-content-center" *ngIf="!isAuthor(plan) && plan.isActive">
+                <button class="btn btn-rounded btn-primary me-1" style="margin-top: 20px;" (click)="selectPlan(plan)"
+                data-bs-toggle="modal" data-bs-target="#subscriptionModal">{{
                     'subscriptions.subscribe' | translate }}</button>
             </div>
         </div>
@@ -193,6 +193,27 @@
         <a class="btn btn-primary m-2" href="javascript:void(0);" data-bs-toggle="modal"
             data-bs-target="#add_newpackage"><i class="fa fa-plus-circle me-2" aria-hidden="true"></i>{{
             'subscriptions.add' | translate }}</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-6">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="header-title">Static backdrop</h4>
+
+                <p>
+                    When backdrop is set to static, the modal will not close when clicking
+                    outside it. Click the button below to try it.
+                </p>
+
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#subscriptionModal">
+                    Launch static backdrop modal
+                </button>
+
+                <!-- Modal -->
+            </div>
+        </div>
     </div>
 </div>
 
@@ -400,11 +421,20 @@
     <div class="modal-dialog modal-sm modal-right">
         <div class="modal-content">
             <div class="modal-header border-0">
+                <h4 class="mt-0">{{ selectedPlan?.title }}</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="text-center">
-                    <h4 class="mt-0">{{ selectedPlan?.title }}</h4>
+                <div class="text-left">
+                    <h6>{{ 'subscriptions.WhatIncluded' | translate }}</h6>
+                    <ul>
+                        <li *ngFor="let option of optionsData">
+                            <span *ngIf="option.isActive"><i class="fa-solid fa-circle-check"></i> {{ option.title
+                                }}</span>
+                            <span *ngIf="!option.isActive"><i class="feather icon-x-circle"></i><s> {{ option.title
+                                    }}</s></span>
+                        </li>
+                    </ul>
                     <p>
                         {{ selectedPlan?.description}}
                     </p><br>
@@ -415,5 +445,36 @@
             </div>
         </div>
         <!-- /.modal-content -->
+    </div>
+</div>
+
+
+<div class="modal fade" id="subscriptionModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">
+                    {{ selectedPlan?.title }}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Anim pariatur cliche reprehenderit, enim eiusmod high life
+                accusamus terry richardson ad squid. 3 wolf moon officia aute,
+                non cupidatat skateboard dolor brunch. Food truck quinoa
+                nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua
+                put a bird on it squid single-origin coffee nulla assumenda
+                shoreditch et.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Close
+                </button>
+                <button type="button" class="btn btn-primary">
+                    Understood
+                </button>
+            </div>
+        </div>
     </div>
 </div>
