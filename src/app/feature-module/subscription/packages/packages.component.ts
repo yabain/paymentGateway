@@ -79,6 +79,7 @@ export class PackagesComponent implements OnInit {
   }
 
   isAuthor(plan: any, user: any = this.currentUser) {
+    console.log('plan: ', plan)
     return user._id.toString() === plan.author._id.toString() ? true : false;
   }
 

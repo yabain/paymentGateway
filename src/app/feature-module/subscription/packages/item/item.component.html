@@ -1,28 +1,26 @@
-    <div>
-        <span class="icon-frame d-flex align-items-rigth justify-content-rigth">
-            <img src="assets/img/icons/price-01.svg" alt="img">
-        </span>
-        <br>
-        <div class="package-header d-flex justify-content-between">
-            <div class="d-flex justify-content-between w-100">
-                <div class="">
-                    <h6>{{ 'subscriptions.' + plan.cycle | translate }}</h6>
-                    <h4>{{ plan.title }}</h4>
-                </div>
+<div>
+    <span class="icon-frame d-flex align-items-rigth justify-content-rigth">
+        <img src="assets/img/icons/price-01.svg" alt="img">
+    </span>
+    <br>
+    <div class="package-header d-flex justify-content-between">
+        <div class="d-flex justify-content-between w-100">
+            <div class="">
+                <h6>{{ 'subscriptions.' + plan.cycle | translate }}</h6>
+                <h4>{{ plan.title }}</h4>
             </div>
         </div>
-        <span class="package-enabled" *ngIf="plan.isActive">{{ 'subscriptions.actived' | translate }}</span>
-        <span class="package-disabled" *ngIf="!plan.isActive">{{ 'subscriptions.inactive' | translate }}</span>
-        <p>{{ plan.subTitle }} </p>
-        <h2 *ngIf="plan.price > 0">{{ plan.price }} {{ plan.currency }}</h2>
-        <h2 *ngIf="plan.price === 0">{{ "item.free" | translate }}</h2>
-        <!-- <h6>{{ 'subscriptions.WhatIncluded' | translate }}</h6>
+    </div>
+    <span class="package-enabled" *ngIf="plan.isActive">{{ 'subscriptions.actived' | translate }}</span>
+    <span class="package-disabled" *ngIf="!plan.isActive">{{ 'subscriptions.inactive' | translate }}</span>
+    <p>{{ plan.subTitle }} </p>
+    <h2 *ngIf="plan.price > 0">{{ plan.price }} {{ plan.currency }}</h2>
+    <h2 *ngIf="plan.price === 0">{{ "item.free" | translate }}</h2>
+    <!-- <h6>{{ 'subscriptions.WhatIncluded' | translate }}</h6>
         <ul>
             <li *ngFor="let option of optionsData">
                 <span *ngIf="option.isActive"><i class="fa-solid fa-circle-check"></i>{{ option.title }}</span>
                 <span *ngIf="!option.isActive"><i class="feather icon-x-circle"></i><s>{{ option.title }}</s></span>
             </li>
         </ul> -->
-    </div>
-
-
+</div>
