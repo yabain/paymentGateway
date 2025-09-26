@@ -149,8 +149,6 @@
     <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3" *ngFor="let plan of plansList">
         <div class="packages card">
             <app-item [plan]="plan" [currentUser]="currentUser"></app-item>
-            <div *ngIf="currentUser.isAdmin" style="text-align: center"> {{ "subscriptions.author" | translate }}: {{
-                showName(plan.author) }}</div>
             <div class="d-flex justify-content-center package-edit">
                 <button type="button" (click)="selectPlan(plan)" type="button" class="btn btn-secondary mt-1 me-1"
                     data-bs-toggle="modal" data-bs-target="#package_details">
@@ -173,13 +171,14 @@
             </div>
             <div class="d-flex justify-content-center" *ngIf="!isAuthor(plan) && plan.isActive">
                 <button class="btn btn-rounded btn-primary me-1" style="margin-top: 20px;" (click)="selectPlan(plan)"
-                data-bs-toggle="modal" data-bs-target="#subscriptionModal">{{
+                    data-bs-toggle="modal" data-bs-target="#subscriptionModal">{{
                     'subscriptions.subscribe' | translate }}</button>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Nothing to show -->
 <div class="row d-flex align-items-center justify-content-center" *ngIf="!watingPlansList && plansList?.length < 1">
     <div style="display: flex;
         justify-content: center;
@@ -207,7 +206,8 @@
                     outside it. Click the button below to try it.
                 </p>
 
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#subscriptionModal">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#subscriptionModal">
                     Launch static backdrop modal
                 </button>
 
@@ -226,7 +226,6 @@
     </div>
 </div>
 
-<!-- /Page Wrapper -->
 
 <!-- Add New Package Modal -->
 <div class="modal custom-modal fade p-20" id="add_newpackage" role="dialog">
@@ -416,19 +415,20 @@
 <!-- /Delete Items Modal -->
 
 
-<!-- Right modal content -->
+<!-- Package details modal content -->
 <div class="modal custom-modal fade modal-delete" id="package_details" role="dialog">
     <div class="modal-dialog modal-sm modal-right">
         <div class="modal-content">
-            <div class="modal-header border-0">
+            <!-- <div class="modal-header border-0">
                 <h4 class="mt-0">{{ selectedPlan?.title }}</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
+            </div> -->
             <div class="modal-body">
-                <div class="text-left">
-                    <h6>{{ 'subscriptions.WhatIncluded' | translate }}</h6>
+                <div class="text-left" *ngIf="selectedPlan">
+                    <app-item [plan]="selectedPlan" [currentUser]="currentUser"></app-item>
+                    <br>
                     <ul>
-                        <li *ngFor="let option of optionsData">
+                        <li *ngFor="let option of optionsData" style="margin-bottom: 5px;">
                             <span *ngIf="option.isActive"><i class="fa-solid fa-circle-check"></i> {{ option.title
                                 }}</span>
                             <span *ngIf="!option.isActive"><i class="feather icon-x-circle"></i><s> {{ option.title
@@ -437,7 +437,9 @@
                     </ul>
                     <p>
                         {{ selectedPlan?.description}}
-                    </p><br>
+                    </p>
+                    <div style="text-align: center"> {{ "subscriptions.author" | translate }}: {{
+                        showName(selectedPlan?.author) }}</div><br>
                     <button type="button" class="btn btn-primary btn-sm" data-bs-dismiss="modal">
                         {{ "action.close" | translate }}
                     </button>

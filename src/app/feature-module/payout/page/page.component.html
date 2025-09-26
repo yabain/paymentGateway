@@ -230,7 +230,7 @@
                                 <button class="btn btn-block btn-outline-light active" (click)="nextPage()"
                                     *ngIf="transactionList?.length === 10"> >> </button>
                     </div>
-                    <div *ngIf="gettingTransactions" class="row d-flex align-items-cente justify-content-center">
+                    <div *ngIf="gettingTransactions && transactionList?.length === 0" class="row d-flex align-items-cente justify-content-center">
                         <!-- <img src="assets/img/ressorces/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;"> -->
                         <div class="spinner-border text-primary" role="status" style="margin: 20px;">
                             <span class="visually-hidden">{{ "loading" | translate }}...</span>

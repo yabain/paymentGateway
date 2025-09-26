@@ -19,10 +19,10 @@ export class PageComponent implements OnInit, OnDestroy {
   gettingTransactions: boolean = true;
   transactionList: any[] = [];
   selectedTransaction: any;
+  private pollTimer: any;
 
   constructor(
     private paymentService: PaymentService,
-
     private route: ActivatedRoute,
   ) {
   }
@@ -61,11 +61,6 @@ export class PageComponent implements OnInit, OnDestroy {
     this.getData();
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
   nextPage(){
     if(this.transactionList.length < 10){
       return false;
@@ -88,33 +83,13 @@ export class PageComponent implements OnInit, OnDestroy {
   getTransactionList(page: number = 1) {
     this.transactionList = [];
     this.gettingTransactions = true;
-    this.paymentService.getTransactionList(page).subscribe({
-      next: (res: any) => {
-        console.log('res: ', res);
-        this.transactionList = res;
-        this.gettingTransactions = false;
-      },
-      error: (err) => {
-        this.gettingTransactions = false;
-        console.log(err);
-      },
-    });
+    this.startPolling(false, page);
   }
 
   getTransactionListByStatus(transactionStatus: string, page: number = 1) {
     this.transactionList = [];
     this.gettingTransactions = true;
-    this.paymentService.getTransactionListByStatus(transactionStatus, page).subscribe({
-      next: (res: any) => {
-        console.log('res: ', res);
-        this.transactionList = res;
-        this.gettingTransactions = false;
-      },
-      error: (err) => {
-        this.gettingTransactions = false;
-        console.log(err);
-      },
-    });
+    this.startPolling(true, page, transactionStatus);
   }
 
   acceptPayment(transactionId){
@@ -137,5 +112,47 @@ export class PageComponent implements OnInit, OnDestroy {
 
   rejectAll(){}
 
+  startPolling(byStatus = false, page: number = 1, transactionStatus?: string) {
+    if (this.pollTimer) clearInterval(this.pollTimer);
+
+    this.pollTimer = setInterval(async () => {
+      try {
+        if(byStatus) {
+          this.paymentService.getTransactionListByStatus(transactionStatus, page).subscribe({
+            next: (res: any) => {
+              console.log('res: ', res);
+              this.transactionList = res;
+              this.gettingTransactions = false;
+            },
+            error: (err) => {
+              this.gettingTransactions = false;
+              console.log(err);
+            },
+          });
+        } else {
+          this.paymentService.getTransactionList(page).subscribe({
+            next: (res: any) => {
+              console.log('res: ', res);
+              this.transactionList = res;
+              this.gettingTransactions = false;
+            },
+            error: (err) => {
+              this.gettingTransactions = false;
+              console.log(err);
+            },
+          });
+        }
+        console.log('polling');
+      } catch (err) {
+        console.warn('polling error', err);
+      }
+    }, 5000);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    clearInterval(this.pollTimer);
+  }
 
 }
