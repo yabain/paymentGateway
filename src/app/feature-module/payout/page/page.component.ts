@@ -81,13 +81,11 @@ export class PageComponent implements OnInit, OnDestroy {
   }
 
   getTransactionList(page: number = 1) {
-    this.transactionList = [];
     this.gettingTransactions = true;
     this.startPolling(false, page);
   }
 
   getTransactionListByStatus(transactionStatus: string, page: number = 1) {
-    this.transactionList = [];
     this.gettingTransactions = true;
     this.startPolling(true, page, transactionStatus);
   }
@@ -114,13 +112,11 @@ export class PageComponent implements OnInit, OnDestroy {
 
   startPolling(byStatus = false, page: number = 1, transactionStatus?: string) {
     if (this.pollTimer) clearInterval(this.pollTimer);
-
     this.pollTimer = setInterval(async () => {
       try {
         if(byStatus) {
           this.paymentService.getTransactionListByStatus(transactionStatus, page).subscribe({
             next: (res: any) => {
-              console.log('res: ', res);
               this.transactionList = res;
               this.gettingTransactions = false;
             },
@@ -132,7 +128,6 @@ export class PageComponent implements OnInit, OnDestroy {
         } else {
           this.paymentService.getTransactionList(page).subscribe({
             next: (res: any) => {
-              console.log('res: ', res);
               this.transactionList = res;
               this.gettingTransactions = false;
             },
@@ -142,11 +137,11 @@ export class PageComponent implements OnInit, OnDestroy {
             },
           });
         }
-        console.log('polling');
+        // console.log('polling');
       } catch (err) {
         console.warn('polling error', err);
       }
-    }, 5000);
+    }, 7000);
   }
 
   ngOnDestroy(): void {

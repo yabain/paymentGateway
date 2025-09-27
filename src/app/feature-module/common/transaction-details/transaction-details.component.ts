@@ -5,17 +5,20 @@ import {
   OnInit,
   ViewChild,
   AfterViewInit,
+  ElementRef,
+  OnDestroy,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { UserService } from 'src/app/services/user/user.service';
 import { PaymentService } from 'src/app/services/payment/payment.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
+import { Subject } from 'rxjs/internal/Subject';
 @Component({
   selector: 'app-transaction-details',
   templateUrl: './transaction-details.component.html',
   styleUrls: ['./transaction-details.component.scss'],
 })
-export class TransactionDetailsComponent implements OnInit {
+export class TransactionDetailsComponent implements OnInit, OnDestroy {
   @Input() transactionData: any;
   customer: any;
   card: any;
@@ -23,8 +26,10 @@ export class TransactionDetailsComponent implements OnInit {
   currentUser: any;
   status: string = 'transaction_initialized';
   processing: boolean = false;
+  private destroy$ = new Subject<void>();
+  private pollTimer: any;
 
-  @ViewChild('closeModal') closeModal: HTMLButtonElement;
+  @ViewChild('closeModal') closeModal: ElementRef;
 
   constructor(
     private userService: UserService,
@@ -33,6 +38,7 @@ export class TransactionDetailsComponent implements OnInit {
   ) {
     this.getCurrentUser();
     console.log('transactionData', this.transactionData);
+    this.getTransactionStatus();
   }
 
   ngOnInit(): void {
@@ -59,7 +65,7 @@ export class TransactionDetailsComponent implements OnInit {
     this.processing = true;
     this.paymentService.acceptPayment(transactionId).subscribe((resp: any) => {
       this.processing = false;
-      this.checkeStatus(transactionId);
+      this.startPolling(transactionId);
     });
   }
 
@@ -71,43 +77,54 @@ export class TransactionDetailsComponent implements OnInit {
 
   ngAfterViewInit() {
     if (this.closeModal) {
-      this.closeModal.click(); // Simule le clic
+      this.closeModal.nativeElement.click(); // Simule le clic
     }
   }
 
   closeModalClick() {
     if (this.closeModal) {
-      this.closeModal.click();
+      this.closeModal.nativeElement.click();
     }
   }
 
-  checkeStatus(transactionId) {
+  checkStatus(transactionId) {
+    console.log('checkStatus: ', transactionId)
     this.processing = true;
     this.paymentService
       .getTransactionData(transactionId)
       .subscribe((res: any) => {
         if (res.status === this.paymentService.status.PAYOUTPENDING) {
-          setTimeout(() => {
-            this.checkeStatus(transactionId);
-          }, 5 * 1000);
+          console.log('pending');
         } else if (res.status === this.paymentService.status.PAYOUTSUCCESS) {
           this.toastService.presentToast('success', 'Done !', '');
-          setTimeout(() => {
-            window.location.reload();
-            this.processing = false;
             this.closeModalClick();
-          }, 3 * 1000);
+            this.processing = false;
         } else if (res.status === this.paymentService.status.PAYOUTERROR) {
           this.toastService.presentToast('error', 'Done !', '');
           setTimeout(() => {
-            window.location.reload();
-            this.processing = false;
             this.closeModalClick();
+            this.processing = false;
           }, 3 * 1000);
         } else {
-          this.processing = false;
-          this.getTransactionStatus();
+          this.processing = true;
         }
       });
+  }
+
+  startPolling(transactionId: string) {
+    if (this.pollTimer) clearInterval(this.pollTimer);
+    this.pollTimer = setInterval(async () => {
+      try {
+        this.checkStatus(transactionId);
+      } catch (err) {
+        console.warn('polling error to get status', err);
+      }
+    }, 7000);
+  }
+  
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    clearInterval(this.pollTimer);
   }
 }

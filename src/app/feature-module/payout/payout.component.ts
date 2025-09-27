@@ -31,7 +31,7 @@ export class PayoutComponent implements OnInit, OnDestroy {
       const url = this.router.url;
       if (url.split('admin-payout/')[1]) {
         const endP = url.split('admin-payout/')[1];
-        console.log('endP: ', endP)
+        // console.log('endP: ', endP)
         this.page = endP === 'payout' ? endP : 'all-payout';
       } else this.page = "payout";
       // console.log("page: ", this.page)

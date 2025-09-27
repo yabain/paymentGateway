@@ -34,6 +34,7 @@ export class PageComponent implements OnInit, OnDestroy {
   metaPayinTransaction: any;
   customerPayinTransaction: any;
   metaPayoutTransaction: any
+  private pollTimer: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -87,13 +88,12 @@ export class PageComponent implements OnInit, OnDestroy {
       },
       error: (err) => {
         this.gettingSolde = false;
-        console.log(err);
+        console.error(err);
       },
     });
   }
 
   getPayinList(periode: number = 1, page: number = 1) {
-    this.gettingPayinTransactions = true;
     this.fw.getPayinList(this.selectedCountry.iso2, periode, page).subscribe({
       next: (res: any) => {
         this.payinList = res.data;
@@ -101,7 +101,7 @@ export class PageComponent implements OnInit, OnDestroy {
       },
       error: (err) => {
         this.gettingPayinTransactions = false;
-        console.log(err);
+        console.error(err);
       },
     });
   }
@@ -120,16 +120,17 @@ export class PageComponent implements OnInit, OnDestroy {
 
   onSelectInPeriode(event) {
     this.periodePayin = (event.target as HTMLSelectElement).value;
+    this.gettingPayinTransactions = true;
     this.getPayinList(Number(this.periodePayin));
   }
 
   onSelectOutPeriode(event) {
     this.periodePayout = (event.target as HTMLSelectElement).value;
+    this.gettingPayoutTransactions = true;
     this.getPayoutList(Number(this.periodePayout));
   }
 
   getPayoutList(periode: number = 1, page: number = 1) {
-    this.gettingPayoutTransactions = true;
     this.fw.getPayoutList(this.selectedCountry.iso2, periode, page).subscribe({
       next: (res: any) => {
         this.payoutList = res.data;
@@ -137,7 +138,7 @@ export class PageComponent implements OnInit, OnDestroy {
       },
       error: (err) => {
         this.gettingPayoutTransactions = false;
-        console.log(err);
+        console.error(err);
       },
     });
   }
@@ -151,12 +152,10 @@ export class PageComponent implements OnInit, OnDestroy {
   refresh() {
     this.periodePayin = '1';
     this.periodePayout = '1';
+    this.gettingPayoutTransactions = true;
+    this.gettingPayinTransactions = true;
     this.getData();
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+    this.startPolling();
   }
 
   nextPayinPage(){
@@ -164,6 +163,7 @@ export class PageComponent implements OnInit, OnDestroy {
       return false;
     }
     this.payinPage +=1;
+    this.gettingPayinTransactions = true;
     return this.getPayinList(Number(this.periodePayin), this.payinPage);
   }
   nextPayoutPage(){
@@ -171,6 +171,7 @@ export class PageComponent implements OnInit, OnDestroy {
       return false;
     }
     this.payoutPage +=1;
+    this.gettingPayoutTransactions = true;
     return this.getPayoutList(Number(this.periodePayout), this.payoutPage);
   }
 
@@ -180,6 +181,7 @@ export class PageComponent implements OnInit, OnDestroy {
       return false;
     }
     this.payinPage -=1;
+    this.gettingPayinTransactions = true;
     return this.getPayinList(Number(this.periodePayin), this.payinPage);
   }
 
@@ -189,6 +191,25 @@ export class PageComponent implements OnInit, OnDestroy {
       return false;
     }
     this.payoutPage -=1;
+    this.gettingPayoutTransactions = true;
     return this.getPayoutList(Number(this.periodePayout), this.payoutPage);
+  }
+
+  startPolling() {
+    if (this.pollTimer) clearInterval(this.pollTimer);
+    this.pollTimer = setInterval(async () => {
+      try {
+        this.getPayoutList(Number(this.periodePayout), this.payoutPage);
+        this.getPayinList(Number(this.periodePayin), this.payinPage);
+      } catch (err) {
+        console.error('polling error', err);
+      }
+    }, 7000);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    clearInterval(this.pollTimer);
   }
 }
