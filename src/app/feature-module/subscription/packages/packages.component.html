@@ -170,7 +170,7 @@
                 </button>
             </div>
             <div class="d-flex justify-content-center" *ngIf="!isAuthor(plan) && plan.isActive">
-                <button class="btn btn-rounded btn-primary me-1" style="margin-top: 20px;" (click)="selectPlan(plan)"
+                <button class="btn btn-rounded btn-primary me-1" style="margin-top: 20px;" (click)="checkSbscriberStatus(plan)"
                     data-bs-toggle="modal" data-bs-target="#subscriptionModal">{{
                     'subscriptions.subscribe' | translate }}</button>
             </div>
@@ -462,12 +462,25 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Anim pariatur cliche reprehenderit, enim eiusmod high life
-                accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                non cupidatat skateboard dolor brunch. Food truck quinoa
-                nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua
-                put a bird on it squid single-origin coffee nulla assumenda
-                shoreditch et.
+                <div *ngIf="checkingSubscriptionStatus">
+                    <div style="display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 300px;">
+                        <div class="spinner-border" role="status"></div>
+                    </div>
+                </div>
+                <div *ngIf="!checkingSubscriptionStatus && isSubscriber">
+                    You are already subscriber.
+                </div>
+                <div *ngIf="!checkingSubscriptionStatus && !isSubscriber">
+                    Anim pariatur cliche reprehenderit, enim eiusmod high life
+                    accusamus terry richardson ad squid. 3 wolf moon officia aute,
+                    non cupidatat skateboard dolor brunch. Food truck quinoa
+                    nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua
+                    put a bird on it squid single-origin coffee nulla assumenda
+                    shoreditch et.
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">

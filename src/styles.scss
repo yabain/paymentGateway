@@ -983,3 +983,13 @@ pre .json-null {
   border: 1px solid #021d66;
   border-radius: 10px;
 }
+
+.toast-top-right,
+.toast-top-left,
+.toast-top-center,
+.toast-bottom-right,
+.toast-bottom-left,
+.toast-bottom-center {
+  position: fixed; // 🔑
+  z-index: 999999; // pour passer au-dessus des autres éléments
+}

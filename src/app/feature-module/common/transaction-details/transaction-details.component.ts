@@ -64,7 +64,6 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
   acceptPayment(transactionId) {
     this.processing = true;
     this.paymentService.acceptPayment(transactionId).subscribe((resp: any) => {
-      this.processing = false;
       this.startPolling(transactionId);
     });
   }
@@ -77,7 +76,7 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
 
   ngAfterViewInit() {
     if (this.closeModal) {
-      this.closeModal.nativeElement.click(); // Simule le clic
+      this.closeModal.nativeElement.click();
     }
   }
 
@@ -99,18 +98,28 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
           this.toastService.presentToast('success', 'Done !', '');
             this.closeModalClick();
             this.processing = false;
+            this.scrollToTop();
         } else if (res.status === this.paymentService.status.PAYOUTERROR) {
-          this.toastService.presentToast('error', 'Done !', '');
-          setTimeout(() => {
+          this.toastService.presentToast('error', 'Error to Payout !', '');
             this.closeModalClick();
             this.processing = false;
-          }, 3 * 1000);
+            this.scrollToTop();
         } else {
           this.processing = true;
         }
       });
   }
 
+  scrollToTop(): void {
+    setTimeout(() => {
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      });
+    }, 100);
+  }
+  
   startPolling(transactionId: string) {
     if (this.pollTimer) clearInterval(this.pollTimer);
     this.pollTimer = setInterval(async () => {

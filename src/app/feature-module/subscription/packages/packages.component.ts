@@ -47,6 +47,8 @@ export class PackagesComponent implements OnInit {
   activeSearch: boolean = false;
   optionsData: any = [];
   searchString: string = '';
+  checkingSubscriptionStatus: boolean = true;
+  isSubscriber: boolean = true;
 
   public routes = routes;
   public selectedValue1 = '';
@@ -130,6 +132,21 @@ export class PackagesComponent implements OnInit {
         this.gettingStatistics = false;
       });
     }
+  }
+
+  checkSbscriberStatus(plan) {
+    this.selectPlan(plan)
+    this.checkingSubscriptionStatus = true;
+    // this.subscriptionService
+    //   .checkSbscriberStatus(this.selectPlan._id)
+    //   .then((data: any) => {
+    //     this.checkingSubscriptionStatus = false;
+    //     if (data.length > 0) {
+    //       this.isSubscriber = true;
+    //     } else {
+    //       this.isSubscriber = false;
+    //     }
+    //   });
   }
 
   selectImg(imageUrl) {

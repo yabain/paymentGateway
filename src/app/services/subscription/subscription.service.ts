@@ -60,7 +60,6 @@ export class SubscriptionService {
     }
   }
 
-
   getMyPlansList(userId): Observable<any | undefined> {
     return this.apiService.getById('plans/planList', userId).pipe(
       map((data) => {
@@ -97,6 +96,16 @@ export class SubscriptionService {
   async getPlansStatistics(): Promise<any> {
     try {
       const response = await this.apiService.getWithoutId('plans/get-statistics').toPromise();
+      return response;
+    } catch (error) {
+      console.error('Error fetching users stats:', error);
+      throw error;
+    }
+  }
+
+  async checkSbscriberStatus(planId: string): Promise<any> {
+    try {
+      const response = await this.apiService.getById('subscription/verify', planId).toPromise();
       return response;
     } catch (error) {
       console.error('Error fetching users stats:', error);

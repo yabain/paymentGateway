@@ -29,6 +29,7 @@ export class PageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+      this.scrollToTop();
       this.refresh();
     });
   }
@@ -66,6 +67,9 @@ export class PageComponent implements OnInit, OnDestroy {
       return false;
     }
     this.page +=1;
+    this.gettingTransactions = true;
+    this.transactionList = [];
+    this.scrollToTop();
     if(this.sectionSelected !== 'all') return this.getTransactionListByStatus(this.sectionSelected, this.page);
     return this.getTransactionList(this.page);
   }
@@ -76,8 +80,22 @@ export class PageComponent implements OnInit, OnDestroy {
       return false;
     }
     this.page -=1;
+    this.gettingTransactions = true;
+    this.transactionList = [];
+    this.scrollToTop();
     if(this.sectionSelected !== 'all') return this.getTransactionListByStatus(this.sectionSelected, this.page);
     return this.getTransactionList(this.page);
+  }
+
+
+  scrollToTop(): void {
+    setTimeout(() => {
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      });
+    }, 100);
   }
 
   getTransactionList(page: number = 1) {
