@@ -170,8 +170,8 @@
                 </button>
             </div>
             <div class="d-flex justify-content-center" *ngIf="!isAuthor(plan) && plan.isActive">
-                <button class="btn btn-rounded btn-primary me-1" style="margin-top: 20px;" (click)="checkSbscriberStatus(plan)"
-                    data-bs-toggle="modal" data-bs-target="#subscriptionModal">{{
+                <button class="btn btn-rounded btn-primary me-1" style="margin-top: 20px;"
+                    (click)="checkSbscriberStatus(plan)" data-bs-toggle="modal" data-bs-target="#subscriptionModal">{{
                     'subscriptions.subscribe' | translate }}</button>
             </div>
         </div>
@@ -195,28 +195,6 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col-xl-6">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="header-title">Static backdrop</h4>
-
-                <p>
-                    When backdrop is set to static, the modal will not close when clicking
-                    outside it. Click the button below to try it.
-                </p>
-
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                    data-bs-target="#subscriptionModal">
-                    Launch static backdrop modal
-                </button>
-
-                <!-- Modal -->
-            </div>
-        </div>
-    </div>
-</div>
-
 <div class="row d-flex align-items-center justify-content-center" *ngIf="watingPlansList">
     <div style="display: flex;
         justify-content: center;
@@ -225,7 +203,6 @@
         <div class="spinner-border" role="status"></div>
     </div>
 </div>
-
 
 <!-- Add New Package Modal -->
 <div class="modal custom-modal fade p-20" id="add_newpackage" role="dialog">
@@ -440,7 +417,7 @@
                     </p>
                     <div style="text-align: center"> {{ "subscriptions.author" | translate }}: {{
                         showName(selectedPlan?.author) }}</div><br>
-                    <button type="button" class="btn btn-primary btn-sm" data-bs-dismiss="modal">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
                         {{ "action.close" | translate }}
                     </button>
                 </div>
@@ -462,33 +439,71 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div *ngIf="checkingSubscriptionStatus">
-                    <div style="display: flex;
+                <div class="step3">
+                    <div *ngIf="checkingSubscriptionStatus">
+                        <div style="display: flex;
                         justify-content: center;
                         align-items: center;
                         height: 300px;">
-                        <div class="spinner-border" role="status"></div>
+                            <div class="spinner-border" role="status"></div>
+                        </div>
+                    </div>
+                    <div *ngIf="!checkingSubscriptionStatus && isSubscriber" style="text-align: center;">
+                        {{ "subscriptions.alreadySubscriber" | translate }}
+                    </div>
+                    <div *ngIf="!checkingSubscriptionStatus && !isSubscriber">
+
+                        <div class="fee-breakdown">
+                            <h4><i class="fas fa-receipt"></i> {{ "payment.amountDetails" | translate }}</h4>
+                            <div class="fee-item">
+                                <span>{{ "payment.amountToBeReceived" | translate }}</span>
+                                <span>
+                                    10000
+                                    <!-- {{amountToBeReceived}} -->
+                                    {{ selectedPlan?.currency }}</span>
+                            </div>
+                            <div class="fee-item">
+                                <span>{{ "payment.equivalentTo" | translate }}</span>
+                                <span> 10000
+                                    <!-- {{estimation}} -->
+                                    {{ selectedPlan?.currency }}</span>
+                            </div>
+                            <div class="fee-item">
+                                <span>{{ "payment.feeDetails" | translate }}</span>
+                                <span>
+                                    500
+                                    <!-- {{ transactionData?.taxesAmount }} -->
+                                    {{ selectedPlan?.currency }}</span>
+                            </div>
+                            <div class="fee-total">
+                                <span>{{ "payment.total" | translate }}</span>
+                                <span>
+                                    200
+                                    <!-- {{ transactionData?.paymentWithTaxes }} -->
+                                    {{ selectedPlan?.currency }}</span>
+                            </div>
+                        </div>
+
+                        <div class="security-notice">
+                            <img src="assets/img/ressorces/flutterwave.png" alt=""
+                                style="max-width: 100px; border-radius: 5px; margin-right: 10px;">
+                            <p>{{ "payment.secureMessage" | translate }}</p>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn btn-cancel" data-bs-dismiss="modal"
+                                *ngIf="!checkingSubscriptionStatus && !subscribing">
+                                {{ "action.close" | translate }}
+                            </button>
+                            <button class="btn2 btn-confirm"
+                                *ngIf="!checkingSubscriptionStatus && !isSubscriber && !subscribing"
+                                (click)="subscribing = true">
+                                <i class="fas fa-check"></i> {{ "payment.proceed" | translate }}
+                            </button>
+                        </div>
+
+
                     </div>
                 </div>
-                <div *ngIf="!checkingSubscriptionStatus && isSubscriber">
-                    You are already subscriber.
-                </div>
-                <div *ngIf="!checkingSubscriptionStatus && !isSubscriber">
-                    Anim pariatur cliche reprehenderit, enim eiusmod high life
-                    accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                    non cupidatat skateboard dolor brunch. Food truck quinoa
-                    nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua
-                    put a bird on it squid single-origin coffee nulla assumenda
-                    shoreditch et.
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    Close
-                </button>
-                <button type="button" class="btn btn-primary">
-                    Understood
-                </button>
             </div>
         </div>
     </div>

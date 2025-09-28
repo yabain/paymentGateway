@@ -49,6 +49,7 @@ export class PackagesComponent implements OnInit {
   searchString: string = '';
   checkingSubscriptionStatus: boolean = true;
   isSubscriber: boolean = true;
+  subscribing: boolean = false;
 
   public routes = routes;
   public selectedValue1 = '';
@@ -66,7 +67,7 @@ export class PackagesComponent implements OnInit {
     private toastService: ToastService,
     private fb: FormBuilder,
     private location: Location,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getId();
@@ -81,7 +82,7 @@ export class PackagesComponent implements OnInit {
   }
 
   isAuthor(plan: any, user: any = this.currentUser) {
-    console.log('plan: ', plan)
+    // console.log('plan: ', plan)
     return user._id.toString() === plan.author._id.toString() ? true : false;
   }
 
@@ -89,33 +90,33 @@ export class PackagesComponent implements OnInit {
     console.log('selected plan: ', plan)
     this.selectedPlan = plan;
     this.optionsData = plan ? plan.options : [];
-    console.log('options: ', plan)
+    // console.log('options: ', plan)
   }
 
   public searchData(value: string): void {
-    if(value){
-    value = value.trim().toLowerCase();
-    this.plansList = this.plansListBackup.filter((plan: any) =>
-      plan.title.toLowerCase().includes(value) ||
-      plan.subTitle.toLowerCase().includes(value)
-    );
+    if (value) {
+      value = value.trim().toLowerCase();
+      this.plansList = this.plansListBackup.filter((plan: any) =>
+        plan.title.toLowerCase().includes(value) ||
+        plan.subTitle.toLowerCase().includes(value)
+      );
     } else return this.plansList = this.plansListBackup;
   }
 
-  filterByPrice(value: number){
-    if(value){
-    this.plansList = this.plansListBackup.filter((plan: any) =>
-      plan.price.toString().toLowerCase().includes(value)
-    );
+  filterByPrice(value: number) {
+    if (value) {
+      this.plansList = this.plansListBackup.filter((plan: any) =>
+        plan.price.toString().toLowerCase().includes(value)
+      );
     } else return this.plansList = this.plansListBackup;
   }
 
   public filterByPeriod(value: string): void {
-    if(value){
-    value = value.trim().toLowerCase();
-    this.plansList = this.plansListBackup.filter((plan: any) =>
-      plan.cycle.toLowerCase().includes(value)
-    );
+    if (value) {
+      value = value.trim().toLowerCase();
+      this.plansList = this.plansListBackup.filter((plan: any) =>
+        plan.cycle.toLowerCase().includes(value)
+      );
     } else return this.plansList = this.plansListBackup;
   }
 
@@ -135,25 +136,23 @@ export class PackagesComponent implements OnInit {
   }
 
   checkSbscriberStatus(plan) {
-    this.selectPlan(plan)
+    this.selectPlan(plan);
+    console.log('plan: ', plan);
     this.checkingSubscriptionStatus = true;
-    // this.subscriptionService
-    //   .checkSbscriberStatus(this.selectPlan._id)
-    //   .then((data: any) => {
-    //     this.checkingSubscriptionStatus = false;
-    //     if (data.length > 0) {
-    //       this.isSubscriber = true;
-    //     } else {
-    //       this.isSubscriber = false;
-    //     }
-    //   });
+    this.subscriptionService
+      .checkSbscriberStatus(this.selectedPlan._id)
+      .then((data: boolean) => {
+        console.log("checkSbscriberStatus: ", data);
+        this.isSubscriber = data;
+        this.checkingSubscriptionStatus = false;
+      });
   }
 
   selectImg(imageUrl) {
     this.imageUrl = imageUrl;
   }
 
-  toggleSearch(){
+  toggleSearch() {
     this.activeSearch = !this.activeSearch;
     this.plansList = this.plansListBackup;
   }
@@ -161,22 +160,22 @@ export class PackagesComponent implements OnInit {
   getMyPlansList() {
     this.watingPlansList = true;
     if (this.isAdmin) {
-    this.subscriptionService
-      .getAllPlansList()
-      .subscribe((data: any) => {
-        this.watingPlansList = false;
-        this.plansList = data;
-        this.plansListBackup = data;
-        console.log('plan list: ', data);
-      });
+      this.subscriptionService
+        .getAllPlansList()
+        .subscribe((data: any) => {
+          this.watingPlansList = false;
+          this.plansList = data;
+          this.plansListBackup = data;
+          // console.log('plan list: ', data);
+        });
     } else {
-    this.subscriptionService
-      .getMyPlansList(this.currentUser._id)
-      .subscribe((data: any) => {
-        this.watingPlansList = false;
-        this.plansList = data;
-        console.log('plan list: ', data);
-      });
+      this.subscriptionService
+        .getMyPlansList(this.currentUser._id)
+        .subscribe((data: any) => {
+          this.watingPlansList = false;
+          this.plansList = data;
+          // console.log('plan list: ', data);
+        });
     }
   }
 
@@ -190,7 +189,7 @@ export class PackagesComponent implements OnInit {
     this.userService.getCurrentUser().then((user: any) => {
       if (!user) return console.log('No user');
       this.currentUser = user;
-      console.log('current user: ', user)
+      // console.log('current user: ', user)
       if (this.isAdminRoute && user.isAdmin) this.isAdmin = true;
       this.currency = user.countryId.currency;
       return this.refresh();

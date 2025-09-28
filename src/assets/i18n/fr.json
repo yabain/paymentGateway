@@ -608,7 +608,8 @@
     "unsubscribe": "Se Désabonner",
     "deletePlan": "Supprimer ce plan",
     "wantDeletePlan": "Êtes-vous certain de vouloir supprimer",
-    "author": "Auteur"
+    "author": "Auteur",
+    "alreadySubscriber": "Vous êtes déjà abonné."
   },
   "personalizer": {
     "title": "Personnalisateur",

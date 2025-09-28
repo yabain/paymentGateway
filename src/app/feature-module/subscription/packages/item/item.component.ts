@@ -17,7 +17,7 @@ export class ItemComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log('plan: ', this.plan);
+    // console.log('plan: ', this.plan);
     this.optionsData = this.plan ? this.plan.options : [];
   }
 
