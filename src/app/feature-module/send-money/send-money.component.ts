@@ -187,13 +187,13 @@ export class SendMoneyComponent implements OnInit {
   }
 
   formatAmount(event: any) {
-    let value = event.target.value.replace(/\s/g, ''); // Supprime les espaces existants
-    value = value.replace(/\D/g, ''); // Supprime tout ce qui n'est pas un chiffre
+    let value = event.target.value.replace(/\s/g, ''); // delete existing space
+    value = value.replace(/\D/g, ''); // delete all not number
 
-    // Ajoute un espace tous les 3 chiffres
+    // Add space after 3 number
     value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 
-    // Met à jour la valeur dans le modèle et l'input
+    // Update input patern
     this.amountToBeReceived = value;
     event.target.value = value;
   }
@@ -657,7 +657,7 @@ export class SendMoneyComponent implements OnInit {
       return false;
     }
 
-    if (transactionData.payment < 10) {
+    if (transactionData.payment < 100) {
       // If payment amount < 10 FCFA
       this.translate.get('payment.minimalAmount').subscribe((res: string) => {
         this.toastService.presentToast('warning', 'Warning', res);
@@ -867,6 +867,7 @@ export class SendMoneyComponent implements OnInit {
     this.ngOnDestroy();
     this.router.navigate([route]);
   }
+  
   /**
    * Cleans up data when the component is destroyed.
    */

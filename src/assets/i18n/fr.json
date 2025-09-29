@@ -586,9 +586,17 @@
     "inactivePlan": "Plams inactifs",
     "totalSubscribers": "Total abonnés",
     "dayly": "Journalier",
+    "daylyPrice": "Coût journalier",
+    "day": "Jour",
     "weekly": "Hebdomadaire",
+    "weeklyPrice": "Coût hebdomadaire",
+    "week": "Semaine",
     "monthly": "Mensuel",
+    "monthlyPrice": "Coût mensuel",
+    "month": "mois",
     "yearly": "Annuel",
+    "yearlyPrice": "Coût annuel",
+    "year": "ans",
     "status": "Statut",
     "actived": "Actif",
     "enable": "Activer",
@@ -609,7 +617,9 @@
     "deletePlan": "Supprimer ce plan",
     "wantDeletePlan": "Êtes-vous certain de vouloir supprimer",
     "author": "Auteur",
-    "alreadySubscriber": "Vous êtes déjà abonné."
+    "alreadySubscriber": "Vous êtes déjà abonné.",
+    "summary": "Récapitulatif",
+    "quantity": "Quantité"
   },
   "personalizer": {
     "title": "Personnalisateur",

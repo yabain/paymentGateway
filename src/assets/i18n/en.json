@@ -586,9 +586,17 @@
     "inactivePlan": "Inactive Plans",
     "totalSubscribers": "Total Subscribers",
     "dayly": "Dayly",
+    "daylyPrice": "Dayly cost",
+    "day": "Day",
     "weekly": "Weekly",
+    "weeklyPrice": "Weekly cost",
+    "week": "Week",
     "monthly": "Monthly",
+    "monthlyPrice": "Monthly cost",
+    "month": "Month",
     "yearly": "Yearly",
+    "yearlyPrice": "Yearly cost",
+    "year": "Year",
     "status": "Status",
     "actived": "Active",
     "enable": "Enable",
@@ -609,7 +617,9 @@
     "deletePlan": "Delete this plan",
     "wantDeletePlan": "Do you want to delete",
     "author": "Author",
-    "alreadySubscriber": "You are already subscriber."
+    "alreadySubscriber": "You are already subscriber.",
+    "summary": "Summary",
+    "quantity": "Quantity"
   },
   "personalizer": {
     "title": "Customizer",

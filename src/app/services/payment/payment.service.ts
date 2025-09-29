@@ -39,6 +39,7 @@ export class PaymentService {
     PAYMENT: 'payment',
     TRANSFER: 'transfer',
     FUNDRAISING: 'fundraising',
+    SUBSCRIPTION: 'subscription',
   };
   amount = 100;
   private txRef: string = '';

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -11,6 +11,11 @@ import { SubscriptionService } from 'src/app/services/subscription/subscription.
 import { UserService } from 'src/app/services/user/user.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { Location } from '@angular/common';
+import { Subject } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { PaymentService } from 'src/app/services/payment/payment.service';
+import { FlutterwaveService } from 'src/app/services/flutterwave/flutterwave.service';
+import { SystemService } from 'src/app/services/system/system.service';
 
 interface data {
   value: string;
@@ -20,7 +25,7 @@ interface data {
   templateUrl: './packages.component.html',
   styleUrls: ['./packages.component.scss'],
 })
-export class PackagesComponent implements OnInit {
+export class PackagesComponent implements OnInit, OnDestroy {
   currentUser!: any;
   statistics!: any;
   title: string = '';
@@ -49,13 +54,33 @@ export class PackagesComponent implements OnInit {
   searchString: string = '';
   checkingSubscriptionStatus: boolean = true;
   isSubscriber: boolean = true;
-  subscribing: boolean = false;
+  proceed: boolean = false;
+  private destroy$ = new Subject<void>();
+  private pollTimer: any;
+  idParam: string | null = null;
+  transactionRef: string;
+  transactionData!: any;
+  taxesAmount: number = 0;
+  invoiceTaxes: number = 5;
+  paymentWithTaxes: number = 0;
 
   public routes = routes;
   public selectedValue1 = '';
   public selectedValue2 = '';
   selectedList2: data[] = [{ value: 'Fixed' }, { value: 'Percentage' }];
   public toggleData = false;
+  quantity: number = 1;
+  estimation: number = 0;
+  goToProceed: boolean = false;
+  txRef: string;
+
+  redirect_url: string = '';
+  showRetry: boolean = false;
+  modalClosed: boolean = false;
+  reOpen: boolean = false;
+  transactionSucceded: boolean = false;
+  transactionFailed: boolean = false;
+
 
   openContent() {
     this.toggleData = !this.toggleData;
@@ -66,19 +91,51 @@ export class PackagesComponent implements OnInit {
     private userService: UserService,
     private toastService: ToastService,
     private fb: FormBuilder,
+    private router: Router,
     private location: Location,
-  ) { }
+    private route: ActivatedRoute,
+    private paymentService: PaymentService,
+    private systemService: SystemService,
+    private fw: FlutterwaveService,
+  ) {}
 
   ngOnInit(): void {
     this.getId();
     this.scrollToTop();
     this.getCurrentUser();
     this.planForm();
+    this.getSystemData();
+    this.transactionRef = this.paymentService.generateId();
   }
 
   getId() {
     const url = this.location.path();
     this.isAdminRoute = url.includes('admin-subscription');
+
+    const idParam = this.route.snapshot.paramMap.get('id');
+
+    if (idParam && idParam !== 'null' && idParam !== 'undefined') {
+      this.idParam = idParam;
+    }
+  }
+
+  calculateTaxesAmount(): number {
+    this.estimation = this.quantity * this.selectedPlan.price;
+    return this.aroundValue(this.estimation * (this.invoiceTaxes / 100));
+  }
+
+  aroundValue(val) {
+    return Math.ceil(val);
+  }
+
+  paymentWithTaxesCalculation() {
+    return this.aroundValue(this.estimation + this.calculateTaxesAmount());
+  }
+  
+  onSelectBank(event){
+    this.quantity = Number((event.target as HTMLSelectElement).value);
+    this.taxesAmount = this.calculateTaxesAmount();
+    this.paymentWithTaxes = this.paymentWithTaxesCalculation();
   }
 
   isAuthor(plan: any, user: any = this.currentUser) {
@@ -87,37 +144,55 @@ export class PackagesComponent implements OnInit {
   }
 
   selectPlan(plan: any) {
-    console.log('selected plan: ', plan)
+    console.log('selected plan: ', plan);
     this.selectedPlan = plan;
+    this.quantity = 1;
     this.optionsData = plan ? plan.options : [];
+    this.estimation = this.selectedPlan.price;
+    this.taxesAmount = this.calculateTaxesAmount();
+    this.paymentWithTaxes = this.paymentWithTaxesCalculation();
     // console.log('options: ', plan)
+  }
+
+  subscribe() {
+    if (!this.selectedPlan) return;
+    this.proceed = true;
+    console.log('proceed: ', this.proceed);
+    this.setTransactionData();
+    console.log('transactionData: ', this.transactionData);
+    setTimeout(() => {
+      this.goToProceed = true;
+      this.proceedSubscribe();
+    }, 2000);
+
   }
 
   public searchData(value: string): void {
     if (value) {
       value = value.trim().toLowerCase();
-      this.plansList = this.plansListBackup.filter((plan: any) =>
-        plan.title.toLowerCase().includes(value) ||
-        plan.subTitle.toLowerCase().includes(value)
+      this.plansList = this.plansListBackup.filter(
+        (plan: any) =>
+          plan.title.toLowerCase().includes(value) ||
+          plan.subTitle.toLowerCase().includes(value),
       );
-    } else return this.plansList = this.plansListBackup;
+    } else return (this.plansList = this.plansListBackup);
   }
 
   filterByPrice(value: number) {
     if (value) {
       this.plansList = this.plansListBackup.filter((plan: any) =>
-        plan.price.toString().toLowerCase().includes(value)
+        plan.price.toString().toLowerCase().includes(value),
       );
-    } else return this.plansList = this.plansListBackup;
+    } else return (this.plansList = this.plansListBackup);
   }
 
   public filterByPeriod(value: string): void {
     if (value) {
       value = value.trim().toLowerCase();
       this.plansList = this.plansListBackup.filter((plan: any) =>
-        plan.cycle.toLowerCase().includes(value)
+        plan.cycle.toLowerCase().includes(value),
       );
-    } else return this.plansList = this.plansListBackup;
+    } else return (this.plansList = this.plansListBackup);
   }
 
   getMyStat() {
@@ -142,7 +217,7 @@ export class PackagesComponent implements OnInit {
     this.subscriptionService
       .checkSbscriberStatus(this.selectedPlan._id)
       .then((data: boolean) => {
-        console.log("checkSbscriberStatus: ", data);
+        console.log('checkSbscriberStatus: ', data);
         this.isSubscriber = data;
         this.checkingSubscriptionStatus = false;
       });
@@ -160,14 +235,12 @@ export class PackagesComponent implements OnInit {
   getMyPlansList() {
     this.watingPlansList = true;
     if (this.isAdmin) {
-      this.subscriptionService
-        .getAllPlansList()
-        .subscribe((data: any) => {
-          this.watingPlansList = false;
-          this.plansList = data;
-          this.plansListBackup = data;
-          // console.log('plan list: ', data);
-        });
+      this.subscriptionService.getAllPlansList().subscribe((data: any) => {
+        this.watingPlansList = false;
+        this.plansList = data;
+        this.plansListBackup = data;
+        // console.log('plan list: ', data);
+      });
     } else {
       this.subscriptionService
         .getMyPlansList(this.currentUser._id)
@@ -337,6 +410,143 @@ export class PackagesComponent implements OnInit {
     );
   }
 
+  verifytransactionData(transactionData): boolean {
+    if (transactionData.payment < 100) {
+      return false;
+    }
+    return true;
+  }
+
+  async proceedSubscribe() {
+    if (!this.verifytransactionData(this.transactionData)) return;
+    this.proceed = true;
+    await this.fw.loadFlutterwaveScript();
+    this.paymentService
+      .proceedPayment(this.transactionData)
+      .subscribe((res: any) => {
+        if (!res) {
+          this.proceed = false;
+          this.toastService.presentToast('error', 'Error', res.message);
+        } else {
+          this.txRef = res.txRef;
+          this.redirect_url = res.redirect_url;
+          this.handleRequest();
+        }
+      });
+  }
+
+  openModal() {
+    this.showRetry = false;
+    setTimeout(() => {
+      this.showRetry = true;
+      this.reOpen = false;
+    }, 10000);
+    this.startPolling();
+    return window.open(this.redirect_url, '_blank', 'width=800,height=800');
+  }
+
+  startPolling() {
+    if (!this.txRef) return;
+    if (this.pollTimer) clearInterval(this.pollTimer);
+    this.transactionSucceded = false;
+    this.transactionFailed = false;
+
+    this.pollTimer = setInterval(async () => {
+      try {
+        this.fw.checkStatus(this.txRef).subscribe((resp: any) => {
+          const status =
+            resp?.data?.data?.status ||
+            resp?.data?.status ||
+            resp?.status ||
+            'pending';
+          if (['successful', 'success'].includes(status.toLowerCase())) {
+            this.transactionSucceded = true;
+            this.transactionFailed = false;
+            clearInterval(this.pollTimer);
+          }
+          if (['cancelled'].includes(status.toLowerCase())) {
+            this.transactionSucceded = false;
+            this.transactionFailed = true;
+            clearInterval(this.pollTimer);
+          }
+          if (['failed'].includes(status.toLowerCase())) {
+            this.transactionSucceded = false;
+            this.transactionFailed = true;
+            // clearInterval(this.pollTimer);
+          }
+        });
+      } catch (err) {
+        console.warn('polling error', err);
+      }
+    }, 5000);
+  }
+
+  handleRequest() {
+    if (this.redirect_url) {
+      const payWin = this.openModal();
+      if (!payWin) {
+        location.href = this.redirect_url;
+        return;
+      }
+
+      // 3) optionnel : surveiller la fermeture et faire une vérif côté serveur
+      const timer = setInterval(async () => {
+        if (payWin.closed) {
+          clearInterval(timer);
+          this.transactionSucceded = false;
+          this.transactionFailed = false;
+          // petite vérification pour mettre l’UI à jour (statut PENDING/ABANDONED)
+          try {
+            this.modalClosed = true;
+            this.verifyAndClosePayin();
+          } catch {}
+          // TODO: afficher un message "paiement annulé" ou rafraîchir l’état
+        }
+      }, 600);
+    } else {
+      this.toastService.presentToast('error', 'Error', '');
+    }
+  }
+
+  openPayin() {
+    this.reOpen = true;
+    this.transactionSucceded = false;
+    this.transactionFailed = false;
+    this.paymentService.openPayin(this.txRef).subscribe((res: any) => {
+      if (res && res.status === 'pending') {
+        return this.handleRequest();
+      }
+      return this.toastService.presentToast('error', 'Error', '');
+    });
+  }
+  
+  verifyAndClosePayin() {
+    this.paymentService
+      .verifyAndClosePayin(this.txRef)
+      .subscribe((res: any) => {
+        if (res) {
+          if (res.status === 'successful' || res.status === 'success') {
+            this.transactionSucceded = true;
+            this.transactionFailed = false;
+          } else if (res.status === 'failed') {
+            this.transactionSucceded = false;
+            this.transactionFailed = true;
+          } else {
+            this.transactionSucceded = false;
+            this.transactionFailed = false;
+          }
+        } else {
+          this.toastService.presentToast('error', 'Error', res.message);
+        }
+      });
+  }
+
+  getSystemData() {
+    this.systemService.getSystemData().subscribe((resp: any) => {
+      this.invoiceTaxes = resp ? resp.invoiceTaxes : 0;
+    });
+  }
+
   showName(userData) {
     return this.userService.showName(userData);
   }
@@ -380,5 +590,54 @@ export class PackagesComponent implements OnInit {
       this.closeModal('delete_modal');
       this.refresh();
     });
+  }
+
+  navigateTo(route) {
+    this.ngOnDestroy();
+    this.router.navigate([route]);
+  }
+
+  setTransactionData() {
+    this.transactionData = {
+      transactionRef: this.transactionRef,
+      estimation: this.estimation,
+      invoiceTaxes: this.invoiceTaxes,
+      taxesAmount: this.calculateTaxesAmount(),
+      paymentWithTaxes: this.paymentWithTaxesCalculation(),
+
+      senderId: this.currentUser._id,
+      senderName: this.showName(this.currentUser),
+      senderEmail: this.currentUser.email,
+      senderContact: this.currentUser.phone,
+      senderCountry: this.currentUser.countryId.name,
+      senderCurrency: this.selectedPlan.currency,
+
+      raisonForTransfer: this.paymentService.transactionType.SUBSCRIPTION,
+      userId: this.currentUser._id,
+
+      receiverName: this.showName(this.selectedPlan.author),
+      receiverEmail: this.selectedPlan.author.email,
+      receiverContact: this.selectedPlan.author.phone,
+      receiverAddress: "WALLET",
+      receiverCountry: "WALLET",
+      receiverCurrency: this.selectedPlan.currency,
+      receiverCountryCode: "WALLET",
+      receiverAmount: this.getCleanAmount(),
+
+      paymentMethod: 'WALLET',
+      receiverMobileAccountNumber: this.selectedPlan.author._id,
+      bankAccountNumber: this.selectedPlan.author._id,
+      bankCode: "WALLET",
+
+      status: this.paymentService.status.INITIALIZED,
+      transactionType: this.paymentService.transactionType.SUBSCRIPTION,
+    };
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    clearInterval(this.pollTimer);
+    this.proceed = false;
   }
 }
