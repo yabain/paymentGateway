@@ -584,7 +584,7 @@
 
       <div class="modal-content" *ngIf="goToProceed">
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-12">
             <div class="wating-msg">
               <img src="assets/img/ressorces/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;"
                 *ngIf="!modalClosed && !transactionSucceded && !transactionFailed">
@@ -625,49 +625,7 @@
 
               <br>
               <button class="btn btn-primary" *ngIf="showRetry || transactionSucceded"
-                (click)="navigateTo('/dashbiard')"> Back to home </button>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="container">
-              <!-- Sidebar Hero -->
-              <div class="hero-sidebar">
-                <div class="hero-pattern"></div>
-                <div class="hero-content">
-                  <div class="hero-badge" style="color: #F57C11 !important;">
-                    <i class="fas fa-rocket" style="color: #F57C11 !important;"></i> {{ "payment.instantTransfer" |
-                    translate }}
-                  </div>
-                  <h1 class="hero-title">{{ "payment.hero-title" | translate }}</h1>
-                  <p class="hero-subtitle">{{ "payment.hero-subTitle" | translate }}</p>
-
-                  <ul class="features-list">
-                    <li>
-                      <i class="fas fa-bolt"></i>
-                      <span>{{ "payment.hero-item1" | translate }}</span>
-                    </li>
-                    <li>
-                      <i class="fas fa-lock"></i>
-                      <span>{{ "payment.hero-item2" | translate }}</span>
-                    </li>
-                    <li>
-                      <i class="fas fa-percentage"></i>
-                      <span>{{ "payment.hero-item3" | translate }}</span>
-                    </li>
-                    <li>
-                      <i class="fas fa-headset"></i>
-                      <span>{{ "payment.hero-item4" | translate }}</span>
-                    </li>
-                  </ul>
-
-                  <div class="security-badge">
-                    <p>
-                      <i class="fas fa-shield-alt"></i>
-                      <span>{{ "payment.hero-secureMessage" | translate }}</span>
-                    </p>
-                  </div>
-                </div>
-              </div>
+                (click)="ngOnDestroy()" data-bs-dismiss="modal"> {{ "action.close" | translate }} </button>
             </div>
           </div>
         </div>

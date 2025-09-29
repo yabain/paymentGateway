@@ -514,18 +514,18 @@ export class SendMoneyComponent implements OnInit {
         return;
       }
 
-      // 3) optionnel : surveiller la fermeture et faire une vérif côté serveur
+      // monitor the closure and do a server-side check
       const timer = setInterval(async () => {
         if (payWin.closed) {
           clearInterval(timer);
           this.transactionSucceded = false;
           this.transactionFailed = false;
-          // petite vérification pour mettre l’UI à jour (statut PENDING/ABANDONED)
+          // small check to update the UI (statut PENDING/ABANDONED)
           try {
             this.modalClosed = true;
             this.verifyAndClosePayin();
           } catch {}
-          // TODO: afficher un message "paiement annulé" ou rafraîchir l’état
+          // TODO: display a "payment canceled" message or refresh the status
         }
       }, 600);
     } else {
