@@ -10,7 +10,7 @@ import { UserService } from 'src/app/services/user/user.service';
 import { SystemService } from 'src/app/services/system/system.service';
 import { DatePipe } from '@angular/common';
 import { ToastService } from 'src/app/services/toast/toast.service';
-import { SoldeService } from 'src/app/services/solde/solde.service';
+import { BalanceService } from 'src/app/services/balance/balance.service';
 
 import {
   FormBuilder,
@@ -67,8 +67,8 @@ export class WithdrawalComponent implements OnInit {
   bic: string = '';
   canNext2Val: boolean = false;
   goToProceed: boolean = false;
-  waittingSolde: boolean = true;
-  solde: number = 0;
+  waittingBalance: boolean = true;
+  balance: number = 0;
 
   constructor(
     private toastService: ToastService,
@@ -81,7 +81,7 @@ export class WithdrawalComponent implements OnInit {
     private paymentService: PaymentService,
     private exchange: ExchangeService,
     private location: LocationService,
-    private soldeService: SoldeService,
+    private balanceService: BalanceService,
   ) {
     this.estimation = 0;
   }
@@ -99,12 +99,12 @@ export class WithdrawalComponent implements OnInit {
   }
 
 
-  getSolde(){
-    this.waittingSolde = true;
-    this.soldeService.getSolde()
+  getBalance(){
+    this.waittingBalance = true;
+    this.balanceService.getBalance()
     .subscribe((data: any) => {
-      this.solde = data ? data.solde : 0;
-      this.waittingSolde = false
+      this.balance = data ? data.balance : 0;
+      this.waittingBalance = false
     })
   }
 
@@ -312,7 +312,7 @@ export class WithdrawalComponent implements OnInit {
         this.waitingUserData = false;
         this.getRates();
         this.getSystemData();
-        this.getSolde();
+        this.getBalance();
       } else {
         this.currentUser = undefined;
         this.waitingUserData = false;

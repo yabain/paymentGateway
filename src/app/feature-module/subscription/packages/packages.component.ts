@@ -618,10 +618,10 @@ export class PackagesComponent implements OnInit, OnDestroy {
       receiverName: this.showName(this.selectedPlan.author),
       receiverEmail: this.selectedPlan.author.email,
       receiverContact: this.selectedPlan.author.phone,
-      receiverAddress: "WALLET",
-      receiverCountry: "WALLET",
+      receiverAddress: this.selectedPlan.cycle,
+      receiverCountry: this.selectedPlan._id,
       receiverCurrency: this.selectedPlan.currency,
-      receiverCountryCode: "WALLET",
+      receiverCountryCode: this.quantity.toString(),
       receiverAmount: this.getCleanAmount(),
 
       paymentMethod: 'WALLET',

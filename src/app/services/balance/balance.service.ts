@@ -8,20 +8,20 @@ import { ApiService } from '../api/api.service';
 @Injectable({
   providedIn: 'root',
 })
-export class SoldeService {
+export class BalanceService {
   constructor(
 
     private apiService: ApiService,
   ) {}
 
   // For admin only
-  getSolde(): Observable<any | undefined> {
-    return this.apiService.getWithToken('solde').pipe(
+  getBalance(): Observable<any | undefined> {
+    return this.apiService.getWithToken('balance').pipe(
       map((data) => {
         return data;
       }),
       catchError((error) => {
-        console.error('Error fetching solde:', error);
+        console.error('Error fetching balance:', error);
         return of([]);
       }),
     );

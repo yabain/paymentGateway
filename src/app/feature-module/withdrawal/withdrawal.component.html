@@ -314,8 +314,8 @@
         <aside class="card summary" aria-live="polite">
           <div class="inline" style="justify-content:space-between; margin-bottom:8px">
             <b>Solde disponible</b><br>
-            <h3 *ngIf="!waittingSolde">{{ solde || 00 }} {{ currentUser.countryId.currency }}</h3>
-            <h6 *ngIf="waittingSolde">
+            <h3 *ngIf="!waittingBalance">{{ balance || 00 }} {{ currentUser.countryId.currency }}</h3>
+            <h6 *ngIf="waittingBalance">
               <div class="spinner-border" role="status"></div></h6>
           </div>
           <div class="amount" id="sumBalance">—</div>

@@ -14,8 +14,8 @@
           {{ 'dashboard.welcome' | translate }} {{ userName }} !
         </h4>
         <p>{{ 'dashboard.subTitleWelcome' | translate }}</p>
-        <h3 style="color: #fff; font-weight: bolder;" *ngIf="!waittingSolde">{{ solde || 00 }} {{ currentUserData.countryId.currency }}</h3>
-        <h6 style="color: #fff; font-weight: bolder;" *ngIf="waittingSolde"><div class="spinner-border" role="status"></div></h6>
+        <h3 style="color: #fff; font-weight: bolder;" *ngIf="!waittingBalance">{{ balance || 00 }} {{ currentUserData.countryId.currency }}</h3>
+        <h6 style="color: #fff; font-weight: bolder;" *ngIf="waittingBalance"><div class="spinner-border" role="status"></div></h6>
         <div class="dash-btns">
           <a [routerLink]="'/send-money'" class="btn view-btn">{{ 'dashboard.sendMoney' | translate }}
             <i class="feather icon-send" data-bs-toggle="tooltip" title="feather icon-send"></i>
