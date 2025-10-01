@@ -37,6 +37,8 @@ export class PageComponent implements OnInit, OnDestroy {
   selectSection(section: string){
     this.page = 1;
     this.sectionSelected = section;
+    this.gettingStatistics = true;
+    this.transactionList = [];
     this.getData()
   }
 

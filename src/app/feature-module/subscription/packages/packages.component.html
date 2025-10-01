@@ -452,7 +452,7 @@
                                 }}</s></span>
                     </li>
                 </ul>
-                <br><label htmlFor="bankCode">{{ "subscriptions.quantity" | translate }}</label>
+                <br><label htmlFor="bankCode" *ngIf="!checkingSubscriptionStatus && !isSubscriber">{{ "subscriptions.quantity" | translate }}</label>
                 <select id="label" class="form-select" (change)="onSelectBank($event)" id="quantity"
                     *ngIf="!checkingSubscriptionStatus && !isSubscriber" [disabled]="proceed">
                     <option [value]="1">
@@ -511,7 +511,11 @@
                         </div>
                     </div>
                     <div *ngIf="!checkingSubscriptionStatus && isSubscriber" style="text-align: center;">
+                        <div class="fee-breakdown">
                         {{ "subscriptions.alreadySubscriber" | translate }}
+                        </div>
+                        <button type="button" class="btn btn-primary btn-lg me-1 mb-2"
+                        style="padding: 5px;" (click)="isSubscriber = false">Recharge</button>
                     </div>
                     <div *ngIf="!checkingSubscriptionStatus && !isSubscriber">
                         <div class="fee-breakdown">

@@ -617,7 +617,7 @@
     "deletePlan": "Supprimer ce plan",
     "wantDeletePlan": "Êtes-vous certain de vouloir supprimer",
     "author": "Auteur",
-    "alreadySubscriber": "Vous êtes déjà abonné.",
+    "alreadySubscriber": "Vous disposez déjà d'un abonnement actif à ce plan.",
     "summary": "Récapitulatif",
     "quantity": "Quantité"
   },

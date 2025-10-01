@@ -617,7 +617,7 @@
     "deletePlan": "Delete this plan",
     "wantDeletePlan": "Do you want to delete",
     "author": "Author",
-    "alreadySubscriber": "You are already subscriber.",
+    "alreadySubscriber": "You already have an active subscription to this plan.",
     "summary": "Summary",
     "quantity": "Quantity"
   },
