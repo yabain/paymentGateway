@@ -97,7 +97,7 @@ export class PackagesComponent implements OnInit, OnDestroy {
     private paymentService: PaymentService,
     private systemService: SystemService,
     private fw: FlutterwaveService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getId();
@@ -131,8 +131,8 @@ export class PackagesComponent implements OnInit, OnDestroy {
   paymentWithTaxesCalculation() {
     return this.aroundValue(this.estimation + this.calculateTaxesAmount());
   }
-  
-  onSelectBank(event){
+
+  onSelectBank(event) {
     this.quantity = Number((event.target as HTMLSelectElement).value);
     this.taxesAmount = this.calculateTaxesAmount();
     this.paymentWithTaxes = this.paymentWithTaxesCalculation();
@@ -453,27 +453,8 @@ export class PackagesComponent implements OnInit, OnDestroy {
 
     this.pollTimer = setInterval(async () => {
       try {
-        this.fw.checkStatus(this.txRef).subscribe((resp: any) => {
-          const status =
-            resp?.data?.data?.status ||
-            resp?.data?.status ||
-            resp?.status ||
-            'pending';
-          if (['successful', 'success'].includes(status.toLowerCase())) {
-            this.transactionSucceded = true;
-            this.transactionFailed = false;
-            clearInterval(this.pollTimer);
-          }
-          if (['cancelled'].includes(status.toLowerCase())) {
-            this.transactionSucceded = false;
-            this.transactionFailed = true;
-            clearInterval(this.pollTimer);
-          }
-          if (['failed'].includes(status.toLowerCase())) {
-            this.transactionSucceded = false;
-            this.transactionFailed = true;
-            // clearInterval(this.pollTimer);
-          }
+        this.paymentService.getPayinByTxRef(this.txRef).subscribe((resp: any) => {
+          this.handlePayinStatus(resp);
         });
       } catch (err) {
         console.warn('polling error', err);
@@ -493,18 +474,44 @@ export class PackagesComponent implements OnInit, OnDestroy {
       const timer = setInterval(async () => {
         if (payWin.closed) {
           clearInterval(timer);
-          this.transactionSucceded = false;
-          this.transactionFailed = false;
           // small check to update the UI (statut PENDING/ABANDONED)
+          this.paymentService.getPayinByTxRef(this.txRef).subscribe((resp: any) => {
+            this.handlePayinStatus(resp);
+          });
           try {
             this.modalClosed = true;
             this.verifyAndClosePayin();
-          } catch {}
+          } catch { }
           // TODO: display a "payment canceled" message or refresh the status
         }
       }, 600);
     } else {
       this.toastService.presentToast('error', 'Error', '');
+    }
+  }
+
+  handlePayinStatus(resp: any) {
+    const status =
+      resp?.data?.data?.status ||
+      resp?.data?.status ||
+      resp?.status ||
+      'pending';
+    console.log('resp: ', resp);
+    console.log('status: ', status);
+    if (['successful', 'success'].includes(status.toLowerCase())) {
+      this.transactionSucceded = true;
+      this.transactionFailed = false;
+      clearInterval(this.pollTimer);
+    }
+    if (['cancelled'].includes(status.toLowerCase())) {
+      this.transactionSucceded = false;
+      this.transactionFailed = true;
+      clearInterval(this.pollTimer);
+    }
+    if (['failed'].includes(status.toLowerCase())) {
+      this.transactionSucceded = false;
+      this.transactionFailed = true;
+      // clearInterval(this.pollTimer);
     }
   }
 
@@ -519,7 +526,7 @@ export class PackagesComponent implements OnInit, OnDestroy {
       return this.toastService.presentToast('error', 'Error', '');
     });
   }
-  
+
   verifyAndClosePayin() {
     this.paymentService
       .verifyAndClosePayin(this.txRef)

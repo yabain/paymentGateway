@@ -149,32 +149,38 @@ export class SendMoneyComponent implements OnInit {
 
     this.pollTimer = setInterval(async () => {
       try {
-        this.fw.checkStatus(this.txRef).subscribe((resp: any) => {
-          const status =
-            resp?.data?.data?.status ||
-            resp?.data?.status ||
-            resp?.status ||
-            'pending';
-          if (['successful', 'success'].includes(status.toLowerCase())) {
-            this.transactionSucceded = true;
-            this.transactionFailed = false;
-            clearInterval(this.pollTimer);
-          }
-          if (['cancelled'].includes(status.toLowerCase())) {
-            this.transactionSucceded = false;
-            this.transactionFailed = true;
-            clearInterval(this.pollTimer);
-          }
-          if (['failed'].includes(status.toLowerCase())) {
-            this.transactionSucceded = false;
-            this.transactionFailed = true;
-            // clearInterval(this.pollTimer);
-          }
+        this.paymentService.getPayinByTxRef(this.txRef).subscribe((resp: any) => {
+          this.handlePayinStatus(resp);
         });
       } catch (err) {
         console.warn('polling error', err);
       }
-    }, 5000);
+    }, 5 * 1000);
+  }
+
+  handlePayinStatus(resp: any) {
+    const status =
+      resp?.data?.data?.status ||
+      resp?.data?.status ||
+      resp?.status ||
+      'pending';
+      console.log('resp: ', resp);
+      console.log('status: ', status);
+    if (['successful', 'success'].includes(status.toLowerCase())) {
+      this.transactionSucceded = true;
+      this.transactionFailed = false;
+      clearInterval(this.pollTimer);
+    }
+    if (['cancelled'].includes(status.toLowerCase())) {
+      this.transactionSucceded = false;
+      this.transactionFailed = true;
+      clearInterval(this.pollTimer);
+    }
+    if (['failed'].includes(status.toLowerCase())) {
+      this.transactionSucceded = false;
+      this.transactionFailed = true;
+      // clearInterval(this.pollTimer);
+    }
   }
 
   getBanksList(countryIso2) {
@@ -518,12 +524,13 @@ export class SendMoneyComponent implements OnInit {
       const timer = setInterval(async () => {
         if (payWin.closed) {
           clearInterval(timer);
-          this.transactionSucceded = false;
-          this.transactionFailed = false;
           // small check to update the UI (statut PENDING/ABANDONED)
+          this.paymentService.getPayinByTxRef(this.txRef).subscribe((resp: any) => {
+            this.handlePayinStatus(resp);
+          });
           try {
             this.modalClosed = true;
-            this.verifyAndClosePayin();
+            // this.verifyAndClosePayin();
           } catch {}
           // TODO: display a "payment canceled" message or refresh the status
         }
@@ -545,29 +552,29 @@ export class SendMoneyComponent implements OnInit {
     });
   }
 
-  verifyAndClosePayin() {
-    this.paymentService
-      .verifyAndClosePayin(this.txRef)
-      .subscribe((res: any) => {
-        if (res) {
-          if (res.status === 'successful' || res.status === 'success') {
-            this.transactionSucceded = true;
-            this.transactionFailed = false;
-          } else if (res.status === 'failed') {
-            this.transactionSucceded = false;
-            this.transactionFailed = true;
-          } else {
-            this.transactionSucceded = false;
-            this.transactionFailed = false;
-          }
-          // this.proceed = false;
-          // this.toastService.presentToast('warning', 'Transaction', res.message);
-          // this.router.navigate(['/tabs']);
-        } else {
-          this.toastService.presentToast('error', 'Error', res.message);
-        }
-      });
-  }
+  // verifyAndClosePayin() {
+  //   this.paymentService
+  //     .verifyAndClosePayin(this.txRef)
+  //     .subscribe((res: any) => {
+  //       if (res) {
+  //         if (res.status === 'successful' || res.status === 'success') {
+  //           this.transactionSucceded = true;
+  //           this.transactionFailed = false;
+  //         } else if (res.status === 'failed') {
+  //           this.transactionSucceded = false;
+  //           this.transactionFailed = true;
+  //         } else {
+  //           this.transactionSucceded = false;
+  //           this.transactionFailed = false;
+  //         }
+  //         // this.proceed = false;
+  //         // this.toastService.presentToast('warning', 'Transaction', res.message);
+  //         // this.router.navigate(['/tabs']);
+  //       } else {
+  //         this.toastService.presentToast('error', 'Error', res.message);
+  //       }
+  //     });
+  // }
 
   getSystemData() {
     this.waitingSystemData = true;

@@ -78,6 +78,14 @@ export class PaymentService {
     );
   }
 
+  getPayinByTxRef(txRef): Observable<any> {
+    return this.apiService.getById(`payin/get-txRef`, txRef).pipe(
+      map((res: any) => {
+        return res;
+      }),
+    );
+  }
+
   getStatistics(): Observable<any | undefined> {
     return this.apiService.getWithToken('transaction/get-statistics').pipe(
       map((data) => {
