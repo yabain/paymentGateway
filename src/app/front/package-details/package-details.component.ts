@@ -21,11 +21,11 @@ interface data {
   value: string;
 }
 @Component({
-  selector: 'app-packages',
-  templateUrl: './packages.component.html',
-  styleUrls: ['./packages.component.scss'],
+  selector: 'app-package-details',
+  templateUrl: './package-details.component.html',
+  styleUrls: ['./package-details.component.scss'],
 })
-export class PackagesComponent implements OnInit, OnDestroy {
+export class PackageDetailsComponent implements OnInit, OnDestroy {
   currentUser!: any;
   statistics!: any;
   title: string = '';

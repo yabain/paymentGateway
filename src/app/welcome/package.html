@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompting with Purpose: Best Practices and Techniques for ChatGPT</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>/* Styles généraux */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .page-container {
+            max-width: 1200px;
+            margin: auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        /* Section Héro (en-tête) */
+        .event-hero {
+            display: flex;
+            flex-wrap: wrap; /* Permet aux éléments de passer à la ligne sur mobile */
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .event-image-container {
+            flex: 1 1 50%; /* Occupe 50% de la largeur sur desktop */
+            position: relative;
+            padding-bottom: 25%; /* Ratio pour l'image */
+            background-color: #3b5998;
+            border-radius: 8px;
+        }
+        
+        .event-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('chemin/vers/votre/image.png') no-repeat center center / cover;
+        }
+        
+        .event-type {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #007bff;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+        }
+        
+        .event-details {
+            flex: 1 1 50%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        /* Boutons et éléments d'interaction */
+        .register-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        /* Corps du contenu et barre latérale */
+        .content-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+        
+        .main-content {
+            flex: 3; /* Le contenu principal prend 3 parts de la largeur */
+            padding-right: 20px;
+        }
+        
+        .sidebar {
+            flex: 1; /* La barre latérale prend 1 part de la largeur */
+            margin-left: 20px;
+            border-left: 1px solid #ddd;
+            padding-left: 20px;
+        }
+        
+        /* Style de la barre latérale */
+        .sidebar-block {
+            margin-bottom: 20px;
+        }
+        
+        .sidebar .label {
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 5px;
+        }
+        
+        .sidebar-block.share-block .share-icons a {
+            color: #333;
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+        
+        /* Responsivité pour mobile */
+        @media (max-width: 768px) {
+            .event-hero, .content-wrapper {
+                flex-direction: column; /* Empile les éléments verticalement */
+            }
+        
+            .event-image-container, .event-details, .main-content, .sidebar {
+                flex-basis: 100%; /* Chaque élément prend toute la largeur */
+                padding: 10px;
+                margin-left: 0;
+                margin-right: 0;
+                border: none;
+            }
+        
+            .event-image-container {
+                padding-bottom: 50%; /* Agrandit l'image sur mobile */
+            }
+        }
+        </style>
+</head>
+<body>
+
+    <main class="page-container">
+        
+        <section class="event-hero">
+            <div class="event-image-container">
+                <div class="event-image"></div>
+                <div class="event-type">
+                    <i class="fas fa-video"></i> LIVESTREAM
+                </div>
+            </div>
+            <div class="event-details">
+                <div class="event-time">8:00 PM - 9:00 PM, Oct 3 WAT</div>
+                <h1>Prompting with Purpose: Best Practices and Techniques for ChatGPT</h1>
+                <div class="event-countdown">
+                    <button class="register-button">Register</button>
+                    <div class="countdown-item">
+                        <div class="value">01</div>
+                        <div class="label">DAYS</div>
+                    </div>
+                    </div>
+            </div>
+        </section>
+
+        <section class="content-wrapper">
+            <div class="main-content">
+                <p>Clear, well-structured prompts are the single biggest lever for extracting reliable, high-quality output from large language models...</p>
+                <p>We will cover the anatomy of an effective prompt, iterative refinement loops, and advanced techniques...</p>
+                <p>This session is best suited for a beginner-intermediate audience.</p>
+            </div>
+
+            <aside class="sidebar">
+                <div class="sidebar-block">
+                    <div class="label">Live in 1 day</div>
+                    <div class="info"><i class="far fa-calendar-alt"></i> October 03, 8:00 PM, WAT</div>
+                    <div class="info"><i class="fas fa-globe"></i> Online</div>
+                    <button class="register-button primary">Register</button>
+                    <button class="add-calendar-button"><i class="fas fa-plus"></i> Add to calendar</button>
+                </div>
+
+                <div class="sidebar-block share-block">
+                    <div class="label">Share</div>
+                    <div class="share-icons">
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fas fa-link"></i></a>
+                    </div>
+                </div>
+            </aside>
+        </section>
+
+    </main>
+
+</body>
+</html>

@@ -24,6 +24,7 @@ import { PaymentComponent } from './payment/payment.component';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ToastService } from './services/toast/toast.service';
 import { DataTablesModule } from 'angular-datatables';
+import { FrontModule } from './front/front.module';
 // import { TransactionDetailsComponent } from './feature-module/common/transaction-details/transaction-details.component';
 // import { JsonViewerComponent } from './feature-module/common/json-viewer/json-viewer.component';
 
@@ -57,7 +58,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFirestoreModule,
-    DataTablesModule
+    DataTablesModule,
+    FrontModule,
   ],
   providers: [ { provide: LOCALE_ID, useValue: "fr-FR" },
     AuthService, UserService, CryptService, ShareLinkService, SystemService, DatePipe,

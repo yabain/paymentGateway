@@ -1,0 +1,172 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    margin: 10px 0
+}
+
+.page-container {
+    max-width: 1200px;
+    margin: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+
+.event-image-container {
+    flex: 1 1 50%; /* Occupe 50% de la largeur sur desktop */
+    position: relative;
+    padding-bottom: 25%; /* Ratio pour l'image */
+    background-color: #3b5998;
+    border-radius: 8px;
+}
+
+.event-time {
+    margin-bottom: 10px;
+}
+.event-type {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #007bff;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.8em;
+}
+
+.event-details {
+    flex: 1 1 50%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Boutons et éléments d'interaction */
+.register-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Corps du contenu et barre latérale */
+.content-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px;
+}
+
+.main-content {
+    flex: 3; /* Le contenu principal prend 3 parts de la largeur */
+    padding-right: 20px;
+}
+
+.sidebar {
+    flex: 1; /* La barre latérale prend 1 part de la largeur */
+    margin-left: 20px;
+    border-left: 1px solid #ddd;
+    padding-left: 20px;
+}
+
+/* Style de la barre latérale */
+.sidebar-block {
+    margin-bottom: 20px;
+}
+
+.sidebar .label {
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.sidebar-block.share-block .share-icons a {
+    color: #333;
+    font-size: 1.5em;
+    margin-right: 10px;
+}
+
+/* Responsivité pour mobile */
+@media (max-width: 768px) {
+    .event-hero, .content-wrapper {
+        flex-direction: column; /* Empile les éléments verticalement */
+    }
+
+    .event-image-container, .event-details, .main-content, .sidebar {
+        flex-basis: 100%; /* Chaque élément prend toute la largeur */
+        padding: 10px;
+        margin-left: 0;
+        margin-right: 0;
+        border: none;
+    }
+
+    .event-image-container {
+        padding-bottom: 50%; /* Agrandit l'image sur mobile */
+    }
+}
+
+.event-countdown {
+    margin-bottom: 15px;
+}
+.countdown-container {
+    display: flex;
+    gap: 5px;
+    border-radius: 10px;
+    background-color: #ffffff;
+}
+
+.countdown-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f1f1f1;
+    padding: 5px 10px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.countdown-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #333;
+}
+
+.countdown-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: #666;
+}
+
+.countdown-separator {
+    font-size: 2rem;
+    color: #ccc;
+    font-weight: 300;
+}
+
+@media (max-width: 600px) {
+    .countdown-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .countdown-item {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .countdown-value {
+        font-size: 1.5rem;
+    }
+
+    .countdown-separator {
+        display: none;
+    }
+}
+

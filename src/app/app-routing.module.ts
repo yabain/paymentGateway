@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { PaymentComponent } from './payment/payment.component';
 import { LoggedInGuard } from './core/guards/loggedIn/logged-in.guard';
+import { PackageDetailsComponent } from './front/package-details/package-details.component';
 
 const routes: Routes = [
   {
@@ -17,6 +18,10 @@ const routes: Routes = [
   {
     path: 'test',
     component: PaymentComponent,
+  },
+  {
+    path: 'package-details',
+    component: PackageDetailsComponent,
   },
   {
     path: 'payment',
