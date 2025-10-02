@@ -625,18 +625,15 @@ export class PackagesComponent implements OnInit, OnDestroy {
       receiverName: this.showName(this.selectedPlan.author),
       receiverEmail: this.selectedPlan.author.email,
       receiverContact: this.selectedPlan.author.phone,
-      receiverAddress: this.selectedPlan.cycle,
-      receiverCountry: this.selectedPlan._id,
+      cycle: this.selectedPlan.cycle,
+      planId: this.selectedPlan._id,
       receiverCurrency: this.selectedPlan.currency,
-      receiverCountryCode: this.quantity.toString(),
+      quantity: this.quantity,
       receiverAmount: this.getCleanAmount(),
 
-      paymentMethod: 'WALLET',
-      receiverMobileAccountNumber: this.selectedPlan.author._id,
-      bankAccountNumber: this.selectedPlan.author._id,
-      bankCode: "WALLET",
+      planAuthor: this.selectedPlan.author._id,
 
-      status: this.paymentService.status.INITIALIZED,
+      status: this.paymentService.status.PAYINPENDING,
       transactionType: this.paymentService.transactionType.SUBSCRIPTION,
     };
   }
