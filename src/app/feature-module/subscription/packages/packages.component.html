@@ -602,13 +602,13 @@
               <img src="../../../assets/img/ressorces/tfailed.gif" alt="" style="max-width: 100px;;"
                 *ngIf="!reOpen && transactionFailed">
               <br>
-              <span style="color: red !important" *ngIf="!reOpen && transactionFailed">Transaction failed</span>
+              <span style="color: red !important" *ngIf="!reOpen && transactionFailed">{{ "payment.transactionFailed" | translate }}</span>
               <p style="margin-top: 50px;" *ngIf="!reOpen && transactionFailed">
                 Click
                 <span class="retry" (click)="openPayin()" *ngIf="!reOpen && transactionFailed">{{
                   "payment.hereToRetry" | translate
                   }}.</span>
-                <span *ngIf="reOpen && transactionFailed">{{ "payment.hereToRetry" | translate }}. Opening...</span>
+                <span *ngIf="reOpen && transactionFailed">{{ "payment.hereToRetry" | translate }}. {{ "payment.opening" | translate }}...</span>
               </p>
 
               <img src="assets/img/ressorces/flutterwave.png" alt="" style="max-width: 100px;;"
@@ -618,14 +618,17 @@
                 <span class="retry" (click)="openPayin()" *ngIf="!reOpen && !transactionSucceded">{{
                   "payment.hereToRetry" | translate
                   }}.</span>
-                <span *ngIf="reOpen && !transactionSucceded">{{ "payment.hereToRetry" | translate }}. Opening...</span>
+                <span *ngIf="reOpen && !transactionSucceded">{{ "payment.hereToRetry" | translate }}. {{ "payment.opening" | translate }}...</span>
               </p>
 
               <img src="assets/img/ressorces/paymentDone.gif" alt="" style="max-width: 250px;;"
                 *ngIf="transactionSucceded && !transactionFailed">
               <p style="margin-top: 50px;" *ngIf="transactionSucceded && !transactionFailed">{{ 'payment.paymentSuccess'
-                | translate }}<br>
-                {{ 'payment.fundsWillReceive' | translate }}</p>
+                | translate }}</p>
+                
+              <p style="margin-top: 50px;" *ngIf="!transactionSucceded && showRetry || !transactionSucceded && transactionSucceded">
+                <br>
+                {{ 'payment.ifPaymentConfirmed' | translate }}</p>
 
               <br>
               <button class="btn btn-primary" *ngIf="showRetry || transactionSucceded"

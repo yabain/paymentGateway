@@ -443,7 +443,10 @@
     "accept": "Accept",
     "transfer": "Transfer",
     "withdrawal": "Withdrawal",
-    "narration": "Narration"
+    "narration": "Narration",
+    "transactionFailed": "Transaction failed",
+    "opening": "Opening",
+    "ifPaymentConfirmed": "If you confirmed the payment on the Flutterwave interface, don't worry because the transaction will continue even if you close this page."
   },
   "whatsapp": {
     "title": "WhatsApp center",

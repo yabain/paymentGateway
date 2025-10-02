@@ -216,9 +216,13 @@ export class PackagesComponent implements OnInit, OnDestroy {
     this.checkingSubscriptionStatus = true;
     this.subscriptionService
       .checkSbscriberStatus(this.selectedPlan._id)
-      .then((data: boolean) => {
+      .then((data: any) => {
         console.log('checkSbscriberStatus: ', data);
-        this.isSubscriber = data;
+        if(data.existingSubscription && data.status){
+          this.isSubscriber = true;
+        } else {
+          this.isSubscriber = false;
+        }
         this.checkingSubscriptionStatus = false;
       });
   }
@@ -459,7 +463,7 @@ export class PackagesComponent implements OnInit, OnDestroy {
       } catch (err) {
         console.warn('polling error', err);
       }
-    }, 5000);
+    }, 5 * 1000);
   }
 
   handleRequest() {
@@ -480,7 +484,7 @@ export class PackagesComponent implements OnInit, OnDestroy {
           });
           try {
             this.modalClosed = true;
-            this.verifyAndClosePayin();
+            // this.verifyAndClosePayin();
           } catch { }
           // TODO: display a "payment canceled" message or refresh the status
         }

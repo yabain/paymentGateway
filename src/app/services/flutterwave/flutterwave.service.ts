@@ -16,12 +16,18 @@ export class FlutterwaveService {
 
   // charge le script Flutterwave dynamiquement
   loadFlutterwaveScript(): Promise<void> {
-    if ((window as any).FlutterwaveCheckout) return Promise.resolve();
+    if (window.FlutterwaveCheckout) return Promise.resolve();
     return new Promise((resolve, reject) => {
       const s = document.createElement('script');
       s.src = 'https://checkout.flutterwave.com/v3.js';
-      s.onload = () => resolve();
-      s.onerror = (e) => reject(e);
+      s.onload = () => {
+        console.log('Flutterwave script loaded');
+        resolve();
+      };
+      s.onerror = (e) => {
+        console.error('Failed to load Flutterwave script', e);
+        reject(new Error('Failed to load Flutterwave script'));
+      };
       document.body.appendChild(s);
     });
   }
