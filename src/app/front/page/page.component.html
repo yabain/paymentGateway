@@ -1,0 +1,53 @@
+<div class="card" style="position: fixed;">
+    <img src="../../../assets/img/ressorces/dk_logo.png" alt="" style="width: 150px; margin: 5px 20px;">
+</div>
+<div class="row" style="padding-top: 50px;">
+    <div class="col-md-8">
+        <app-package-details></app-package-details>
+    </div>
+    <div class="col-md-4">
+        <div class="container" style="padding: 20px;">
+            <!-- Sidebar Hero -->
+            <div class="hero-sidebar">
+                <div class="hero-pattern"></div>
+                <div class="hero-content">
+                    <div class="hero-badge" style="color: #F57C11 !important;">
+                        <i class="fas fa-rocket" style="color: #F57C11 !important;"></i> {{
+                        "payment.instantTransfer" |
+                        translate }}
+                    </div>
+                    <h1 class="hero-title">{{ "payment.hero-title" | translate }}</h1>
+                    <p class="hero-subtitle">{{ "payment.hero-subTitle" | translate }}</p>
+
+                    <ul class="features-list">
+                        <li>
+                            <i class="fas fa-bolt"></i>
+                            <span>{{ "payment.hero-item1" | translate }}</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-lock"></i>
+                            <span>{{ "payment.hero-item2" | translate }}</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-percentage"></i>
+                            <span>{{ "payment.hero-item3" | translate }}</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-headset"></i>
+                            <span>{{ "payment.hero-item4" | translate }}</span>
+                        </li>
+                    </ul>
+
+                    <div class="security-badge">
+                        <p>
+                            <i class="fas fa-shield-alt"></i>
+                            <span>{{ "payment.hero-secureMessage" | translate }}</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-footer></app-footer>

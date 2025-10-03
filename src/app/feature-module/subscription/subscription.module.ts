@@ -9,6 +9,8 @@ import { SubscriptionListComponent } from './subscription-list/subscription-list
 import { TranslateModule } from '@ngx-translate/core';
 import { SubscriptionService } from 'src/app/services/subscription/subscription.service';
 import { ItemComponent } from './packages/item/item.component';
+import { FrontModule } from 'src/app/front/front.module';
+import { DetailsComponent } from './packages/details/details.component';
 
 
 @NgModule({
@@ -17,12 +19,14 @@ import { ItemComponent } from './packages/item/item.component';
     SubscriptionListComponent,
     PackagesComponent,
     ItemComponent,
+    DetailsComponent
   ],
   imports: [
     CommonModule,
     SubscriptionRoutingModule,
     SharedModule,
-    TranslateModule
+    TranslateModule,
+    FrontModule
   ],
   providers: [SubscriptionService]
 })

@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { PaymentComponent } from './payment/payment.component';
 import { LoggedInGuard } from './core/guards/loggedIn/logged-in.guard';
-import { PackageDetailsComponent } from './front/package-details/package-details.component';
+import { PageComponent } from './front/page/page.component';
 
 const routes: Routes = [
   {
@@ -21,7 +21,7 @@ const routes: Routes = [
   },
   {
     path: 'package-details/:id',
-    component: PackageDetailsComponent,
+    component: PageComponent,
   },
   {
     path: 'payment',

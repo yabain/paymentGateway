@@ -29,6 +29,19 @@ h1 {
 .event-time {
     margin-bottom: 10px;
 }
+
+.badge-success {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #039935;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.8em;
+  box-shadow: 3px 3px 3px #03993567;
+}
+
 .badge-warning {
     position: absolute;
     top: 10px;
@@ -39,15 +52,16 @@ h1 {
     border-radius: 5px;
     font-size: 0.8em;
 }
+
 .badge-error {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background-color: #d10303;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 0.8em;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #d10303;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.8em;
 }
 
 .event-details {
@@ -182,111 +196,6 @@ h1 {
 
 
 
-
-
-
-/* Sidebar Hero */
-.hero-sidebar {
-    background: linear-gradient(
-      135deg,
-      #021d66 0%,
-      #021d66 100%
-    );
-    color: white;
-    padding: 30px 50px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-    border-radius: 0 25px 25px 0;
-  }
-  
-  .hero-content {
-    position: relative;
-    z-index: 2;
-  }
-  
-  .hero-badge {
-    background: rgba(255, 255, 255, 0.2);
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 14px;
-    margin-bottom: 20px;
-    display: inline-block;
-    backdrop-filter: blur(10px);
-  }
-  
-  .hero-title {
-    font-size: 25px;
-    font-weight: 700;
-    margin-bottom: 20px;
-    line-height: 1.2;
-    color: #fff;
-  }
-  
-  .hero-subtitle {
-    font-size: 18px;
-    opacity: 0.9;
-    margin-bottom: 20px;
-    line-height: 1.6;
-  }
-  
-  .features-list {
-    list-style: none;
-    margin-bottom: 50px;
-  }
-  
-  .features-list li {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-    font-size: 16px;
-  }
-  
-  .features-list i {
-    background: rgba(255, 255, 255, 0.2);
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 15px;
-    font-size: 18px;
-  }
-  
-  .security-badge {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 20px;
-    border-radius: 5px;
-    // backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #fff;
-  }
-  
-  .security-badge p {
-    display: flex;
-    align-items: center;
-    font-size: 14px;
-  }
-  
-  .security-badge i {
-    margin-right: 10px;
-    font-size: 20px;
-  }
-  
-  .hero-pattern {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    opacity: 0.1;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="white"/></svg>');
-    background-size: 50px 50px;
-  }
-  
   /* Main Content */
   .main-content {
     padding: 50px;

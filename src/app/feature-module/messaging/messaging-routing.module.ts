@@ -3,11 +3,13 @@ import { RouterModule, Routes } from '@angular/router';
 import { WhatsappComponent } from './whatsapp/whatsapp.component';
 import { MessagingComponent } from './messaging.component';
 import { MailComponent } from './mail/mail.component';
+import { AdminGuard } from 'src/app/core/guards/adminer/admin.guard';
 
 const routes: Routes = [
   {
     path: '',
     component: MessagingComponent,
+    canActivate: [AdminGuard],
     children: [
       {
         path: '',

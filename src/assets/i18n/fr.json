@@ -5,7 +5,7 @@
     "en": "Anglais",
     "skip": "Skip",
     "start": "Commencer",
-    "langChanged": "Votre langue a été mis à jour."
+    "langChanged": "Votre langue a été mise à jour."
   },
   "navbar": {
     "home": "Accueil",
@@ -628,7 +628,9 @@
     "quantity": "Quantité",
     "alreadySubscriber": "Déjà abonné",
     "expiredSubscription": "Abonnement expiré",
-    "subscriptionExpireIn": "Votre abonnement expire dans:"
+    "subscriptionExpireIn": "Votre abonnement expire dans:",
+    "subscriptionToday": "Abonnez-vous dès aujourd'hui",
+    "renewSubscription": "Renouvellez votre abonnement"
   },
   "personalizer": {
     "title": "Personnalisateur",

@@ -23,7 +23,7 @@ export class AdminGuard {
     } else {
       const user = JSON.parse(localStorage.getItem(environment.user_data));
       if(user.isAdmin) return true
-      else return true;
+      else return false;
     }
   }
 }

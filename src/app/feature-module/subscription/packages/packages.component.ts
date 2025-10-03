@@ -132,7 +132,7 @@ export class PackagesComponent implements OnInit, OnDestroy {
     return this.aroundValue(this.estimation + this.calculateTaxesAmount());
   }
 
-  onSelectBank(event) {
+  onQuantity(event) {
     this.quantity = Number((event.target as HTMLSelectElement).value);
     this.taxesAmount = this.calculateTaxesAmount();
     this.paymentWithTaxes = this.paymentWithTaxesCalculation();

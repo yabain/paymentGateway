@@ -21,6 +21,7 @@ import { SendMoneyComponent } from './send-money/send-money.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WithdrawalComponent } from './withdrawal/withdrawal.component';
 import { CdkStepperModule } from '@angular/cdk/stepper';
+import { FrontModule } from '../front/front.module';
 
 
 @NgModule({
@@ -48,6 +49,7 @@ import { CdkStepperModule } from '@angular/cdk/stepper';
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
+    FrontModule,
   ],
 })
 export class FeatureModuleModule {}

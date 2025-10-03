@@ -44,6 +44,7 @@ const routes: Routes = [
       },
       {
         path: 'admin-massaging',
+        canActivate: [AdminGuard],
         loadChildren: () =>
           import('./messaging/messaging.module').then(
             (m) => m.MessagingModule,
@@ -53,6 +54,7 @@ const routes: Routes = [
       // --- Admin route ----
       {
         path: 'customer',
+        canActivate: [AdminGuard],
         loadChildren: () =>
           import('./customers/customers.module').then((m) => m.CustomersModule),
       },

@@ -16,6 +16,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PaymentService } from 'src/app/services/payment/payment.service';
 import { FlutterwaveService } from 'src/app/services/flutterwave/flutterwave.service';
 import { SystemService } from 'src/app/services/system/system.service';
+import { StorageService } from 'src/app/services/storage/storage.service';
+import { environment } from 'src/environments/environment';
 
 interface data {
   value: string;
@@ -80,6 +82,16 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
   url: string = "";
 
 
+  // futureDate: Date = new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000);
+  futureDate: Date = new Date();
+  private intervalId: any;
+
+  days: number = 0;
+  months: number = 0; // ⚠️ souvent on calcule en jours/heures/minutes/secondes uniquement
+  hours: number = 0;
+  minutes: number = 0;
+  seconds: number = 0;
+
   openContent() {
     this.toggleData = !this.toggleData;
   }
@@ -95,17 +107,40 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
     private paymentService: PaymentService,
     private systemService: SystemService,
     private fw: FlutterwaveService,
+    private storage: StorageService,
   ) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((datas: any) => {
+      // this.startCountdown(this.futureDate);
       this.scrollToTop();
       this.getId();
       this.transactionRef = this.paymentService.generateId();
-      setTimeout(() => {
-        this.scrollToTop();
-      }, 100);
     });
+  }
+
+  startCountdown(targetDate: Date) {
+    this.updateCountdown(targetDate); // première maj directe
+
+    this.intervalId = setInterval(() => {
+      this.updateCountdown(targetDate);
+    }, 1000);
+  }
+
+  private updateCountdown(targetDate: Date) {
+    const now = new Date().getTime();
+    const distance = targetDate.getTime() - now;
+
+    if (distance <= 0) {
+      this.days = this.hours = this.minutes = this.seconds = 0;
+      clearInterval(this.intervalId);
+      return;
+    }
+
+    this.days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    this.hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    this.minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    this.seconds = Math.floor((distance % (1000 * 60)) / 1000);
   }
 
   getId() {
@@ -120,12 +155,15 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
+  showName(userData) {
+    return this.userService.showName(userData);
+  }
 
-  getPlanDataById(planId) {
+  getPlanDataById(planId: string) {
     this.subscriptionService.getMyPlansData(planId)
       .subscribe((data: any) => {
         console.log('getMyPlansData: ', data);
-        if(!data){
+        if (!data) {
           return this.navigateTo('/')
         }
         this.planData = data;
@@ -137,7 +175,7 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
 
   isAuthor(plan: any, user: any = this.currentUser) {
     // console.log('plan: ', plan)
-    return user._id.toString() === plan.author._id.toString() ? true : false;
+    return user?._id.toString() === plan?.author._id.toString() ? true : false;
   }
 
   subscribe() {
@@ -155,18 +193,22 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
   checkSbscriberStatus(plan) {
     console.log('plan: ', plan);
     this.checkingSubscriptionStatus = true;
-    if(!this.currentUser){
+    if (!this.currentUser) {
       this.isSubscriber = false;
       this.checkingSubscriptionStatus = false;
     }
-    
+
     this.subscriptionService
       .checkSbscriberStatus(this.planData._id)
       .then((data: any) => {
         console.log('checkSbscriberStatus: ', data);
         this.subscriptionStatus = data;
-        if(data.existingSubscription && data.status){
+        if (data.existingSubscription) {
           this.isSubscriber = true;
+          if (data.status) {
+            this.futureDate = new Date(data.endDate);
+            this.startCountdown(this.futureDate);
+          }
         } else {
           this.isSubscriber = false;
         }
@@ -180,13 +222,20 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
       if (!user) return this.watingCurrentUser = false;
       this.currentUser = user;
       this.checkSbscriberStatus(this.planData);
-      if(this.currentUser.admin || this.currentUser._id == this.planData.planAuthor){
+      if (this.currentUser.admin || this.currentUser._id == this.planData.planAuthor) {
         this.planForm(this.planData);
       }
       console.log('current user: ', user);
       this.isAuthor(this.planData);
       if (user.isAdmin) this.isAdmin = true;
       this.currency = this.planData.currency;
+
+
+      if (!this.isDashboardRoute && this.currentUser) {
+        const newUrl = this.url.replace('/package-details', '/subscription/details');
+        this.navigateTo(newUrl);
+      }
+
       return this.watingCurrentUser = true;
     });
   }
@@ -209,7 +258,9 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
   }
 
   refresh() {
-    this.scrollToTop();
+    // this.loadingData = true;
+    this.ngOnInit();
+    this.getPlanDataById(this.idParam);
   }
 
   formatAmount(event: any) {
@@ -497,10 +548,6 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  showName(userData) {
-    return this.userService.showName(userData);
-  }
-
   closeModal(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) {
@@ -537,12 +584,20 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
   deletePlan(planId) {
     this.subscriptionService.deletePlan(planId).then((resp: any) => {
       this.toastService.presentToast('success', 'Done !', '', 5000);
-      this.closeModal('delete_modal');
-      this.refresh();
+      this.navigateTo('/subscription/packages')
     });
   }
 
+  onQuantity(event) {
+    this.quantity = Number((event.target as HTMLSelectElement).value);
+    this.taxesAmount = this.calculateTaxesAmount();
+    this.paymentWithTaxes = this.paymentWithTaxesCalculation();
+  }
+
   navigateTo(route) {
+    if (!this.currentUser && route === '/auth/login') {
+      this.storage.setStorage(environment.memory_link, this.url);
+    }
     this.ngOnDestroy();
     this.router.navigate([route]);
   }
@@ -582,6 +637,9 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
     this.destroy$.next();
     this.destroy$.complete();
     clearInterval(this.pollTimer);

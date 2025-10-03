@@ -43,7 +43,7 @@ export class UserService {
    * @returns Formatted user name or username
    */
   showName(userData: any): string {
-    if (userData.accountType === 'personal'){
+    if (userData?.accountType === 'personal'){
       return `${userData?.firstName} ${userData?.lastName}`
     }
     return userData?.name;

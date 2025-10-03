@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { CustomersComponent } from './customers.component';
 import { CustomerListComponent } from './customers-list/customer-list.component';
 import { CustomerDetailsComponent } from './customer-details/customer-details.component';
+import { AdminGuard } from 'src/app/core/guards/adminer/admin.guard';
 
 const routes: Routes = [
   {
@@ -13,6 +14,7 @@ const routes: Routes = [
   {
     path: '',
     component: CustomersComponent,
+    canActivate: [AdminGuard],
     children: [
       {
         path: 'list',

@@ -628,7 +628,9 @@
     "quantity": "Quantity",
     "alreadySubscriber": "Already subscriber",
     "expiredSubscription": "Subscription expired",
-    "subscriptionExpireIn": "Your subscription expires in:"
+    "subscriptionExpireIn": "Your subscription expires in:",
+    "subscriptionToday": "Subscribe today",
+    "renewSubscription": "Renew your subscription"
   },
   "personalizer": {
     "title": "Customizer",

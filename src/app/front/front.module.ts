@@ -8,6 +8,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { FeatureModuleRoutingModule } from '../feature-module/feature-module-routing.module';
 import { SharedModule } from '../shared/shared.module';
+import { PageComponent } from './page/page.component';
+import { FooterComponent } from './footer/footer.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, '../assets/i18n/', '.json');
@@ -15,9 +17,11 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 @NgModule({
   declarations: [
-    PackageDetailsComponent
+    PackageDetailsComponent,
+    PageComponent,
+    FooterComponent
   ],
-  exports: [PackageDetailsComponent],
+  exports: [PackageDetailsComponent, PageComponent, FooterComponent],
   providers: [],
   imports: [
     CommonModule,

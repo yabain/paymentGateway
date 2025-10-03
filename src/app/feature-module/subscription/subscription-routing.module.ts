@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { SubscriptionComponent } from './subscription.component';
 import { PackagesComponent } from './packages/packages.component';
 import { SubscriptionListComponent } from './subscription-list/subscription-list.component';
+import { DetailsComponent } from './packages/details/details.component';
 
 const routes: Routes = [
   {
@@ -23,6 +24,10 @@ const routes: Routes = [
         component: PackagesComponent,
       },
     ],
+  },
+  {
+    path: 'details/:id',
+    component: DetailsComponent,
   },
   {
     path: '**',
