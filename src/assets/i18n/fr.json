@@ -35,7 +35,10 @@
     "start": "Commencer",
     "reset": "Réinitialiser",
     "add": "Add",
-    "retry": "Réessayer"
+    "retry": "Réessayer",
+    "share": "Partager",
+    "copy": "Copier",
+    "report": "Signaler"
   },
   "auth": {
     "login": "Se connecter",
@@ -620,9 +623,12 @@
     "deletePlan": "Supprimer ce plan",
     "wantDeletePlan": "Êtes-vous certain de vouloir supprimer",
     "author": "Auteur",
-    "alreadySubscriber": "Vous disposez déjà d'un abonnement actif à ce plan.",
+    "alreadySubscriberMsg": "Vous disposez déjà d'un abonnement actif à ce plan.",
     "summary": "Récapitulatif",
-    "quantity": "Quantité"
+    "quantity": "Quantité",
+    "alreadySubscriber": "Déjà abonné",
+    "expiredSubscription": "Abonnement expiré",
+    "subscriptionExpireIn": "Votre abonnement expire dans:"
   },
   "personalizer": {
     "title": "Personnalisateur",

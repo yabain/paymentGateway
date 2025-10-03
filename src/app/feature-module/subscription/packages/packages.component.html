@@ -510,9 +510,10 @@
                             <div class="spinner-border" role="status"></div>
                         </div>
                     </div>
+
                     <div *ngIf="!checkingSubscriptionStatus && isSubscriber" style="text-align: center;">
                         <div class="fee-breakdown">
-                        {{ "subscriptions.alreadySubscriber" | translate }}
+                        {{ "subscriptions.alreadySubscriberMsg" | translate }}
                         </div>
                         <button type="button" class="btn btn-primary btn-lg me-1 mb-2"
                         style="padding: 5px;" (click)="isSubscriber = false">Recharge</button>

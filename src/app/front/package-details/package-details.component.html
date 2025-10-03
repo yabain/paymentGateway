@@ -1,74 +1,194 @@
-<div style="padding: 20px;">
+<div style="padding: 20px;" *ngIf="loadingData">
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex justify-content-center" style=" padding: 50px;">
+                <div class="spinner-border spinner" role="status"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="padding: 20px;" *ngIf="!loadingData">
     <div class="row">
-        <div class="col-md-12">
-            <div class="card  page-tilte">
-                <div class="main-title">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="event-image">
-                                <img src="../../../assets/img/ressorces/package_img.png" alt="">
-                            </div>
-                            <div class="event-type">
-                                <i class="fas fa-video"></i> Subscriber
-                            </div>
-                        </div>
-                        <div class="col-md-8">
-                            <div class="event-details">
-                                Expire dans <br>
-                                <div class="event-countdown">
-                                    <div class="countdown-container">
-                                        <div class="countdown-item">
-                                            <span class="countdown-value" id="days">01</span>
-                                            <span class="countdown-label">DAYS</span>
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card  page-tilte">
+                        <div class="main-title">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="event-image">
+                                        <img [src]="imageUrl" alt="">
+                                    </div>
+                                    <div class="badge-warning"
+                                        *ngIf="subscriptionStatus?.existingSubscription && subscriptionStatus?.status">
+                                        <i class="feather icon-check-circle"></i> {{ "subscriptions.alreadySubscriber" |
+                                        translate }}
+                                    </div>
+                                    <div class="badge-error"
+                                        *ngIf="subscriptionStatus?.existingSubscription && !subscriptionStatus?.status">
+                                        <i class="feather icon-triangle"></i> {{ "subscriptions.expiredSubscription" |
+                                        translate }}
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="event-details">
+                                        {{ "subscriptions.subscriptionExpireIn" | translate }} <br>
+                                        <div class="event-countdown">
+                                            <div class="countdown-container">
+                                                <div class="countdown-item">
+                                                    <span class="countdown-value" id="days">01</span>
+                                                    <span class="countdown-label">{{ "subscriptions.day" | translate
+                                                        }}s</span>
+                                                </div>
+                                                <span class="countdown-separator">:</span>
+                                                <div class="countdown-item">
+                                                    <span class="countdown-value" id="hrs">02</span>
+                                                    <span class="countdown-label">HRS</span>
+                                                </div>
+                                                <span class="countdown-separator">:</span>
+                                                <div class="countdown-item">
+                                                    <span class="countdown-value" id="mins">41</span>
+                                                    <span class="countdown-label">MINS</span>
+                                                </div>
+                                                <span class="countdown-separator">:</span>
+                                                <div class="countdown-item">
+                                                    <span class="countdown-value" id="secs">42</span>
+                                                    <span class="countdown-label">SECS</span>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <span class="countdown-separator">:</span>
-                                        <div class="countdown-item">
-                                            <span class="countdown-value" id="hrs">02</span>
-                                            <span class="countdown-label">HRS</span>
+                                        <h1>{{ planData?.title }}</h1>
+                                        <div class="event-time" style="margin-bottom: 10px;">{{ planData?.subTitle }}
                                         </div>
-                                        <span class="countdown-separator">:</span>
-                                        <div class="countdown-item">
-                                            <span class="countdown-value" id="mins">41</span>
-                                            <span class="countdown-label">MINS</span>
-                                        </div>
-                                        <span class="countdown-separator">:</span>
-                                        <div class="countdown-item">
-                                            <span class="countdown-value" id="secs">42</span>
-                                            <span class="countdown-label">SECS</span>
+                                        <h4 style="margin-bottom: 10px;">{{ planData?.price }} {{ planData?.currency}} /
+                                            <span *ngIf="planData?.cycle === 'dayly'">{{ "subscriptions.day" |
+                                                translate }}</span>
+                                            <span *ngIf="planData?.cycle === 'weekly'">{{ "subscriptions.week" |
+                                                translate }}</span>
+                                            <span *ngIf="planData?.cycle === 'monthly'">{{ "subscriptions.month" |
+                                                translate }}</span>
+                                            <span *ngIf="planData?.cycle === 'yearly'">{{ "subscriptions.year" |
+                                                translate }}</span>
+                                        </h4>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <button class="btn btn-rounded btn-primary me-1">
+                                                    {{ "subscriptions.subscribe" | translate }}</button>
+                                            </div>
+                                            <div class="col-md-8" style="text-align: right !important;">
+                                                <button class="btn btn-rounded btn-outline-secondary me-1">
+                                                    <i class="feather icon-share-2"></i>
+                                                    {{ "action.share" | translate }}</button>
+                                                <button type="button"
+                                                    class="btn btn-rounded btn-outline-secondary me-1">
+                                                    <i class="feather icon-alert-circle"></i></button>
+                                                <button class="btn btn-rounded btn-outline-secondary me-1">
+                                                    <i class="feather icon-edit"></i></button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <h1>Loyer</h1>
-                                <div class="event-time">Here the subtitle</div>
-                                <button class="register-button">Register</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3>{{ planData?.title }} </h3>
+                            <h6 style="margin-bottom: 10px; color: #00000050;">{{ planData?.subTitle }} </h6>
+                            <a *ngFor="let option of optionsData">
+                                <button *ngIf="option.isActive" class="btn btn-block btn-outline-dark"
+                                    style="margin-right: 10px;"><i class="fa-solid fa-circle-check"></i> {{ option.title
+                                    }}</button>
+                                <button *ngIf="!option.isActive" class="btn btn-block btn-outline-dark"><i
+                                        class="fa-solid fa-circle-check"></i> {{ option.title
+                                    }}</button>
+                            </a>
+                            <br><br>
+                            <!-- <ul>
+                                <li *ngFor="let option of optionsData" style="margin-bottom: 5px;">
+                                    <span *ngIf="option.isActive"><i class="fa-solid fa-circle-check"></i> {{ option.title
+                                        }}</span>
+                                    <span *ngIf="!option.isActive"><i class="feather icon-x-circle"></i><s> {{ option.title
+                                            }}</s></span>
+                                </li>
+                            </ul> -->
 
+                            {{ planData.description }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4" style="text-align: left !important;">
+                    <div class="card customer-details-group">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-12">
+                                    <div class="customer-details">
+                                        <div class="d-flex align-items-center">
+                                            <span class="customer-widget-img d-inline-flex">
+                                                <img class="rounded-circle" [src]="planData ? planData?.author.pictureUrl : 'assets/img/new/user.png'" alt="image">
+                                                <span class="animate-circle"></span>
+                                            </span>
+                                            <div class="customer-details-cont">
+                                                <h6>{{planData?.author.firstName}}
+                                                </h6>
+                                                <p style="font-size: 0.5rem;">
+                                                    <b>Email: </b>{{planData?.author.email}} <br>
+                                                    <b>Phone: </b>{{planData?.author.phone}}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="card-body">
-            <div class="d-flex justify-content-center" style="margin-top: 10 vh">
-                <div class="spinner-border spinner" role="status"></div>
-            </div>
-        </div>
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-body">
-                    Ici la description du plan
-                </div>
-            </div>
-        </div>
         <div class="col-md-4">
-            <div class="card">
-                <div class="card-body sold">
-                    <!-- ========= Colonne de résumé ========= -->
-                    <aside class="card summary" aria-live="polite">
-                        ici les détails du proprio
-                    </aside>
+            <div class="container">
+                <!-- Sidebar Hero -->
+                <div class="hero-sidebar">
+                    <div class="hero-pattern"></div>
+                    <div class="hero-content">
+                        <div class="hero-badge" style="color: #F57C11 !important;">
+                            <i class="fas fa-rocket" style="color: #F57C11 !important;"></i> {{
+                            "payment.instantTransfer" |
+                            translate }}
+                        </div>
+                        <h1 class="hero-title">{{ "payment.hero-title" | translate }}</h1>
+                        <p class="hero-subtitle">{{ "payment.hero-subTitle" | translate }}</p>
+
+                        <ul class="features-list">
+                            <li>
+                                <i class="fas fa-bolt"></i>
+                                <span>{{ "payment.hero-item1" | translate }}</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-lock"></i>
+                                <span>{{ "payment.hero-item2" | translate }}</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-percentage"></i>
+                                <span>{{ "payment.hero-item3" | translate }}</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-headset"></i>
+                                <span>{{ "payment.hero-item4" | translate }}</span>
+                            </li>
+                        </ul>
+
+                        <div class="security-badge">
+                            <p>
+                                <i class="fas fa-shield-alt"></i>
+                                <span>{{ "payment.hero-secureMessage" | translate }}</span>
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

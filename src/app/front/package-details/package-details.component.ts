@@ -26,11 +26,15 @@ interface data {
   styleUrls: ['./package-details.component.scss'],
 })
 export class PackageDetailsComponent implements OnInit, OnDestroy {
+  loadingData: boolean = true;
+  subscriptionStatus: any;
   currentUser!: any;
-  statistics!: any;
+  isDashboardRoute: boolean = false;
+
+  // statistics!: any;
   title: string = '';
   subTitle: string = '';
-  imageUrl: string = 'assets/img/icons/price-01.svg';
+  imageUrl: string = 'assets/img/ressorces/package_img.png';
   cycle: string = 'monthly'; // yearly | monthly | weekly | dayly
   description: string = '';
   isActive: boolean = true;
@@ -38,20 +42,12 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
   currency: string = '';
   subscriberNumber: number = 0;
   planData!: any;
-  gettingStatistics: boolean = true;
   options: any;
   form: FormGroup;
   watingCreation: boolean = false;
-  watingPlansList: boolean = true;
-  plansList: any;
-  plansListBackup: any;
-  selectedPlan: any;
   wattingStatus: boolean = false;
   isAdmin: boolean = false;
-  isAdminRoute: boolean = false;
-  activeSearch: boolean = false;
   optionsData: any = [];
-  searchString: string = '';
   checkingSubscriptionStatus: boolean = true;
   isSubscriber: boolean = true;
   proceed: boolean = false;
@@ -80,6 +76,8 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
   reOpen: boolean = false;
   transactionSucceded: boolean = false;
   transactionFailed: boolean = false;
+  watingCurrentUser: boolean = false;
+  url: string = "";
 
 
   openContent() {
@@ -100,28 +98,97 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.getId();
-    this.scrollToTop();
-    this.getCurrentUser();
-    this.planForm();
-    this.getSystemData();
-    this.transactionRef = this.paymentService.generateId();
+    this.route.paramMap.subscribe((datas: any) => {
+      this.scrollToTop();
+      this.getId();
+      this.transactionRef = this.paymentService.generateId();
+      setTimeout(() => {
+        this.scrollToTop();
+      }, 100);
+    });
   }
 
   getId() {
-    const url = this.location.path();
-    this.isAdminRoute = url.includes('admin-subscription');
+    this.url = this.location.path();
+    this.isDashboardRoute = this.url.includes('subscription');
 
     const idParam = this.route.snapshot.paramMap.get('id');
+    this.getPlanDataById(idParam);
 
     if (idParam && idParam !== 'null' && idParam !== 'undefined') {
       this.idParam = idParam;
     }
   }
 
-  calculateTaxesAmount(): number {
-    this.estimation = this.quantity * this.selectedPlan.price;
-    return this.aroundValue(this.estimation * (this.invoiceTaxes / 100));
+
+  getPlanDataById(planId) {
+    this.subscriptionService.getMyPlansData(planId)
+      .subscribe((data: any) => {
+        console.log('getMyPlansData: ', data);
+        if(!data){
+          return this.navigateTo('/')
+        }
+        this.planData = data;
+        this.optionsData = data.options;
+        this.getCurrentUser()
+        this.loadingData = false;
+      });
+  }
+
+  isAuthor(plan: any, user: any = this.currentUser) {
+    // console.log('plan: ', plan)
+    return user._id.toString() === plan.author._id.toString() ? true : false;
+  }
+
+  subscribe() {
+    if (!this.planData) return;
+    this.proceed = true;
+    console.log('proceed: ', this.proceed);
+    this.setTransactionData();
+    console.log('transactionData: ', this.transactionData);
+    setTimeout(() => {
+      this.goToProceed = true;
+      this.proceedSubscribe();
+    }, 2000);
+  }
+
+  checkSbscriberStatus(plan) {
+    console.log('plan: ', plan);
+    this.checkingSubscriptionStatus = true;
+    if(!this.currentUser){
+      this.isSubscriber = false;
+      this.checkingSubscriptionStatus = false;
+    }
+    
+    this.subscriptionService
+      .checkSbscriberStatus(this.planData._id)
+      .then((data: any) => {
+        console.log('checkSbscriberStatus: ', data);
+        this.subscriptionStatus = data;
+        if(data.existingSubscription && data.status){
+          this.isSubscriber = true;
+        } else {
+          this.isSubscriber = false;
+        }
+        this.checkingSubscriptionStatus = false;
+      });
+  }
+
+  getCurrentUser() {
+    this.watingCurrentUser = true;
+    this.userService.getCurrentUser().then((user: any) => {
+      if (!user) return this.watingCurrentUser = false;
+      this.currentUser = user;
+      this.checkSbscriberStatus(this.planData);
+      if(this.currentUser.admin || this.currentUser._id == this.planData.planAuthor){
+        this.planForm(this.planData);
+      }
+      console.log('current user: ', user);
+      this.isAuthor(this.planData);
+      if (user.isAdmin) this.isAdmin = true;
+      this.currency = this.planData.currency;
+      return this.watingCurrentUser = true;
+    });
   }
 
   aroundValue(val) {
@@ -132,145 +199,17 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
     return this.aroundValue(this.estimation + this.calculateTaxesAmount());
   }
 
-  onSelectBank(event) {
-    this.quantity = Number((event.target as HTMLSelectElement).value);
-    this.taxesAmount = this.calculateTaxesAmount();
-    this.paymentWithTaxes = this.paymentWithTaxesCalculation();
-  }
-
-  isAuthor(plan: any, user: any = this.currentUser) {
-    // console.log('plan: ', plan)
-    return user._id.toString() === plan.author._id.toString() ? true : false;
-  }
-
-  selectPlan(plan: any) {
-    console.log('selected plan: ', plan);
-    this.selectedPlan = plan;
-    this.quantity = 1;
-    this.optionsData = plan ? plan.options : [];
-    this.estimation = this.selectedPlan.price;
-    this.taxesAmount = this.calculateTaxesAmount();
-    this.paymentWithTaxes = this.paymentWithTaxesCalculation();
-    // console.log('options: ', plan)
-  }
-
-  subscribe() {
-    if (!this.selectedPlan) return;
-    this.proceed = true;
-    console.log('proceed: ', this.proceed);
-    this.setTransactionData();
-    console.log('transactionData: ', this.transactionData);
-    setTimeout(() => {
-      this.goToProceed = true;
-      this.proceedSubscribe();
-    }, 2000);
-
-  }
-
-  public searchData(value: string): void {
-    if (value) {
-      value = value.trim().toLowerCase();
-      this.plansList = this.plansListBackup.filter(
-        (plan: any) =>
-          plan.title.toLowerCase().includes(value) ||
-          plan.subTitle.toLowerCase().includes(value),
-      );
-    } else return (this.plansList = this.plansListBackup);
-  }
-
-  filterByPrice(value: number) {
-    if (value) {
-      this.plansList = this.plansListBackup.filter((plan: any) =>
-        plan.price.toString().toLowerCase().includes(value),
-      );
-    } else return (this.plansList = this.plansListBackup);
-  }
-
-  public filterByPeriod(value: string): void {
-    if (value) {
-      value = value.trim().toLowerCase();
-      this.plansList = this.plansListBackup.filter((plan: any) =>
-        plan.cycle.toLowerCase().includes(value),
-      );
-    } else return (this.plansList = this.plansListBackup);
-  }
-
-  getMyStat() {
-    this.gettingStatistics = true;
-    if (this.isAdmin) {
-      this.subscriptionService.getPlanStatistics().subscribe((data: any) => {
-        this.statistics = data;
-        this.gettingStatistics = false;
-      });
-    } else {
-      this.subscriptionService.getMyPlanStatistics().subscribe((data: any) => {
-        this.statistics = data;
-        this.gettingStatistics = false;
-      });
-    }
-  }
-
-  checkSbscriberStatus(plan) {
-    this.selectPlan(plan);
-    console.log('plan: ', plan);
-    this.checkingSubscriptionStatus = true;
-    this.subscriptionService
-      .checkSbscriberStatus(this.selectedPlan._id)
-      .then((data: any) => {
-        console.log('checkSbscriberStatus: ', data);
-        if(data.existingSubscription && data.status){
-          this.isSubscriber = true;
-        } else {
-          this.isSubscriber = false;
-        }
-        this.checkingSubscriptionStatus = false;
-      });
-  }
-
   selectImg(imageUrl) {
     this.imageUrl = imageUrl;
   }
 
-  toggleSearch() {
-    this.activeSearch = !this.activeSearch;
-    this.plansList = this.plansListBackup;
-  }
-
-  getMyPlansList() {
-    this.watingPlansList = true;
-    if (this.isAdmin) {
-      this.subscriptionService.getAllPlansList().subscribe((data: any) => {
-        this.watingPlansList = false;
-        this.plansList = data;
-        this.plansListBackup = data;
-        // console.log('plan list: ', data);
-      });
-    } else {
-      this.subscriptionService
-        .getMyPlansList(this.currentUser._id)
-        .subscribe((data: any) => {
-          this.watingPlansList = false;
-          this.plansList = data;
-          // console.log('plan list: ', data);
-        });
-    }
+  calculateTaxesAmount(): number {
+    this.estimation = this.quantity * this.planData.price;
+    return this.aroundValue(this.estimation * (this.invoiceTaxes / 100));
   }
 
   refresh() {
-    this.getMyStat();
-    this.getMyPlansList();
     this.scrollToTop();
-  }
-
-  getCurrentUser() {
-    this.userService.getCurrentUser().then((user: any) => {
-      if (!user) return console.log('No user');
-      this.currentUser = user;
-      // console.log('current user: ', user)
-      if (this.isAdminRoute && user.isAdmin) this.isAdmin = true;
-      this.currency = user.countryId.currency;
-      return this.refresh();
-    });
   }
 
   formatAmount(event: any) {
@@ -288,22 +227,22 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
     return parseFloat(cleanValue) || 0;
   }
 
-  planForm() {
+  planForm(data?) {
     this.form = new FormGroup({
-      title: new FormControl(this.title, {
+      title: new FormControl(data?.title || this.title, {
         validators: [Validators.required, Validators.minLength(3)],
       }),
-      imageUrl: new FormControl(this.imageUrl),
-      isActive: new FormControl(true),
-      currency: new FormControl(this.currentUser?.countryId.currency),
+      imageUrl: new FormControl(data?.imageUrl || this.imageUrl),
+      isActive: new FormControl(data?.isActive || true),
+      currency: new FormControl(data?.currency || ''),
       subscriberNumber: new FormControl(0),
-      subTitle: new FormControl('', {
+      subTitle: new FormControl(data?.subTitle || '', {
         validators: [Validators.required, Validators.minLength(3)],
       }),
-      description: new FormControl('', { validators: [Validators.required] }),
-      cycle: new FormControl(this.cycle, { validators: [Validators.required] }),
-      price: new FormControl(this.price, { validators: [Validators.required] }),
-      options: this.fb.array([]),
+      description: new FormControl(data?.description || '', { validators: [Validators.required] }),
+      cycle: new FormControl(data?.cycle || this.cycle, { validators: [Validators.required] }),
+      price: new FormControl(data?.price || this.price, { validators: [Validators.required] }),
+      options: this.fb.array(data?.options || []),
     });
 
     this.addOptions();
@@ -358,7 +297,7 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
     const raw = this.form.getRawValue();
 
     raw.price = +String(raw.price ?? '').replace(/\s/g, '') || 0;
-    raw.currency = this.currentUser.countryId.currency || 'XAF';
+    raw.currency = this.planData.currency || 'XAF';
 
     const formData = new FormData();
     Object.entries(raw).forEach(([key, value]) => {
@@ -613,29 +552,29 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
       transactionRef: this.transactionRef,
       estimation: this.estimation,
       invoiceTaxes: this.invoiceTaxes,
-      taxesAmount: this.calculateTaxesAmount(),
+      taxesAmount: this.planData.taxesAmount,
       paymentWithTaxes: this.paymentWithTaxesCalculation(),
 
       senderId: this.currentUser._id,
-      senderName: this.showName(this.currentUser),
+      senderName: this.planData.currency,
       senderEmail: this.currentUser.email,
       senderContact: this.currentUser.phone,
       senderCountry: this.currentUser.countryId.name,
-      senderCurrency: this.selectedPlan.currency,
+      senderCurrency: this.planData.currency,
 
       raisonForTransfer: this.paymentService.transactionType.SUBSCRIPTION,
       userId: this.currentUser._id,
 
-      receiverName: this.showName(this.selectedPlan.author),
-      receiverEmail: this.selectedPlan.author.email,
-      receiverContact: this.selectedPlan.author.phone,
-      cycle: this.selectedPlan.cycle,
-      planId: this.selectedPlan._id,
-      receiverCurrency: this.selectedPlan.currency,
+      receiverName: this.showName(this.planData.author),
+      receiverEmail: this.planData.author.email,
+      receiverContact: this.planData.author.phone,
+      cycle: this.planData.cycle,
+      planId: this.planData._id,
+      receiverCurrency: this.planData.currency,
       quantity: this.quantity,
       receiverAmount: this.getCleanAmount(),
 
-      planAuthor: this.selectedPlan.author._id,
+      planAuthor: this.planData.author._id,
 
       status: this.paymentService.status.PAYINPENDING,
       transactionType: this.paymentService.transactionType.SUBSCRIPTION,
@@ -656,9 +595,8 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
     this.transactionData = null;
     this.txRef = '';
     this.redirect_url = '';
-    this.selectedPlan = null;
+    this.planData = null;
     this.optionsData = [];
-    this.searchString = '';
     this.checkingSubscriptionStatus = true;
   }
 }

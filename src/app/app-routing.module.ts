@@ -20,7 +20,7 @@ const routes: Routes = [
     component: PaymentComponent,
   },
   {
-    path: 'package-details',
+    path: 'package-details/:id',
     component: PackageDetailsComponent,
   },
   {

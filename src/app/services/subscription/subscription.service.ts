@@ -71,6 +71,18 @@ export class SubscriptionService {
       }),
     );
   }
+
+  getMyPlansData(planId): Observable<any | undefined> {
+    return this.apiService.getById('plans/get-data', planId).pipe(
+      map((data) => {
+        return data;
+      }),
+      catchError((error) => {
+        console.error('Error fetching plan statistics:', error);
+        return of(false);
+      }),
+    );
+  }
   
   getAllPlansList(): Observable<any | undefined> {
     return this.apiService.progressiveGetWithoutId('plans').pipe(

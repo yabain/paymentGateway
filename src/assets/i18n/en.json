@@ -35,7 +35,10 @@
     "start": "Start",
     "reset": "Reset",
     "add": "Add",
-    "retry": "Retry"
+    "retry": "Retry",
+    "share": "Share",
+    "copy": "Copy",
+    "report": "Report"
   },
   "auth": {
     "login": "Log in",
@@ -620,9 +623,12 @@
     "deletePlan": "Delete this plan",
     "wantDeletePlan": "Do you want to delete",
     "author": "Author",
-    "alreadySubscriber": "You already have an active subscription to this plan.",
+    "alreadySubscriberMsg": "You already have an active subscription to this plan.",
     "summary": "Summary",
-    "quantity": "Quantity"
+    "quantity": "Quantity",
+    "alreadySubscriber": "Already subscriber",
+    "expiredSubscription": "Subscription expired",
+    "subscriptionExpireIn": "Your subscription expires in:"
   },
   "personalizer": {
     "title": "Customizer",
