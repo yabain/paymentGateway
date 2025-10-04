@@ -252,6 +252,7 @@ export class WithdrawalComponent implements OnInit {
       this.waitingExchangeRate
     )
       return false;
+    if(this.balance < this.estimation) return false
     return true;
   }
 

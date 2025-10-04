@@ -72,6 +72,17 @@ export class SubscriptionService {
     );
   }
 
+  getSubscribersList(planId): Observable<any> {
+    return this.apiService.getById('subscription/get-subscribers', planId).pipe(
+      map((data) => {
+        return data;
+      }),
+      catchError((error) => {
+        console.error('Error fetching plan statistics:', error);
+        return of([]);
+      }),
+    );}
+
   getMyPlansData(planId): Observable<any | undefined> {
     return this.apiService.getById('plans/get-data', planId).pipe(
       map((data) => {

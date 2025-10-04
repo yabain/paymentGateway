@@ -571,3 +571,46 @@ h1 {
     }
   }
   
+  .edit-delete-content {
+    margin-left: -5px;
+}
+.option-space {
+    border: 1px solid #021b672c;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    padding: 15px;
+}
+
+  .main-title {
+    // background-image: linear-gradient(to right, #003087, #fff);
+    // background: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    
+  }
+  
+  .wating-msg {
+    text-align: center;
+    padding-top: 150px;
+    margin-bottom: 150px;
+  }
+  
+  /* Dans le fichier SCSS de votre composant */
+  .no-spinners {
+    --webkit-appearance: none;
+    margin: 0;
+  
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  
+    &[type="number"] {
+      -moz-appearance: textfield;
+    }
+  }
+  
+  .non-clickable-steps .mat-step-header {
+    pointer-events: none;
+  }

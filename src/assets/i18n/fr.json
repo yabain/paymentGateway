@@ -486,7 +486,7 @@
     "email": "Email",
     "password": "Mot de passe",
     "secure": "Sécurité",
-    "enabled": "Activée",
+    "enabled": "Actif",
     "disabled": "Désactivé",
     "encription": "Criptage",
     "resetSettings": "Réinitialiser",
@@ -558,7 +558,7 @@
     "addUser": "Ajouter un utilisateur",
     "personal": "Personnel",
     "organisation": "Organisation",
-    "enabled": "Activé",
+    "enabled": "Actif",
     "disabled": "Désactivé",
     "creationDate": "Date de création",
     "disable": "Désactiver",
@@ -630,7 +630,8 @@
     "expiredSubscription": "Abonnement expiré",
     "subscriptionExpireIn": "Votre abonnement expire dans:",
     "subscriptionToday": "Abonnez-vous dès aujourd'hui",
-    "renewSubscription": "Renouvellez votre abonnement"
+    "renewSubscription": "Renouvellez votre abonnement",
+    "subscriberList": "Liste des abonnés"
   },
   "personalizer": {
     "title": "Personnalisateur",

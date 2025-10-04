@@ -79,8 +79,8 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
   transactionSucceded: boolean = false;
   transactionFailed: boolean = false;
   watingCurrentUser: boolean = false;
-  url: string = "";
-
+  url: string = '';
+  copied = false;
 
   // futureDate: Date = new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000);
   futureDate: Date = new Date();
@@ -91,6 +91,8 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
   hours: number = 0;
   minutes: number = 0;
   seconds: number = 0;
+  gettingSubscribers: boolean = true;
+  subscribers: any[] = [];
 
   openContent() {
     this.toggleData = !this.toggleData;
@@ -108,7 +110,7 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
     private systemService: SystemService,
     private fw: FlutterwaveService,
     private storage: StorageService,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((datas: any) => {
@@ -138,9 +140,26 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
     }
 
     this.days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    this.hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    this.hours = Math.floor(
+      (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+    );
     this.minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
     this.seconds = Math.floor((distance % (1000 * 60)) / 1000);
+  }
+
+  getSubscribersList() {
+    this.gettingSubscribers = true;
+    this.subscriptionService
+      .getSubscribersList(this.planData._id)
+      .subscribe((data: any) => {
+        console.log('getSubscribersList: ', data);
+        this.gettingSubscribers = false;
+        this.subscribers = data;
+      });
+  }
+
+  public getDate(date: string) {
+    return date.split('T')[0];
   }
 
   getId() {
@@ -160,17 +179,20 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
   }
 
   getPlanDataById(planId: string) {
-    this.subscriptionService.getMyPlansData(planId)
-      .subscribe((data: any) => {
-        console.log('getMyPlansData: ', data);
-        if (!data) {
-          return this.navigateTo('/')
-        }
-        this.planData = data;
-        this.optionsData = data.options;
-        this.getCurrentUser()
-        this.loadingData = false;
-      });
+    this.subscriptionService.getMyPlansData(planId).subscribe((data: any) => {
+      console.log('getMyPlansData: ', data);
+      if (!data) {
+        return this.navigateTo('/');
+      }
+      this.planData = data;
+      this.optionsData = data.options;
+      this.getCurrentUser();
+      this.loadingData = false;
+
+      this.quantity = 1;
+      this.taxesAmount = this.calculateTaxesAmount();
+      this.paymentWithTaxes = this.paymentWithTaxesCalculation();
+    });
   }
 
   isAuthor(plan: any, user: any = this.currentUser) {
@@ -219,24 +241,32 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
   getCurrentUser() {
     this.watingCurrentUser = true;
     this.userService.getCurrentUser().then((user: any) => {
-      if (!user) return this.watingCurrentUser = false;
+      if (!user) return (this.watingCurrentUser = false);
       this.currentUser = user;
       this.checkSbscriberStatus(this.planData);
-      if (this.currentUser.admin || this.currentUser._id == this.planData.planAuthor) {
+      if (
+        this.currentUser.admin ||
+        this.currentUser._id == this.planData.planAuthor
+      ) {
         this.planForm(this.planData);
       }
       console.log('current user: ', user);
       this.isAuthor(this.planData);
       if (user.isAdmin) this.isAdmin = true;
       this.currency = this.planData.currency;
-
+      if (this.isAuthor(this.planData) || this.isAdmin) {
+        this.getSubscribersList();
+      }
 
       if (!this.isDashboardRoute && this.currentUser) {
-        const newUrl = this.url.replace('/package-details', '/subscription/details');
+        const newUrl = this.url.replace(
+          '/package-details',
+          '/subscription/details',
+        );
         this.navigateTo(newUrl);
       }
 
-      return this.watingCurrentUser = true;
+      return (this.watingCurrentUser = true);
     });
   }
 
@@ -290,9 +320,15 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
       subTitle: new FormControl(data?.subTitle || '', {
         validators: [Validators.required, Validators.minLength(3)],
       }),
-      description: new FormControl(data?.description || '', { validators: [Validators.required] }),
-      cycle: new FormControl(data?.cycle || this.cycle, { validators: [Validators.required] }),
-      price: new FormControl(data?.price || this.price, { validators: [Validators.required] }),
+      description: new FormControl(data?.description || '', {
+        validators: [Validators.required],
+      }),
+      cycle: new FormControl(data?.cycle || this.cycle, {
+        validators: [Validators.required],
+      }),
+      price: new FormControl(data?.price || this.price, {
+        validators: [Validators.required],
+      }),
       options: this.fb.array(data?.options || []),
     });
 
@@ -447,9 +483,11 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
 
     this.pollTimer = setInterval(async () => {
       try {
-        this.paymentService.getPayinByTxRef(this.txRef).subscribe((resp: any) => {
-          this.handlePayinStatus(resp);
-        });
+        this.paymentService
+          .getPayinByTxRef(this.txRef)
+          .subscribe((resp: any) => {
+            this.handlePayinStatus(resp);
+          });
       } catch (err) {
         console.warn('polling error', err);
       }
@@ -469,13 +507,15 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
         if (payWin.closed) {
           clearInterval(timer);
           // small check to update the UI (statut PENDING/ABANDONED)
-          this.paymentService.getPayinByTxRef(this.txRef).subscribe((resp: any) => {
-            this.handlePayinStatus(resp);
-          });
+          this.paymentService
+            .getPayinByTxRef(this.txRef)
+            .subscribe((resp: any) => {
+              this.handlePayinStatus(resp);
+            });
           try {
             this.modalClosed = true;
             // this.verifyAndClosePayin();
-          } catch { }
+          } catch {}
           // TODO: display a "payment canceled" message or refresh the status
         }
       }, 600);
@@ -496,6 +536,7 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
       this.transactionSucceded = true;
       this.transactionFailed = false;
       clearInterval(this.pollTimer);
+      this.refresh();
     }
     if (['cancelled'].includes(status.toLowerCase())) {
       this.transactionSucceded = false;
@@ -584,7 +625,7 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
   deletePlan(planId) {
     this.subscriptionService.deletePlan(planId).then((resp: any) => {
       this.toastService.presentToast('success', 'Done !', '', 5000);
-      this.navigateTo('/subscription/packages')
+      this.navigateTo('/subscription/packages');
     });
   }
 
@@ -636,6 +677,25 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
     };
   }
 
+
+  copyUrl() {
+    let url = window.location.href; // Récupère l'URL actuelle
+    url = this.url.replace(
+      '/subscription/details',
+      '/package-details',
+    );
+    url = environment.frontUrl + url
+    navigator.clipboard.writeText(url).then(() => {
+      this.copied = true;
+
+      // Réinitialise le message après 2 secondes
+      this.toastService.presentToast('success', 'Copied !', '', 5000);
+      setTimeout(() => this.copied = false, 2000);
+    }).catch(err => {
+      console.error('Impossible de copier : ', err);
+    });
+  }
+
   ngOnDestroy(): void {
     if (this.intervalId) {
       clearInterval(this.intervalId);
@@ -650,11 +710,11 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
     this.transactionSucceded = false;
     this.transactionFailed = false;
     this.modalClosed = false;
-    this.transactionData = null;
-    this.txRef = '';
-    this.redirect_url = '';
-    this.planData = null;
-    this.optionsData = [];
-    this.checkingSubscriptionStatus = true;
+    // this.transactionData = null;
+    // this.txRef = '';
+    // this.redirect_url = '';
+    // this.planData = null;
+    // this.optionsData = [];
+    // this.checkingSubscriptionStatus = true;
   }
 }

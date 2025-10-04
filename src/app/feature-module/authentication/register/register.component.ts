@@ -87,6 +87,7 @@ export class RegisterComponent implements OnInit {
         validators: [Validators.required],
       }),
       phone: new FormControl(null, { validators: [Validators.required] }),
+      balance: new FormControl(0, { validators: [Validators.required] }),
       countryId: new FormControl(null, { validators: [Validators.required] }),
       cityId: new FormControl(null, { validators: [Validators.required] }),
       agreeTerms: new FormControl(null, { validators: [Validators.required] }),

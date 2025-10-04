@@ -630,7 +630,8 @@
     "expiredSubscription": "Subscription expired",
     "subscriptionExpireIn": "Your subscription expires in:",
     "subscriptionToday": "Subscribe today",
-    "renewSubscription": "Renew your subscription"
+    "renewSubscription": "Renew your subscription",
+    "subscriberList": "Subscribers list"
   },
   "personalizer": {
     "title": "Customizer",
