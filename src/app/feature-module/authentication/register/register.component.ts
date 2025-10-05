@@ -189,20 +189,20 @@ export class RegisterComponent implements OnInit {
             if (url) {
               this.router.navigateByUrl(url, { replaceUrl: true });
               this.storage.removeStorage(environment.memory_link);
-              this.toastService.presentToast(
-                'success',
-                'Welcome !' +
-                  this.userService.showName(this.form.value),
-                'Your account has been created successfully !',
-                10000,
-              );
               // this.form.reset();
               // setTimeout(() => window.location.reload(), 1000);
             } else {
-              this.router.navigateByUrl('/tabs', { replaceUrl: true });
+              this.router.navigateByUrl('/dashboard', { replaceUrl: true });
               // this.form.reset();
               // setTimeout(() => window.location.reload(), 1000);
             }
+            this.toastService.presentToast(
+              'success',
+              'Welcome !' +
+                this.userService.showName(this.form.value),
+              'Your account has been created successfully !',
+              10000,
+            );
           });
         }
         this.isLoading = false;

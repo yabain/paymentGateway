@@ -189,11 +189,29 @@
                             <div class="col-md-12">
                               <div class="input-block mb-3">
                                 <label htmlFor="receiverMobileAccountNumber">
-                                  {{ 'payment.receiverMobileAccountNumber' | translate }} *</label> +{{
-                                currentUser?.countryId?.code }}
-                                <input id="receiverMobileAccountNumber" type="telephone" class="form-control"
-                                  placeholder="691229122" [(ngModel)]="receiverMobileAccountNumber"
-                                  name="receiverMobileAccountNumber" (input)="canNext2()" />
+                                  {{ 'payment.receiverMobileAccountNumber' | translate }} *</label>
+                                <div class="input-group">
+                                  <span class="input-group-text">+{{ currentUser?.countryId?.code }}</span>
+                                  <input id="receiverMobileAccountNumber" type="telephone" class="form-control"
+                                    placeholder="691229122" [(ngModel)]="receiverMobileAccountNumber"
+                                    name="receiverMobileAccountNumber" (input)="canNext2()" />
+                                </div>
+                              </div>
+                            </div>
+
+                          </div>
+                          <div class="col-md-12" *ngIf="selectedMethod === 'BANK'">
+                            <div class="col-md-12">
+                              <div class="input-block mb-3">
+                                <label htmlFor="bankCode">BANK *</label>
+                                <select id="label" class="form-select" (change)="onSelectBank($event)" id="country"
+                                  *ngIf="!waitingBankList">
+                                  <option *ngFor="let bank of bankList" [value]="bank.code">
+                                    {{ bank.name | translate }}
+                                  </option>
+                                </select>
+                                <span class="spinner-border spinner-border-sm me-2" role="status"
+                                  *ngIf="waitingBankList" style="margin-left: 25vh"></span>
                               </div>
                             </div>
                           </div>
@@ -201,18 +219,9 @@
                             <div class="col-md-12">
                               <div class="input-block mb-3">
                                 <label htmlFor="bankAccountNumber">{{ 'payment.accountNumber' | translate }} *</label>
-                                <input id="bankAccountNumber" type="text" class="form-control"
-                                  placeholder="FR76 1234 5678 9012 3456 7890 123" [(ngModel)]="bankAccountNumber"
-                                  name="bankAccountNumber" (input)="formatAccountNumber($event)" />
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-md-12" *ngIf="selectedMethod === 'BANK'">
-                            <div class="col-md-12">
-                              <div class="input-block mb-3">
-                                <label htmlFor="bic">BIC/SWIFT *</label>
-                                <input id="bic" type="text" class="form-control" placeholder="BNPAFRPPXXX"
-                                  [(ngModel)]="bic" name="bic" (input)="canNext2()" />
+                                <input id="bankAccountNumber" type="text" class="form-control" placeholder="10 Digits"
+                                  [(ngModel)]="bankAccountNumber" name="bankAccountNumber"
+                                  (input)="formatAccountNumber($event)" />
                               </div>
                             </div>
                           </div>
@@ -266,8 +275,8 @@
                           <span class="detail-value">{{ bankAccountNumber }}</span>
                         </div>
                         <div class="detail-item" *ngIf="selectedMethod === 'BANK'">
-                          <span class="detail-label">BIC/SWIFT</span>
-                          <span class="detail-value">{{ bic }}</span>
+                          <span class="detail-label">Bank code</span>
+                          <span class="detail-value">{{ bankCode }}</span>
                         </div>
                         <div class="detail-item" *ngIf="selectedMethod != 'BANK'">
                           <span class="detail-label">{{ 'payment.receiverMobileAccountNumber' | translate }}</span>

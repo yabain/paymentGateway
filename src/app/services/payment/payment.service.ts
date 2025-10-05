@@ -24,9 +24,9 @@ export class PaymentService {
     INITIALIZED: 'transaction_initialized',
 
     PAYINPENDING: 'transaction_payin_pending',
-    PAYINSUCCESS: 'transaction_payin_success',
     PAYINERROR: 'transaction_payin_error',
     PAYINCLOSED: 'transaction_payin_closed',
+    PAYINSUCCESS: 'transaction_payin_success',
 
     PAYOUTPENDING: 'transaction_payout_pending',
     PAYOUTSUCCESS: 'transaction_payout_success',
@@ -56,6 +56,16 @@ export class PaymentService {
   proceedPayment(data): Observable<any> {
     console.log('proceedPayment data: ', data);
     return from(this.apiService.create(`fw/payin`, data)).pipe(
+      map((resp) => {
+        return resp;
+      }),
+      catchError((error) => of({ error })),
+    );
+  }
+
+  proceedWithdarawal(data): Observable<any> {
+    console.log('proceedWithdarawal data: ', data);
+    return from(this.apiService.create(`fw/withdarawal`, data)).pipe(
       map((resp) => {
         return resp;
       }),

@@ -18,18 +18,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-
-export enum ReqStatus {
-  PENDING = 'transaction_pending',
-  PAYIN = 'transaction_payin',
-  PAYINSUCCESS = 'transaction_payin_success',
-  PAYINERROR = 'transaction_payin_error',
-  PAYOUT = 'transaction_payout',
-  PAYOUTSUCCESS = 'transaction_payout_success',
-  PAYOUTERROR = 'transaction_payout_error',
-  ERROR = 'transaction_error',
-  SUCCESS = 'transaction_success',
-}
+import { FlutterwaveService } from 'src/app/services/flutterwave/flutterwave.service';
 
 @Component({
   selector: 'app-withdrawal',
@@ -64,11 +53,14 @@ export class WithdrawalComponent implements OnInit {
   statusErrorMsg: any = [];
   methodName: string = 'Bank transfer';
   bankAccountNumber: string = '';
-  bic: string = '';
+  bankCode: string = '';
   canNext2Val: boolean = false;
   goToProceed: boolean = false;
   waittingBalance: boolean = true;
   balance: number = 0;
+  waitingBankList: boolean = true;
+  bankList: any = [];
+  selectedBank: any;
 
   constructor(
     private toastService: ToastService,
@@ -82,6 +74,7 @@ export class WithdrawalComponent implements OnInit {
     private exchange: ExchangeService,
     private location: LocationService,
     private balanceService: BalanceService,
+    private fw: FlutterwaveService,
   ) {
     this.estimation = 0;
   }
@@ -98,6 +91,14 @@ export class WithdrawalComponent implements OnInit {
     });
   }
 
+  getBanksList(countryIso2) {
+    this.waitingBankList = true;
+    this.fw.getBanksList(countryIso2).subscribe((res: any) => {
+      this.waitingBankList = false;
+      this.bankList = res;
+      console.log('bank list: ', res)
+    });
+  }
 
   getBalance(){
     this.waittingBalance = true;
@@ -230,17 +231,8 @@ export class WithdrawalComponent implements OnInit {
     };
   }
 
-  calculateTaxesAmount(): number {
-    console.log('calculateTaxesAmount: ', this.estimation, this.invoiceTaxes);
-    return this.aroundValue(this.estimation * (this.invoiceTaxes / 100));
-  }
-
   aroundValue(val) {
     return Math.ceil(val);
-  }
-
-  paymentWithTaxesCalculation() {
-    return this.aroundValue(this.estimation + this.calculateTaxesAmount());
   }
 
   canNext(): boolean {
@@ -268,7 +260,8 @@ export class WithdrawalComponent implements OnInit {
     if (!this.canNext()) return false;
     this.setTransactionData();
     if (this.selectedMethod === 'BANK') {
-      if (this.bankAccountNumber && this.bic) return (this.canNext2Val = true);
+      if (this.bankAccountNumber && this.bankCode)
+        return (this.canNext2Val = true);
     } else {
       if (!this.receiverMobileAccountNumber) this.canNext2Val = false;
       if (
@@ -282,7 +275,6 @@ export class WithdrawalComponent implements OnInit {
       )
         return (this.canNext2Val = true);
     }
-    console.log('transaction data: ', this.transactionData);
     return (this.canNext2Val = false);
   }
 
@@ -351,14 +343,15 @@ export class WithdrawalComponent implements OnInit {
     console.log('Payment data:', this.transactionData);
     // return ;
     this.paymentService
-      .proceedPayment(this.transactionData)
+      .proceedWithdarawal(this.transactionData)
       .subscribe((res: any) => {
-        // console.log('the end of the transaction: ', res);
+        console.log('the end of the transaction: ', res);
         if (res.success != true) {
           this.proceed = false;
           this.toastService.presentToast('error', 'Error', res.message);
         } else if (res && res.success === true) {
-          // this.handleRequest(res.transactionData);
+          // this.handleRequest(res.transactionData)
+          this.toastService.presentToast('success', 'Success !', 'Transaction initiated. You will receive the confirmation message');
         }
       });
   }
@@ -373,12 +366,21 @@ export class WithdrawalComponent implements OnInit {
   }
 
   setTransactionData() {
+    if (this.selectedMethod === 'MTN') {
+      this.bankAccountNumber =
+        this.currentUser.countryId.code + this.receiverMobileAccountNumber;
+      this.bankCode = 'MTN';
+    } else if (this.selectedMethod === 'OM') {
+      this.bankAccountNumber =
+        this.currentUser.countryId.code + this.receiverMobileAccountNumber;
+      this.bankCode = 'ORANGEMONEY';
+    }
     this.transactionData = {
       transactionRef: this.transactionRef,
       estimation: this.estimation,
-      invoiceTaxes: this.invoiceTaxes,
-      taxesAmount: this.calculateTaxesAmount(),
-      paymentWithTaxes: this.paymentWithTaxesCalculation(),
+      invoiceTaxes: 0,
+      taxesAmount: 0,
+      paymentWithTaxes: this.estimation,
 
       senderId: this.currentUser._id,
       senderName: this.showName(this.currentUser),
@@ -400,15 +402,18 @@ export class WithdrawalComponent implements OnInit {
 
       paymentMethod: this.selectedMethod,
       receiverMobileAccountNumber: this.receiverMobileAccountNumber,
-      bankAccountNumber: this.bankAccountNumber,
-      bic: this.bic,
+      bankAccountNumber: 
+      this.bankAccountNumber?.replaceAll(' ', '') || undefined,
+      bankCode: this.bankCode,
 
-      paymentStatus: ReqStatus.PENDING,
+      status: this.paymentService.status.PAYINSUCCESS,
+      transactionType: this.paymentService.transactionType.WITHDRAWAL,
     };
     console.log('transactionData: ', this.transactionData);
   }
 
   verifytransactionData(transactionData): boolean {
+    console.log('transaction DATA: ', transactionData);
     // remove all characteres witch are not a number
     // transactionData.paymentMethodNumber =
     //   transactionData.paymentMethodNumber.replace(/\D/g, "");
@@ -441,6 +446,7 @@ export class WithdrawalComponent implements OnInit {
       });
       return false;
     }
+
 
     return true;
   }
@@ -509,7 +515,7 @@ export class WithdrawalComponent implements OnInit {
     }
     this.selectedMethod = method;
     this.getMethodName(method);
-    this.bic = undefined;
+    this.bankCode = undefined;
     this.bankAccountNumber = undefined;
     this.receiverMobileAccountNumber = undefined;
     this.setTransactionData();
@@ -524,7 +530,19 @@ export class WithdrawalComponent implements OnInit {
   //   }
   // }
 
+  /**
+   * Filters cities based on selected country.
+   * @param bank The selected country object.
+   */
+  onSelectBank(event: Event) {
+    const bankCode = (event.target as HTMLSelectElement).value;
+    const selected = this.bankList.filter((e) => e.code === bankCode);
+    this.selectedBank = selected[0];
+    this.bankCode = this.selectedBank?.code || '';
+  }
+
   nextStep() {
+    if (this.step === 1) this.getBanksList(this.currentUser.countryId.iso2);
     if (this.step === 2) {
       this.setTransactionData();
       if (!this.verifytransactionData(this.transactionData)) return;
@@ -545,8 +563,8 @@ export class WithdrawalComponent implements OnInit {
 
   // Méthode pour réinitialiser le stepper
   stepperToProceed() {
-    this.goToProceed = true;
     if (!this.verifytransactionData(this.transactionData)) return;
+    this.goToProceed = true;
     this.scrollToTop();
     console.log('transactionData: ', this.transactionData);
   }

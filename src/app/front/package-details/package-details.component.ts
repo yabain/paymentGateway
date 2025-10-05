@@ -287,10 +287,9 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
     return this.aroundValue(this.estimation * (this.invoiceTaxes / 100));
   }
 
-  refresh() {
-    // this.loadingData = true;
+  refresh(reload: boolean = false) {
+    if (reload) this.loadingData = true;
     this.ngOnInit();
-    this.getPlanDataById(this.idParam);
   }
 
   formatAmount(event: any) {
