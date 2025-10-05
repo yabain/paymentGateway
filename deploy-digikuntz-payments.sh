@@ -8,7 +8,7 @@ cd ~/public_html/app.digikuntz.com # /home/digikuntz/public_html/app.digikuntz.c
 git pull origin main
 /opt/cpanel/ea-nodejs18/bin/npm install -f
 /opt/cpanel/ea-nodejs18/bin/npm run build
-pm2 restart digikuntz-backend
+pm2 restart digikuntz-backend --update-env # ou /opt/cpanel/ea-nodejs18/bin/pm2 start dist/main.js --name digikuntz-backend si le process n'est pas démarré
 
 # Frontend
 cd ~/public_html/payments.digikuntz.com
