@@ -13,7 +13,7 @@ export const environment = {
   GOOGLE_MAPS_API_KEY: 'AIzaSyDK2TEGhQV8FJoZq5E520KOV94tzI1Jrg0',
 
   backendUrl: 'https://payments.digikuntz.com', // For Production
-  frontUrl: 'https://app.digikuntz.com',
+  frontUrl: 'http://54.36.120.149:3001',
 
   ENCRYPTION_KEY: '1KSLDKHFSHLKHLKQB8CIZY8Z9D70CC68Z612GHG923G2904240HKH42086763071535021', // Key for encrypt data
   
