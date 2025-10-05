@@ -16,7 +16,7 @@ npm install @angular/cli --save-dev
 # Nettoyer le cache npm (optionnel mais recommandé)
 npm cache clean --force
 
-# Build localement
+# ---------------- Build localement ----------------
 npx ng build --configuration production --output-path=dist
 
 # Implémenter le fichier .htaccess et mettre dans le repertoir dist
@@ -31,9 +31,11 @@ RewriteRule ^(.*) /index.html [NC,L]
 #---------------------------------------
 
 # Se connecter au serveur et vider le repertoire du frontend
-ssh -p 1219 digikuntz@server.gic.cm
+# ssh -p 1219 digikuntz@server.gic.cm # Ancien serveur
+ssh -p 1219 digikuntz@prime.gic.cm
 cd ~/public_html/payments.digikuntz.com
 rm -rf ./*
 
 # Cobier les fichiers du build du repertoire dist sur le serveur au repertoire du front préalablement vidé
-scp -P 1219 -r dist/* digikuntz@server.gic.cm:~/public_html/app.digikuntz.com/
+# scp -P 1219 -r dist/* digikuntz@server.gic.cm:~/public_html/payments.digikuntz.com/ # Ancien serveur
+scp -P 1219 -r dist/* digikuntz@prime.gic.cm:~/public_html/payments.digikuntz.com/
