@@ -702,7 +702,7 @@ document.getElementById("search").addEventListener("submit", async function(e) {
     };
 
     try {
-        const res = await fetch("http://localhost:3000/newsletter/new", {
+        const res = await fetch("https://app.digikuntz.com/newsletter/new", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data)
