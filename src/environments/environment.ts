@@ -12,8 +12,8 @@ export const environment = {
   // Google Maps API Key
   GOOGLE_MAPS_API_KEY: 'AIzaSyDK2TEGhQV8FJoZq5E520KOV94tzI1Jrg0',
 
-  backendUrl: 'http://54.36.120.149:3001',  // For Production
-  // backendUrl: 'http://localhost:3001', // For dev
+  // backendUrl: 'http://54.36.120.149:3001',  // For Production
+  backendUrl: 'http://localhost:3001', // For dev
   
   // frontUrl: 'https://payments.digikuntz.com',
   frontUrl: 'http://localhost:4200',

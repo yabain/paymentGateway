@@ -426,6 +426,7 @@
     "hero-secureMessage": "Your data is encrypted and protected in accordance with the General Data Protection Regulation (GDPR).",
     "processing-message1": "Your request is being processed.",
     "processing-message2": "Confirm payment through our flutterwave portal.",
+    "processing-message3": "You will be notified once this is complete.",
     "reset-form": "Reset form",
     "processing-message4": "If a payment window does not open, click",
     "hereToRetry": "here to retry",

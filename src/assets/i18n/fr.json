@@ -426,6 +426,7 @@
     "hero-secureMessage": "Vos données sont cryptées et protégées conformément au Règlement Général sur la Protection des Données (RGPD).",
     "processing-message1": "Le traitement de votre demande est en cours.",
     "processing-message2": "Confirmez le paiement via notre portail flutterwave.",
+    "processing-message3": "Vous serez notifié une fois que cela sera terminé.",
     "reset-form": "Vider le formulaire",
     "processing-message4": "Si une fenètre de paiement ne s'ouvre pas, Cliquez",
     "hereToRetry": "ici pour réessayer",

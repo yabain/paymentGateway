@@ -353,7 +353,7 @@
               <!-- <img src="assets/img/new/loader.gif" width="30px" alt=""> -->
               <p style="margin-top: 50px;">
                 {{ "payment.processing-message1" | translate }}<br>
-                {{ "payment.processing-message2" | translate }}
+                <span *ngIf="!proceed && result">{{ "payment.processing-message3" | translate }}</span>
               </p>
               <img src="assets/img/ressorces/flutterwave.png" alt="" style="max-width: 100px;;">
             </div>

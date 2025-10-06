@@ -86,13 +86,13 @@
         </div>
         <div class="col-xl-3 col-md-6 d-flex">
             <div class="card w-100">
-                <div class="card-body card-head c-hover" (click)="selectSection('rejected')"
+                <div class="card-body card-head c-hover" (click)="selectSection('error')"
                     [ngClass]="sectionSelected === 'rejected' ? 'active' :  ''">
                     <div class="grid-info-item inactive-plane">
                         <div class="grid-info">
                             <span>{{ 'payment.rejectedPayout' | translate }}</span>
                             <h4 *ngIf="gettingStatistics">{{ "loading" | translate }}...</h4>
-                            <h4 *ngIf="!gettingStatistics">{{ statistics?.rejectedTransaction }}</h4>
+                            <h4 *ngIf="!gettingStatistics">{{ statistics?.errorTransaction }}</h4>
                         </div>
                         <div class="grid-head-icon">
                             <i class="feather icon-pause-circle"></i>

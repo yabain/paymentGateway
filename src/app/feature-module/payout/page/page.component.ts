@@ -61,6 +61,8 @@ export class PageComponent implements OnInit, OnDestroy {
   }
 
   refresh() {
+    this.gettingTransactions = true;
+    this.transactionList = [];
     this.getData();
   }
 
@@ -131,6 +133,7 @@ export class PageComponent implements OnInit, OnDestroy {
   rejectAll(){}
 
   startPolling(byStatus = false, page: number = 1, transactionStatus?: string) {
+    console.log('start polling: ', transactionStatus);
     if (this.pollTimer) clearInterval(this.pollTimer);
     this.pollTimer = setInterval(async () => {
       try {

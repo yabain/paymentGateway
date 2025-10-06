@@ -62,6 +62,8 @@ export class WithdrawalComponent implements OnInit {
   bankList: any = [];
   selectedBank: any;
 
+  result!: any;
+
   constructor(
     private toastService: ToastService,
     private router: Router,
@@ -346,13 +348,15 @@ export class WithdrawalComponent implements OnInit {
       .proceedWithdarawal(this.transactionData)
       .subscribe((res: any) => {
         console.log('the end of the transaction: ', res);
-        if (res.success != true) {
           this.proceed = false;
-          this.toastService.presentToast('error', 'Error', res.message);
-        } else if (res && res.success === true) {
-          // this.handleRequest(res.transactionData)
-          this.toastService.presentToast('success', 'Success !', 'Transaction initiated. You will receive the confirmation message');
-        }
+          this.result = res;
+          if (res.status === 'error') {
+            this.toastService.presentToast('dansger', 'Error', res.message);
+            return;
+          } else if (res.status === 'success') {
+            this.toastService.presentToast('success', 'Done !', res.message);
+          }
+          this.toastService.presentToast('success', 'Done !', res.message);
       });
   }
 
@@ -399,6 +403,7 @@ export class WithdrawalComponent implements OnInit {
       receiverCountry: this.currentUser.countryId.name,
       receiverCurrency: this.currentUser.countryId.currency,
       receiverAmount: this.getCleanAmount(),
+      receiverCountryCode: this.currentUser.countryId.code,
 
       paymentMethod: this.selectedMethod,
       receiverMobileAccountNumber: this.receiverMobileAccountNumber,
@@ -409,11 +414,11 @@ export class WithdrawalComponent implements OnInit {
       status: this.paymentService.status.PAYINSUCCESS,
       transactionType: this.paymentService.transactionType.WITHDRAWAL,
     };
-    console.log('transactionData: ', this.transactionData);
+    // console.log('transactionData: ', this.transactionData);
   }
 
   verifytransactionData(transactionData): boolean {
-    console.log('transaction DATA: ', transactionData);
+    // console.log('transaction DATA: ', transactionData);
     // remove all characteres witch are not a number
     // transactionData.paymentMethodNumber =
     //   transactionData.paymentMethodNumber.replace(/\D/g, "");
@@ -566,7 +571,8 @@ export class WithdrawalComponent implements OnInit {
     if (!this.verifytransactionData(this.transactionData)) return;
     this.goToProceed = true;
     this.scrollToTop();
-    console.log('transactionData: ', this.transactionData);
+    this.onSubmit();
+    // console.log('transactionData: ', this.transactionData);
   }
 
   resetStepper() {
