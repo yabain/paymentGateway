@@ -498,7 +498,7 @@
     "address": "Adresse",
     "date": "Date",
     "success": "Succès",
-    "erreor": "Erreur"
+    "error": "Erreur"
   },
   "dashboard": {
     "title": "Tableau de bord",

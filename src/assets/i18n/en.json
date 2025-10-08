@@ -498,7 +498,7 @@
     "address": "Addresse",
     "date": "Date",
     "success": "Success",
-    "erreor": "Error"
+    "error": "Error"
   },
   "dashboard": {
     "title": "Dashboard",

@@ -2,7 +2,8 @@
     <div class="content-page-header page-tilte">
         <h5>
             <img src="assets/img/ressorces/gmail.png" alt="" style="width: 30px; margin-right: 10px;">
-            {{ 'sideMenu.mail' | translate }}</h5>
+            {{ 'sideMenu.mail' | translate }}
+        </h5>
         <div class="page-content">
             <div class="list-btn">
                 <ul class="filter-list">
@@ -192,15 +193,16 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let o of emailList">
+                            <tr *ngFor="let o of emailList" (click)="selectEmail(o)" href="javascript:void(0);"
+                                data-bs-toggle="modal" data-bs-target="#email_details">
                                 <td>{{ o.to }}</td>
-                                <td>{{ o.subject }}</td>
+                                <td>{{ getFirst60Chars(o.subject) }}</td>
                                 <td>{{ o.createdAt | date:'dd-MM-yyyy HH:mm:ss'}}</td>
                                 <td>
-                                    <button class="btn btn-block btn-outline-success" disabled
-                                        *ngIf="o.status === true">{{ "mail.success" | translate }}</button>
-                                    <button class="btn btn-block btn-outline-danger" disabled
-                                        *ngIf="o.status === false">{{ "mail.error" | translate }}</button>
+                                    <span style="color: #04850e;" *ngIf="o.status === true">{{ "mail.success" |
+                                        translate }}</span>
+                                    <span style="color: #df0404;" *ngIf="o.status === false">{{ "mail.error" | translate
+                                        }}</span>
                                 </td>
                             </tr>
                         </tbody>
@@ -232,6 +234,92 @@
                                 align-items: center;">
                             {{ "nts" | translate }}
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal custom-modal fade p-20" id="email_details" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <div class="form-header modal-header-title text-start mb-0">
+                    <h4 class="mb-0">Output Email</h4>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeModal
+                    id="closeModal">
+                </button>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <div class="form-header modal-header-title text-start mb-0">
+
+                        <button class="btn btn-rounded btn-outline-dannger"
+                            [ngClass]="selectedEmail?.status === true ? 'btn-outline-success' : 'btn-outline-dannger'"
+                            disabled>
+                            <b *ngIf="selectedEmail?.status === true">{{ "mail.success" | translate }}</b>
+                            <b *ngIf="selectedEmail?.status === false">{{ "mail.error" | translate }}</b>
+                        </button>
+                    </div><br>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5 class="form-title mb-3">{{ "payment.details" | translate }}</h5>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="input-block mb-3">
+                                <label>ID</label>
+                                <input type="text" class="form-control" placeholder="" [value]="selectedEmail?._id"
+                                    disabled *ngIf="selectedEmail?._id">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="input-block mb-3">
+                                <label>Date</label>
+                                <input type="text" class="form-control" placeholder=""
+                                    [value]="selectedEmail?.createdAt | date : 'dd/MM/yyyy HH:mm:ss'" disabled>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="input-block mb-3">
+                                <label>From:</label>
+                                <input type="text" class="form-control" placeholder="" [value]="selectedEmail?.from"
+                                    disabled>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="input-block mb-3">
+                                <label>To:</label>
+                                <input type="text" class="form-control" placeholder="" [value]="selectedEmail?.to"
+                                    disabled>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-12">
+                            <div class="input-block mb-3">
+                                <label>Subject</label>
+                                <input type="text" class="form-control" placeholder="" [value]="selectedEmail?.subject"
+                                    disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <br>
+            <div class="modal-body">
+                <div class="col-sm-12 col-md-12">
+                  <div class="option-space-op">
+                    <!-- Bind le HTML avec innerHTML -->
+                    <div [innerHTML]="emailBody"></div>
+                  </div>
+                </div>
+              </div>
+            <br>
+            <div class="modal-body">
+                {{ "rawData" | translate }}:
+                <div class="col-sm-12 col-md-12">
+                    <div class="option-space">
+                        <app-json-viewer [data]="selectedEmail" *ngIf="selectedEmail"></app-json-viewer>
                     </div>
                 </div>
             </div>

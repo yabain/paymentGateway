@@ -8,6 +8,7 @@ import { MessagingComponent } from './messaging.component';
 import { WhatsappComponent } from './whatsapp/whatsapp.component';
 import { MailComponent } from './mail/mail.component';
 import { QRCodeModule } from 'angularx-qrcode';
+import { CommonItemModule } from '../common/common-item.module';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { QRCodeModule } from 'angularx-qrcode';
   ],
   imports: [
     CommonModule,
+    CommonItemModule,
     MessagingRoutingModule,
     SharedModule,
     TranslateModule,

@@ -43,7 +43,11 @@ export class MailComponent implements OnInit {
   emailList: any;
   emailPage: number = 1;
 
-  constructor(private mailService: MailService) {}
+  selectedEmail!: any;
+  
+  emailBody: string = "";
+
+  constructor(private mailService: MailService) { }
 
   ngOnInit(): void {
     this.refresh();
@@ -68,7 +72,7 @@ export class MailComponent implements OnInit {
     this.edition = !this.edition;
   }
 
-  changeUserActiveStatus() {}
+  changeUserActiveStatus() { }
 
   getSmtpData() {
     this.waitingData = true;
@@ -85,6 +89,16 @@ export class MailComponent implements OnInit {
     });
   }
 
+  getFirst60Chars(str) {
+    if (typeof str !== 'string') {
+      throw new Error('Parameter must be a string.');
+    }
+    if (str.length <= 60) {
+      return str;
+    }
+    return str.substring(0, 60) + '...';
+  }
+
   refresh() {
     this.getSmtpData();
     this.getOutputMails();
@@ -93,34 +107,34 @@ export class MailComponent implements OnInit {
   getOutputMails(page: number = 1, keyword?: string) {
     this.gettingtOutputMails = true
     this.mailService.getOutputMails(page, keyword ? keyword : '')
-    .subscribe({
-      next: (res: any) => {
-        this.emailList = res;
-        this.gettingtOutputMails = false
-      },
-      error: (err) => {
-        this.emailList = [];
-        this.gettingtOutputMails = false;
-        console.log(err);
-      },
-    });
+      .subscribe({
+        next: (res: any) => {
+          this.emailList = res;
+          this.gettingtOutputMails = false
+        },
+        error: (err) => {
+          this.emailList = [];
+          this.gettingtOutputMails = false;
+          console.log(err);
+        },
+      });
   }
 
 
-  previousEmailPage(){
-    if(this.emailPage < 2){
+  previousEmailPage() {
+    if (this.emailPage < 2) {
       this.emailPage = 1;
       return false;
     }
-    this.emailPage -=1;
+    this.emailPage -= 1;
     return this.getOutputMails(this.emailPage);
   }
 
-  nextEmailPage(){
-    if(this.emailList.length < 10){
+  nextEmailPage() {
+    if (this.emailList.length < 10) {
       return false;
     }
-    this.emailPage +=1;
+    this.emailPage += 1;
     return this.getOutputMails(this.emailPage);
   }
 
@@ -205,5 +219,10 @@ export class MailComponent implements OnInit {
         console.log(err);
       },
     });
+  }
+
+  selectEmail(email) {
+    this.selectedEmail = email;
+    this.emailBody = email.body || "<h4 style='color: green!important'>Nothing in Body</h4><br><p>This email has no content.</p>";
   }
 }
