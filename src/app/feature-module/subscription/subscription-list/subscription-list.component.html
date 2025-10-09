@@ -90,97 +90,13 @@
       </div>
     </div> -->
   </div>
-</div>
 
-<!-- <div class="row">
-  <div class="col-sm-12">
-    <div class="card-table">
-      <div class="card-body">
-        <div class="table-responsive">
-          <div class="companies-table">
-            <table matSort (matSortChange)="sortData($event)" class="table table-center table-hover datatable">
-              <thead class="thead-light">
-                <tr>
-                  <th Class="no-sort">#</th>
-                  <th mat-sort-header="subscriber">Subscriber</th>
-                  <th mat-sort-header="plan">Plan</th>
-                  <th mat-sort-header="billingCycle">Billing Cycle</th>
-                  <th mat-sort-header="paymentGateway">Payment Gateway</th>
-                  <th mat-sort-header="amount">Amount</th>
-                  <th mat-sort-header="registeredOn">Registered On</th>
-                  <th mat-sort-header="expiringOn">Expiring On</th>
-                  <th mat-sort-header="status">Status</th>
-                  <th mat-sort-header="invoice">Invoice </th>
-                  <th Class="no-sort">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (data of tableData; track data) {
-                <tr>
-                  <td>{{data.id}}</td>
-                  <td>
-                    <h2 class="table-avatar">
-                      <a [routerLink]="routes.profile" class="company-avatar avatar-md me-2 companies company-icon">
-                        <img class="avatar-img rounded-circle company" [src]="data.img" alt="Company Image"></a>
-                      <a href="javascript:void(0);">{{data.subscriber}}</a>
-                    </h2>
-                  </td>
-                  <td>{{data.plan}}</td>
-                  <td>{{data.billingCycle}}</td>
-                  <td>{{data.paymentGateway}}</td>
-                  <td>{{data.amount}}</td>
-                  <td>{{data.registeredOn}}</td>
-                  @if (data.expiringOn !== 'Expired') {
-                  <td>{{data.expiringOn}}</td>
-                  }
-                  @if (data.expiringOn === 'Expired') {
-                  <td>
-                    <span class="text-danger">{{data.expiringOn}}</span>
-                  </td>
-                  }
-                  <td>
-                    <span class="badge d-inline-flex align-items-center"
-                      [ngClass]="{'bg-success-light': data.status === 'Paid', 'bg-danger-light': data.status === 'Unpaid'}">
-                      <i class="feather me-1"
-                        [ngClass]="{'icon-check': data.status === 'Paid', 'icon-x': data.status === 'Unpaid'}">
-                      </i>
-                      {{data.status}}
-                    </span>
-                  </td>
-                  <td><a [routerLink]="routes.invoiceSubscription" class="invoice-detail"><i
-                        class="feather icon-file-text"></i></a></td>
-                  <td class="d-flex align-items-center">
-                    <div class="dropdown dropdown-action">
-                      <a href="javascript:void(0);" class=" btn-action-icon " data-bs-toggle="dropdown"
-                        aria-expanded="false"><i class="fas fa-ellipsis-v"></i></a>
-                      <div class="dropdown-menu dropdown-menu-end">
-                        <ul class="dropdown-ul">
-                          <li>
-                            <a class="dropdown-item" href="javascript:void(0);"><i
-                                class="feather icon-download me-2"></i>Download</a>
-                          </li>
-                          <li class="delete-alt">
-                            <div>
-                              <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal"
-                                data-bs-target="#delete_modal"><i class="feather icon-trash-2 me-2"></i>Delete</a>
-                            </div>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-                }
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <app-custom-pagination></app-custom-pagination>
-      </div>
+  <div class="row">
+    <div class="col-sm-12">
+
     </div>
   </div>
-</div> -->
-
+</div>
 <div class="row d-flex align-items-center justify-content-center">
   <div class="col-md-12" style="display: flex;
                                 justify-content: center;
@@ -190,32 +106,7 @@
   </div>
   <div class="col-md-12" style="display: flex;
                                 justify-content: center;
-                                align-items: center;">
+                                align-items: center; margin-bottom: 30px;">
     {{ "nts" | translate }}
   </div>
 </div>
-
-<!-- Delete Items Modal -->
-<div class="modal custom-modal fade modal-delete" id="delete_modal" role="dialog">
-  <div class="modal-dialog modal-dialog-centered modal-md">
-    <div class="modal-content">
-      <div class="modal-body">
-        <div class="form-header">
-          <div class="delete-modal-icon">
-            <span><i class="feather icon-check-circle"></i></span>
-          </div>
-          <h3>Are You Sure?</h3>
-          <p>You want delete plan</p>
-        </div>
-        <div class="modal-btn delete-action">
-          <div class="modal-footer justify-content-center p-0">
-            <button type="submit" data-bs-dismiss="modal" class="btn btn-primary paid-continue-btn me-2">Yes,
-              Delete</button>
-            <button type="button" data-bs-dismiss="modal" class="btn btn-back cancel-btn">No, Cancel</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- /Delete Items Modal -->

@@ -81,7 +81,6 @@ export class PackagesComponent implements OnInit, OnDestroy {
   transactionSucceded: boolean = false;
   transactionFailed: boolean = false;
 
-
   openContent() {
     this.toggleData = !this.toggleData;
   }
@@ -97,7 +96,7 @@ export class PackagesComponent implements OnInit, OnDestroy {
     private paymentService: PaymentService,
     private systemService: SystemService,
     private fw: FlutterwaveService,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.getId();
@@ -144,7 +143,6 @@ export class PackagesComponent implements OnInit, OnDestroy {
   }
 
   selectPlan(plan: any) {
-    console.log('selected plan: ', plan);
     this.selectedPlan = plan;
     this.quantity = 1;
     this.optionsData = plan ? plan.options : [];
@@ -164,7 +162,6 @@ export class PackagesComponent implements OnInit, OnDestroy {
       this.goToProceed = true;
       this.proceedSubscribe();
     }, 2000);
-
   }
 
   public searchData(value: string): void {
@@ -173,7 +170,8 @@ export class PackagesComponent implements OnInit, OnDestroy {
       this.plansList = this.plansListBackup.filter(
         (plan: any) =>
           plan.title.toLowerCase().includes(value) ||
-          plan.subTitle.toLowerCase().includes(value),
+          plan.subTitle.toLowerCase().includes(value) ||
+          plan.description.toLowerCase().includes(value),
       );
     } else return (this.plansList = this.plansListBackup);
   }
@@ -212,13 +210,11 @@ export class PackagesComponent implements OnInit, OnDestroy {
 
   checkSbscriberStatus(plan) {
     this.selectPlan(plan);
-    console.log('plan: ', plan);
     this.checkingSubscriptionStatus = true;
     this.subscriptionService
       .checkSbscriberStatus(this.selectedPlan._id)
       .then((data: any) => {
-        console.log('checkSbscriberStatus: ', data);
-        if(data.existingSubscription && data.status){
+        if (data.existingSubscription && data.status) {
           this.isSubscriber = true;
         } else {
           this.isSubscriber = false;
@@ -243,7 +239,7 @@ export class PackagesComponent implements OnInit, OnDestroy {
         this.watingPlansList = false;
         this.plansList = data;
         this.plansListBackup = data;
-        // console.log('plan list: ', data);
+        console.log('plansListBackup geted: ', this.plansListBackup);
       });
     } else {
       this.subscriptionService
@@ -251,7 +247,7 @@ export class PackagesComponent implements OnInit, OnDestroy {
         .subscribe((data: any) => {
           this.watingPlansList = false;
           this.plansList = data;
-          // console.log('plan list: ', data);
+          this.plansListBackup = data;
         });
     }
   }
@@ -457,9 +453,11 @@ export class PackagesComponent implements OnInit, OnDestroy {
 
     this.pollTimer = setInterval(async () => {
       try {
-        this.paymentService.getPayinByTxRef(this.txRef).subscribe((resp: any) => {
-          this.handlePayinStatus(resp);
-        });
+        this.paymentService
+          .getPayinByTxRef(this.txRef)
+          .subscribe((resp: any) => {
+            this.handlePayinStatus(resp);
+          });
       } catch (err) {
         console.warn('polling error', err);
       }
@@ -479,13 +477,15 @@ export class PackagesComponent implements OnInit, OnDestroy {
         if (payWin.closed) {
           clearInterval(timer);
           // small check to update the UI (statut PENDING/ABANDONED)
-          this.paymentService.getPayinByTxRef(this.txRef).subscribe((resp: any) => {
-            this.handlePayinStatus(resp);
-          });
+          this.paymentService
+            .getPayinByTxRef(this.txRef)
+            .subscribe((resp: any) => {
+              this.handlePayinStatus(resp);
+            });
           try {
             this.modalClosed = true;
             // this.verifyAndClosePayin();
-          } catch { }
+          } catch {}
           // TODO: display a "payment canceled" message or refresh the status
         }
       }, 600);

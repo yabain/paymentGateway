@@ -152,7 +152,6 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
     this.subscriptionService
       .getSubscribersList(this.planData._id)
       .subscribe((data: any) => {
-        console.log('getSubscribersList: ', data);
         this.gettingSubscribers = false;
         this.subscribers = data;
       });
@@ -180,7 +179,6 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
 
   getPlanDataById(planId: string) {
     this.subscriptionService.getMyPlansData(planId).subscribe((data: any) => {
-      console.log('getMyPlansData: ', data);
       if (!data) {
         return this.navigateTo('/');
       }
@@ -196,16 +194,13 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
   }
 
   isAuthor(plan: any, user: any = this.currentUser) {
-    // console.log('plan: ', plan)
     return user?._id.toString() === plan?.author._id.toString() ? true : false;
   }
 
   subscribe() {
     if (!this.planData) return;
     this.proceed = true;
-    console.log('proceed: ', this.proceed);
     this.setTransactionData();
-    console.log('transactionData: ', this.transactionData);
     setTimeout(() => {
       this.goToProceed = true;
       this.proceedSubscribe();
@@ -213,7 +208,6 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
   }
 
   checkSbscriberStatus(plan) {
-    console.log('plan: ', plan);
     this.checkingSubscriptionStatus = true;
     if (!this.currentUser) {
       this.isSubscriber = false;
@@ -223,7 +217,6 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
     this.subscriptionService
       .checkSbscriberStatus(this.planData._id)
       .then((data: any) => {
-        console.log('checkSbscriberStatus: ', data);
         this.subscriptionStatus = data;
         if (data.existingSubscription) {
           this.isSubscriber = true;
@@ -250,7 +243,6 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
       ) {
         this.planForm(this.planData);
       }
-      console.log('current user: ', user);
       this.isAuthor(this.planData);
       if (user.isAdmin) this.isAdmin = true;
       this.currency = this.planData.currency;
@@ -529,8 +521,6 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
       resp?.data?.status ||
       resp?.status ||
       'pending';
-    console.log('resp: ', resp);
-    console.log('status: ', status);
     if (['successful', 'success'].includes(status.toLowerCase())) {
       this.transactionSucceded = true;
       this.transactionFailed = false;

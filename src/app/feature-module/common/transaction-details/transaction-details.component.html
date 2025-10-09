@@ -32,7 +32,7 @@
                     </button>
                 </span>
 
-                <button class="btn btn-rounded btn-outline-dannger" *ngIf="transactionData?.status === 'transaction_payin_error'
+                <button class="btn btn-rounded btn-outline-danger" *ngIf="transactionData?.status === 'transaction_payin_error'
                 || transactionData?.status === 'transaction_payout_rejected'
                 || transactionData?.status === 'transaction_payout_error'
                 || transactionData?.status === 'transaction_payout_closed'" disabled style="color: #a00000;">{{
