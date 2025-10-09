@@ -53,6 +53,7 @@
     "welcomeBack": "Welcome back",
     "signInToYourAccount": "Sign in to your account",
     "passwordUpdated": "Your password has been updated successfully.",
+    "passwordLinkSent": "A password reset link has been sent to your address",
     "requestExpired": "Request expired, please restart the procedure",
     "unknowEmail": "unknow email address. You need to create an account",
     "unableResetPwd": "Unable to reset password. Please try later",

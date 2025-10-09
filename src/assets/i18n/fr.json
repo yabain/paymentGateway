@@ -53,6 +53,7 @@
     "welcomeBack": "Content de te revoir",
     "signInToYourAccount": "Connectez-vous à votre compte",
     "passwordUpdated": "Votre mot de passe a bien été mis à jour.",
+    "passwordLinkSent": "Un line de réinitialisation de mot de passe a été envoyé à votre adress",
     "requestExpired": "Requête expirée, veuillez recommencer la procédure",
     "unknowEmail": "Adresse Email inconnue. Veuillez créer un compte.",
     "unableResetPwd": "Impossible de reinitialiser le mot de passe. Veuillez essayer plus tard.",
