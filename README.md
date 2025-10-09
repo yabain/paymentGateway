@@ -30,6 +30,10 @@ RewriteRule ^.*$ - [NC,L]
 RewriteRule ^(.*) /index.html [NC,L]
 #---------------------------------------
 
+
+#--------------------
+Deployment from local
+#------------------
 # Se connecter au serveur et vider le repertoire du frontend
 # ssh -p 1219 digikuntz@server.gic.cm # Ancien serveur
 ssh -p 1219 digikuntz@prime.gic.cm
@@ -39,3 +43,43 @@ rm -rf ./*
 # Cobier les fichiers du build du repertoire dist sur le serveur au repertoire du front préalablement vidé
 # scp -P 1219 -r dist/* digikuntz@server.gic.cm:~/public_html/payments.digikuntz.com/ # Ancien serveur
 scp -P 1219 -r dist/* digikuntz@prime.gic.cm:~/public_html/payments.digikuntz.com/
+
+
+#--------------------
+Deployment from Git
+#------------------
+# Se connecter au serveur et vider le repertoire du frontend
+# ssh -p 1219 digikuntz@server.gic.cm # Ancien serveur
+ssh -p 1219 digikuntz@prime.gic.cm
+cd ~/public_html/payments.digikuntz.com
+rm -rf ./*
+
+git clone https://github.com/yabain/paymentGateway.git .
+
+/opt/cpanel/ea-nodejs18/bin/npm install -f
+ng build --configuration production --output-path=dist
+cp -r dist/* ~/public_html/payments.digikuntz.com/
+
+
+#--------------------
+Update deployment
+#------------------
+ssh -p 1219 digikuntz@prime.gic.cm
+./deploy-front.sh
+
+
+
+#--------- deploy-front.sh
+#!/bin/bash
+
+# Frontend
+
+# git clone https://github.com/yabain/paymentGateway.git .
+
+cd ~/public_html/payments.digikuntz.com
+git restore deploy-digikuntz-payments.sh
+git pull origin main
+/opt/cpanel/ea-nodejs18/bin/npm install -f
+ng build --configuration production --output-path=dist
+cp -r dist/* ~/public_html/payments.digikuntz.com/
+#--------- / deploy-front.sh
