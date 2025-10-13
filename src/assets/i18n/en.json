@@ -540,7 +540,11 @@
     "mail": "Mail Center",
     "messageCenter": "Message Center",
     "payin": "Cash collection",
-    "payout": "cash withdrawal"
+    "payout": "cash withdrawal",
+    "profile": "Profile",
+    "organisation": "Organisation",
+    "mySubscriptionList": "Mes abonements",
+    "transactionList": "Transaction List"
   },
   "flutterwave": {
     "otherCurrencyBalances": "Othes currency balance available",

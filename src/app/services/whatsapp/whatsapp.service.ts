@@ -23,7 +23,7 @@ export class WhatsappService {
   }
 
   getQrCode(): Observable<boolean> {
-    return this.apiService.getWithoutId('whatsapp/get-qr-code').pipe(
+    return this.apiService.getWithoutId('wa/qr').pipe(
       map((res: any) => {
         if (res) {
           return res;
@@ -38,7 +38,7 @@ export class WhatsappService {
   }
 
   refreshQrCode(): Observable<boolean> {
-    return this.apiService.getWithoutId('whatsapp/refresh-qr-code').pipe(
+    return this.apiService.getWithoutId('wa/qr').pipe(
       map((res: any) => {
         if (res) {
           return res;
@@ -53,7 +53,7 @@ export class WhatsappService {
   }
 
   getClienStatus(): Observable<boolean> {
-    return this.apiService.getWithoutId('whatsapp/get-client-status').pipe(
+    return this.apiService.getWithoutId('wa/status').pipe(
       map((res: any) => {
         console.log('res getClienStatus: ', res)
         if (res) {
@@ -88,8 +88,8 @@ export class WhatsappService {
     );
   }
 
-  sendTestMessage(code: string, to: string, message: string): Observable<any> {
-    return this.apiService.create('whatsapp/send', { to, message, code }).pipe(
+  sendTestMessage(countryCode: string, to: string, message: string): Observable<any> {
+    return this.apiService.create('wa/send-text', { to, message, countryCode }).pipe(
       map((res: any) => {
         console.log('res', res);
         if (res && res.success) {

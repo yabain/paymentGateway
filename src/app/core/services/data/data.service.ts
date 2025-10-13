@@ -722,6 +722,7 @@ export class DataService {
       }),
     );
   }
+  
   public sideBarMenuDigikuntz: any[] = [
     {
       tittle: 'main',
@@ -755,11 +756,87 @@ export class DataService {
           base: 'withdrawal',
         },
         {
+          menuValue: 'mySubscriptionList',
+          route: '/dashboard',
+          hasSubRoute: false, // Show arrow after menu item title
+          showSubRoute: true,
+          icon: 'repeat',
+          base: 'subscription',
+        },
+        {
+          menuValue: 'transactionList',
+          route: '/dashboard',
+          hasSubRoute: false, // Show arrow after menu item title
+          showSubRoute: true,
+          icon: 'repeat',
+          base: 'transactions',
+        },
+        {
+          menuValue: 'profile',
+          route: '/dashboard',
+          hasSubRoute: false, // Show arrow after menu item title
+          showSubRoute: true,
+          icon: 'user',
+          base: 'profil',
+        },
+        // {
+        //   menuValue: 'subscriptions',
+        //   route: '/subscription',
+        //   hasSubRoute: false, // Show arrow after menu item title
+        //   showSubRoute: true,
+        //   icon: 'repeat',
+        //   base: 'subscription',
+        // },
+        // {
+        //   menuValue: 'fundraising',
+        //   route: '/fundraising',
+        //   hasSubRoute: false, // Show arrow after menu item title
+        //   showSubRoute: true,
+        //   icon: 'command',
+        //   base: 'fundraising',
+        // },
+      ],
+    },
+  ];
+  
+  public sideBarMenuDigikuntzOrganisation: any[] = [
+    {
+      tittle: 'organisation',
+      active: false,
+      icon: 'airplay',
+      showAsTab: false,
+      separateRoute: false,
+      menu: [
+        // {
+        //   menuValue: 'dashboard',
+        //   route: '/dashboard',
+        //   hasSubRoute: false, // Show arrow after menu item title
+        //   showSubRoute: true,
+        //   icon: 'home',
+        //   base: 'dashboard',
+        // },
+        // {
+        //   menuValue: 'sendMoney',
+        //   route: '/send-money',
+        //   hasSubRoute: false, // Show arrow after menu item title
+        //   showSubRoute: true,
+        //   icon: 'send',
+        //   base: 'send-money',
+        // },
+        // {
+        //   menuValue: 'cashWithdrawal',
+        //   route: '/withdrawal',
+        //   hasSubRoute: false, // Show arrow after menu item title
+        //   showSubRoute: true,
+        //   icon: 'download',
+        //   base: 'withdrawal',
+        // },
+        {
           menuValue: 'payments',
           route: '/dashboard',
           hasSubRoute: false, // Show arrow after menu item title
           showSubRoute: true,
-          icon: 'home',
+          icon: 'download',
           base: 'payments',
         },
         {
@@ -858,8 +935,11 @@ export class DataService {
   public getSideBarData: BehaviorSubject<Array<SideBarData>> =
     new BehaviorSubject<Array<SideBarData>>(this.sideBarMenuDigikuntz);
 
+  public getSideBarDataOrganization: BehaviorSubject<Array<SideBarData>> =
+      new BehaviorSubject<Array<SideBarData>>([...this.sideBarMenuDigikuntz, ...this.sideBarMenuDigikuntzOrganisation]);
+
   public getSideBarDataAdmin: BehaviorSubject<Array<SideBarData>> =
-    new BehaviorSubject<Array<SideBarData>>([...this.sideBarMenuDigikuntz, ...this.sideBarMenuDigikuntzAdmin]);
+        new BehaviorSubject<Array<SideBarData>>([...this.sideBarMenuDigikuntz, ...this.sideBarMenuDigikuntzOrganisation, ...this.sideBarMenuDigikuntzAdmin]);
 
   public resetData(): void {
     this.sideBarMenuDigikuntz.map((res: SideBar) => {

@@ -94,7 +94,8 @@
                                                     {{ 'auth.login' | translate }}</button>
                                             </div>
                                             <div class="col-md-8" style="text-align: right !important;">
-                                                <button class="btn btn-rounded btn-outline-secondary me-1" (click)="copyUrl()">
+                                                <button class="btn btn-rounded btn-outline-secondary me-1"
+                                                    (click)="copyUrl()">
                                                     <i class="feather icon-share-2"></i>
                                                     {{ 'action.share' | translate }}
                                                 </button>
@@ -195,7 +196,15 @@
 <!-- Subscriber List -->
 <div class="card" *ngIf="currentUser && isAuthor(planData) || currentUser && isAdmin">
     <div class="card-header">
-        <h3>{{ 'subscriptions.subscriberList' | translate }} ({{ subscribers.length }})</h3>
+        <div class="row">
+            <div class="col-md-8">
+                <h3>{{ 'subscriptions.subscriberList' | translate }} ({{ subscribers.length }})</h3>
+            </div>
+            <div class="col-md-4" style="text-align: right;">
+                <button class="btn btn-rounded btn-outline-secondary me-1" data-bs-toggle="modal"
+                    data-bs-target="#add_subscriber_modal">+ {{ 'action.add' | translate }} </button>
+            </div>
+        </div>
     </div>
     <div class="card-body">
         <div class="row">
@@ -220,8 +229,7 @@
                                     <tr>
                                         <td>
                                             <h2 class="table-avatar">
-                                                <a
-                                                    class="avatar avatar-md me-2"><img class="avatar-img rounded-circle"
+                                                <a class="avatar avatar-md me-2"><img class="avatar-img rounded-circle"
                                                         [src]="subscription.userId.pictureUrl" alt="User Image" /></a>
                                                 <a>{{
                                                     showName(subscription.userId)
@@ -289,10 +297,6 @@
     </div>
 </div>
 <!-- /Subscriber List -->
-
-
-
-
 
 
 <!-- Delete Items Modal -->
@@ -542,3 +546,32 @@
         </div>
     </div>
 </div>
+
+<!-- Delete Items Modal -->
+<div class="modal custom-modal fade modal-delete" id="add_subscriber_modal" role="dialog" data-bs-backdrop="static"
+    data-bs-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title align-items-center justify-content-center" id="staticBackdropLabel">
+                    Add subscriber
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    (close)="ngOnDestroy()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-btn delete-action">
+                    <div class="modal-footer justify-content-center p-0">
+                        <button type="button" data-bs-dismiss="modal" class="btn btn-outline-secondary m-1"
+                            (close)="ngOnDestroy()">{{ 'action.cancel'
+                            | translate }}</button>
+                        <button type="submit" (click)="createSubscriptionItem()" class="btn btn-primary m-1"
+                            data-bs-dismiss="modal">
+                            Create</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Delete Items Modal -->

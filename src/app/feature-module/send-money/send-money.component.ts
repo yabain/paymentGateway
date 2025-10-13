@@ -606,6 +606,7 @@ export class SendMoneyComponent implements OnInit {
       senderEmail: this.currentUser.email,
       senderContact: this.currentUser.phone,
       senderCountry: this.currentUser.countryId.name,
+      senderCountryCode: this.currentUser.countryId.code,
       senderCurrency: this.currentUser.countryId.currency,
 
       raisonForTransfer: this.raisonForTransfer,

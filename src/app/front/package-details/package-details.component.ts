@@ -685,6 +685,8 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
+  createSubscriptionItem(){}
+
   ngOnDestroy(): void {
     if (this.intervalId) {
       clearInterval(this.intervalId);

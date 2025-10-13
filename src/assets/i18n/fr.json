@@ -540,7 +540,11 @@
     "mail": "Centre Mail",
     "messageCenter": "Centre de messages",
     "payin": "Encaissements",
-    "payout": "Décaissements"
+    "payout": "Décaissements",
+    "profile": "Profil",
+    "organisation": "Organisation",
+    "mySubscriptionList": "Mes abonements",
+    "transactionList": "Transactions"
   },
   "flutterwave": {
     "otherCurrencyBalances": "Solde d'autres devises disponible",
