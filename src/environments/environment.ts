@@ -17,7 +17,7 @@ export const environment = {
   backendUrl: 'http://localhost:3002', // For dev
   
   // frontUrl: 'https://payments.digikuntz.com',
-  frontUrl: 'https://localhost:4200',
+  frontUrl: 'http://localhost:4200',
 
   ENCRYPTION_KEY: '1KSLDKHFSHLKHLKQB8CIZY8Z9D70CC68Z612GHG923G2904240HKH42086763071535021', // Key for encrypt data
   

@@ -1,0 +1,99 @@
+<form [formGroup]="form" *ngIf="form">
+  <div class="modal-body">
+    <div class="login-userset">
+      <div class="input-block mb-3">
+        <label htmlFor="label">{{ 'auth.accountType' | translate}} *</label>
+        <select id="accountType" formControlName="accountType" class="form-select" [disabled]>
+          <option value="personal" selected>{{ 'auth.personal' |
+            translate }}</option>
+        </select>
+      </div>
+      <div class="input-block mb-3" *ngIf="formType === 'organisation'">
+        <label class="form-label">{{ 'auth.organisationName' | translate }}</label>
+        <input type="text" formControlName="name" class="form-control"
+          placeholder="{{ 'auth.organisationName' | translate }}" />
+      </div>
+      <div class="input-block mb-3" *ngIf="formType === 'personal'">
+        <label class="form-label">{{ 'auth.firstName'| translate }} *</label>
+        <input type="text" formControlName="firstName" class="form-control"
+          placeholder="{{ 'auth.needFirstName'| translate }}" />
+      </div>
+      <div class="input-block mb-3" *ngIf="formType === 'personal'">
+        <label class="form-label">{{ 'auth.lastName'| translate }} *</label>
+        <input type="text" formControlName="lastName" class="form-control"
+          placeholder="{{ 'auth.needLastName'| translate }}" />
+      </div>
+      <div class="input-block mb-3">
+        <label htmlFor="country">{{ 'auth.country' | translate}} *</label>
+        <div class="col-lg-12">
+          <div class="input-group">
+            <img [src]="flagCountry" alt="" class="flag" slot="start" style="width: 30px; margin: 7px 5px;">
+            <select id="country" formControlName="countryId" *ngIf="!gettingLocations" (change)="onSelect($event)"
+              class="form-select">
+              <option value="" selected></option>
+              <option *ngFor="let country of countries" [value]="country._id">
+                {{ country.name | translate}}
+              </option>
+            </select>
+            <span id="basic-addon1" class="form-select" *ngIf="gettingLocations">
+              <div class="spinner-border" role="status"></div>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="input-block mb-3">
+        <label htmlFor="city">{{ 'auth.city' | translate}} *</label>
+        <div class="col-lg-12">
+          <div class="input-group">
+            <select id="city" formControlName="cityId" *ngIf="!gettingLocations" class="form-select">
+              <option *ngFor="let city of cities" value="{{city._id}}">
+                {{city.name}}
+              </option>
+            </select>
+            <img src="assets/img/new/loader.gif" width="15px" alt="" *ngIf="gettingLocations" class="form-select">
+          </div>
+        </div>
+      </div>
+      <div class="input-block mb-3 row">
+        <label htmlFor="phone">{{ 'auth.phone' | translate}} *</label>
+        <div class="col-lg-12">
+          <div class="input-group">
+            <span class="input-group-text" id="basic-addon1">{{contryCode}}</span>
+            <input id="phone" type="text" formControlName="phone" class="form-control" placeholder="phone"
+              aria-label="Username" aria-describedby="basic-addon1" />
+          </div>
+        </div>
+      </div>
+      <div class="input-block mb-3">
+        <label htmlFor="email" class="form-label">{{ 'auth.emailAddres'| translate }} *</label>
+        <input type="email" id="email" formControlName="email" class="form-control"
+          placeholder="{{ 'auth.needEmail'| translate }}" />
+      </div>
+      <div class="input-block mb-3">
+        <label htmlFor="subscriptionStartDate" class="form-label">{{ 'subscriptions.subscriptionStartDate'| translate }}
+          *</label>
+        <input type="date" id="subscriptionStartDate" formControlName="subscriptionStartDate" class="form-control"
+          placeholder="{{ 'subscriptions.subscriptionStartDate'| translate }}" />
+      </div>
+      <!-- <button type="submit" (click)="createSubscriptionItem()" class="btn btn-primary" *ngIf="!isLoading">
+        {{ 'auth.register' | translate }}
+      </button>
+      <button [disabled]="form.invalid" class="btn btn-lg btn-block btn-light w-100" type="submit" disabled
+        *ngIf="isLoading">
+        <div class="spinner-border" role="status"></div>
+      </button> -->
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="modal-btn delete-action">
+      <div class="modal-footer justify-content-center p-0">
+        <button type="button" data-bs-dismiss="modal" class="btn btn-outline-secondary m-1">{{ 'action.cancel' |
+          translate }}</button>
+        <button type="submit" (click)="onSubmit()" class="btn btn-primary m-1" *ngIf="!waittingSubscription">
+          {{ "action.add" | translate }}</button>
+        <button *ngIf="waittingSubscription" class="btn btn-primary m-1">
+          <div class="spinner-border" role="status"></div></button>
+      </div>
+    </div>
+  </div>
+</form>

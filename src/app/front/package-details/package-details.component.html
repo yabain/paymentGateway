@@ -88,7 +88,7 @@
                                                 <button class="btn btn-rounded btn-primary me-1" data-bs-toggle="modal"
                                                     data-bs-target="#subscriptionModal"
                                                     *ngIf="currentUser && !isAuthor(planData) && planData?.isActive">
-                                                    {{ 'subscriptions.subscribe' | translate }}</button>
+                                                    {{ 'subscriptions.pay' | translate }}</button>
                                                 <button class="btn btn-rounded btn-primary me-1" *ngIf="!currentUser"
                                                     (click)="navigateTo('/auth/login')">
                                                     {{ 'auth.login' | translate }}</button>
@@ -119,6 +119,9 @@
                                                     *ngIf="currentUser && isAuthor(planData) || currentUser && isAdmin">
                                                     <i class="feather icon-trash-2"></i>
                                                 </button>
+                                            </div>
+                                            <div class="col-md-12" *ngIf="currentUser">
+                                                {{ 'subscriptions.as' | translate }} <b>{{ showName(currentUser)}}</b>
                                             </div>
                                         </div>
                                     </div>
@@ -201,7 +204,9 @@
                 <h3>{{ 'subscriptions.subscriberList' | translate }} ({{ subscribers.length }})</h3>
             </div>
             <div class="col-md-4" style="text-align: right;">
-                <button class="btn btn-rounded btn-outline-secondary me-1" data-bs-toggle="modal"
+                <button class="btn btn-rounded btn-outline-secondary me-1" (click)="refresh()"
+                   ><i class="feather icon-refresh-ccw"></i></button>
+                <button class="btn btn-rounded btn-outline-primary me-1" data-bs-toggle="modal"
                     data-bs-target="#add_subscriber_modal">+ {{ 'action.add' | translate }} </button>
             </div>
         </div>
@@ -217,11 +222,11 @@
                                 <thead class="thead-light">
                                     <tr>
                                         <th mat-sort-header="name">{{ "auth.username" | translate }}</th>
-                                        <th mat-sort-header="balance">{{ "auth.phone" | translate }}</th>
-                                        <th mat-sort-header="created">{{ "item.start" | translate }}</th>
-                                        <th mat-sort-header="phone">{{ "item.end" | translate }}</th>
+                                        <th mat-sort-header="phone">{{ "auth.phone" | translate }}</th>
+                                        <th mat-sort-header="dateStart">{{ "item.start" | translate }}</th>
+                                        <th mat-sort-header="dateEnd">{{ "item.end" | translate }}</th>
                                         <th mat-sort-header="status">{{ "mail.status" | translate }}</th>
-                                        <th mat-sort-header="status">Action</th>
+                                        <th mat-sort-header="action">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody *ngIf="!gettingSubscribers">
@@ -230,23 +235,23 @@
                                         <td>
                                             <h2 class="table-avatar">
                                                 <a class="avatar avatar-md me-2"><img class="avatar-img rounded-circle"
-                                                        [src]="subscription.userId.pictureUrl" alt="User Image" /></a>
+                                                        [src]="subscription?.userId.pictureUrl" alt="User Image" /></a>
                                                 <a>{{
-                                                    showName(subscription.userId)
+                                                    showName(subscription?.userId)
                                                     }}
-                                                    <span>{{ subscription.userId.email }}</span>
+                                                    <span>{{ subscription?.userId.email }}</span>
                                                 </a>
                                             </h2>
                                         </td>
-                                        <td> {{ subscription.userId.phone }}
+                                        <td> {{ subscription?.userId.phone }}
                                         </td>
-                                        <td>{{ getDate(subscription.startDate) }}</td>
-                                        <td>{{ getDate(subscription.endDate) }}</td>
+                                        <td>{{ getDate(subscription?.startDate) }}</td>
+                                        <td>{{ getDate(subscription?.endDate) }}</td>
                                         <td>
                                             <span [ngClass]="{
-                            'bg-success-light': subscription.status != false,
-                            'bg-danger-light': subscription.status === false
-                          }" class="badge badge-pill bg-success-light">{{ (subscription.userId.isActive === false ?
+                            'bg-success-light': subscription?.status != false,
+                            'bg-danger-light': subscription?.status === false
+                          }" class="badge badge-pill bg-success-light">{{ (subscription?.status === false ?
                                                 'users.disabled' :
                                                 'users.enabled') | translate }}</span><br
                                                 *ngIf="subscription.userId.isAdmin === true">
@@ -352,7 +357,8 @@
                                 }}</s></span>
                     </li>
                 </ul>
-                <br><label htmlFor="bankCode" *ngIf="!checkingSubscriptionStatus && !isSubscriber">{{
+                <br>
+                <label htmlFor="bankCode" *ngIf="!checkingSubscriptionStatus && !isSubscriber">{{
                     'subscriptions.quantity' | translate }}</label>
                 <select id="label" class="form-select" (change)="onQuantity($event)" id="quantity"
                     *ngIf="!checkingSubscriptionStatus && !isSubscriber" [disabled]="proceed">
@@ -554,23 +560,11 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title align-items-center justify-content-center" id="staticBackdropLabel">
-                    Add subscriber
+                    Ajouter un abonné
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                    (close)="ngOnDestroy()"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <div class="modal-btn delete-action">
-                    <div class="modal-footer justify-content-center p-0">
-                        <button type="button" data-bs-dismiss="modal" class="btn btn-outline-secondary m-1"
-                            (close)="ngOnDestroy()">{{ 'action.cancel'
-                            | translate }}</button>
-                        <button type="submit" (click)="createSubscriptionItem()" class="btn btn-primary m-1"
-                            data-bs-dismiss="modal">
-                            Create</button>
-                    </div>
-                </div>
-            </div>
+            <app-add-subscriber></app-add-subscriber>
         </div>
     </div>
 </div>

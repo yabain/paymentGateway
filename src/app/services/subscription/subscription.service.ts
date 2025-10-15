@@ -42,7 +42,9 @@ export class SubscriptionService {
 
   async changeStatus(planId): Promise<any> {
     try {
-      const response = await this.apiService.update('plans/update-status', planId, {}).toPromise();
+      const response = await this.apiService
+        .update('plans/update-status', planId, {})
+        .toPromise();
       return response;
     } catch (error) {
       console.error('Error to change plan status:', error);
@@ -52,7 +54,9 @@ export class SubscriptionService {
 
   async deletePlan(planId): Promise<any> {
     try {
-      const response = await this.apiService.delete('plans/delete', planId).toPromise();
+      const response = await this.apiService
+        .delete('plans/delete', planId)
+        .toPromise();
       return response;
     } catch (error) {
       console.error('Error to delete plan: ', error);
@@ -81,7 +85,8 @@ export class SubscriptionService {
         console.error('Error fetching plan statistics:', error);
         return of([]);
       }),
-    );}
+    );
+  }
 
   getMyPlansData(planId): Observable<any | undefined> {
     return this.apiService.getById('plans/get-data', planId).pipe(
@@ -94,7 +99,7 @@ export class SubscriptionService {
       }),
     );
   }
-  
+
   getAllPlansList(): Observable<any | undefined> {
     return this.apiService.progressiveGetWithoutId('plans').pipe(
       map((data) => {
@@ -118,7 +123,9 @@ export class SubscriptionService {
 
   async getPlansStatistics(): Promise<any> {
     try {
-      const response = await this.apiService.getWithoutId('plans/get-statistics').toPromise();
+      const response = await this.apiService
+        .getWithoutId('plans/get-statistics')
+        .toPromise();
       return response;
     } catch (error) {
       console.error('Error fetching users stats:', error);
@@ -126,13 +133,31 @@ export class SubscriptionService {
     }
   }
 
-  async checkSbscriberStatus(planId: string): Promise<any> {
+  async checkSbscriberStatus(planId: string, userId?): Promise<any> {
     try {
-      const response = await this.apiService.getById('subscription/verify', planId).toPromise();
+      let response: any;
+      if (userId) {
+        response = await this.apiService
+          .getById('subscription/verify-with-user', planId + 'AAA' + userId)
+          .toPromise();
+      } else {
+        response = await this.apiService
+          .getById('subscription/verify', planId)
+          .toPromise();
+      }
       return response;
     } catch (error) {
       console.error('Error fetching users stats:', error);
       throw error;
     }
+  }
+
+  addSubscriber(data: any): Observable<any> {
+    return from(this.apiService.create('plans/add-subscriber', data)).pipe(
+      map((resp) => {
+        return resp;
+      }),
+      catchError((error) => of({ error })),
+    );
   }
 }

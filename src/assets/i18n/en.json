@@ -625,6 +625,8 @@
     "checkIfAvailable": "Check if available",
     "addOption": "Add",
     "subscribe": "Subscribe",
+    "pay": "Pay",
+    "as": "As",
     "unsubscribe": "Unsubscribe",
     "deletePlan": "Delete this plan",
     "wantDeletePlan": "Do you want to delete",
@@ -637,7 +639,8 @@
     "subscriptionExpireIn": "Your subscription expires in:",
     "subscriptionToday": "Subscribe today",
     "renewSubscription": "Renew your subscription",
-    "subscriberList": "Subscribers list"
+    "subscriberList": "Subscribers list",
+    "subscriptionStartDate": "Subscription start date"
   },
   "personalizer": {
     "title": "Customizer",

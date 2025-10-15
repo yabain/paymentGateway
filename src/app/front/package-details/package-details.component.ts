@@ -56,6 +56,7 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private pollTimer: any;
   idParam: string | null = null;
+  userId: string | null = null;
   transactionRef: string;
   transactionData!: any;
   taxesAmount: number = 0;
@@ -87,7 +88,7 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
   private intervalId: any;
 
   days: number = 0;
-  months: number = 0; // ⚠️ souvent on calcule en jours/heures/minutes/secondes uniquement
+  months: number = 0; // ⚠️ often we calculate in days/hours/minutes/seconds only
   hours: number = 0;
   minutes: number = 0;
   seconds: number = 0;
@@ -116,10 +117,10 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
     this.route.paramMap.subscribe((datas: any) => {
       // this.startCountdown(this.futureDate);
       this.scrollToTop();
-      this.getId();
-      this.transactionRef = this.paymentService.generateId();
+      this.refresh(true);
     });
   }
+
 
   startCountdown(targetDate: Date) {
     this.updateCountdown(targetDate); // première maj directe
@@ -152,8 +153,8 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
     this.subscriptionService
       .getSubscribersList(this.planData._id)
       .subscribe((data: any) => {
-        this.gettingSubscribers = false;
         this.subscribers = data;
+        this.gettingSubscribers = false;
       });
   }
 
@@ -162,15 +163,30 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
   }
 
   getId() {
+    
     this.url = this.location.path();
     this.isDashboardRoute = this.url.includes('subscription');
 
     const idParam = this.route.snapshot.paramMap.get('id');
-    this.getPlanDataById(idParam);
 
     if (idParam && idParam !== 'null' && idParam !== 'undefined') {
-      this.idParam = idParam;
+     [this.idParam, this.userId] = idParam.split('AAA');
     }
+    console.log('idParam', this.idParam);
+    console.log('userId', this.userId);
+    this.getPlanDataById(this.idParam);
+  }
+  
+  getUserData(userId) {
+     this.userService.getUser(userId)
+         .subscribe((user)=> {
+            if (user) {
+               this.currentUser = user;
+               this.checkSbscriberStatus(this.planData);
+               this.loadingData = false;
+            }
+          
+      })
   }
 
   showName(userData) {
@@ -184,12 +200,16 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
       }
       this.planData = data;
       this.optionsData = data.options;
-      this.getCurrentUser();
-      this.loadingData = false;
-
       this.quantity = 1;
       this.taxesAmount = this.calculateTaxesAmount();
       this.paymentWithTaxes = this.paymentWithTaxesCalculation();
+
+      if (this.userId) {
+          this.getUserData(this.userId);
+      } else {
+        this.getCurrentUser();
+        this.loadingData = false;
+      }
     });
   }
 
@@ -213,9 +233,10 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
       this.isSubscriber = false;
       this.checkingSubscriptionStatus = false;
     }
+    console.log('plan', plan)
 
     this.subscriptionService
-      .checkSbscriberStatus(this.planData._id)
+      .checkSbscriberStatus(this.planData._id, this.currentUser._id || undefined)
       .then((data: any) => {
         this.subscriptionStatus = data;
         if (data.existingSubscription) {
@@ -281,7 +302,8 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
 
   refresh(reload: boolean = false) {
     if (reload) this.loadingData = true;
-    this.ngOnInit();
+    this.getId();
+    this.transactionRef = this.paymentService.generateId();
   }
 
   formatAmount(event: any) {
@@ -666,14 +688,8 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
     };
   }
 
-
   copyUrl() {
-    let url = window.location.href; // Récupère l'URL actuelle
-    url = this.url.replace(
-      '/subscription/details',
-      '/package-details',
-    );
-    url = environment.frontUrl + url
+    const url = environment.frontUrl + '/package-details/' + this.idParam;
     navigator.clipboard.writeText(url).then(() => {
       this.copied = true;
 
@@ -685,7 +701,9 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  createSubscriptionItem(){}
+  createSubscriptionItem(){
+
+  }
 
   ngOnDestroy(): void {
     if (this.intervalId) {

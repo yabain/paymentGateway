@@ -1,4 +1,4 @@
-import { Component, OnDestroy} from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { DataService, routes } from 'src/app/core/core.index';
 import { MenuItem } from 'src/app/core/models/models';
@@ -18,7 +18,6 @@ interface MainMenus {
 }
 
 interface SideBarData {
-
   mainMenus?: MainMenus[];
   active: boolean;
   icon: string;
@@ -30,13 +29,11 @@ interface SideBarData {
   route: string;
   hasSubRoute: boolean;
   base: string;
-  url:string;
-  tittle:string;
-
-
+  url: string;
+  tittle: string;
 }
-interface url{
-  url:string
+interface url {
+  url: string;
 }
 @Component({
   selector: 'app-side-menu-one',
@@ -51,20 +48,19 @@ export class SideMenuOneComponent implements OnDestroy {
   public multilevel: Array<boolean> = [false, false, false];
   userData: any = {};
 
-
   base = 'dashboard';
   page = '';
   last = '';
   currentRoute = '';
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  side_bar_data:any[] = [];
+  side_bar_data: any[] = [];
 
   constructor(
     public router: Router,
     private data: DataService,
     private sideBar: SideBarService,
     private auth: AuthService,
-    private userService: UserService
+    private userService: UserService,
   ) {
     router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -78,30 +74,33 @@ export class SideMenuOneComponent implements OnDestroy {
     this.sideBar.primarySkinStyle.subscribe((res: string) => {
       this.primarySkinStyle = res;
     });
-    this.sideBar.toggleMobileSideBar.subscribe((res:string) => {
-      if (res == "true") {
+    this.sideBar.toggleMobileSideBar.subscribe((res: string) => {
+      if (res == 'true') {
         this.mobileSidebar = true;
       } else {
         this.mobileSidebar = false;
       }
     });
-    this.userService.getCurrentUserData()
-    .then((user: any) => {
+    this.userService.getCurrentUserData().then((user: any) => {
       if (!user) return;
-      if(user.isAdmin === true){
-        this.data.getSideBarDataAdmin.subscribe((res:SideBarData[]) => {
-        this.side_bar_data = res;
-    });
+      if (user.isAdmin === true) {
+        this.data.getSideBarDataAdmin.subscribe((res: SideBarData[]) => {
+          this.side_bar_data = res;
+        });
+      } else if (user.accountType === 'organisation') {
+        this.data.getSideBarDataOrganization.subscribe((res: SideBarData[]) => {
+          this.side_bar_data = res;
+        });
       } else {
-        this.data.getSideBarData.subscribe((res:SideBarData[]) => {
-        this.side_bar_data = res;
-    });}
-    })
+        this.data.getSideBarData.subscribe((res: SideBarData[]) => {
+          this.side_bar_data = res;
+        });
+      }
+    });
     // get sidebar data as observable because data is controlled for design to expand submenus
-
   }
 
-cliclReloader() {}
+  cliclReloader() {}
 
   private getRoutes(route: url): void {
     const splitVal = route.url.split('/');
@@ -113,17 +112,19 @@ cliclReloader() {}
 
   public miniSideBarMouseHover(position: string): void {
     if (position == 'over') {
-      this.sideBar.expandSideBar.next("true");
+      this.sideBar.expandSideBar.next('true');
     } else {
-      this.sideBar.expandSideBar.next("false");
+      this.sideBar.expandSideBar.next('false');
     }
   }
 
-  public expandSubMenus(menu: { menuValue: string; showSubRoute: boolean; }): void {
+  public expandSubMenus(menu: {
+    menuValue: string;
+    showSubRoute: boolean;
+  }): void {
     // console.log(menu,"main menu")
     sessionStorage.setItem('menuValue', menu.menuValue);
     this.side_bar_data.map((mainMenus: MainMenus) => {
-
       mainMenus.menu.map((resMenu) => {
         // collapse other submenus which are open
         if (resMenu.menuValue == menu.menuValue) {
@@ -146,5 +147,4 @@ cliclReloader() {}
   public logOut(): void {
     this.auth.logout();
   }
-
 }

@@ -74,6 +74,7 @@ export class RegisterComponent implements OnInit {
     this.getLocations();
     this.updateFormStructure('personal');
   }
+  
   /**
    * Initializes the reactive form with necessary fields and validators.
    */

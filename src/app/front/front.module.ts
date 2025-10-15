@@ -10,6 +10,7 @@ import { FeatureModuleRoutingModule } from '../feature-module/feature-module-rou
 import { SharedModule } from '../shared/shared.module';
 import { PageComponent } from './page/page.component';
 import { FooterComponent } from './footer/footer.component';
+import { AddSubscriberComponent } from './add-subscriber/add-subscriber.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, '../assets/i18n/', '.json');
@@ -19,7 +20,8 @@ export function HttpLoaderFactory(http: HttpClient) {
   declarations: [
     PackageDetailsComponent,
     PageComponent,
-    FooterComponent
+    FooterComponent,
+    AddSubscriberComponent
   ],
   exports: [PackageDetailsComponent, PageComponent, FooterComponent],
   providers: [],

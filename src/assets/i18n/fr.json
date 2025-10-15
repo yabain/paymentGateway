@@ -34,7 +34,7 @@
     "skip": "Passer",
     "start": "Commencer",
     "reset": "Réinitialiser",
-    "add": "Add",
+    "add": "Ajouter",
     "retry": "Réessayer",
     "share": "Partager",
     "copy": "Copier",
@@ -489,7 +489,7 @@
     "password": "Mot de passe",
     "secure": "Sécurité",
     "enabled": "Actif",
-    "disabled": "Désactivé",
+    "disabled": "Inactif",
     "encription": "Criptage",
     "resetSettings": "Réinitialiser",
     "sendTest": "Envoyer un mail test",
@@ -625,6 +625,8 @@
     "checkIfAvailable": "Cocher si valable",
     "addOption": "Ajouter",
     "subscribe": "Souscrire",
+    "pay": "Payer",
+    "as": "Au compte de",
     "unsubscribe": "Se Désabonner",
     "deletePlan": "Supprimer ce plan",
     "wantDeletePlan": "Êtes-vous certain de vouloir supprimer",
@@ -637,7 +639,8 @@
     "subscriptionExpireIn": "Votre abonnement expire dans:",
     "subscriptionToday": "Abonnez-vous dès aujourd'hui",
     "renewSubscription": "Renouvellez votre abonnement",
-    "subscriberList": "Liste des abonnés"
+    "subscriberList": "Liste des abonnés",
+    "subscriptionStartDate": "Date de début de l'abonnement"
   },
   "personalizer": {
     "title": "Personnalisateur",
