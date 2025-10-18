@@ -234,6 +234,7 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
       this.checkingSubscriptionStatus = false;
     }
     console.log('plan', plan)
+    console.log('currentUser: ', this.currentUser);
 
     this.subscriptionService
       .checkSbscriberStatus(this.planData._id, this.currentUser._id || undefined)

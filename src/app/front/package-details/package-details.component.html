@@ -36,15 +36,15 @@
                                 <div class="col-md-8">
                                     <div class="event-details">
                                         <span
-                                            *ngIf="subscriptionStatus?.existingSubscription && subscriptionStatus?.status">
-                                            {{ 'subscriptions.subscriptionExpireIn' | translate }} <br>
-                                        </span>
-                                        <span
                                             *ngIf="subscriptionStatus?.existingSubscription && !subscriptionStatus?.status">
                                             {{ 'subscriptions.renewSubscription' | translate }} <br>
                                         </span>
                                         <span *ngIf="subscriptionStatus?.existingSubscription === false">
                                             {{ 'subscriptions.subscriptionToday' | translate }} <br>
+                                        </span>
+                                        <span
+                                            *ngIf="subscriptionStatus?.existingSubscription && subscriptionStatus?.status">
+                                            {{ 'subscriptions.subscriptionExpireIn' | translate }} <br>
                                         </span>
                                         <div class="event-countdown" *ngIf="subscriptionStatus?.existingSubscription">
                                             <div class="countdown-container">
@@ -70,6 +70,11 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <span
+                                            *ngIf="subscriptionStatus?.existingSubscription && subscriptionStatus?.status">
+                                            {{ 'item.start' | translate }}: {{ getDate(subscriptionStatus?.startDate) }} 
+                                            || {{ 'item.end' | translate }}: {{ getDate(subscriptionStatus?.endDate) }}<br>
+                                        </span>
                                         <h1>{{ planData?.title }}</h1>
                                         <div class="event-time" style="margin-bottom: 10px;">{{ planData?.subTitle }}
                                         </div>
