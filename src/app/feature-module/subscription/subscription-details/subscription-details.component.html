@@ -1,0 +1,112 @@
+<div class="page-header">
+  <div class="content-page-header page-tilte">
+    <h5 *ngIf="!isAdminRoute">{{ 'subscriptions.myList' | translate }}</h5>
+    <h5 *ngIf="isAdminRoute">{{ 'subscriptions.allSystemList' | translate }}</h5>
+    <div class="page-content">
+      <div class="list-btn">
+        <ul class="filter-list">
+          <li>
+            <a class="btn-filters active btn-hover" data-bs-toggle="tooltip" data-bs-placement="bottom"
+              matTooltip="Grid-View"><span><i class="feather icon-grid"></i></span></a>
+          </li>
+          <li>
+            <a class="btn-filters btn-hover" data-bs-toggle="tooltip" data-bs-placement="bottom"
+              matTooltip="List-View"><span><i class="feather icon-list"></i></span></a>
+          </li>
+          <li>
+            <a class="btn-filters btn-hover" href="javascript:void(0);" data-bs-toggle="tooltip"
+              data-bs-placement="bottom" title="Refresh" matTooltip="Refresh"><span><i
+                  class="feather icon-refresh-ccw"></i></span></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /Page Header -->
+
+<div class="super-admin-list-head">
+  <div class="row">
+    <div class="col-xl-3 col-md-6 d-flex">
+      <div class="card w-100">
+        <div class="card-body">
+          <div class="grid-info-item subscription-list total-subscriber">
+            <div class="grid-head-icon">
+              <i class="feather icon-users"></i>
+            </div>
+            <div class="grid-info">
+              <span>{{ "subscriptions.totalSubscriptions" | translate }}</span>
+              <h4>0</h4>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-6 d-flex">
+      <div class="card w-100">
+        <div class="card-body">
+          <div class="grid-info-item subscription-list active-subscriber">
+            <div class="grid-head-icon">
+              <i class="feather icon-user-check"></i>
+            </div>
+            <div class="grid-info">
+              <span>{{ "subscriptions.activeSubscriptions" | translate }}</span>
+              <h4>0</h4>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-6 d-flex">
+      <div class="card w-100">
+        <div class="card-body">
+          <div class="grid-info-item subscription-list expired-subscriber">
+            <div class="grid-head-icon">
+              <i class="feather icon-user-x"></i>
+            </div>
+            <div class="grid-info">
+              <span>{{ "subscriptions.inactiveSubscriptions" | translate }}</span>
+              <h4>0</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="col-xl-3 col-md-6 d-flex">
+      <div class="card w-100">
+        <div class="card-body">
+          <div class="grid-info-item subscription-list total-transaction">
+            <div class="grid-head-icon">
+              <i class="feather icon-shield"></i>
+            </div>
+            <div class="grid-info">
+              <span>Total Transaction</span>
+              <h4>$6,565,60</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> -->
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+
+    </div>
+  </div>
+</div>
+<div class="row d-flex align-items-center justify-content-center">
+  <div class="col-md-12" style="display: flex;
+                                justify-content: center;
+                                align-items: center;">
+    <img src="../../../../assets/img/ressorces/nts.png" alt="" style="max-width: 150px;
+                                    height: auto;">
+  </div>
+  <div class="col-md-12" style="display: flex;
+                                justify-content: center;
+                                align-items: center; margin-bottom: 30px;">
+    {{ "nts" | translate }}
+  </div>
+</div>

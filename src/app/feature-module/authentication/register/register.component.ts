@@ -97,6 +97,7 @@ export class RegisterComponent implements OnInit {
       email: new FormControl(null, {
         validators: [Validators.required, Validators.email],
       }),
+      whatsapp: new FormControl(null, { validators: [Validators.required] }),
       password: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(8)],
       }),
@@ -178,6 +179,7 @@ export class RegisterComponent implements OnInit {
 
     // Nettoyage numéro
     this.form.value.phone = this.form.value.phone.replace(/\D/g, '');
+    this.form.value.whatsapp = this.contryCode + '-' + this.form.value.phone.replace(/\D/g, '');
 
     this.isLoading = true;
 

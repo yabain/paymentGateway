@@ -21,65 +21,156 @@
   <div class="col-lg-6">
     <div class="saas-login-wrapper p-0">
       <div class="login-content">
-        <form [formGroup]="form">
-          <div class="login-userset">
-            <div class="login-logo">
-              <img src="assets/img/ressorces/dk_logo.png" alt="Logo" />
+        <div class="login-userset">
+          <div class="login-logo">
+            <img src="assets/img/ressorces/dk_logo.png" alt="Logo" />
+          </div>
+          <div class="login-card">
+            <div class="login-heading">
+              <p>{{ 'auth.welcomeBack' | translate }}</p>
+              <h3>{{ 'auth.signInToYourAccount' | translate }}</h3>
             </div>
-            <div class="login-card">
-              <div class="login-heading">
-                <p>{{ 'auth.welcomeBack' | translate }}</p>
-                <h3>{{ 'auth.signInToYourAccount' | translate }}</h3>
-              </div>
-              <div class="input-block mb-3">
-                <label class="form-label">{{ 'auth.email' | translate }} *</label>
-                <input class="form-control" formControlName="email" type="text"
-                  placeholder="{{ 'auth.enterEmail' | translate }}" />
-              </div>
-              <div class="input-block mb-3">
-                <label class="form-control-label">{{ 'auth.password' | translate }} *</label>
-                <div class="pass-group">
-                  <input class="form-control" label="" formControlName="password" [type]="type ? 'password' : 'text'"
-                    placeholder="{{ 'auth.enterPassword' | translate }}" minlength="8" />
-                  <a href="javascript:void(0);" (click)="changeType()">
-                    <span [ngClass]="
+
+            <div class="subscription-plane-head">
+              <ul>
+                <li>
+                  <a (click)="toggleChoice(true)" [class]="isEmail ? 'active' : ''">{{ 'sideMenu.mail' | translate }}
+                  </a>
+                </li>
+                <li>
+                  <a (click)="toggleChoice(false)" [class]="!isEmail ? 'active' : ''">{{ 'auth.phone' | translate }}
+                    </a>
+                </li>
+              </ul>
+            </div>
+
+            <div *ngIf="isEmail">
+              <form [formGroup]="form">
+                <div class="input-block mb-3">
+                  <label class="form-label">{{ 'auth.email' | translate }} *</label>
+                  <input class="form-control" formControlName="email" type="text"
+                    placeholder="{{ 'auth.enterEmail' | translate }}" />
+                </div>
+                <div class="input-block mb-3">
+                  <label class="form-control-label">{{ 'auth.password' | translate }} *</label>
+                  <div class="pass-group">
+                    <input class="form-control" label="" formControlName="password" [type]="type ? 'password' : 'text'"
+                      placeholder="{{ 'auth.enterPassword' | translate }}" minlength="8" />
+                    <a href="javascript:void(0);" (click)="changeType()">
+                      <span [ngClass]="
                         type
                           ? 'fas toggle-password fa-eye-slash'
                           : 'fas toggle-password fa-eye'
                       "></span>
-                  </a>
+                    </a>
+                  </div>
                 </div>
-              </div>
-              <div class="input-block mb-0">
-                <div class="row">
-                  <div class="col-sm-6">
-                    <div class="form-check custom-checkbox mb-3">
-                      <input type="checkbox" class="form-check-input" id="cb1" />
-                      <label class="custom-control-label mb-0" for="cb1">{{ 'auth.rememberMe' | translate}}</label>
+                <div class="input-block mb-0">
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div class="form-check custom-checkbox mb-3">
+                        <input type="checkbox" class="form-check-input" id="cb1" />
+                        <label class="custom-control-label mb-0" for="cb1">{{ 'auth.rememberMe' | translate}}</label>
+                      </div>
+                    </div>
+                    <div class="col-sm-6 text-sm-end mb-3">
+                      <span class="forgot-link" [routerLink]="routes.forgot_password">{{ 'auth.forgotPassword' |
+                        translate}} ?</span>
                     </div>
                   </div>
-                  <div class="col-sm-6 text-sm-end mb-3">
-                    <span class="forgot-link" [routerLink]="routes.forgot_password">{{ 'auth.forgotPassword' |
-                      translate}} ?</span>
-                  </div>
                 </div>
+                <button type="submit" (click)="onSubmit()" class="btn btn-primary" *ngIf="!isLoading">
+                  {{ 'auth.login' | translate}}
+                </button>
+                <button [disabled]="true" class="btn btn-lg btn-block btn-light w-100" type="submit" disabled
+                  *ngIf="isLoading">
+                  <div class="spinner-border" role="status"></div>
+                </button>
+              </form>
+            </div>
+
+            <div *ngIf="!isEmail">
+              <div *ngIf="!gettingLocations">
+                <form [formGroup]="form2">
+                  <div class="input-block mb-3">
+                    <label htmlFor="country">{{ 'auth.country' | translate}} *</label>
+                    <div class="col-lg-12">
+                      <div class="input-group">
+                        <img [src]="flagCountry" alt="" class="flag" slot="start" style="width: 30px; margin: 7px 5px;">
+                        <select id="country" *ngIf="!gettingLocations" (change)="onSelect($event)" class="form-select">
+                          <option value="" selected></option>
+                          <option *ngFor="let country of countries" [value]="country._id">
+                            {{ country.name | translate}}
+                          </option>
+                        </select>
+                        <span id="basic-addon1" class="form-select" *ngIf="gettingLocations">
+                          <div class="spinner-border" role="status"></div>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="input-block mb-3 row">
+                    <label htmlFor="phone">{{ 'auth.phone' | translate}} (Whatsapp) *</label>
+                    <div class="col-lg-12">
+                      <div class="input-group">
+                        <span class="input-group-text" id="basic-addon1">{{contryCode}}</span>
+                        <input id="phone" type="text" formControlName="whatsapp" class="form-control" placeholder="phone"
+                          aria-label="Username" aria-describedby="basic-addon1" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="input-block mb-3">
+                    <label class="form-control-label">{{ 'auth.password' | translate }} *</label>
+                    <div class="pass-group">
+                      <input class="form-control" label="" formControlName="password"
+                        [type]="type ? 'password' : 'text'" placeholder="{{ 'auth.enterPassword' | translate }}"
+                        minlength="8" />
+                      <a href="javascript:void(0);" (click)="changeType()">
+                        <span [ngClass]="
+                        type
+                          ? 'fas toggle-password fa-eye-slash'
+                          : 'fas toggle-password fa-eye'
+                      "></span>
+                      </a>
+                    </div>
+                  </div>
+                  <div class="input-block mb-0">
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <div class="form-check custom-checkbox mb-3">
+                          <input type="checkbox" class="form-check-input" id="cb1" />
+                          <label class="custom-control-label mb-0" for="cb1">{{ 'auth.rememberMe' | translate}}</label>
+                        </div>
+                      </div>
+                      <div class="col-sm-6 text-sm-end mb-3">
+                        <span class="forgot-link" [routerLink]="routes.forgot_password">{{ 'auth.forgotPassword' |
+                          translate}} ?</span>
+                      </div>
+                    </div>
+                  </div>
+                  <button type="submit" (click)="onSubmit()" class="btn btn-primary" *ngIf="!isLoading">
+                    {{ 'auth.login' | translate}}
+                  </button>
+                  <button [disabled]="true" class="btn btn-lg btn-block btn-light w-100" type="submit" disabled
+                    *ngIf="isLoading">
+                    <div class="spinner-border" role="status"></div>
+                  </button>
+                </form>
               </div>
-              <button type="submit" (click)="onSubmit()" class="btn btn-primary" *ngIf="!isLoading">
-                {{ 'auth.login' | translate}}
-              </button>
-              <button [disabled]="form.invalid" class="btn btn-lg btn-block btn-light w-100" type="submit" disabled
-                *ngIf="isLoading">
+              <div *ngIf="gettingLocations">
                 <div class="spinner-border" role="status"></div>
-              </button>
+              </div>
             </div>
-            <div class="acc-in">
-              <p>
-                {{ 'auth.doNotHaveAccount' | translate}} ?
-                <a [routerLink]="routes.register">{{ 'auth.register' | translate}}</a>
-              </p>
-            </div>
+
+
           </div>
-        </form>
+          <div class="acc-in">
+            <p>
+              {{ 'auth.doNotHaveAccount' | translate}} ?
+              <a [routerLink]="routes.register">{{ 'auth.register' | translate}}</a>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </div>

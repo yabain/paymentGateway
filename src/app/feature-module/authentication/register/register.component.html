@@ -62,7 +62,7 @@
                   <div class="input-group">
                     <img [src]="flagCountry" alt="" class="flag" slot="start" style="width: 30px; margin: 7px 5px;">
                     <select id="country" formControlName="countryId" *ngIf="!gettingLocations"
-                      (change)="onSelect($event)" class="form-select" (onChange)="accountTypeOnSelect($event)">
+                      (change)="onSelect($event)" class="form-select">
                       <option value="" selected></option>
                       <option *ngFor="let country of countries" [value]="country._id">
                         {{ country.name | translate}}
@@ -89,7 +89,7 @@
                 </div>
               </div>
               <div class="input-block mb-3 row">
-                <label htmlFor="phone">{{ 'auth.phone' | translate}} *</label>
+                <label htmlFor="phone">{{ 'auth.phone' | translate}} (Whatsapp) *</label>
                 <div class="col-lg-12">
                   <div class="input-group">
                     <span class="input-group-text" id="basic-addon1">{{contryCode}}</span>

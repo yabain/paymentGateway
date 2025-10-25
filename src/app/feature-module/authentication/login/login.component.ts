@@ -5,6 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { routes } from 'src/app/core/core.index';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { LanguageService } from 'src/app/services/language/language.service';
+import { LocationService } from 'src/app/services/location/location.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { SystemService } from 'src/app/services/system/system.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
@@ -20,8 +21,17 @@ export class LoginComponent implements OnInit {
   public routes = routes;
 
   form: FormGroup;
+  form2: FormGroup;
   type = true; // Used to toggle password visibility
   isLoading: boolean = false;
+  isEmail: boolean = true;
+  countries: any = [];
+  selectedCountry: any;
+  contryCode: string = '--';
+  phone: number;
+  gettingLocations: boolean = true;
+
+  flagCountry: string = 'assets/ressorces/flag.png';
 
   constructor(
     private authService: AuthService,
@@ -33,8 +43,10 @@ export class LoginComponent implements OnInit {
     private systemService: SystemService,
     private toastService: ToastService,
     private language: LanguageService,
+    private location: LocationService,
   ) {
     this.initForm();
+    this.getLocations();
   }
 
   /**
@@ -46,6 +58,33 @@ export class LoginComponent implements OnInit {
         this.router.navigateByUrl('/tabs', { replaceUrl: true });
       }
     });
+  }
+
+  /**
+   * Retrieves and sets available countries and cities for the form.
+   */
+  getLocations() {
+    this.location.getCountries().subscribe((countries) => {
+      console.log('countries: ', countries);
+      this.countries = countries.sort((a, b) => a.name.localeCompare(b.name));
+      this.countries = this.countries.filter((e) => e.status != false);
+      this.gettingLocations = false;
+    });
+  }
+
+  onSelect(event) {
+    const value = (event.target as HTMLSelectElement).value;
+    let country = this.countries.filter((e) => e._id === value);
+    this.selectedCountry = country[0];
+    this.setFlag(value);
+  }
+
+  setFlag(coutryId) {
+    let country = this.countries.filter((e) => e._id === coutryId);
+    country = country[0];
+    this.flagCountry =
+      country.flagUrl || '../../../../assets/ressorces/flag.png';
+    this.contryCode = '+' + country.code || '--';
   }
 
   /**
@@ -63,8 +102,23 @@ export class LoginComponent implements OnInit {
    */
   initForm() {
     this.form = new FormGroup({
+      type: new FormControl('email', {
+        validators: [Validators.required],
+      }),
       email: new FormControl(null, {
         validators: [Validators.required, Validators.email],
+      }),
+      password: new FormControl(null, {
+        validators: [Validators.required, Validators.minLength(8)],
+      }),
+    });
+
+    this.form2 = new FormGroup({
+      type: new FormControl('phone', {
+        validators: [Validators.required],
+      }),
+      whatsapp: new FormControl(null, {
+        validators: [Validators.required],
       }),
       password: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(8)],
@@ -83,14 +137,24 @@ export class LoginComponent implements OnInit {
    * Handles form submission for user login
    */
   onSubmit() {
-    if (!this.form.valid) {
-      this.form.markAllAsTouched();
-      return;
+    if (this.isEmail) {
+      if (!this.form.valid) {
+        this.form.markAllAsTouched();
+        return;
+      }
+    } else {
+      const phone = this.form2.value.whatsapp;
+      this.form2.value.whatsapp = this.selectedCountry.code + '-' + phone.toString();
+      console.log('form2', this.form2.value);
+      if (!this.form2.valid) {
+        this.form.markAllAsTouched();
+        return;
+      }
     }
 
     this.isLoading = true;
     this.authService
-      .login(this.form.value)
+      .login(this.isEmail ? this.form.value : this.form2.value)
       .then((user: any) => {
         console.log('onSubmit: ', user);
         if (user) {
@@ -151,7 +215,7 @@ export class LoginComponent implements OnInit {
           this.translate
             .get('auth.desabledAccountMsg')
             .subscribe((res: string) => {
-                this.toastService.presentToast('error', 'Error', res, 10000);
+              this.toastService.presentToast('error', 'Error', res, 10000);
             });
           // this.authService.logout();
         } else {
@@ -197,5 +261,9 @@ export class LoginComponent implements OnInit {
    */
   navigateTo(location: string) {
     this.router.navigate([location], { replaceUrl: true });
+  }
+
+  toggleChoice(isEmail: boolean) {
+    this.isEmail = isEmail;
   }
 }
