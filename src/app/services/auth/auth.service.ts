@@ -49,7 +49,6 @@ export class AuthService {
    * @returns A promise resolving to the user's UID or rejecting with an error.
    */
   login(formValue): Promise<any> {
-    console.log('login in service', formValue);
     return new Promise((resolve, reject) => {
       try {
         this.apiService.post('auth/signin', formValue).subscribe(
@@ -117,7 +116,6 @@ export class AuthService {
           return true;
         });
     } catch (e) {
-      console.log('logout error');
       console.error('Error during logout:', e);
       throw e;
     }

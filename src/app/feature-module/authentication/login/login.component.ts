@@ -65,7 +65,6 @@ export class LoginComponent implements OnInit {
    */
   getLocations() {
     this.location.getCountries().subscribe((countries) => {
-      console.log('countries: ', countries);
       this.countries = countries.sort((a, b) => a.name.localeCompare(b.name));
       this.countries = this.countries.filter((e) => e.status != false);
       this.gettingLocations = false;
@@ -145,7 +144,6 @@ export class LoginComponent implements OnInit {
     } else {
       const phone = this.form2.value.whatsapp;
       this.form2.value.whatsapp = this.selectedCountry.code + '-' + phone.toString();
-      console.log('form2', this.form2.value);
       if (!this.form2.valid) {
         this.form.markAllAsTouched();
         return;
@@ -156,10 +154,8 @@ export class LoginComponent implements OnInit {
     this.authService
       .login(this.isEmail ? this.form.value : this.form2.value)
       .then((user: any) => {
-        console.log('onSubmit: ', user);
         if (user) {
           if (user === false) {
-            console.log('onSubmit false');
             this.translate
               .get('auth.errorCredential')
               .subscribe((res: string) => {
@@ -169,7 +165,6 @@ export class LoginComponent implements OnInit {
               });
           }
           if (user.isActive === false) {
-            console.log('onSubmit active');
             this.isLoading = false;
             this.translate
               .get('auth.desabledAccountMsg')
@@ -196,7 +191,6 @@ export class LoginComponent implements OnInit {
             });
           }
         } else {
-          console.log('onSubmit else out');
           this.isLoading = false;
           this.translate
             .get('auth.errorCredential')
@@ -209,9 +203,8 @@ export class LoginComponent implements OnInit {
       .catch((e) => {
         this.isLoading = false;
         const err = e.error.message.message;
-        console.log('error to login: ', e.error.message.message)
+        console.error('error to login: ', e.error.message.message)
         if (err.search('account is disabled') > 0) {
-          console.log('In the if')
           this.translate
             .get('auth.desabledAccountMsg')
             .subscribe((res: string) => {
