@@ -773,11 +773,11 @@ export class DataService {
         },
         {
           menuValue: 'profile',
-          route: '/dashboard',
+          route: '/profile',
           hasSubRoute: false, // Show arrow after menu item title
           showSubRoute: true,
           icon: 'user',
-          base: 'profil',
+          base: 'profile',
         },
         // {
         //   menuValue: 'subscriptions',

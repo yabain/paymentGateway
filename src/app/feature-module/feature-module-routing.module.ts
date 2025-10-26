@@ -42,14 +42,6 @@ const routes: Routes = [
             (m) => m.SubscriptionModule,
           ),
       },
-      {
-        path: 'admin-massaging',
-        canActivate: [AdminGuard],
-        loadChildren: () =>
-          import('./messaging/messaging.module').then(
-            (m) => m.MessagingModule,
-          ),
-      },
 
       // --- Admin route ----
       {
@@ -80,6 +72,14 @@ const routes: Routes = [
         loadChildren: () =>
           import('./payout/payout.module').then(
             (m) => m.PayoutModule,
+          ),
+      },
+      {
+        path: 'admin-massaging',
+        canActivate: [AdminGuard],
+        loadChildren: () =>
+          import('./messaging/messaging.module').then(
+            (m) => m.MessagingModule,
           ),
       },
 

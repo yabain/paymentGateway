@@ -1,198 +1,247 @@
-<div class="scroll-content">
-  <div class="profile-cover">
-    <div class="profile-cover-wrap">
-      <img
-        class="profile-cover-img"
-        src="assets/img/profiles/avatar-02.jpg"
-        alt="Profile Cover"
-      />
+<!-- Page Wrapper -->
+<div class="content container-fluid">
+  <div class="row justify-content-lg-center">
+    <div class="col-lg-12">
 
-      <!-- Custom File Cover -->
-      <div class="cover-content">
-        <div class="custom-file-btn">
-          <input type="file" class="custom-file-btn-input" id="cover_upload" />
-          <label
-            class="custom-file-btn-label btn btn-sm btn-white"
-            for="cover_upload"
-          >
-            <i class="fas fa-camera"></i>
-            <span class="d-none d-sm-inline-block ms-1">Update Cover</span>
-          </label>
+      <div class="profile-cover">
+        <div class="profile-cover-wrap">
+          <img class="profile-cover-img" src="{{cover}}" alt="">
         </div>
       </div>
-      <!-- /Custom File Cover -->
-    </div>
-  </div>
 
-  <div class="text-center mb-5">
-    <label class="avatar avatar-xxl profile-cover-avatar" for="avatar_upload">
-      <img
-        class="avatar-img"
-        src="assets/img/profiles/avatar-02.jpg"
-        alt="Profile Image"
-      />
-      <input type="file" id="avatar_upload" />
-      <span class="avatar-edit">
-        <i class="fas fa-edit avatar-uploader-icon shadow-soft"></i>
-      </span>
-    </label>
-    <h2>
-      Charles Hafner
-      <i
-        class="fas fa-certificate text-primary"
-        data-bs-toggle="tooltip"
-        data-placement="top"
-        title=""
-        data-original-title="Verified"
-      ></i>
-    </h2>
-    <ul class="list-inline">
-      <li class="list-inline-item">
-        <i class="far fa-building"></i> <span>Hafner Pvt Ltd.</span>
-      </li>
-      <li class="list-inline-item">
-        <i class="fas fa-map-marker-alt"></i> West Virginia, US
-      </li>
-      <li class="list-inline-item">
-        <i class="far fa-calendar-alt"></i> <span>Joined November 2017</span>
-      </li>
-    </ul>
-  </div>
-
-  <div class="row">
-    <div class="col-lg-4">
-      <div class="card card-body">
-        <h5>Complete your profile</h5>
-
-        <!-- Progress -->
-        <div class="d-flex justify-content-between align-items-center">
-          <div class="progress progress-md flex-grow-1">
-            <div
-              class="progress-bar bg-primary"
-              role="progressbar"
-              style="width: 30%"
-              aria-valuenow="30"
-              aria-valuemin="0"
-              aria-valuemax="100"
-            ></div>
+      <div class="text-center mb-5">
+        <form [formGroup]="uploadPictureForm" class="" style="text-align: center;" *ngIf="currentUser && uploadPictureForm">
+          <div class="avatar avatar-xxl profile-cover-avatar">
+            <img class="avatar-img" src="{{userData?.pictureUrl ? userData?.pictureUrl  : 'assets/img/new/user.png'}}" alt="">
+            <span class="avatar-edit" (click)="changePicture(true);fileUploader.click()">
+              <i class="feather icon-camera avatar-uploader-icon shadow-soft"></i>
+            </span>
+            <input type="file" name="picture" id="picture" accept="image/*" class="form-control ml-4" #fileUploader
+              formControlName="pictureFile" (change)="showPreview($event)" style="display: none;">
           </div>
-          <span class="ms-4">30%</span>
+        </form>
+        <div class="div">
+          <span class="badge rounded-pill badge-outline-success"
+          *ngIf="currentUser && !currentUser?.premium && currentUser?.verified && !currentUser?.warning">
+            <i class="feather icon-check-circle"></i> {{ "badge.verified" | translate }}</span>
+            <span class="badge rounded-pill badge-outline-warning"
+            *ngIf="currentUser && currentUser?.warning">
+              <i class="feather icon-alert-triangle"></i> {{ 'profile.warningAccount' | translate }}</span>
+          <span class="badge badge-gradient-success"
+          *ngIf="currentUser && currentUser?.premium && !currentUser?.warning">
+            <i class="feather icon-zap"></i> Premium</span>
+          <span class="badge badge-soft-danger badge-border"
+          *ngIf="currentUser && !currentUser?.verified && !currentUser?.warning">
+            <i class="feather icon-user-x"></i> {{ "badge.notVerified" | translate }}</span>
+          <span class="badge badge-soft-dark badge-border"
+          *ngIf="currentUser && currentUser?.inVerification">
+            <i class="feather icon-refresh-ccw"></i> {{ "badge.inVerification" | translate }}</span>
+          <span class="badge badge-gradient-primary" *ngIf="currentUser && currentUser?.isAdmin">
+            <i class="feather icon-slack"></i> Admin</span>
+          <div name="checkmark-done-outline" class="verified-badge"
+            *ngIf="currentUser && currentUser?.verified && !currentUser?.vip && !currentUser?.warning && !currentUser?.premium ">
+          </div>
+          <p *ngIf="currentUser && currentUser?.warning" class="warning-message">{{ 'profile.warningAccount' |
+            translate }}</p>
         </div>
-        <!-- /Progress -->
+        <br>
+        <div *ngIf="isChangePicture">
+          <a class="btn btn-sm btn-secondary m-2" (click)="cancel()">{{ "action.cancel" |
+            translate }}</a>
+          <a *ngIf="!uploadingPicture" class="btn btn-sm btn-success m-2" (click)="savePicture()">{{ "action.save" |
+            translate }}</a>
+          <a *ngIf="uploadingPicture" class="btn btn-sm btn-success" disabled>
+            <img src="assets/img/new/loader.gif" width="20px">
+          </a>
+        </div>
+        <h2>
+          {{ showName(userData) }}
+          <!-- <i class="fas fa-certificate text-primary small" data-bs-toggle="tooltip" data-placement="top" title="" data-original-title="Verified"></i> -->
+        </h2>
+        <ul class="list-inline" *ngIf="userData">
+          <li class="list-inline-item" *ngIf="userData?._id">
+            ID: <span style="margin-left: 5px;">{{userData?._id ?
+              userData?._id : ''}}</span>
+          </li>
+        </ul>
+        <div *ngIf="!userData">
+          <img src="assets/img/new/loader.gif" width="20px">
+        </div>
       </div>
 
-      <div class="card">
-        <div class="card-header">
-          <h5 class="card-title d-flex justify-content-between">
-            <span>Profile</span>
-            <a
-              class="btn btn-sm btn-white"
-              [routerLink]="routes.profileSettings"
-              >Edit</a
-            >
-          </h5>
-        </div>
-        <div class="card-body">
-          <ul class="list-unstyled mb-0">
-            <li class="py-0">
-              <small class="text-dark">About</small>
-            </li>
-            <li>Charles Hafner</li>
-            <li>Hafner Pvt Ltd.</li>
-            <li class="pt-2 pb-0">
-              <small class="text-dark">Contacts</small>
-            </li>
-            <li>charleshafner&#64;example.com</li>
-            <li>+1 (304) 499-13-66</li>
-            <li class="pt-2 pb-0">
-              <small class="text-dark">Address</small>
-            </li>
-            <li>
-              4663 Agriculture Lane,<br />
-              Miami,<br />
-              Florida - 33165,<br />
-              United States.
-            </li>
-          </ul>
-        </div>
+      <div class="alert alert-warning alert-dismissible fade show" role="alert"
+      *ngIf="currentUser && currentUser.warning">
+        <strong>{{ "badge.warning" | translate }}: </strong> 
+        {{ "alert.warningAccount" | translate }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
       </div>
-    </div>
 
-    <div class="col-lg-8">
-      <div class="card">
-        <div class="card-header">
-          <h5 class="card-title">Activity</h5>
+      <div class="alert alert-secondary alert-dismissible fade show" role="alert"
+      *ngIf="currentUser && currentUser.inVerification">
+        <strong>{{ "badge.inVerification" | translate }}: </strong> 
+        {{ "alert.inVerification" | translate }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title d-flex justify-content-between">
+                <span>{{ "sideMenu.profile" | translate }}</span>
+                <a class="btn btn-sm btn-white" (click)="edit()" *ngIf="!edition && !loading">{{ "action.edit" |
+                  translate }}</a>
+                <a class="btn btn-sm btn-secondary" (click)="edit()" *ngIf="edition && !loading">{{ "action.cancel" |
+                  translate }}</a>
+                <a class="btn btn-sm btn-success" (click)="submit()" *ngIf="edition && !loading">{{ "action.save" |
+                  translate }}</a>
+                <a class="btn btn-sm" *ngIf="loading"><img src="assets/img/new/loader.gif" width="20px"></a>
+              </h5>
+            </div>
+            <div class="card-body" *ngIf="!userData" style="text-align: center;">
+              <img src="assets/img/new/loader.gif" width="20px">
+            </div>
+            <div class="card-body" *ngIf="userData && !edition">
+              <ul class="list-unstyled mb-0">
+                <li class="py-0">
+                  <i class="feather icon-user" style="margin-right: 5px;"></i>
+                  <small class="text-dark">{{ "auth.firstName" | translate }}</small>
+                </li>
+                <input type="text" class="form-control" value="{{userData?.firstName}}" disabled><br>
+
+                <li class="pt-2 pb-0">
+                  <i class="feather icon-user" style="margin-right: 5px;"></i>
+                  <small class="text-dark">{{ "auth.lastName" | translate }}</small>
+                </li>
+                <input type="text" class="form-control" value="{{userData?.lastName}}" disabled><br>
+
+                <li class="pt-2 pb-0">
+                  <i class="feather icon-user" style="margin-right: 5px;"></i>
+                  <small class="text-dark">Sexe</small>
+                </li>
+                <input type="text" class="form-control" value="{{userData?.sexe}}" disabled><br>
+
+                <li class="pt-2 pb-0">
+                  <i class="feather icon-mail" style="margin-right: 5px;"></i><small class="text-dark">{{ "terms.email"
+                    |
+                    translate }}</small>
+                </li>
+                <input type="text" class="form-control" value="{{userData?.email}}" disabled><br>
+
+                <li class="pt-2 pb-0">
+                  <i class="feather icon-map-pin" style="margin-right: 5px;"></i><small class="text-dark">{{
+                    "auth.country" |
+                    translate }}</small>
+                </li>
+                <input type="text" class="form-control" value="{{userData?.countryId.name}}" disabled><br>
+
+                <li class="pt-2 pb-0">
+                  <i class="feather icon-map-pin" style="margin-right: 5px;"></i><small class="text-dark">{{ "auth.city"
+                    |
+                    translate }}</small>
+                </li>
+                <input type="text" class="form-control" value="{{userData?.cityId.name}}" disabled><br>
+
+                <li class="pt-2 pb-0">
+                  <i class="feather icon-map-pin" style="margin-right: 5px;"></i><small class="text-dark">{{
+                    "mail.address" |
+                    translate }}</small>
+                </li>
+                <input type="text" *ngIf="userData?.phone" class="form-control" value="{{userData?.address}}"
+                  disabled><br>
+
+                <li class="pt-2 pb-0">
+                  <i class="feather icon-phone" style="margin-right: 5px;"></i><small class="text-dark">{{ "terms.phone"
+                    |
+                    translate }} (Whatsapp)</small>
+                </li>
+                <input type="text" *ngIf="userData?.phone" class="form-control" value="{{userData?.phone}}"
+                  disabled><br>
+
+                <li class="pt-2 pb-0">
+                  <i class="feather icon-calendar" style="margin-right: 5px;"></i><small class="text-dark">{{
+                    "users.creationDate" |
+                    translate }}</small>
+                </li>
+                <input type="text" *ngIf="userData?.phone" class="form-control"
+                  value="{{userData?.createdAt | date: 'dd/MM/YYYY'}}" disabled><br>
+
+
+
+              </ul>
+            </div>
+            <!-- <form [formGroup]="form" (ngSubmit)="submit()" class="card-body" *ngIf="userData && edition">
+                              <ul class="list-unstyled mb-0">
+                                  <li class="py-0">
+                                      <small class="text-dark">Nom *</small>
+                                  </li>
+                                  <input type="text" class="form-control" formControlName="firstName" value="{{userData?.firstName}}"><br>
+                                  <li class="pt-2 pb-0">
+                                      <small class="text-dark">Prénom *</small>
+                                  </li>
+                                  <input type="text" class="form-control" formControlName="lastName" value="{{userData?.lastName}}"><br>
+                                  <li class="pt-2 pb-0">
+                                      <i class="fa fa-user" style="margin-right: 5px;"></i><small
+                                          class="text-dark">Sexe *</small>
+                                  </li>
+                                  <select class="select form-select form-control" formControlName="sexe">
+                                      <option value="M" selected>Homme</option>
+                                      <option value="F">Femme</option>
+                                  </select>
+                                  <li class="pt-2 pb-0">
+                                      <small class="text-dark"><button class="btn btn-light"><i class="fas fa-envelope" style="margin-right: 5px;"></i> Changer d'email</button></small>
+                                  </li>
+                                  <input type="text" class="form-control" value="{{userData?.email}}" disabled><br>
+                                  <li class="pt-2 pb-0">
+                                      <i class="fas fa-phone" style="margin-right: 5px;"></i><small
+                                          class="text-dark">Téléphone *</small>
+                                  </li>
+                                  <input type="text" class="form-control" formControlName="phone1" value="{{userData?.phone1}}" placeholder="Téléphone principal" style="margin-bottom: 5px;">
+                                  <input type="text" class="form-control" formControlName="phone2" value="{{userData?.phone2}}" placeholder="Téléphone secondaire"><br>
+
+                                  <li class="pt-2 pb-0">
+                                      <i class="fas fa-map-marker-alt" style="margin-right: 5px;"></i><small
+                                          class="text-dark">Adresse</small>
+                                  </li>
+                                  <input type="text" class="form-control" formControlName="location" value="{{userData?.location}}" placeholder="Votre adresse de résidence">
+                              </ul>
+                          </form> -->
+          </div>
         </div>
-        <div class="card-body card-body-height">
-          <ul class="activity-feed">
-            <li class="feed-item">
-              <div class="feed-date">Nov 16</div>
-              <span class="feed-text"
-                ><a [routerLink]="routes.profileSettings">Brian Johnson</a> has
-                paid the invoice
-                <a [routerLink]="routes.viewInvoice">"#DF65485"</a></span
-              >
-            </li>
-            <li class="feed-item">
-              <div class="feed-date">Nov 7</div>
-              <span class="feed-text"
-                ><a [routerLink]="routes.profile">Marie Canales</a> has accepted
-                your estimate
-                <a [routerLink]="routes.estimatesView">#GTR458789</a></span
-              >
-            </li>
-            <li class="feed-item">
-              <div class="feed-date">Oct 24</div>
-              <span class="feed-text"
-                >New expenses added
-                <a [routerLink]="routes.expensesList">"#TR018756</a></span
-              >
-            </li>
-            <li class="feed-item">
-              <div class="feed-date">Oct 24</div>
-              <span class="feed-text"
-                >New expenses added
-                <a [routerLink]="routes.expensesList">"#TR018756</a></span
-              >
-            </li>
-            <li class="feed-item">
-              <div class="feed-date">Oct 24</div>
-              <span class="feed-text"
-                >New expenses added
-                <a [routerLink]="routes.expensesList">"#TR018756</a></span
-              >
-            </li>
-            <li class="feed-item">
-              <div class="feed-date">Oct 24</div>
-              <span class="feed-text"
-                >New expenses added
-                <a [routerLink]="routes.expensesList">"#TR018756</a></span
-              >
-            </li>
-            <li class="feed-item">
-              <div class="feed-date">Oct 24</div>
-              <span class="feed-text"
-                >New expenses added
-                <a [routerLink]="routes.expensesList">"#TR018756</a></span
-              >
-            </li>
-            <li class="feed-item">
-              <div class="feed-date">Jan 27</div>
-              <span class="feed-text"
-                ><a [routerLink]="routes.profile">Robert Martin</a> gave a review
-                for <a [routerLink]="'/product-details'">"Dell Laptop"</a></span
-              >
-            </li>
-            <li class="feed-item">
-              <div class="feed-date">Jan 14</div>
-              <span class="feed-text"
-                >New customer registered
-                <a [routerLink]="routes.profileSettings">"Tori Carter"</a></span
-              >
-            </li>
-          </ul>
+        <div class="col-lg-8">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title">Activités</h5>
+            </div>
+            <div class="card-body card-body-height" *ngIf="userData">
+              <ul class="activity-feed">
+                <li class="feed-item">
+                  <div class="feed-date">Nov 16 - 16:00 (GMT +1)</div>
+                  <span class="feed-text">Nouvelle <a>Connexion</a></span>
+                </li>
+                <li class="feed-item">
+                  <div class="feed-date">Nov 7 - 16:00 (GMT +1)</div>
+                  <span class="feed-text">Nouvelle <a>Connexion</a></span>
+                </li>
+              </ul>
+            </div>
+            <div class="card-body" *ngIf="!userData" style="text-align: center;">
+              <img src="assets/img/new/loader.gif" width="20px">
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+<!-- /Page Wrapper -->

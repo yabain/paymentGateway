@@ -10,9 +10,7 @@ import { environment } from 'src/environments/environment';
 export class AdminGuard {
   constructor(private router: Router) {}
 
-  canActivate(
-  
-  ):
+  canActivate():
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree>
     | boolean
@@ -22,8 +20,13 @@ export class AdminGuard {
       return false;
     } else {
       const user = JSON.parse(localStorage.getItem(environment.user_data));
-      if(user.isAdmin) return true
-      else return false;
+      if(user.isAdmin) {
+        return true;
+      } else {
+        this.router.navigate([routes.dashboard]);
+        return false;
+      }
     }
+  
   }
 }

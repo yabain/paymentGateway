@@ -697,6 +697,25 @@
     "transaction_payout_closed": "Virement annulé",
     "waitingConfirmation": "Attente confirmation"
   },
+  "badge": {
+    "verified": "Vérifié",
+    "unVerified": "Non vérifié",
+    "active": "Actif",
+    "inactive": "Inactif",
+    "admin": "Admin",
+    "warning": "Avertissement",
+    "danger": "Danger",
+    "inVerification": "En examen"
+  },
+  "alert": {
+    "title": "Alertes",
+    "verifiedAccount": "Les information du compte ont été vérifiées et ne peuvent plus faire l'objet d'une modification",
+    "unverifiedAccount": "Les information du compte ne sont pas vérifiées et peuvent être modifiées",
+    "needToVerifyAccount": "Les information du compte ne sont pas vérifiées et doivent être vérifiées. Complétez la phase de vérification pour bénéficier de toutes les fonctionnalités de digiKUTZ Payments.",
+    "inactiveAccount": "Ce compte a été désactivé.",
+    "warningAccount": "Ce compte a été signalé comme dangereux et est en exament par nos équipes.",
+    "inVerification": "Les informations du compte sont en examen."
+  },
   "rawData": "Données brutes",
   "tool": "Outil",
   "meetUrl": "Lien de la Visio",
