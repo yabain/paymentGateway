@@ -699,19 +699,20 @@
   },
   "badge": {
     "verified": "Verified",
-    "unverified": "Not verified",
+    "unVerified": "Not verified",
     "active": "Active",
     "inactive": "Inactive",
     "admin": "Admin",
     "warning": "Warning",
     "danger": "Danger",
-    "inVerification": "Under review"
+    "inVerification": "Under review",
+    "notVerified": "Not verified"
   },
   "alert": {
     "title": "Alerts",
-    "verifiedAccount": "Account information has been verified and can no longer be changed",
+    "verifiedAccount": "Some account information has been verified and can no longer be changed",
     "unverifiedAccount": "Account information is not verified and can be changed",
-    "needToVerifyAccount": "Account information is not verified and must be verified. Complete the verification phase to benefit from all digiKUTZ Payments features.",
+    "needToVerifyAccount": "Account information is not verified and must be verified. Complete the verification phase to benefit from all digiKUNTZ Payments features.",
     "inactiveAccount": "This account has been deactivated.",
     "warningAccount": "This account has been flagged as unsafe and is under review by our teams.",
     "inVerification": "This account is currently under verification."

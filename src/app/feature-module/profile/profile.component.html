@@ -10,9 +10,11 @@
       </div>
 
       <div class="text-center mb-5">
-        <form [formGroup]="uploadPictureForm" class="" style="text-align: center;" *ngIf="currentUser && uploadPictureForm">
+        <form [formGroup]="uploadPictureForm" class="" style="text-align: center;"
+          *ngIf="currentUser && uploadPictureForm">
           <div class="avatar avatar-xxl profile-cover-avatar">
-            <img class="avatar-img" src="{{userData?.pictureUrl ? userData?.pictureUrl  : 'assets/img/new/user.png'}}" alt="">
+            <img class="avatar-img" src="{{userData?.pictureUrl ? userData?.pictureUrl  : 'assets/img/new/user.png'}}"
+              alt="">
             <span class="avatar-edit" (click)="changePicture(true);fileUploader.click()">
               <i class="feather icon-camera avatar-uploader-icon shadow-soft"></i>
             </span>
@@ -22,19 +24,20 @@
         </form>
         <div class="div">
           <span class="badge rounded-pill badge-outline-success"
-          *ngIf="currentUser && !currentUser?.premium && currentUser?.verified && !currentUser?.warning">
+            *ngIf="currentUser && !currentUser?.premium && currentUser?.verified && !currentUser?.warning">
             <i class="feather icon-check-circle"></i> {{ "badge.verified" | translate }}</span>
-            <span class="badge rounded-pill badge-outline-warning"
-            *ngIf="currentUser && currentUser?.warning">
-              <i class="feather icon-alert-triangle"></i> {{ 'profile.warningAccount' | translate }}</span>
+          <span class="badge rounded-pill badge-outline-warning" *ngIf="currentUser && currentUser?.warning">
+            <i class="feather icon-alert-triangle"></i> {{ 'profile.warningAccount' | translate }}</span>
           <span class="badge badge-gradient-success"
-          *ngIf="currentUser && currentUser?.premium && !currentUser?.warning">
+            *ngIf="currentUser && currentUser?.premium && !currentUser?.warning">
             <i class="feather icon-zap"></i> Premium</span>
+          <span class="badge badge-soft-warning badge-border"
+            *ngIf="currentUser && !currentUser?.verified && !currentUser?.warning">
+            <i class="feather icon-disc"></i> {{ "badge.notVerified" | translate }}</span>
           <span class="badge badge-soft-danger badge-border"
-          *ngIf="currentUser && !currentUser?.verified && !currentUser?.warning">
-            <i class="feather icon-user-x"></i> {{ "badge.notVerified" | translate }}</span>
-          <span class="badge badge-soft-dark badge-border"
-          *ngIf="currentUser && currentUser?.inVerification">
+            *ngIf="currentUser && !currentUser?.verified && currentUser?.isActive === false">
+            <i class="feather icon-user-x"></i> {{ "badge.inactive" | translate }}</span>
+          <span class="badge badge-soft-dark badge-border" *ngIf="currentUser && currentUser?.inVerification">
             <i class="feather icon-refresh-ccw"></i> {{ "badge.inVerification" | translate }}</span>
           <span class="badge badge-gradient-primary" *ngIf="currentUser && currentUser?.isAdmin">
             <i class="feather icon-slack"></i> Admin</span>
@@ -69,28 +72,36 @@
         </div>
       </div>
 
+      <!-- account reported as dangerous -->
       <div class="alert alert-warning alert-dismissible fade show" role="alert"
-      *ngIf="currentUser && currentUser.warning">
-        <strong>{{ "badge.warning" | translate }}: </strong> 
+        *ngIf="currentUser && currentUser?.warning">
+        <strong>{{ "badge.warning" | translate }}: </strong>
         {{ "alert.warningAccount" | translate }}
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-          aria-label="Close"
-        ></button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
 
+      <!-- Verify your account -->
+      <div class="alert alert-warning alert-dismissible fade show" role="alert"
+        *ngIf="currentUser && !currentUser?.verified">
+        <strong>{{ "badge.unVerified" | translate }}: </strong>
+        {{ "alert.needToVerifyAccount" | translate }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+
+      <!-- Account in verification -->
       <div class="alert alert-secondary alert-dismissible fade show" role="alert"
-      *ngIf="currentUser && currentUser.inVerification">
-        <strong>{{ "badge.inVerification" | translate }}: </strong> 
+        *ngIf="currentUser && currentUser?.inVerification">
+        <strong>{{ "badge.inVerification" | translate }}: </strong>
         {{ "alert.inVerification" | translate }}
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-          aria-label="Close"
-        ></button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+
+      <!-- Account disabled -->
+      <div class="alert alert-danger alert-dismissible fade show" role="alert"
+        *ngIf="currentUser && currentUser?.isActive === false">
+        <strong>{{ "badge.inactive" | translate }}: </strong>
+        {{ "alert.inactiveAccount" | translate }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
 
       <div class="row">
@@ -107,6 +118,12 @@
                   translate }}</a>
                 <a class="btn btn-sm" *ngIf="loading"><img src="assets/img/new/loader.gif" width="20px"></a>
               </h5>
+              <div *ngIf="currentUser && currentUser?.verified && edition">
+                <br>
+                <div class="alert alert-secondary alert-dismissible fade show" role="alert">
+                  {{ "alert.verifiedAccount" | translate }}
+                </div>
+              </div>
             </div>
             <div class="card-body" *ngIf="!userData" style="text-align: center;">
               <img src="assets/img/new/loader.gif" width="20px">
