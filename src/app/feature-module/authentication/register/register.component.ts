@@ -179,7 +179,7 @@ export class RegisterComponent implements OnInit {
 
     // Nettoyage numéro
     this.form.value.phone = this.form.value.phone.replace(/\D/g, '');
-    this.form.value.whatsapp = this.contryCode + '-' + this.form.value.phone.replace(/\D/g, '');
+    this.form.value.whatsapp = this.contryCode + ' ' + this.form.value.phone.replace(/\D/g, '');
 
     this.isLoading = true;
 

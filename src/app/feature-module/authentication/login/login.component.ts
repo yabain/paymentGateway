@@ -143,7 +143,7 @@ export class LoginComponent implements OnInit {
       }
     } else {
       const phone = this.form2.value.whatsapp;
-      this.form2.value.whatsapp = this.selectedCountry.code + '-' + phone.toString();
+      this.form2.value.whatsapp = this.selectedCountry.code + ' ' + phone.toString();
       if (!this.form2.valid) {
         this.form.markAllAsTouched();
         return;

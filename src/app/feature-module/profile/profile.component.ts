@@ -3,9 +3,12 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
+import { LocationService } from 'src/app/services/location/location.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { UserService } from 'src/app/services/user/user.service';
+import { LanguageService } from 'src/app/services/language/language.service';
+import { DateService } from 'src/app/services/pipe/date.service';
 
 @Component({
   selector: 'app-profile',
@@ -22,6 +25,7 @@ export class ProfileComponent implements OnInit {
   edition: boolean = false;
   form: FormGroup;
   loading: boolean = false;
+  loading2: boolean = false;
   userId: any;
   cover: string = "assets/img/ressorces/cover.jpeg";
   currentUser: any;
@@ -31,6 +35,9 @@ export class ProfileComponent implements OnInit {
   isChangePicture = false;
   memoryImage: string;
   selectedImage: any;
+  allCities: any = [];
+  description: string
+  descriptionEdition: boolean = false;
 
   constructor(
     private Router: Router,
@@ -39,6 +46,9 @@ export class ProfileComponent implements OnInit {
     private userService: UserService,
     private toastService: ToastService,
     private translate: TranslateService,
+    private location: LocationService,
+    private language: LanguageService,
+    private dateService: DateService,
   ) {
   }
 
@@ -67,38 +77,178 @@ export class ProfileComponent implements OnInit {
     };
   }
 
+  formatDate(): string {
+    return this.dateService.formatDate(this.currentUser.createdAt, 'short', this.currentUser.language);
+  }
+
   userForm(userdata) {
     this.form = new FormGroup({
-      firstName: new FormControl(userdata?.firstName ? userdata?.firstName : '', [Validators.required,]),
-      lastName: new FormControl(userdata?.lastName ? userdata?.lastName : '', [Validators.required,]),
-      email: new FormControl(userdata?.email ? userdata?.email : '', { validators: [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$')] }),
-      phone1: new FormControl(userdata?.phone1 ? userdata?.phone1 : '', [Validators.required,]),
-      phone2: new FormControl(userdata?.phone2 ? userdata?.phone2 : ''),
-      location: new FormControl(userdata?.location ? userdata?.location : ''),
-      sexe: new FormControl(userdata?.sexe ? userdata?.sexe : '', [Validators.required,]),
+      firstName: new FormControl(userdata?.firstName),
+      lastName: new FormControl(userdata?.lastName),
+      name: new FormControl(userdata?.name),
+      // email: new FormControl(userdata?.email ? userdata?.email : '', { validators: [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$')] }),
+      phone: new FormControl(userdata?.phone ? userdata?.phone : '', [Validators.required,]),
+      gender: new FormControl(userdata?.gender ? userdata?.gender : '', [Validators.required,]),
+      // accountType: new FormControl('personal', {
+      //   validators: [Validators.required],
+      // }),
+      // countryId: new FormControl(null, { validators: [Validators.required] }),
+      cityId: new FormControl(userdata?.cityId ? userdata?.cityId._id : '', { validators: [Validators.required] }),
+      language: new FormControl(userdata?.language, { validators: [Validators.required] }),
+      address: new FormControl(userdata?.address, { validators: [Validators.required] }),
+      // whatsapp: new FormControl(userdata?.whatsapp, { validators: [Validators.required] }),
     });
+
+    this.updateFormValidator();
+  }
+
+  updateFormValidator() {
+    if (this.currentUser.accountType === 'personal') {
+      this.form.get('firstName')?.setValidators([Validators.required]);
+      this.form.get('lastName')?.setValidators([Validators.required]);
+      this.form.get('firstName')?.updateValueAndValidity({ emitEvent: false });
+      this.form.get('lastName')?.updateValueAndValidity({ emitEvent: false });
+      
+      this.form.get('name')?.clearValidators();
+      this.form.get('name')?.updateValueAndValidity({ emitEvent: false });
+    } else {
+      this.form.get('name')?.setValidators([Validators.required]);
+      this.form.get('name')?.updateValueAndValidity({ emitEvent: false });
+      
+      this.form.get('firstName')?.clearValidators();
+      this.form.get('lastName')?.clearValidators();
+      this.form.get('firstName')?.updateValueAndValidity({ emitEvent: false });
+      this.form.get('lastName')?.updateValueAndValidity({ emitEvent: false });
+    }
   }
 
   submit() {
+    // Enable the form temporarily to check validity if it's disabled
+    const wasDisabled = this.form.disabled;
+    if (wasDisabled) {
+      this.form.enable({ emitEvent: false });
+    }
     
+    // Mark all fields as touched to show validation errors
+    this.form.markAllAsTouched();
+    
+    if (!this.form.valid) {
+      // Log validation errors for debugging
+      Object.keys(this.form.controls).forEach(key => {
+        const control = this.form.get(key);
+        if (control && control.invalid) {
+          console.log(`Field ${key}:`, control.errors);
+        }
+      });
+      
+      this.toastService.presentToast('error', 'Error', 'Invalid Form');
+      return;
+    }
+    
+    // Re-disable if it was disabled before
+    if (wasDisabled) {
+      this.form.disable({ emitEvent: false });
+    }
+    this.loading = true;
+
+    this.userService.updateUserProfile(this.form.value)
+      .subscribe
+      ({
+        next: (userData) => {
+          console.log('userData: ', userData)
+          if (!userData) {
+            this.translate.get("profile.profileUpdatedError").subscribe((res: string) => {
+              this.toastService.presentToast('error', 'Error', res, 10000);
+            });
+          } else {
+            this.language.useLanguage(this.form.value.language);
+            this.userService.setCurrentUser(userData);
+            this.translate.get("profile.profileUpdated").subscribe((res: string) => {
+              this.toastService.presentToast('success', 'Done !', res, 10000);
+            })
+            this.getDatas();
+            this.edition = false;
+            this.loading = false;
+          }
+        },
+        error: (error) => {
+          this.translate.get("profile.profileUpdatedError").subscribe((res: string) => {
+            this.toastService.presentToast('error', 'Error', res, 10000);
+          });
+        }
+      });
   }
 
   edit() {
     this.edition = !this.edition;
+    if (!this.form) return;
+    if (this.edition) {
+      this.form.enable({ emitEvent: false });
+      this.userForm(this.currentUser);
+    } else {
+      this.form.disable({ emitEvent: false });
+    }
+  }
+
+  editDescription() {
+    this.descriptionEdition = !this.descriptionEdition;
+    if (this.descriptionEdition) {
+      return;
+    } else {
+      this.description = this.currentUser.description;
+    }
   }
 
   getDatas() {
     this.getCurrentUser();
   }
 
-  async getCurrentUser(){
+  saveDescription(){
+    console.log('description: ', this.description);
+    this.loading2 = true;
+
+    this.userService.updateUserProfile({description: this.description})
+      .subscribe
+      ({
+        next: (userData) => {
+          console.log('userData: ', userData)
+          if (!userData) {
+            this.translate.get("profile.profileUpdatedError").subscribe((res: string) => {
+              this.toastService.presentToast('error', 'Error', res, 10000);
+            });
+          } else {
+            this.userService.setCurrentUser(userData);
+            this.translate.get("profile.profileUpdated").subscribe((res: string) => {
+              this.toastService.presentToast('success', 'Done !', res, 10000);
+            })
+            this.getDatas();
+            this.descriptionEdition = false;
+            this.loading2 = false;
+          }
+        },
+        error: (error) => {
+          this.translate.get("profile.profileUpdatedError").subscribe((res: string) => {
+            this.toastService.presentToast('error', 'Error', res, 10000);
+          });
+        }
+      });
+  }
+
+  async getCurrentUser() {
     this.currentUser = await this.userService.getCurrentUser();
     this.userData = this.currentUser;
-    this.memoryImage = this.currentUser.pictureUrl
-    if (this.currentUser) this.loading = false;
+    this.memoryImage = this.currentUser.pictureUrl;
+    if (this.currentUser) {
+      this.userForm(this.currentUser);
+      this.getCities();
+      this.description = this.currentUser.description;
+      // Start in view mode with controls disabled to avoid template [disabled]
+      this.form.disable({ emitEvent: false });
+      this.loading = false;
+    }
     console.log(this.currentUser)
   }
-  
+
   /**
    * Saves the selected profile picture.
    */
@@ -114,11 +264,11 @@ export class ProfileComponent implements OnInit {
         next: (userData) => {
           // console.log('userData: ', userData)
           if (userData.error) {
-            this.translate.get("event.updateError").subscribe((res: string) => {
+            this.translate.get("profile.profileUpdatedError").subscribe((res: string) => {
               this.toastService.presentToast('error', 'Error', res, 10000);
             });
           } else {
-            this.translate.get("profile.pictureSaved").subscribe((res: string) => {
+            this.translate.get("profile.profileUpdated").subscribe((res: string) => {
               this.toastService.presentToast('success', 'Done !', res, 10000);
             })
             this.userService.setCurrentUser(userData);
@@ -129,7 +279,7 @@ export class ProfileComponent implements OnInit {
           this.uploadingPicture = false;
         },
         error: (error) => {
-          this.translate.get("event.updateError").subscribe((res: string) => {
+          this.translate.get("profile.profileUpdatedError").subscribe((res: string) => {
             this.toastService.presentToast('error', 'Error', res, 10000);
           });
           this.isChangePicture = false;
@@ -137,12 +287,19 @@ export class ProfileComponent implements OnInit {
         },
       });
   }
-  
+
   /**
    * Refreshes the page.
    */
   refresh(): void {
     window.location.reload();
+  }
+
+  getCities() {
+    this.location.getCities().subscribe((cities) => {
+      this.allCities = cities.filter((e) => e.countryId === this.currentUser.countryId._id);
+      this.allCities = this.allCities.sort((a, b) => a.name.localeCompare(b.name));
+    });
   }
 
 
@@ -151,7 +308,7 @@ export class ProfileComponent implements OnInit {
       pictureFile: new FormControl(undefined, Validators.required),
     });
   }
-  
+
 
   cancel() {
     if (this.currentUser) {
@@ -159,7 +316,7 @@ export class ProfileComponent implements OnInit {
       this.isChangePicture = false;
     }
   }
-  
+
   /**
    * Toggles the state of profile picture change.
    * @param value - Boolean indicating change state
@@ -185,7 +342,7 @@ export class ProfileComponent implements OnInit {
       this.selectedImage = null;
     }
   }
-  
+
   showName(userData: any): string {
     return this.userService.showName(userData);
   }
