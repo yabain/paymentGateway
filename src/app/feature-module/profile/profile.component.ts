@@ -27,7 +27,7 @@ export class ProfileComponent implements OnInit {
   loading: boolean = false;
   loading2: boolean = false;
   userId: any;
-  cover: string = "assets/img/ressorces/cover.jpeg";
+  cover: string = "assets/img/ressorces/cover.png";
   currentUser: any;
   countries: any;
   uploadingPicture = false;
@@ -82,6 +82,9 @@ export class ProfileComponent implements OnInit {
   }
 
   userForm(userdata) {
+    const urlPattern =
+    /^(https?:\/\/)?([\w\-]+\.)+[a-z]{2,6}(:\d+)?(\/.*)?$/i;
+
     this.form = new FormGroup({
       firstName: new FormControl(userdata?.firstName),
       lastName: new FormControl(userdata?.lastName),
@@ -96,7 +99,11 @@ export class ProfileComponent implements OnInit {
       cityId: new FormControl(userdata?.cityId ? userdata?.cityId._id : '', { validators: [Validators.required] }),
       language: new FormControl(userdata?.language, { validators: [Validators.required] }),
       address: new FormControl(userdata?.address, { validators: [Validators.required] }),
-      // whatsapp: new FormControl(userdata?.whatsapp, { validators: [Validators.required] }),
+      facebook: new FormControl(userdata?.facebook, { validators: [Validators.pattern(urlPattern),] }),
+      website: new FormControl(userdata?.website, { validators: [Validators.pattern(urlPattern),] }),
+      linkedIn: new FormControl(userdata?.linkedIn, { validators: [Validators.pattern(urlPattern),] }),
+      instagram: new FormControl(userdata?.instagram, { validators: [Validators.pattern(urlPattern),] }),
+      twitter: new FormControl(userdata?.twitter, { validators: [Validators.pattern(urlPattern),] }),
     });
 
     this.updateFormValidator();
@@ -151,15 +158,18 @@ export class ProfileComponent implements OnInit {
     }
     this.loading = true;
 
+
     this.userService.updateUserProfile(this.form.value)
       .subscribe
       ({
         next: (userData) => {
           console.log('userData: ', userData)
-          if (!userData) {
+          if (!userData || userData.error) {
             this.translate.get("profile.profileUpdatedError").subscribe((res: string) => {
               this.toastService.presentToast('error', 'Error', res, 10000);
             });
+            this.edition = true;
+            this.loading = false;
           } else {
             this.language.useLanguage(this.form.value.language);
             this.userService.setCurrentUser(userData);
@@ -345,5 +355,10 @@ export class ProfileComponent implements OnInit {
 
   showName(userData: any): string {
     return this.userService.showName(userData);
+  }
+
+  whatsappUrl(whatsapp) {
+    const data = whatsapp.replace(' ', '');
+    return `https://wa.me/${data}`;
   }
 }

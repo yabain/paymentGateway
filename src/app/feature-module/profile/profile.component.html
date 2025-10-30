@@ -54,7 +54,7 @@
           <a *ngIf="!uploadingPicture" class="btn btn-sm btn-success m-2" (click)="savePicture()">{{ "action.save" |
             translate }}</a>
           <a *ngIf="uploadingPicture" class="btn btn-sm btn-success" disabled>
-            <img src="assets/img/new/loader.gif" width="20px">
+            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
           </a>
         </div>
         <h2>
@@ -67,9 +67,24 @@
               userData?._id : ''}}</span>
           </li>
         </ul>
-        <div *ngIf="!userData">
-          <img src="assets/img/new/loader.gif" width="20px">
-        </div>
+
+        <a target="_blank" [href]="userData?.linkedIn" class="btn btn-light btn-sm me-1" *ngIf="userData && userData?.linkedIn">
+          <img src="assets/img/ressorces/linkedIn.png" alt="" style="width: 25px; margin-right: 5px;">
+        </a>
+        <a target="_blank" [href]="userData?.facebook" class="btn btn-light btn-sm me-1" *ngIf="userData && userData?.facebook">
+          <img src="assets/img/ressorces/facebook.png" alt="" style="width: 20px; margin-right: 5px;">
+        </a>
+        <a target="_blank" [href]="userData?.instagram" class="btn btn-light btn-sm me-1" *ngIf="userData && userData?.instagram">
+          <img src="assets/img/ressorces/instagram.png" alt="" style="width: 25px; margin-right: 5px;">
+        </a>
+        <a target="_blank" [href]="userData?.twitter" class="btn btn-light btn-sm me-1" *ngIf="userData && userData?.twitter">
+          <img src="assets/img/ressorces/x.webp" alt="" style="width: 25px; margin-right: 5px;">
+        </a>
+        <a target="_blank" [href]="whatsappUrl(userData?.whatsapp)" class="btn btn-light btn-sm me-1" *ngIf="userData && userData?.whatsapp">
+          <img src="assets/img/ressorces/whatsapp.webp" alt="" style="width: 25px; margin-right: 5px;">
+        </a>
+        
+        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" *ngIf="!userData"></span>
       </div>
 
       <!-- account reported as dangerous -->
@@ -106,7 +121,7 @@
       </div>
 
       <div class="row">
-        <div class="col-lg-4">
+        <div class="col-lg-8">
           <div class="card">
             <div class="card-header">
               <h5 class="card-title d-flex justify-content-between">
@@ -118,7 +133,7 @@
                   translate }}</a>
                 <a class="btn btn-sm btn-success" (click)="submit()" *ngIf="edition && !loading">{{ "action.save" |
                   translate }}</a>
-                <span class="spinner-border spinner-border-sm me-2" role="status" *ngIf="loading"></span>
+                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" *ngIf="loading"></span>
               </h5>
               <div *ngIf="currentUser && currentUser?.verified && edition">
                 <br>
@@ -132,8 +147,8 @@
             </div>
             <div class="card-body" *ngIf="userData">
               <form [formGroup]="form" (ngSubmit)="submit()">
-                <ul class="list-unstyled">
-                  <li class="py-0" *ngIf="userData?.accountType === 'organisation'">
+                <ul class="list-unstyled row">
+                  <li class="mt-3 py-0 col-md-6" *ngIf="userData?.accountType === 'organisation'">
                     <i class="feather icon-user" style="margin-right: 5px;"></i>
                     <small class="text-dark">{{ "profile.name" | translate }} *</small>
                     <input type="text" formControlName="name" class="form-control"
@@ -143,7 +158,7 @@
                     </div>
                   </li>
 
-                  <li class="py-0" *ngIf="userData?.accountType === 'personal'">
+                  <li class="mt-3 py-0 col-md-6" *ngIf="userData?.accountType === 'personal'">
                     <i class="feather icon-user" style="margin-right: 5px;"></i>
                     <small class="text-dark">{{ "auth.firstName" | translate }} *</small>
                     <input type="text" formControlName="firstName" class="form-control"
@@ -154,7 +169,7 @@
                     </div>
                   </li>
 
-                  <li class="mt-3 py-0" *ngIf="userData?.accountType === 'personal'">
+                  <li class="mt-3 py-0 col-md-6" *ngIf="userData?.accountType === 'personal'">
                     <i class="feather icon-user" style="margin-right: 5px;"></i>
                     <small class="text-dark">{{ "auth.lastName" | translate }} *</small>
                     <input type="text" formControlName="lastName" class="form-control"
@@ -165,7 +180,7 @@
                     </div>
                   </li>
 
-                  <li class="mt-3 pb-0">
+                  <li class="mt-3 pb-0 col-md-6">
                     <i class="feather icon-user" style="margin-right: 5px;"></i>
                     <small class="text-dark">{{ "profile.gender" | translate }}</small>
                     <select class="select form-select form-control" formControlName="gender"
@@ -178,13 +193,13 @@
                     </div>
                   </li>
 
-                  <li class="mt-3 pb-0">
+                  <li class="mt-3 pb-0 col-md-6">
                     <i class="feather icon-map-pin" style="margin-right: 5px;"></i>
                     <small class="text-dark">{{ "auth.country" | translate }}</small>
                     <input type="text" class="form-control" value="{{userData?.countryId.name}}" disabled>
                   </li>
 
-                  <li class="mt-3 pb-0">
+                  <li class="mt-3 pb-0 col-md-6">
                     <i class="feather icon-map-pin" style="margin-right: 5px;"></i><small class="text-dark">
                       {{ "auth.city" | translate }}</small>
                     <select id="city" formControlName="cityId" class="form-select"
@@ -198,7 +213,17 @@
                     </div>
                   </li>
 
-                  <li class="mt-3 pb-0">
+                  <li class="mt-3 pb-0 col-md-6">
+                    <i class="feather icon-user" style="margin-right: 5px;"></i>
+                    <small class="text-dark">{{ "lang.title" | translate }}</small>
+                    <select class="select form-select form-control" formControlName="language">
+                      <img src="assets/icons/fr-flag.svg" alt="" style="width: 15px; height: 12px;">
+                      <option value="fr" selected>{{ "lang.fr" | translate }}</option>
+                      <option value="en">{{ "lang.en" | translate }}</option>
+                    </select>
+                  </li>
+
+                  <li class="mt-3 pb-0 col-md-6">
                     <i class="feather icon-map-pin" style="margin-right: 5px;"></i>
                     <small class="text-dark">{{ "mail.address" | translate }}</small>
                     <input type="text" formControlName="address" *ngIf="userData?.phone" class="form-control"
@@ -208,7 +233,7 @@
                     </div>
                   </li>
 
-                  <li class="mt-3 pb-0">
+                  <li class="mt-3 pb-0 col-md-6">
                     <i class="feather icon-phone" style="margin-right: 5px;"></i>
                     <small class="text-dark">{{ "terms.phone" | translate }}</small>
                     <input type="text" formControlName="phone" class="form-control"
@@ -218,7 +243,7 @@
                     </div>
                   </li>
 
-                  <li class="mt-3 pb-0">
+                  <li class="mt-3 pb-0 col-md-6">
                     <i class="feather icon-mail" style="margin-right: 5px;"></i>
                     <small class="text-dark">{{ "terms.email" | translate }}</small>
                     <small class="text-dark" *ngIf="edition"><br>
@@ -229,7 +254,7 @@
                     <input type="text" class="form-control" value="{{userData?.email}}" disabled>
                   </li>
 
-                  <li class="mt-3 pb-0">
+                  <li class="mt-3 pb-0 col-md-6">
                     <i class="feather icon-mail" style="margin-right: 5px;"></i>
                     <small class="text-dark">{{ "auth.password" | translate }}</small>
                     <small class="text-dark" *ngIf="edition"><br>
@@ -240,8 +265,63 @@
                     <input type="text" class="form-control" value="*********" disabled>
                   </li>
 
-                  <li class="mt-3 pb-0">
-                    <img src="assets/img/ressorces/WhatsApp.svg.webp" alt="" style="width: 15px; margin-right: 5px;">
+                  <li class="mt-3 pb-0 col-md-6">
+                    <img src="assets/img/ressorces/web.webp" alt="" style="width: 15px; margin-right: 5px;">
+                    <small class="text-dark">{{ "profile.website" | translate }}</small>
+                    <input type="text" formControlName="website" class="form-control"
+                      [class.is-invalid]="form.get('website')?.invalid && form.get('website')?.touched">
+                    <div class="invalid-feedback"
+                      *ngIf="form.get('website')?.invalid && form.get('website')?.touched">
+                      {{ "profile.invalidUrl" | translate }}
+                    </div>
+                  </li>
+
+                  <li class="mt-3 pb-0 col-md-6">
+                    <img src="assets/img/ressorces/linkedIn.png" alt="" style="width: 15px; margin-right: 5px;">
+                    <small class="text-dark">LinkedIn</small>
+                    <input type="text" formControlName="linkedIn" class="form-control"
+                      [class.is-invalid]="form.get('linkedIn')?.invalid && form.get('linkedIn')?.touched">
+                    <div class="invalid-feedback"
+                      *ngIf="form.get('linkedIn')?.invalid && form.get('linkedIn')?.touched">
+                      {{ "profile.invalidUrl" | translate }}
+                    </div>
+                  </li>
+
+                  <li class="mt-3 pb-0 col-md-6">
+                    <img src="assets/img/ressorces/facebook.png" alt="" style="width: 15px; margin-right: 5px;">
+                    <small class="text-dark">Facebook</small>
+                    <input type="text" formControlName="facebook" class="form-control"
+                      [class.is-invalid]="form.get('facebook')?.invalid && form.get('facebook')?.touched">
+                    <div class="invalid-feedback"
+                      *ngIf="form.get('facebook')?.invalid && form.get('facebook')?.touched">
+                      {{ "profile.invalidUrl" | translate }}
+                    </div>
+                  </li>
+
+                  <li class="mt-3 pb-0 col-md-6">
+                    <img src="assets/img/ressorces/x.webp" alt="" style="width: 15px; margin-right: 5px;">
+                    <small class="text-dark">Twitter</small>
+                    <input type="text" formControlName="twitter" class="form-control"
+                      [class.is-invalid]="form.get('twitter')?.invalid && form.get('twitter')?.touched">
+                    <div class="invalid-feedback"
+                      *ngIf="form.get('twitter')?.invalid && form.get('twitter')?.touched">
+                      {{ "profile.invalidUrl" | translate }}
+                    </div>
+                  </li>
+
+                  <li class="mt-3 pb-0 col-md-6">
+                    <img src="assets/img/ressorces/instagram.png" alt="" style="width: 15px; margin-right: 5px;">
+                    <small class="text-dark">Instagram</small>
+                    <input type="text" formControlName="instagram" class="form-control"
+                      [class.is-invalid]="form.get('instagram')?.invalid && form.get('instagram')?.touched">
+                    <div class="invalid-feedback"
+                      *ngIf="form.get('instagram')?.invalid && form.get('instagram')?.touched">
+                      {{ "profile.invalidUrl" | translate }}
+                    </div>
+                  </li>
+
+                  <li class="mt-3 pb-0 col-md-6">
+                    <img src="assets/img/ressorces/whatsapp.webp" alt="" style="width: 15px; margin-right: 5px;">
                     <small class="text-dark">Whatsapp</small>
                     <small class="text-dark" *ngIf="edition"><br>
                       <button class="btn btn-light">
@@ -251,29 +331,12 @@
                     <input type="text" value="+{{userData?.whatsapp}}" class="form-control" disabled>
                   </li>
 
-                  <li class="mt-3 pb-0">
-                    <i class="feather icon-user" style="margin-right: 5px;"></i>
-                    <small class="text-dark">{{ "lang.title" | translate }}</small>
-                    <select class="select form-select form-control" formControlName="language">
-                      <img src="assets/icons/fr-flag.svg" alt="" style="width: 15px; height: 12px;">
-                      <option value="fr" selected>{{ "lang.fr" | translate }}</option>
-                      <option value="en">{{ "lang.en" | translate }}</option>
-                    </select>
-                  </li>
-
-                  <li class="mt-3 pb-0">
-                    <i class="feather icon-calendar" style="margin-right: 5px;"></i><small class="text-dark">{{
-                      "users.creationDate" |
-                      translate }}</small>
-                    <input type="text" class="form-control" value="{{userData?.createdAt | date: 'dd/MM/YYYY'}}"
-                      disabled>
-                  </li>
                 </ul>
               </form>
             </div>
           </div>
         </div>
-        <div class="col-lg-8">
+        <div class="col-lg-4">
           <div class="card">
             <div class="card-header d-flex justify-content-between">
               <h5 class="card-title">{{ "profile.description" | translate }}</h5>
@@ -286,7 +349,7 @@
               <a class="btn btn-sm btn-success" (click)="saveDescription()" *ngIf="descriptionEdition && !loading2">
                 <i class="feather icon-edit"></i>
                 {{ "action.save" | translate }}</a>
-                <span class="spinner-border spinner-border-sm me-2" role="status" *ngIf="loading2"></span>
+              <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" *ngIf="loading2"></span>
             </div>
             <div class="card-body card-body-height" *ngIf="userData">
               <p *ngIf="currentUser && !descriptionEdition">{{ description }} </p>
@@ -294,7 +357,7 @@
                 [(ngModel)]="description"></textarea>
             </div>
             <div class="card-body" *ngIf="!userData" style="text-align: center;">
-            <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+              <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
             </div>
           </div>
           <div class="card">
@@ -303,6 +366,10 @@
             </div>
             <div class="card-body card-body-height" *ngIf="userData">
               <ul class="activity-feed">
+                <li class="feed-item">
+                  <div class="feed-date">{{ formatDate() }} - {{ currentUser.createdAt | date: 'hh:mm' }}</div>
+                  <span class="feed-text"><a>Action: </a>{{ "users.accountCreation" | translate }}</span>
+                </li>
                 <li class="feed-item">
                   <div class="feed-date">{{ formatDate() }} - {{ currentUser.createdAt | date: 'hh:mm' }}</div>
                   <span class="feed-text"><a>Action: </a>{{ "users.accountCreation" | translate }}</span>

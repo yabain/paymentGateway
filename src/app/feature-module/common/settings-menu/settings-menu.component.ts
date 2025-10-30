@@ -1,6 +1,8 @@
-import { Component, ElementRef, Renderer2} from '@angular/core';
+import { Component, ElementRef, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataService, routes, SideBarService } from 'src/app/core/core.index';
+import { ToastService } from 'src/app/services/toast/toast.service';
+import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
   selector: 'app-settings-menu',
@@ -30,7 +32,9 @@ export class SettingsMenuComponent {
     private router: Router,
     private data: DataService,
     private renderer: Renderer2,
-     private el: ElementRef
+    private el: ElementRef,
+    private userService: UserService,
+    private toastService: ToastService,
   ) {
     this.sideBar.layoutPosition.subscribe((res: string) => {
       this.layoutPosition = res;
@@ -38,19 +42,19 @@ export class SettingsMenuComponent {
     this.sideBar.layoutDirection.subscribe((res: string) => {
       this.layoutDirection = res;
     });
-    
+
     this.sideBar.headerSidebarStyle.subscribe((res: string) => {
       this.headerSidebarStyle = res;
     });
     this.sideBar.primarySkinStyle.subscribe((res: string) => {
       this.primarySkinStyle = res;
     });
-     // <* to check layout colors *>
-     this.sideBar.layoutColor.subscribe((res: string) => {
+    // <* to check layout colors *>
+    this.sideBar.layoutColor.subscribe((res: string) => {
       this.layoutColor = res;
-      if(res=="4"){
+      if (res == "4") {
         this.renderer.addClass(document.body, 'custom-class');
-      }else{
+      } else {
         this.renderer.removeClass(document.body, 'custom-class');
       }
     });
@@ -58,25 +62,25 @@ export class SettingsMenuComponent {
     this.sideBar.layoutWidth.subscribe((res: string) => {
       this.layoutWidth = res;
     });
-     // <* to check layout topcolor *>
-     this.sideBar.layoutTopColor.subscribe((res: string) => {
+    // <* to check layout topcolor *>
+    this.sideBar.layoutTopColor.subscribe((res: string) => {
       this.layoutTopColor = res;
     });
     // <* to check layout sidebar color *>
     this.sideBar.layoutSidebarColor.subscribe((res: string) => {
       this.layoutSidebarColor = res;
     });
-      // <* to check layout sidebarsize *>
-      this.sideBar.layoutSidebarSize.subscribe((res: string) => {
-        this.layoutSidebarSize = res;
-      });
-       // <* to check layout sidebarview *>
-     this.sideBar.layoutSidebarView.subscribe((res: string) => {
+    // <* to check layout sidebarsize *>
+    this.sideBar.layoutSidebarSize.subscribe((res: string) => {
+      this.layoutSidebarSize = res;
+    });
+    // <* to check layout sidebarview *>
+    this.sideBar.layoutSidebarView.subscribe((res: string) => {
       this.layoutSidebarView = res;
     });
   }
 
- 
+
   setRtlFormat(): void {
     const currentUrl = this.router.url;
     window.location.href =
@@ -114,12 +118,13 @@ export class SettingsMenuComponent {
     this.sideBar.changeLayout('1'),
     this.sideBar.changeColors('1'),
     this.sideBar.changeWidth('1');
-    this.sideBar.changeTopcolor('1'), 
+    this.sideBar.changeTopcolor('1'),
     this.sideBar.changeSidebarColor('1'),
     this.sideBar.changepositionscroll('1'),
     this.sideBar.changeSidebarSize('1'),
     this.sideBar.changeSidebarView('1');
     this.checked = true;
+    this.resetSettings();
   }
   boxedLayout(): void {
     this.sideBar.changeWidth('2');
@@ -128,11 +133,35 @@ export class SettingsMenuComponent {
     // Add a class to the body element
     this.renderer.addClass(this.el.nativeElement.ownerDocument.body, 'custom-class');
     console.log("custom-class")
-   }
+  }
 
-   onRtlChange() {
+  onRtlChange() {
     if (this.isRtl) {
       window.location.href = 'https://kanakku.dreamstechnologies.com/angular/template-rtl/';
     }
+  }
+
+  saveSettings() {
+    this.userService.setUserSetting()
+      .subscribe((res) => {
+        console.log(res);
+        this.toastService.presentToast('success', 'Done !', '', 10000);
+      },
+        (error) => {
+          console.log(error);
+          this.toastService.presentToast('error', 'Error', 'Error to save settings');
+        })
+  }
+
+  resetSettings() {
+    this.userService.resetUserSetting()
+      .subscribe((res) => {
+        console.log(res);
+        this.toastService.presentToast('success', 'Done !', '', 10000);
+      },
+        (error) => {
+          console.log(error);
+          this.toastService.presentToast('error', 'Error', 'Error to reset settings');
+        })
   }
 }

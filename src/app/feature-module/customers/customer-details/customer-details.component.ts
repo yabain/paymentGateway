@@ -40,8 +40,7 @@ export class CustomerDetailsComponent implements OnInit, OnDestroy {
   gettingUserData: boolean = true;
   userData: any;
   userId!: string;
-
-  //** / pagination variables
+  cover: string = "assets/img/ressorces/cover.png";
 
   constructor(
     private data: DataService,
@@ -210,7 +209,17 @@ export class CustomerDetailsComponent implements OnInit, OnDestroy {
       this.pageSelection.push({ skip: skip, limit: limit });
     }
   }
+
   open() {
     this.Toggledata = !this.Toggledata;
+  }
+
+  showName(userData: any): string {
+    return this.userService.showName(userData);
+  }
+
+  whatsappUrl(whatsapp) {
+    const data = whatsapp.replace(' ', '');
+    return `https://wa.me/${data}`;
   }
 }

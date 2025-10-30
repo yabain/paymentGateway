@@ -179,16 +179,19 @@ export class LoginComponent implements OnInit {
             this.language.setLocalUserLanguage(user.language);
             this.language.useLanguage(user.language);
             this.form.reset();
-            this.storage.getStorage(environment.memory_link).then((url) => {
-              if (url) {
-                this.router.navigateByUrl(url, { replaceUrl: true });
-                this.storage.removeStorage(environment.memory_link);
-                // setTimeout(() => window.location.reload(), 1000);
-              } else {
-                this.router.navigateByUrl('/tabs', { replaceUrl: true });
-                // setTimeout(() => window.location.reload(), 1000);
-              }
-            });
+            this.userService.getUserSetting()
+            .subscribe((res)=>{
+              this.storage.getStorage(environment.memory_link).then((url) => {
+                if (url) {
+                  this.router.navigateByUrl(url, { replaceUrl: true });
+                  this.storage.removeStorage(environment.memory_link);
+                  // setTimeout(() => window.location.reload(), 1000);
+                } else {
+                  this.router.navigateByUrl('/tabs', { replaceUrl: true });
+                  // setTimeout(() => window.location.reload(), 1000);
+                }
+              });
+            })
           }
         } else {
           this.isLoading = false;

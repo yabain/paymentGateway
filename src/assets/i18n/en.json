@@ -343,7 +343,9 @@
     "activity": "Activity",
     "description": "Description",
     "profileUpdated": "Profile has been updated",
-    "profileUpdatedError": "Profile update error"
+    "profileUpdatedError": "Profile update error",
+    "invalidUrl": "Invalid url",
+    "website": "Website"
   },
   "payment": {
     "title": "Payment",

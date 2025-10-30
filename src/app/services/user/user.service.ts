@@ -19,8 +19,8 @@ export class UserService {
     private storage: StorageService,
     private authService: AuthService,
     private apiService: ApiService
-  ) { 
-    
+  ) {
+
   }
 
   /**
@@ -43,7 +43,7 @@ export class UserService {
    * @returns Formatted user name or username
    */
   showName(userData: any): string {
-    if (userData?.accountType === 'personal'){
+    if (userData?.accountType === 'personal') {
       return `${userData?.firstName} ${userData?.lastName}`
     }
     return userData?.name;
@@ -123,11 +123,11 @@ export class UserService {
    */
   updateUserProfile(userData: any): Observable<any> {
     return from(this.apiService.updateWithoutId(`user/update-profile`, userData))
-    .pipe(
-      catchError(error => {
-        return of({ error: true, message: error.message || 'An error occurred' });
-      })
-    );
+      .pipe(
+        catchError(error => {
+          return of({ error: true, message: error.message || 'An error occurred' });
+        })
+      );
   }
 
   /**
@@ -226,7 +226,7 @@ export class UserService {
     }
   }
 
-  
+
 
   async changeStatus(userId): Promise<any> {
     try {
@@ -256,5 +256,82 @@ export class UserService {
       console.error('Error to change verified status:', error);
       throw error;
     }
+  }
+
+  getUserSetting(): Observable<any> {
+    return from(this.apiService.getWithoutId(`userSettings/get`))
+      .pipe(
+        map((resp) => {
+          this.setSettingsToStorage(resp);
+          return resp;
+        }),
+        catchError(error => {
+          return of({ error: true, message: error.message || 'An error occurred' });
+        })
+      );
+  }
+
+  setUserSetting(userSettings?): Observable<any> {
+    if (!userSettings) userSettings = this.getSettingsFromStorage();
+    console.log('userSettings: ', userSettings);
+    return from(this.apiService.update(`userSettings/update`, 'null', userSettings))
+      .pipe(
+        map((resp) => {
+          // this.setSettingsToStorage(resp);
+          return resp;
+        }),
+        catchError(error => {
+          return of({ error: true, message: error.message || 'An error occurred' });
+        })
+      );
+  }
+  
+  resetUserSetting(): Observable<any> {
+    const userSettings = {
+      layoutPosition: 1,
+      layoutColor: 1,
+      layoutTopColor: 1,
+      layoutSidebarColor: 1,
+      layoutWidth: 1,
+      layoutPositionScroll: 1,
+      layoutSidebarSize: 1,
+      layoutSidebarView: 1
+    };
+    return from(this.setUserSetting(userSettings))
+    .pipe(
+      map((resp) => {
+        // this.setSettingsToStorage(resp);
+        return resp;
+      }),
+      catchError(error => {
+        return of({ error: true, message: error.message || 'An error occurred' });
+      })
+    );
+  }
+
+  setSettingsToStorage(userSettings) {
+    this.storage.setStorage('layoutPosition', JSON.stringify(userSettings.layoutPosition));
+    this.storage.setStorage('layoutColor', JSON.stringify(userSettings.layoutColor));
+    this.storage.setStorage('layoutTopColor', JSON.stringify(userSettings.layoutTopColor));
+    this.storage.setStorage('layoutSidebarColor', JSON.stringify(userSettings.layoutSidebarColor));
+    this.storage.setStorage('layoutWidth', JSON.stringify(userSettings.layoutWidth));
+    this.storage.setStorage('layoutPositionScroll', JSON.stringify(userSettings.layoutPositionScroll));
+    this.storage.setStorage('layoutSidebarSize', JSON.stringify(userSettings.layoutSidebarSize));
+    this.storage.setStorage('layoutSidebarView', JSON.stringify(userSettings.layoutSidebarView));
+  }
+  
+
+  getSettingsFromStorage() {
+    const userSettings = {
+      layoutPosition: JSON.parse(localStorage.getItem('layoutPosition')),
+      layoutColor: JSON.parse(localStorage.getItem('layoutColor')),
+      layoutTopColor: JSON.parse(localStorage.getItem('layoutTopColor')),
+      layoutSidebarColor: JSON.parse(localStorage.getItem('layoutSidebarColor')),
+      layoutWidth: JSON.parse(localStorage.getItem('layoutWidth')),
+      layoutPositionScroll: JSON.parse(localStorage.getItem('layoutPositionScroll')),
+      layoutSidebarSize: JSON.parse(localStorage.getItem('layoutSidebarSize')),
+      layoutSidebarView: JSON.parse(localStorage.getItem('layoutSidebarView'))
+    };
+    return userSettings;
   }
 }
