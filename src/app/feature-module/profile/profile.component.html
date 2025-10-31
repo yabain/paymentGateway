@@ -68,6 +68,9 @@
           </li>
         </ul>
 
+        <a target="_blank" [href]="userData?.website" class="btn btn-light btn-sm me-1" *ngIf="userData && userData?.website">
+          <img src="assets/img/ressorces/web.webp" alt="" style="width: 25px; margin-right: 5px;">
+        </a>
         <a target="_blank" [href]="userData?.linkedIn" class="btn btn-light btn-sm me-1" *ngIf="userData && userData?.linkedIn">
           <img src="assets/img/ressorces/linkedIn.png" alt="" style="width: 25px; margin-right: 5px;">
         </a>

@@ -1,4 +1,4 @@
-<div style="padding: 20px;" *ngIf="loadingData">
+<div *ngIf="loadingData">
     <div class="card">
         <div class="card-body">
             <div class="d-flex justify-content-center" style=" padding: 50px;">
@@ -7,7 +7,7 @@
         </div>
     </div>
 </div>
-<div style="padding: 20px;" *ngIf="!loadingData">
+<div *ngIf="!loadingData">
     <div class="row">
         <div class="col-md-12">
             <div class="row">
@@ -35,17 +35,17 @@
                                 </div>
                                 <div class="col-md-8">
                                     <div class="event-details">
-                                        <span
+                                        <h6
                                             *ngIf="subscriptionStatus?.existingSubscription && !subscriptionStatus?.status">
                                             {{ 'subscriptions.renewSubscription' | translate }} <br>
-                                        </span>
-                                        <span *ngIf="subscriptionStatus?.existingSubscription === false">
+                                        </h6>
+                                        <h6 *ngIf="subscriptionStatus?.existingSubscription === false">
                                             {{ 'subscriptions.subscriptionToday' | translate }} <br>
-                                        </span>
-                                        <span
+                                        </h6>
+                                        <h6
                                             *ngIf="subscriptionStatus?.existingSubscription && subscriptionStatus?.status">
                                             {{ 'subscriptions.subscriptionExpireIn' | translate }} <br>
-                                        </span>
+                                        </h6>
                                         <div class="event-countdown" *ngIf="subscriptionStatus?.existingSubscription">
                                             <div class="countdown-container">
                                                 <div class="countdown-item">
@@ -70,14 +70,14 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <span
+                                        <h6
                                             *ngIf="subscriptionStatus?.existingSubscription && subscriptionStatus?.status">
                                             {{ 'item.start' | translate }}: {{ getDate(subscriptionStatus?.startDate) }} 
                                             || {{ 'item.end' | translate }}: {{ getDate(subscriptionStatus?.endDate) }}<br>
-                                        </span>
+                                        </h6>
                                         <h1>{{ planData?.title }}</h1>
-                                        <div class="event-time" style="margin-bottom: 10px;">{{ planData?.subTitle }}
-                                        </div>
+                                        <h6 class="event-time" style="margin-bottom: 10px;">{{ planData?.subTitle }}
+                                        </h6>
                                         <h4 style="margin-bottom: 10px;">{{ planData?.price }} {{ planData?.currency}} /
                                             <span *ngIf="planData?.cycle === 'dayly'">{{ 'subscriptions.day' |
                                                 translate }}</span>
@@ -125,9 +125,9 @@
                                                     <i class="feather icon-trash-2"></i>
                                                 </button>
                                             </div>
-                                            <div class="col-md-12" *ngIf="currentUser">
+                                            <h6 class="col-md-12" *ngIf="currentUser">
                                                 {{ 'subscriptions.as' | translate }} <b>{{ showName(currentUser)}}</b>
-                                            </div>
+                                            </h6>
                                         </div>
                                     </div>
                                 </div>
@@ -144,7 +144,7 @@
                             <h6 style="margin-bottom: 10px; color: #00000050;">{{ planData?.subTitle }} </h6>
                             <a *ngFor="let option of optionsData">
                                 <button *ngIf="option?.isActive" class="btn btn-block btn-outline-dark"
-                                    style="margin-right: 10px;"><i class="fa-solid fa-circle-check"></i> {{ option.title
+                                    style="margin-right: 10px; color: #4e4c4c;"><i class="fa-solid fa-circle-check"></i> {{ option.title
                                     }}</button>
                                 <button *ngIf="!option?.isActive" class="btn btn-block btn-outline-dark"><i
                                         class="fa-solid fa-circle-check"></i> {{ option.title

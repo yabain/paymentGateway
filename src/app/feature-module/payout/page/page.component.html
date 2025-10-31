@@ -1,6 +1,7 @@
 <div class="page-header">
     <div class="content-page-header page-tilte">
-        <h5>
+        <h5 style="color:  black !important;">
+            <img src="assets/img/ressorces/payout.png" alt="" style="max-width: 40px; margin-right: 10px;">
             {{ "payment.pendingPayout" | translate }}
         </h5>
         <div class="page-content">
@@ -144,6 +145,8 @@
                                 <td *ngIf="t?.transactionType === 'transfer'">{{ "payment.transfer" | translate }}</td>
                                 <td *ngIf="t?.transactionType === 'withdrawal'">{{ "payment.withdrawal" | translate }}
                                 </td>
+                                <td *ngIf="t?.transactionType === 'subscription'">{{ "subscriptions.title" | translate }}</td>
+                                <td *ngIf="t?.transactionType === 'fundraising'">{{ "fundraising.title" | translate }}</td>
                                 <td>{{ t?.createdAt | date:'dd-MM-yyyy HH:mm:ss'}}</td>
                                 <!-- <td>{{ t?.estimation | number:'1.2-2' }} {{ t?.senderCurrency }}</td>
                                 <td>{{ t?.taxesAmount | number:'1.2-2' }} {{ t?.senderCurrency }}</td> -->
@@ -153,59 +156,43 @@
                                 <td *ngIf="sectionSelected !== 'pending'">
                                     <div class="form-header modal-header-title text-start mb-0">
 
-                                        <span *ngIf="t?.status === 'transaction_initialized' || t?.status === 'transaction_payin_closed'">
-                                            <button class="btn btn-rounded btn-outline-dark me-1" disabled>
-                                                {{ "status." + t?.status | translate }}
-                                            </button>
+                                        <span class="badge badge-label bg-dark" *ngIf="t?.status === 'transaction_initialized' || t?.status === 'transaction_payin_closed'">
+                                            {{ "status." + t?.status | translate }}
                                         </span>
 
-                                        <button class="btn btn-block btn-outline-danger" *ngIf="t?.status === 'transaction_payin_error'
+                                        <span class="badge badge-label bg-danger" *ngIf="t?.status === 'transaction_payin_error'
                                         || t?.status === 'transaction_payout_rejected'
                                         || t?.status === 'transaction_payout_error'
-                                        || t?.status === 'transaction_payout_closed'"
-                                        disabled>{{ "status." + t?.status | translate }} </button>
-
-                                        <span *ngIf="t?.status === 'transaction_payout_success'">
-                                            <button class="btn btn-rounded btn-outline-success me-1" disabled>
-                                                {{ "status." + t?.status | translate }}
-                                            </button>
-                                        </span>
-
-                                        <span *ngIf="t?.status === 'transaction_payin_success'">
-                                            <button class="btn btn-rounded btn-outline-primary me-1" disabled
-                                            *ngIf="t?.transactionType === 'transfer' || t?.transactionType === 'withdrawal'">
-                                                {{ "status.waitingConfirmation" | translate }}
-                                            </button>
-                                            <button class="btn btn-rounded btn-outline-success me-1" disabled
-                                            *ngIf="t?.transactionType !== 'transfer' && t?.transactionType !== 'withdrawal'">
-                                                {{ "status." + t?.status | translate }}
-                                            </button>
-                                        </span>
-                                        <!-- <button class="btn btn-rounded btn-outline-success me-1" disabled
-                                        *ngIf="t?.status === 'transaction_payout_success'">
-                                            {{ "status." + t?.status | translate }}
-                                        </button> -->
-
-                                        <span>
-                                            <button class="btn btn-rounded btn-outline-warning me-1" *ngIf="t?.status === 'transaction_payin_pending'
-                                                || t?.status === 'transaction_payout_pending'" disabled style="color: #F57C11">
+                                        || t?.status === 'transaction_payout_closed'">{{ "status." + t?.status | translate }}</span>
+                                        <span class="badge badge-label bg-warning" *ngIf="t?.status === 'transaction_payin_pending'
+                                                || t?.status === 'transaction_payout_pending'">
                                                 <span role="status" class="spinner-border spinner-border-sm me-2"></span>
                                                 {{ "status." + t?.status | translate }}
-                                            </button>
+                                            </span>
+                                        <span class="badge badge-label bg-success" *ngIf="t?.status === 'transaction_payout_success'">
+                                            {{ "status." + t?.status | translate }}</span>
+
+                                        <span *ngIf="t?.status === 'transaction_payin_success'">
+                                            <span class="badge badge-label bg-success" *ngIf="t?.transactionType === 'transfer' || t?.transactionType === 'withdrawal'">
+                                                {{ "status.waitingConfirmation" | translate }}
+                                            </span>
+                                            <span class="badge badge-label bg-success" *ngIf="t?.transactionType !== 'transfer' && t?.transactionType !== 'withdrawal'">
+                                                {{ "status." + t?.status | translate }}
+                                            </span>
                                         </span>
                                     </div>
                                 </td>
                                 <td *ngIf="sectionSelected === 'pending'">
-                                    <button class="btn btn-rounded btn-outline-danger me-1" *ngIf="t?.status === 'transaction_payout_error'">
+                                    <span class="badge badge-label bg-danger" *ngIf="t?.status === 'transaction_payout_error'">
                                         {{ "status." + t?.status | translate }}
-                                    </button>
-                                    <button class="btn btn-rounded btn-outline-warning me-1" *ngIf="t?.status === 'transaction_payout_pending'" disabled style="color: #F57C11">
+                                    </span>
+                                    <span class="badge badge-label bg-warning" *ngIf="t?.status === 'transaction_payout_pending'">
                                         <span role="status" class="spinner-border spinner-border-sm me-2"></span>
                                         {{ "status." + t?.status | translate }}
-                                    </button>
-                                    <button class="btn btn-rounded btn-outline-primary me-1" href="javascript:void(0);"  *ngIf="t?.status !== 'transaction_payout_pending' && t?.status !== 'transaction_payout_error'"
-                                        data-bs-toggle="tooltip" data-bs-placement="bottom"><span>
-                                        {{ "status.waitingConfirmation" | translate }}</span></button>
+                                    </span>
+                                    <span class="badge badge-label bg-primary" *ngIf="t?.status !== 'transaction_payout_pending' && t?.status !== 'transaction_payout_error'">
+                                        {{ "status.waitingConfirmation" | translate }}
+                                    </span>
 
                                     <!-- <button class="btn btn-rounded btn-outline-success me-1" href="javascript:void(0);"
                                         data-bs-toggle="tooltip" data-bs-placement="bottom" matTooltip="accept Payment"

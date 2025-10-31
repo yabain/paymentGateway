@@ -1,7 +1,13 @@
 <div class="page-header">
   <div class="content-page-header page-tilte">
-    <h5 *ngIf="!isAdminRoute">{{ 'subscriptions.myList' | translate }}</h5>
-    <h5 *ngIf="isAdminRoute">{{ 'subscriptions.allSystemList' | translate }}</h5>
+    <h5 *ngIf="!isAdminRoute" style="color: black !important">
+      <img src="assets/img/ressorces/package.png" alt="" style="max-width: 40px; margin-right: 10px;">
+      {{ 'subscriptions.myList' | translate }}
+    </h5>
+    <h5 *ngIf="isAdminRoute" style="color: black !important">
+      <img src="assets/img/ressorces/package.png" alt="" style="max-width: 40px; margin-right: 10px;">
+      {{ 'subscriptions.allSystemList' | translate }}
+    </h5>
     <div class="page-content">
       <div class="list-btn">
         <ul class="filter-list">

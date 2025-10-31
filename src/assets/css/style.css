@@ -25335,7 +25335,7 @@ table th.no-sort::after {
   position: relative;
 }
 .subscription-plane-head ul li a.active {
-  color: #021d66;
+  color: #F57C11 !important;
   padding-bottom: 8px;
 }
 .subscription-plane-head ul li a.active::before {

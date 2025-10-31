@@ -122,7 +122,7 @@ export class SettingsMenuComponent {
     this.sideBar.changeSidebarColor('1'),
     this.sideBar.changepositionscroll('1'),
     this.sideBar.changeSidebarSize('1'),
-    this.sideBar.changeSidebarView('1');
+    this.sideBar.changeSidebarView('2');
     this.checked = true;
     this.resetSettings();
   }

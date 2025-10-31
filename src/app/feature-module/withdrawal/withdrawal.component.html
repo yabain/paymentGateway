@@ -1,6 +1,8 @@
 <div class="main-title" *ngIf="!goToProceed">
   <div class="content-page-header page-tilte">
-    <h2>{{ "dashboard.cashWithdrawal" | translate }}</h2>
+    <h2 style="color: black !important">
+      <img src="assets/img/ressorces/withdraw.png" alt="" style="max-width: 40px; margin-right: 10px;">
+      {{ "dashboard.cashWithdrawal" | translate }}</h2>
     <div class="list-btn">
       <ul class="filter-list">
         <li (click)="refresh()">

@@ -51,6 +51,9 @@
     </li>
   </ul>
 
+  <a target="_blank" [href]="userData?.website" class="btn btn-light btn-sm me-1" *ngIf="userData && userData?.website">
+    <img src="assets/img/ressorces/web.webp" alt="" style="width: 25px; margin-right: 5px;">
+  </a>
   <a target="_blank" [href]="userData?.linkedIn" class="btn btn-light btn-sm me-1" *ngIf="userData && userData?.linkedIn">
     <img src="assets/img/ressorces/linkedIn.png" alt="" style="width: 25px; margin-right: 5px;">
   </a>
@@ -72,7 +75,7 @@
 
 <div class="page-header">
   <div class="content-page-header page-tilte">
-    <h5>{{ "users.userDetails" | translate }}</h5>
+    <h5 style="color: black !important;">{{ "users.userDetails" | translate }}</h5>
     <div class="list-btn">
       <ul class="filter-list">
         <li *ngIf="userData?.isActive === true"
@@ -179,7 +182,7 @@
             </span>
             <div class="customer-details-cont">
               <h6>Website</h6>
-              <p class="customer-mail">www.example.com</p>
+              <p class="customer-mail">{{userData?.website}}</p>
             </div>
           </div>
         </div>

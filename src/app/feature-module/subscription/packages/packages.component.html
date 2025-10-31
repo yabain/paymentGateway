@@ -1,7 +1,13 @@
 <div class="page-header">
     <div class="content-page-header page-tilte">
-        <h5 *ngIf="!isAdmin">{{ 'subscriptions.myPlan' | translate }}</h5>
-        <h5 *ngIf="isAdmin">{{ 'subscriptions.allSystemPlan' | translate }}</h5>
+        <h5 *ngIf="!isAdmin" style="color: black !important;">
+            <img src="assets/img/ressorces/package.png" alt="" style="max-width: 40px; margin-right: 10px;">
+            {{ 'subscriptions.myPlan' | translate }}
+        </h5>
+        <h5 *ngIf="isAdmin" style="color: black !important;">
+            <img src="assets/img/ressorces/package.png" alt="" style="max-width: 40px; margin-right: 10px;">
+            {{ 'subscriptions.allSystemPlan' | translate }}
+        </h5>
         <div class="page-content">
             <div class="list-btn">
                 <ul class="filter-list">
@@ -148,13 +154,14 @@
 <div class="row d-flex align-items-center justify-content-center" *ngIf="!watingPlansList && plansList?.length >= 1">
     <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3" *ngFor="let plan of plansList">
         <div class="packages card">
-            <app-item [plan]="plan" [currentUser]="currentUser" (click)="navigateTo('/subscription/details/' + plan._id)"></app-item>
+            <app-item [plan]="plan" [currentUser]="currentUser"
+                (click)="navigateTo('/subscription/details/' + plan._id)"></app-item>
             <div class="d-flex justify-content-center package-edit">
                 <button type="button" (click)="selectPlan(plan)" type="button" class="btn btn-secondary mt-1 me-1"
                     data-bs-toggle="modal" data-bs-target="#package_details">
                     <i class="feather icon-menu"></i>
                 </button>
-                <button type="button" *ngIf="isAuthor(plan) || isAdmin" (click)="selectPlan(plan)"
+                <!-- <button type="button" *ngIf="isAuthor(plan) || isAdmin" (click)="selectPlan(plan)"
                     class="btn btn-rounded btn-outline-primary me-1" href="javascript:void(0);" data-bs-toggle="modal"
                     data-bs-target="#edit_package">
                     <i class="feather icon-edit"></i>
@@ -167,13 +174,16 @@
                     class="btn btn-rounded btn-outline-danger me-1" href="javascript:void(0);" data-bs-toggle="modal"
                     data-bs-target="#delete_modal">
                     <i class="feather icon-trash-2"></i>
-                </button>
-            </div>
-            <div class="d-flex justify-content-center" *ngIf="!isAuthor(plan) && plan.isActive">
-                <button class="btn btn-rounded btn-primary me-1" style="margin-top: 20px;"
+                </button> -->
+                <button class="btn btn-rounded btn-primary me-1" *ngIf="!isAuthor(plan) && plan.isActive"
                     (click)="checkSbscriberStatus(plan)" data-bs-toggle="modal" data-bs-target="#subscriptionModal">{{
                     'subscriptions.subscribe' | translate }}</button>
             </div>
+            <!-- <div class="d-flex justify-content-center" *ngIf="!isAuthor(plan) && plan.isActive">
+                <button class="btn btn-rounded btn-primary me-1" style="margin-top: 20px;"
+                    (click)="checkSbscriberStatus(plan)" data-bs-toggle="modal" data-bs-target="#subscriptionModal">{{
+                    'subscriptions.subscribe' | translate }}</button>
+            </div> -->
         </div>
     </div>
 </div>
@@ -451,7 +461,8 @@
                                 }}</s></span>
                     </li>
                 </ul>
-                <br><label htmlFor="bankCode" *ngIf="!checkingSubscriptionStatus && !isSubscriber">{{ "subscriptions.quantity" | translate }}</label>
+                <br><label htmlFor="bankCode" *ngIf="!checkingSubscriptionStatus && !isSubscriber">{{
+                    "subscriptions.quantity" | translate }}</label>
                 <select id="label" class="form-select" (change)="onQuantity($event)" id="quantity"
                     *ngIf="!checkingSubscriptionStatus && !isSubscriber" [disabled]="proceed">
                     <option [value]="1">
@@ -512,10 +523,10 @@
 
                     <div *ngIf="!checkingSubscriptionStatus && isSubscriber" style="text-align: center;">
                         <div class="fee-breakdown">
-                        {{ "subscriptions.alreadySubscriberMsg" | translate }}
+                            {{ "subscriptions.alreadySubscriberMsg" | translate }}
                         </div>
-                        <button type="button" class="btn btn-primary btn-lg me-1 mb-2"
-                        style="padding: 5px;" (click)="isSubscriber = false">Recharge</button>
+                        <button type="button" class="btn btn-primary btn-lg me-1 mb-2" style="padding: 5px;"
+                            (click)="isSubscriber = false">Recharge</button>
                     </div>
                     <div *ngIf="!checkingSubscriptionStatus && !isSubscriber">
                         <div class="fee-breakdown">
@@ -572,8 +583,7 @@
                                 {{ "action.close" | translate }}
                             </button>
                             <button class="btn2 btn-confirm"
-                                *ngIf="!checkingSubscriptionStatus && !isSubscriber && !proceed"
-                                (click)="subscribe()">
+                                *ngIf="!checkingSubscriptionStatus && !isSubscriber && !proceed" (click)="subscribe()">
                                 <i class="fas fa-check"></i> {{ "payment.proceed" | translate }}
                             </button>
                         </div>
@@ -586,56 +596,62 @@
             </div>
         </div>
 
-      <div class="modal-content" *ngIf="goToProceed">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="wating-msg">
-              <img src="assets/img/ressorces/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;"
-                *ngIf="!modalClosed && !transactionSucceded && !transactionFailed">
-              <!-- <div class="spinner-border" role="status" *ngIf="!modalClosed && !transactionSucceded && !transactionFailed"></div> -->
-              <p style="margin-top: 50px;" *ngIf="!modalClosed && !transactionSucceded && !transactionFailed">
-                {{ "payment.processing-message1" | translate }}<br>
-                {{ "payment.processing-message2" | translate }}
-              </p>
+        <div class="modal-content" *ngIf="goToProceed">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="wating-msg">
+                        <img src="assets/img/ressorces/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;"
+                            *ngIf="!modalClosed && !transactionSucceded && !transactionFailed">
+                        <!-- <div class="spinner-border" role="status" *ngIf="!modalClosed && !transactionSucceded && !transactionFailed"></div> -->
+                        <p style="margin-top: 50px;" *ngIf="!modalClosed && !transactionSucceded && !transactionFailed">
+                            {{ "payment.processing-message1" | translate }}<br>
+                            {{ "payment.processing-message2" | translate }}
+                        </p>
 
 
-              <img src="../../../assets/img/ressorces/tfailed.gif" alt="" style="max-width: 100px;;"
-                *ngIf="!reOpen && transactionFailed">
-              <br>
-              <span style="color: red !important" *ngIf="!reOpen && transactionFailed">{{ "payment.transactionFailed" | translate }}</span>
-              <p style="margin-top: 50px;" *ngIf="!reOpen && transactionFailed">
-                Click
-                <span class="retry" (click)="openPayin()" *ngIf="!reOpen && transactionFailed">{{
-                  "payment.hereToRetry" | translate
-                  }}.</span>
-                <span *ngIf="reOpen && transactionFailed">{{ "payment.hereToRetry" | translate }}. {{ "payment.opening" | translate }}...</span>
-              </p>
+                        <img src="../../../assets/img/ressorces/tfailed.gif" alt="" style="max-width: 100px;;"
+                            *ngIf="!reOpen && transactionFailed">
+                        <br>
+                        <span style="color: red !important" *ngIf="!reOpen && transactionFailed">{{
+                            "payment.transactionFailed" | translate }}</span>
+                        <p style="margin-top: 50px;" *ngIf="!reOpen && transactionFailed">
+                            Click
+                            <span class="retry" (click)="openPayin()" *ngIf="!reOpen && transactionFailed">{{
+                                "payment.hereToRetry" | translate
+                                }}.</span>
+                            <span *ngIf="reOpen && transactionFailed">{{ "payment.hereToRetry" | translate }}. {{
+                                "payment.opening" | translate }}...</span>
+                        </p>
 
-              <img src="assets/img/ressorces/flutterwave.png" alt="" style="max-width: 100px;;"
-                *ngIf="!transactionSucceded && !transactionFailed">
-              <p style="margin-top: 50px;" *ngIf="showRetry && !transactionSucceded && !transactionFailed">
-                {{ "payment.processing-message4" | translate }}
-                <span class="retry" (click)="openPayin()" *ngIf="!reOpen && !transactionSucceded">{{
-                  "payment.hereToRetry" | translate
-                  }}.</span>
-                <span *ngIf="reOpen && !transactionSucceded">{{ "payment.hereToRetry" | translate }}. {{ "payment.opening" | translate }}...</span>
-              </p>
+                        <img src="assets/img/ressorces/flutterwave.png" alt="" style="max-width: 100px;;"
+                            *ngIf="!transactionSucceded && !transactionFailed">
+                        <p style="margin-top: 50px;" *ngIf="showRetry && !transactionSucceded && !transactionFailed">
+                            {{ "payment.processing-message4" | translate }}
+                            <span class="retry" (click)="openPayin()" *ngIf="!reOpen && !transactionSucceded">{{
+                                "payment.hereToRetry" | translate
+                                }}.</span>
+                            <span *ngIf="reOpen && !transactionSucceded">{{ "payment.hereToRetry" | translate }}. {{
+                                "payment.opening" | translate }}...</span>
+                        </p>
 
-              <img src="assets/img/ressorces/paymentDone.gif" alt="" style="max-width: 250px;;"
-                *ngIf="transactionSucceded && !transactionFailed">
-              <p style="margin-top: 50px;" *ngIf="transactionSucceded && !transactionFailed">{{ 'payment.paymentSuccess'
-                | translate }}</p>
-                
-              <p style="margin-top: 50px;" *ngIf="!transactionSucceded && showRetry || !transactionSucceded && transactionSucceded">
-                <br>
-                {{ 'payment.ifPaymentConfirmed' | translate }}</p>
+                        <img src="assets/img/ressorces/paymentDone.gif" alt="" style="max-width: 250px;;"
+                            *ngIf="transactionSucceded && !transactionFailed">
+                        <p style="margin-top: 50px;" *ngIf="transactionSucceded && !transactionFailed">{{
+                            'payment.paymentSuccess'
+                            | translate }}</p>
 
-              <br>
-              <button class="btn btn-primary" *ngIf="showRetry || transactionSucceded"
-                (click)="ngOnDestroy()" data-bs-dismiss="modal"> {{ "action.close" | translate }} </button>
+                        <p style="margin-top: 50px;"
+                            *ngIf="!transactionSucceded && showRetry || !transactionSucceded && transactionSucceded">
+                            <br>
+                            {{ 'payment.ifPaymentConfirmed' | translate }}
+                        </p>
+
+                        <br>
+                        <button class="btn btn-primary" *ngIf="showRetry || transactionSucceded" (click)="ngOnDestroy()"
+                            data-bs-dismiss="modal"> {{ "action.close" | translate }} </button>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
 </div>

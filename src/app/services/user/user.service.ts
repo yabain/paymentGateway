@@ -295,7 +295,7 @@ export class UserService {
       layoutWidth: 1,
       layoutPositionScroll: 1,
       layoutSidebarSize: 1,
-      layoutSidebarView: 1
+      layoutSidebarView: 2
     };
     return from(this.setUserSetting(userSettings))
     .pipe(

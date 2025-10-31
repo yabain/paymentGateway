@@ -28,6 +28,7 @@ export class MailComponent implements OnInit {
   smtpUser: string;
   smtpPassword: string;
   smtpEncription: string;
+  emailForAlert: string;
   edition: boolean = false;
 
   status: boolean = true;
@@ -66,6 +67,7 @@ export class MailComponent implements OnInit {
     this.smtpUser = this.smtpData.smtpUser;
     this.smtpPassword = this.smtpData.smtpPassword;
     this.status = this.smtpData.status;
+    this.emailForAlert = this.smtpData.emailForAlert;
   }
 
   toggleEdition() {
@@ -147,6 +149,7 @@ export class MailComponent implements OnInit {
       smtpUser: this.smtpUser,
       smtpPassword: this.smtpPassword,
       status: this.status,
+      emailForAlert: this.emailForAlert,
     };
     if (!this.verifyData()) {
       return;

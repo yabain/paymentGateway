@@ -26,47 +26,43 @@
             <div class="form-header modal-header-title text-start mb-0">
 
                 <span
-                    *ngIf="transactionData?.status === 'transaction_initialized' || transactionData?.status === 'transaction_payin_closed'">
-                    <button class="btn btn-rounded btn-outline-dark me-1" disabled>
-                        {{ "status." + transactionData?.status | translate }}
-                    </button>
+                    *ngIf="transactionData?.status === 'transaction_initialized' || transactionData?.status === 'transaction_payin_closed'"
+                    class="badge badge-label bg-dark">
+                    {{ "status." + transactionData?.status | translate }}
                 </span>
 
-                <button class="btn btn-rounded btn-outline-danger" *ngIf="transactionData?.status === 'transaction_payin_error'
+                <span class="badge badge-label bg-danger" *ngIf="transactionData?.status === 'transaction_payin_error'
                 || transactionData?.status === 'transaction_payout_rejected'
                 || transactionData?.status === 'transaction_payout_error'
-                || transactionData?.status === 'transaction_payout_closed'" disabled style="color: #a00000;">{{
+                || transactionData?.status === 'transaction_payout_closed'">{{
                     "status." +
-                    transactionData?.status | translate }} </button>
+                    transactionData?.status | translate }} </span>
 
-                <span *ngIf="transactionData?.status === 'transaction_payout_success'">
-                    <button class="btn btn-rounded btn-outline-success me-1" disabled>
-                        {{ "status." + transactionData?.status | translate }}
-                    </button>
+                <span *ngIf="transactionData?.status === 'transaction_payout_success'"
+                    class="badge badge-label bg-success">
+                    {{ "status." + transactionData?.status | translate }}
                 </span>
 
                 <span *ngIf="transactionData?.status === 'transaction_payin_success'">
-                    <button class="btn btn-rounded btn-outline-primary me-1" disabled
+                    <span class="badge badge-label bg-primary" disabled
                         *ngIf="transactionData?.transactionType === 'transfer' || transactionData?.transactionType === 'withdrawal'">
                         {{ "status.waitingConfirmation" | translate }}
-                    </button>
-                    <button class="btn btn-rounded btn-outline-success me-1" disabled
+                    </span>
+                    <span class="badge badge-label bg-success"
                         *ngIf="transactionData?.transactionType !== 'transfer' && transactionData?.transactionType !== 'withdrawal'">
                         {{ "status." + transactionData?.status | translate }}
-                    </button>
+                    </span>
                 </span>
-                <button class="btn btn-rounded btn-outline-success me-1" disabled
+                <span class="badge badge-label bg-success"
                     *ngIf="transactionData?.status === 'transaction_payout_success'">
                     {{ "status." + transactionData?.status | translate }}
-                </button>
+                </span>
 
-                <span>
-                    <button class="btn btn-rounded btn-outline-warning me-1" *ngIf="transactionData?.status === 'transaction_payin_pending'
-                        || transactionData?.status === 'transaction_payout_pending'" disabled style="color: #F57C11">
+                    <span class="badge badge-label bg-warning" *ngIf="transactionData?.status === 'transaction_payin_pending'
+                        || transactionData?.status === 'transaction_payout_pending'">
                         <span role="status" class="spinner-border spinner-border-sm me-2"></span>
                         {{ "status." + transactionData?.status | translate }}
-                    </button>
-                </span>
+                    </span>
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -76,8 +72,8 @@
                                 translate }} </button>
                         </div>
                         <div class="profile-img company-profile-img" *ngIf="transactionData?.status === 'failed'">
-                            <button class="btn btn-rounded btn-outline-danger me-1">{{ "payment.error" |
-                                translate }} </button>
+                            <span class="badge badge-label bg-danger">{{ "payment.error" |
+                                translate }} </span>
                         </div>
                     </div>
                 </div>
@@ -454,8 +450,8 @@
     </div>
 
     <button class="btn btn-rounded btn-outline-secondary me-1" href="javascript:void(0);" style="margin-left: 20px;"
-        data-bs-toggle="tooltip" data-bs-placement="bottom" matTooltip="Close view" (click)="ngOnDestroy(); closeModalClick()"
-        *ngIf="!processing"><span>
+        data-bs-toggle="tooltip" data-bs-placement="bottom" matTooltip="Close view"
+        (click)="ngOnDestroy(); closeModalClick()" *ngIf="!processing"><span>
             {{ "action.close" | translate }}
         </span>
     </button>

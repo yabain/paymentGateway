@@ -1,6 +1,6 @@
 <div class="page-header">
     <div class="content-page-header page-tilte">
-        <h5>
+        <h5 style="color: black !important">
             <img src="assets/img/ressorces/gmail.png" alt="" style="width: 30px; margin-right: 10px;">
             {{ 'sideMenu.mail' | translate }}
         </h5>
@@ -99,6 +99,15 @@
                                             <option [value]="'SSL/TLS'">SSL/TLS</option>
                                             <option [value]="'STARTTLS'">STARTTLS</option>
                                         </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="input-block mb-3">
+                                        <label htmlFor="label">{{ "mail.emailForAlert" | translate }} *</label>
+                                        <input id="label" type="text" [(ngModel)]="emailForAlert" name="emailForAlert"
+                                            class="form-control" [disabled]="!edition" />
                                     </div>
                                 </div>
                             </div>
