@@ -67,10 +67,10 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'admin-payout',
+        path: 'admin-payments',
         canActivate: [AdminGuard],
         loadChildren: () =>
-          import('./payout/payout.module').then(
+          import('./payments/payout/payout.module').then(
             (m) => m.PayoutModule,
           ),
       },

@@ -2,7 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PayoutComponent } from './payout.component';
 import { PageComponent } from './page/page.component';
-import { AllPayoutComponent } from './all-payout/all-payout.component';
+import { AllPaymentsComponent } from './all-payments/all-payments.component';
+import { PayinComponent } from '../payin/payin.component';
 
 const routes: Routes = [
   {
@@ -19,8 +20,12 @@ const routes: Routes = [
         component: PageComponent,
       },
       {
-        path: 'all-payout',
-        component: AllPayoutComponent,
+        path: 'payin',
+        component: PayinComponent,
+      },
+      {
+        path: 'all-payments',
+        component: AllPaymentsComponent,
       },
     ],
   },

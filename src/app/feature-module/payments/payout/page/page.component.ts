@@ -73,7 +73,7 @@ export class PageComponent implements OnInit, OnDestroy {
     this.scrollToTop();
     if (this.sectionSelected !== 'all')
       return this.getTransactionListByStatus(this.sectionSelected, this.page);
-    return this.getTransactionList(this.page);
+    return this.getPayoutTransactionList(this.page);
   }
 
   previousPage() {
@@ -87,7 +87,7 @@ export class PageComponent implements OnInit, OnDestroy {
     this.scrollToTop();
     if (this.sectionSelected !== 'all')
       return this.getTransactionListByStatus(this.sectionSelected, this.page);
-    return this.getTransactionList(this.page);
+    return this.getPayoutTransactionList(this.page);
   }
 
   scrollToTop(): void {
@@ -100,7 +100,7 @@ export class PageComponent implements OnInit, OnDestroy {
     }, 100);
   }
 
-  getTransactionList(page: number = 1) {
+  getPayoutTransactionList(page: number = 1) {
     this.gettingTransactions = true;
     this.startPolling(false, page);
   }
@@ -121,7 +121,7 @@ export class PageComponent implements OnInit, OnDestroy {
 
   getData() {
     this.getStat();
-    if (this.sectionSelected === 'all') return this.getTransactionList();
+    if (this.sectionSelected === 'all') return this.getPayoutTransactionList();
     else return this.getTransactionListByStatus(this.sectionSelected);
   }
 
@@ -149,7 +149,7 @@ export class PageComponent implements OnInit, OnDestroy {
               },
             });
         } else {
-          this.paymentService.getTransactionList(page).subscribe({
+          this.paymentService.getPayoutTransactionList(page).subscribe({
             next: (res: any) => {
               this.transactionList = res;
               this.gettingTransactions = false;

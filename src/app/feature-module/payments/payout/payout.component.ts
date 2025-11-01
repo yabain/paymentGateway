@@ -29,12 +29,18 @@ export class PayoutComponent implements OnInit, OnDestroy {
   verifyRoute() {
     setTimeout(() => {
       const url = this.router.url;
-      if (url.split('admin-payout/')[1]) {
-        const endP = url.split('admin-payout/')[1];
-        // console.log('endP: ', endP)
-        this.page = endP === 'payout' ? endP : 'all-payout';
+      if (url.split('admin-payments/')[1]) {
+        const endP = url.split('admin-payments/')[1];
+        if(endP === 'payout'){
+          this.page = 'payout';
+        }
+        if(endP === 'payin'){
+          this.page = 'payin';
+        }
+        if(endP === 'all-payments'){
+          this.page = 'all-payments';
+        }
       } else this.page = "payout";
-      // console.log("page: ", this.page)
     }, 200);
   }
 

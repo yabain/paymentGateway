@@ -1,25 +1,13 @@
 <div class="page-header">
     <div class="content-page-header page-tilte">
         <h5 style="color:  black !important;">
-            <img src="assets/img/ressorces/payout.png" alt="" style="max-width: 40px; margin-right: 10px;">
-            {{ "payment.pendingPayout" | translate }}
+            <!-- <img src="assets/img/ressorces/payout.png" alt="" style="max-width: 40px; margin-right: 10px;"> -->
+            {{ "dashboard.allTransactions" | translate }}
+            <span *ngIf="statistics">({{ statistics?.totalTransaction }})</span>
         </h5>
         <div class="page-content">
             <div class="list-btn">
                 <ul class="filter-list">
-                    <li>
-                        <a class="btn btn-rounded btn-outline-success me-1" href="javascript:void(0);"
-                            data-bs-toggle="tooltip" data-bs-placement="bottom" matTooltip="Accept all payments"
-                            (click)="acceptAll()"><span>
-                                {{ "payment.payAll" | translate }}</span></a>
-                    </li>
-                    <li>
-                        <a class="btn btn-rounded btn-outline-danger me-1" href="javascript:void(0);"
-                            data-bs-toggle="tooltip" data-bs-placement="bottom" matTooltip="Reject all payments"
-                            (click)="rejectAll()"><span>
-                                {{ "payment.rejectAll" | translate }}
-                            </span></a>
-                    </li>
                     <li>
                         <a class="btn-filters btn-hover" href="javascript:void(0);" data-bs-toggle="tooltip"
                             data-bs-placement="bottom" matTooltip="Refresh" (click)="refresh()"><span><i
@@ -32,90 +20,12 @@
 </div>
 <!-- /Page Header -->
 
-<div class="super-admin-list-head">
-    <div class="row">
-        <div class="col-xl-3 col-md-6 d-flex">
-            <div class="card w-100">
-                <div class="card-body card-head c-hover" (click)="selectSection('all')"
-                    [ngClass]="sectionSelected === 'all' ? 'active' :  ''">
-                    <div class="grid-info-item total-type">
-                        <div class="grid-info">
-                            <span>{{ 'payment.allPayout' | translate }}</span>
-                            <h4 *ngIf="gettingStatistics">{{ "loading" | translate }}...</h4>
-                            <h4 *ngIf="!gettingStatistics">{{ statistics?.totalTransaction }}</h4>
-                        </div>
-                        <div class="grid-head-icon">
-                            <i class="feather icon-list"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-md-6 d-flex">
-            <div class="card w-100">
-                <div class="card-body card-head c-hover" (click)="selectSection('pending')"
-                    [ngClass]="sectionSelected === 'pending' ? 'active' :  ''">
-                    <div class="grid-info-item total-plane">
-                        <div class="grid-info">
-                            <span>{{ 'payment.pendingPayout' | translate }}</span>
-                            <h4 *ngIf="gettingStatistics">{{ "loading" | translate }}...</h4>
-                            <h4 *ngIf="!gettingStatistics">{{ statistics?.pendingTransaction }}</h4>
-                        </div>
-                        <div class="grid-head-icon">
-                            <i class="feather icon-pause-circle"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-md-6 d-flex">
-            <div class="card w-100">
-                <div class="card-body card-head c-hover" (click)="selectSection('accepted')"
-                    [ngClass]="sectionSelected === 'accepted' ? 'active' :  ''">
-                    <div class="grid-info-item active-plane">
-                        <div class="grid-info">
-                            <span>{{ 'payment.acceptedPayout' | translate }}</span>
-                            <h4 *ngIf="gettingStatistics">{{ "loading" | translate }}...</h4>
-                            <h4 *ngIf="!gettingStatistics">{{ statistics?.endedTransaction }}</h4>
-                        </div>
-                        <div class="grid-head-icon">
-                            <i class="feather icon-pocket"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-md-6 d-flex">
-            <div class="card w-100">
-                <div class="card-body card-head c-hover" (click)="selectSection('error')"
-                    [ngClass]="sectionSelected === 'rejected' ? 'active' :  ''">
-                    <div class="grid-info-item inactive-plane">
-                        <div class="grid-info">
-                            <span>{{ 'payment.rejectedPayout' | translate }}</span>
-                            <h4 *ngIf="gettingStatistics">{{ "loading" | translate }}...</h4>
-                            <h4 *ngIf="!gettingStatistics">{{ statistics?.errorTransaction }}</h4>
-                        </div>
-                        <div class="grid-head-icon">
-                            <i class="feather icon-pause-circle"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="row">
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h5 class="card-title" *ngIf="sectionSelected === 'rejected'">{{ 'payment.rejectedPayout' | translate }}
-                </h5>
-                <h5 class="card-title" *ngIf="sectionSelected === 'accepted'">{{ 'payment.acceptedPayout' | translate }}
-                </h5>
-                <h5 class="card-title" *ngIf="sectionSelected === 'pending'">{{ 'payment.pendingPayout' | translate }}
-                </h5>
-                <h5 class="card-title" *ngIf="sectionSelected === 'all'">{{ 'payment.allPayout' | translate }}</h5>
+                <h5 class="card-title">{{ "dashboard.allTransactions" | translate }}</h5>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -124,13 +34,12 @@
                             <tr>
                                 <th>Type</th>
                                 <th>Date</th>
-                                <th>{{ "payment.amount" | translate }}</th>
+                                <th>{{ "payment.sender" | translate }}</th>
                                 <!-- <th>{{ "payment.taxes" | translate }}</th>
                                 <th>{{ "payment.sender" | translate }}</th> -->
                                 <th>{{ "payment.receiverName" | translate }}</th>
                                 <th>{{ "payment.amountToBeReceived" | translate }}</th>
-                                <th *ngIf="sectionSelected !== 'pending'">{{ "mail.status" | translate }}</th>
-                                <th *ngIf="sectionSelected === 'pending'"></th>
+                                <th>{{ "mail.status" | translate }}</th>
                             </tr>
                         </thead>
                         .
@@ -153,7 +62,7 @@
                                 <td>{{ t?.senderName }} ( {{ t?.senderCountry | translate }} )</td>
                                 <td>{{ t?.receiverName }} ( {{ t?.senderCountry | translate }} )</td>
                                 <td>{{ t?.receiverAmount | number:'1.2-2' }} {{ t?.receiverCurrency }}</td>
-                                <td *ngIf="sectionSelected !== 'pending'">
+                                <td>
                                     <div class="form-header modal-header-title text-start mb-0">
 
                                         <span class="badge badge-label bg-dark" *ngIf="t?.status === 'transaction_initialized' || t?.status === 'transaction_payin_closed'">
@@ -181,29 +90,6 @@
                                             </span>
                                         </span>
                                     </div>
-                                </td>
-                                <td *ngIf="sectionSelected === 'pending'">
-                                    <span class="badge badge-label bg-danger" *ngIf="t?.status === 'transaction_payout_error'">
-                                        {{ "status." + t?.status | translate }}
-                                    </span>
-                                    <span class="badge badge-label bg-warning" *ngIf="t?.status === 'transaction_payout_pending'">
-                                        <span role="status" class="spinner-border spinner-border-sm me-2"></span>
-                                        {{ "status." + t?.status | translate }}
-                                    </span>
-                                    <span class="badge badge-label bg-primary" *ngIf="t?.status !== 'transaction_payout_pending' && t?.status !== 'transaction_payout_error'">
-                                        {{ "status.waitingConfirmation" | translate }}
-                                    </span>
-
-                                    <!-- <button class="btn btn-rounded btn-outline-success me-1" href="javascript:void(0);"
-                                        data-bs-toggle="tooltip" data-bs-placement="bottom" matTooltip="accept Payment"
-                                        (click)="acceptPayment(t?._id)"><span>
-                                            {{ "payment.accept" | translate }}</span></button>
-
-                                    <button class="btn btn-rounded btn-outline-danger me-1" href="javascript:void(0);"
-                                        data-bs-toggle="tooltip" data-bs-placement="bottom" matTooltip="Reject Payment"
-                                        (click)="rejectPayment()"><span>
-                                            {{ "payment.reject" | translate }}
-                                        </span></button> -->
                                 </td>
                             </tr>
                         </tbody>
@@ -242,7 +128,6 @@
         </div>
     </div>
 </div>
-
 
 <div class="modal custom-modal fade p-20" id="payout_transaction_details" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-lg">

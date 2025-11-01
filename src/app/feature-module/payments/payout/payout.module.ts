@@ -5,16 +5,18 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { PayoutComponent } from './payout.component';
 import { PageComponent } from './page/page.component';
-import { AllPayoutComponent } from './all-payout/all-payout.component';
+import { AllPaymentsComponent } from './all-payments/all-payments.component';
 import { PayoutRoutingModule } from './payout-routing.module';
-import { CommonItemModule } from '../common/common-item.module';
+import { CommonItemModule } from '../../common/common-item.module';
+import { PayinComponent } from '../payin/payin.component';
 
 
 @NgModule({
   declarations: [
     PageComponent,
     PayoutComponent,
-    AllPayoutComponent,
+    PayinComponent,
+    AllPaymentsComponent,
   ],
   imports: [
     CommonModule,

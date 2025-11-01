@@ -123,6 +123,21 @@ export class PaymentService {
     );
   }
   
+  getPayoutTransactionList(page: number = 1): Observable<any> {
+    return this.apiService.getWithoutId(`transaction/all-payout` + '?page=' + page).pipe(
+      map((res: any) => {
+        if (res) {
+          return res;
+        }
+        return false;
+      }),
+      catchError((err) => {
+        console.error('Error getting favorites:', err);
+        return of(false); // Emit false if there's an error
+      }),
+    );
+  }
+
   acceptPayment(transactionId): Observable<any> {
     return this.apiService.getById(`fw/payout`, transactionId).pipe(
       map((res: any) => {
