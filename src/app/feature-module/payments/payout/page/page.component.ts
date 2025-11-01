@@ -45,7 +45,7 @@ export class PageComponent implements OnInit, OnDestroy {
     if(refresh) this.gettingStatistics = true;
     this.paymentService.getStatistics().subscribe((data: any) => {
       this.statistics = data;
-      // console.log('stat: ', data);
+      console.log('stat: ', data);
       this.gettingStatistics = false;
     });
   }

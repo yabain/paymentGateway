@@ -512,7 +512,8 @@
     "address": "Addresse",
     "date": "Date",
     "success": "Success",
-    "error": "Error"
+    "error": "Error",
+    "emailForAlert": "Contact(s) for alerts"
   },
   "dashboard": {
     "title": "Dashboard",

@@ -1,1 +1,161 @@
-Payin
+<div class="page-header">
+    <div class="content-page-header page-tilte">
+        <h5 style="color:  black !important;">
+            <!-- <img src="assets/img/ressorces/payout.png" alt="" style="max-width: 40px; margin-right: 10px;"> -->
+            {{ "sideMenu.payin" | translate }}
+            <span *ngIf="statistics">({{ statistics?.totalPayinTransactions }})</span>
+        </h5>
+        <div class="page-content">
+            <div class="list-btn">
+                <ul class="filter-list">
+                    <li>
+                        <a class="btn-filters btn-hover" href="javascript:void(0);" data-bs-toggle="tooltip"
+                            data-bs-placement="bottom" matTooltip="Refresh" (click)="refresh()"><span><i
+                                    class="feather icon-refresh-ccw"></i></span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Page Header -->
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">{{ "dashboard.allTransactions" | translate }}</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped mb-0" *ngIf="!gettingTransactions && transactionList?.length > 0">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Date</th>
+                                <th>{{ "payment.sender" | translate }}</th>
+                                <!-- <th>{{ "payment.taxes" | translate }}</th>
+                                <th>{{ "payment.sender" | translate }}</th> -->
+                                <th>{{ "payment.receiverName" | translate }}</th>
+                                <th>{{ "payment.amountToBeReceived" | translate }}</th>
+                                <th>{{ "mail.status" | translate }}</th>
+                            </tr>
+                        </thead>
+                        .
+                        <tbody>
+                            <tr *ngFor="let t of transactionList">
+                                <td (click)="selectTransaction(t)" href="javascript:void(0);" data-bs-toggle="modal"
+                                    data-bs-target="#payin_transaction_details"
+                                    *ngIf="t?.transactionId.transactionType === 'transfer'">{{ "payment.transfer" |
+                                    translate }}</td>
+                                <td (click)="selectTransaction(t)" href="javascript:void(0);" data-bs-toggle="modal"
+                                    data-bs-target="#payin_transaction_details"
+                                    *ngIf="t?.transactionId.transactionType === 'withdrawal'">{{ "payment.withdrawal" |
+                                    translate }}
+                                </td>
+                                <td (click)="selectTransaction(t)" href="javascript:void(0);" data-bs-toggle="modal"
+                                    data-bs-target="#payin_transaction_details"
+                                    *ngIf="t?.transactionId.transactionType === 'subscription'">{{ "subscriptions.title"
+                                    | translate }}</td>
+                                <td (click)="selectTransaction(t)" href="javascript:void(0);" data-bs-toggle="modal"
+                                    data-bs-target="#payin_transaction_details"
+                                    *ngIf="t?.transactionId.transactionType === 'fundraising'">{{ "fundraising.title" |
+                                    translate }}</td>
+                                <td (click)="selectTransaction(t)" href="javascript:void(0);" data-bs-toggle="modal"
+                                    data-bs-target="#payin_transaction_details">{{ t?.transactionId.createdAt |
+                                    date:'dd-MM-yyyy HH:mm:ss'}}</td>
+                                <!-- <td (click)="selectTransaction(t)" href="javascript:void(0);"
+                            data-bs-toggle="modal"
+                                data-bs-target="#payin_transaction_details">{{ t?.transactionId.estimation | number:'1.2-2' }} {{ t?.transactionId.senderCurrency }}</td>
+                                <td (click)="selectTransaction(t)" href="javascript:void(0);"
+                            data-bs-toggle="modal"
+                                data-bs-target="#payin_transaction_details">{{ t?.transactionId.taxesAmount | number:'1.2-2' }} {{ t?.transactionId.senderCurrency }}</td> -->
+                                <td (click)="selectTransaction(t)" href="javascript:void(0);" data-bs-toggle="modal"
+                                    data-bs-target="#payin_transaction_details">{{ t?.transactionId.senderName }} ( {{
+                                    t?.transactionId.senderCountry | translate }} )</td>
+                                <td (click)="selectTransaction(t)" href="javascript:void(0);" data-bs-toggle="modal"
+                                    data-bs-target="#payin_transaction_details">{{ t?.transactionId.receiverName }} ( {{
+                                    t?.transactionId.senderCountry | translate }} )</td>
+                                <td (click)="selectTransaction(t)" href="javascript:void(0);" data-bs-toggle="modal"
+                                    data-bs-target="#payin_transaction_details">{{ t?.transactionId.receiverAmount |
+                                    number:'1.2-2' }} {{ t?.transactionId.receiverCurrency }}</td>
+                                <td>
+                                    <div class="form-header modal-header-title text-start mb-0">
+
+                                        <span class="badge badge-label bg-dark"
+                                            *ngIf="t?.transactionId.status === 'transaction_initialized' || t?.transactionId.status === 'transaction_payin_closed'">
+                                            {{ "status." + t?.transactionId.status | translate }}
+                                        </span>
+
+                                        <span class="badge badge-label bg-danger" *ngIf="t?.transactionId.status === 'transaction_payin_error'
+                                        || t?.transactionId.status === 'transaction_payout_rejected'
+                                        || t?.transactionId.status === 'transaction_payout_error'
+                                        || t?.transactionId.status === 'transaction_payout_closed'">{{ "status." +
+                                            t?.transactionId.status | translate }}</span>
+                                        <span class="badge badge-label bg-warning" *ngIf="t?.transactionId.status === 'transaction_payin_pending'
+                                                || t?.transactionId.status === 'transaction_payout_pending'">
+                                            <span role="status" class="spinner-border spinner-border-sm me-2"></span>
+                                            {{ "status." + t?.transactionId.status | translate }}
+                                        </span>
+                                        <span class="badge badge-label bg-success"
+                                            *ngIf="t?.transactionId.status === 'transaction_payout_success'">
+                                            {{ "status." + t?.transactionId.status | translate }}</span>
+
+                                        <span *ngIf="t?.transactionId.status === 'transaction_payin_success'">
+                                            <span class="badge badge-label bg-success"
+                                                *ngIf="t?.transactionId.transactionType === 'transfer' || t?.transactionId.transactionType === 'withdrawal'">
+                                                {{ "status.waitingConfirmation" | translate }}
+                                            </span>
+                                            <span class="badge badge-label bg-success"
+                                                *ngIf="t?.transactionId.transactionType !== 'transfer' && t?.transactionId.transactionType !== 'withdrawal'">
+                                                {{ "status." + t?.transactionId.status | translate }}
+                                            </span>
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table><br>
+                    <div *ngIf="!gettingTransactions && transactionList?.length > 0">
+                        <button class="btn btn-block btn-outline-light active" (click)="previousPage()"
+                            *ngIf="page !== 1">
+                            << </button>
+                                <button class="btn btn-block btn-outline-light active">Page: {{ page }}</button>
+                                <button class="btn btn-block btn-outline-light active" (click)="nextPage()"
+                                    *ngIf="transactionList?.length === 10"> >> </button>
+                    </div>
+                    <div *ngIf="gettingTransactions && transactionList?.length === 0"
+                        class="row d-flex align-items-cente justify-content-center">
+                        <!-- <img src="assets/img/ressorces/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;"> -->
+                        <div class="spinner-border text-primary" role="status" style="margin: 20px;">
+                            <span class="visually-hidden">{{ "loading" | translate }}...</span>
+                        </div>
+                    </div>
+
+                    <div *ngIf="!gettingTransactions && transactionList?.length < 1"
+                        class="row d-flex align-items-center justify-content-center">
+                        <div class="col-md-12" style="display: flex;
+                                justify-content: center;
+                                align-items: center;">
+                            <img src="assets/img/ressorces/nts.png" alt="" style="max-width: 150px;
+                                    height: auto;">
+                        </div>
+                        <div class="col-md-12" style="display: flex;
+                                justify-content: center;
+                                align-items: center;">
+                            {{ "nts" | translate }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal custom-modal fade p-20" id="payin_transaction_details" role="dialog" data-bs-backdrop="static"
+    data-bs-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <app-transaction-details [transactionData]="selectedTransaction"></app-transaction-details>
+    </div>
+</div>

@@ -307,14 +307,12 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
     this.transactionRef = this.paymentService.generateId();
   }
 
-  formatAmount(event: any) {
-    let value = event.target.value.replace(/\s/g, '');
+  formatAmount(value: any) {
     value = value.replace(/\D/g, '');
 
     value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 
     this.price = value;
-    event.target.value = value;
   }
 
   getCleanAmount(): number {
@@ -664,7 +662,7 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
       paymentWithTaxes: this.paymentWithTaxesCalculation(),
 
       senderId: this.currentUser._id,
-      senderName: this.planData.currency,
+      senderName: this.showName(this.currentUser),
       senderEmail: this.currentUser.email,
       senderContact: this.currentUser.phone,
       senderCountry: this.currentUser.countryId.name,
@@ -680,7 +678,7 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
       planId: this.planData._id,
       receiverCurrency: this.planData.currency,
       quantity: this.quantity,
-      receiverAmount: this.getCleanAmount(),
+      receiverAmount: this.planData.price,
 
       planAuthor: this.planData.author._id,
 

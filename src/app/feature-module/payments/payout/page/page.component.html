@@ -42,7 +42,7 @@
                         <div class="grid-info">
                             <span>{{ 'payment.allPayout' | translate }}</span>
                             <h4 *ngIf="gettingStatistics">{{ "loading" | translate }}...</h4>
-                            <h4 *ngIf="!gettingStatistics">{{ statistics?.totalTransaction }}</h4>
+                            <h4 *ngIf="!gettingStatistics">{{ statistics?.totalPayoutTransactions }}</h4>
                         </div>
                         <div class="grid-head-icon">
                             <i class="feather icon-list"></i>
@@ -59,7 +59,7 @@
                         <div class="grid-info">
                             <span>{{ 'payment.pendingPayout' | translate }}</span>
                             <h4 *ngIf="gettingStatistics">{{ "loading" | translate }}...</h4>
-                            <h4 *ngIf="!gettingStatistics">{{ statistics?.pendingTransaction }}</h4>
+                            <h4 *ngIf="!gettingStatistics">{{ statistics?.pendingTransactions }}</h4>
                         </div>
                         <div class="grid-head-icon">
                             <i class="feather icon-pause-circle"></i>
@@ -76,7 +76,7 @@
                         <div class="grid-info">
                             <span>{{ 'payment.acceptedPayout' | translate }}</span>
                             <h4 *ngIf="gettingStatistics">{{ "loading" | translate }}...</h4>
-                            <h4 *ngIf="!gettingStatistics">{{ statistics?.endedTransaction }}</h4>
+                            <h4 *ngIf="!gettingStatistics">{{ statistics?.endedTransactions }}</h4>
                         </div>
                         <div class="grid-head-icon">
                             <i class="feather icon-pocket"></i>
@@ -93,7 +93,7 @@
                         <div class="grid-info">
                             <span>{{ 'payment.rejectedPayout' | translate }}</span>
                             <h4 *ngIf="gettingStatistics">{{ "loading" | translate }}...</h4>
-                            <h4 *ngIf="!gettingStatistics">{{ statistics?.errorTransaction }}</h4>
+                            <h4 *ngIf="!gettingStatistics">{{ statistics?.errorTransactions }}</h4>
                         </div>
                         <div class="grid-head-icon">
                             <i class="feather icon-pause-circle"></i>
@@ -135,62 +135,87 @@
                         </thead>
                         .
                         <tbody>
-                            <tr *ngFor="let t of transactionList" [ngClass]="{
-                                'table-success': t.status === 'successful',
-                                'table-light': t.status === 'pending',
-                                'table-danger': t.status === 'failed'
-                                }" (click)="selectTransaction(t)" href="javascript:void(0);" data-bs-toggle="modal"
+                            <tr *ngFor="let t of transactionList" data-bs-toggle="modal"
                                 data-bs-target="#payout_transaction_details">
-
-                                <td *ngIf="t?.transactionType === 'transfer'">{{ "payment.transfer" | translate }}</td>
-                                <td *ngIf="t?.transactionType === 'withdrawal'">{{ "payment.withdrawal" | translate }}
+                                <td (click)="selectTransaction(t)" href="javascript:void(0);" data-bs-toggle="modal"
+                                    data-bs-target="#payout_transaction_details"
+                                    *ngIf="t?.transactionType === 'transfer'">{{ "payment.transfer" | translate }}</td>
+                                <td (click)="selectTransaction(t)" href="javascript:void(0);" data-bs-toggle="modal"
+                                    data-bs-target="#payout_transaction_details"
+                                    *ngIf="t?.transactionType === 'withdrawal'">{{ "payment.withdrawal" | translate }}
                                 </td>
-                                <td *ngIf="t?.transactionType === 'subscription'">{{ "subscriptions.title" | translate }}</td>
-                                <td *ngIf="t?.transactionType === 'fundraising'">{{ "fundraising.title" | translate }}</td>
-                                <td>{{ t?.createdAt | date:'dd-MM-yyyy HH:mm:ss'}}</td>
-                                <!-- <td>{{ t?.estimation | number:'1.2-2' }} {{ t?.senderCurrency }}</td>
-                                <td>{{ t?.taxesAmount | number:'1.2-2' }} {{ t?.senderCurrency }}</td> -->
-                                <td>{{ t?.senderName }} ( {{ t?.senderCountry | translate }} )</td>
-                                <td>{{ t?.receiverName }} ( {{ t?.senderCountry | translate }} )</td>
-                                <td>{{ t?.receiverAmount | number:'1.2-2' }} {{ t?.receiverCurrency }}</td>
+                                <td (click)="selectTransaction(t)" href="javascript:void(0);" data-bs-toggle="modal"
+                                    data-bs-target="#payout_transaction_details"
+                                    *ngIf="t?.transactionType === 'subscription'">{{ "subscriptions.title" | translate
+                                    }}</td>
+                                <td (click)="selectTransaction(t)" href="javascript:void(0);" data-bs-toggle="modal"
+                                    data-bs-target="#payout_transaction_details"
+                                    *ngIf="t?.transactionType === 'fundraising'">{{ "fundraising.title" | translate }}
+                                </td>
+                                <td (click)="selectTransaction(t)" href="javascript:void(0);" data-bs-toggle="modal"
+                                    data-bs-target="#payout_transaction_details">{{ t?.createdAt | date:'dd-MM-yyyy
+                                    HH:mm:ss'}}</td>
+                                <!-- <td (click)="selectTransaction(t)" href="javascript:void(0);"
+                             data-bs-toggle="modal"
+                                data-bs-target="#payout_transaction_details">{{ t?.estimation | number:'1.2-2' }} {{ t?.senderCurrency }}</td>
+                                <td (click)="selectTransaction(t)" href="javascript:void(0);"
+                             data-bs-toggle="modal"
+                                data-bs-target="#payout_transaction_details">{{ t?.taxesAmount | number:'1.2-2' }} {{ t?.senderCurrency }}</td> -->
+                                <td (click)="selectTransaction(t)" href="javascript:void(0);" data-bs-toggle="modal"
+                                    data-bs-target="#payout_transaction_details">{{ t?.senderName }} ( {{
+                                    t?.senderCountry | translate }} )</td>
+                                <td (click)="selectTransaction(t)" href="javascript:void(0);" data-bs-toggle="modal"
+                                    data-bs-target="#payout_transaction_details">{{ t?.receiverName }} ( {{
+                                    t?.senderCountry | translate }} )</td>
+                                <td (click)="selectTransaction(t)" href="javascript:void(0);" data-bs-toggle="modal"
+                                    data-bs-target="#payout_transaction_details">{{ t?.receiverAmount | number:'1.2-2'
+                                    }} {{ t?.receiverCurrency }}</td>
                                 <td *ngIf="sectionSelected !== 'pending'">
                                     <div class="form-header modal-header-title text-start mb-0">
 
-                                        <span class="badge badge-label bg-dark" *ngIf="t?.status === 'transaction_initialized' || t?.status === 'transaction_payin_closed'">
+                                        <span class="badge badge-label bg-dark"
+                                            *ngIf="t?.status === 'transaction_initialized' || t?.status === 'transaction_payin_closed'">
                                             {{ "status." + t?.status | translate }}
                                         </span>
 
                                         <span class="badge badge-label bg-danger" *ngIf="t?.status === 'transaction_payin_error'
                                         || t?.status === 'transaction_payout_rejected'
                                         || t?.status === 'transaction_payout_error'
-                                        || t?.status === 'transaction_payout_closed'">{{ "status." + t?.status | translate }}</span>
+                                        || t?.status === 'transaction_payout_closed'">{{ "status." + t?.status |
+                                            translate }}</span>
                                         <span class="badge badge-label bg-warning" *ngIf="t?.status === 'transaction_payin_pending'
                                                 || t?.status === 'transaction_payout_pending'">
-                                                <span role="status" class="spinner-border spinner-border-sm me-2"></span>
-                                                {{ "status." + t?.status | translate }}
-                                            </span>
-                                        <span class="badge badge-label bg-success" *ngIf="t?.status === 'transaction_payout_success'">
+                                            <span role="status" class="spinner-border spinner-border-sm me-2"></span>
+                                            {{ "status." + t?.status | translate }}
+                                        </span>
+                                        <span class="badge badge-label bg-success"
+                                            *ngIf="t?.status === 'transaction_payout_success'">
                                             {{ "status." + t?.status | translate }}</span>
 
                                         <span *ngIf="t?.status === 'transaction_payin_success'">
-                                            <span class="badge badge-label bg-success" *ngIf="t?.transactionType === 'transfer' || t?.transactionType === 'withdrawal'">
+                                            <span class="badge badge-label bg-success"
+                                                *ngIf="t?.transactionType === 'transfer' || t?.transactionType === 'withdrawal'">
                                                 {{ "status.waitingConfirmation" | translate }}
                                             </span>
-                                            <span class="badge badge-label bg-success" *ngIf="t?.transactionType !== 'transfer' && t?.transactionType !== 'withdrawal'">
+                                            <span class="badge badge-label bg-success"
+                                                *ngIf="t?.transactionType !== 'transfer' && t?.transactionType !== 'withdrawal'">
                                                 {{ "status." + t?.status | translate }}
                                             </span>
                                         </span>
                                     </div>
                                 </td>
                                 <td *ngIf="sectionSelected === 'pending'">
-                                    <span class="badge badge-label bg-danger" *ngIf="t?.status === 'transaction_payout_error'">
+                                    <span class="badge badge-label bg-danger"
+                                        *ngIf="t?.status === 'transaction_payout_error'">
                                         {{ "status." + t?.status | translate }}
                                     </span>
-                                    <span class="badge badge-label bg-warning" *ngIf="t?.status === 'transaction_payout_pending'">
+                                    <span class="badge badge-label bg-warning"
+                                        *ngIf="t?.status === 'transaction_payout_pending'">
                                         <span role="status" class="spinner-border spinner-border-sm me-2"></span>
                                         {{ "status." + t?.status | translate }}
                                     </span>
-                                    <span class="badge badge-label bg-primary" *ngIf="t?.status !== 'transaction_payout_pending' && t?.status !== 'transaction_payout_error'">
+                                    <span class="badge badge-label bg-primary"
+                                        *ngIf="t?.status !== 'transaction_payout_pending' && t?.status !== 'transaction_payout_error'">
                                         {{ "status.waitingConfirmation" | translate }}
                                     </span>
 
@@ -216,7 +241,8 @@
                                 <button class="btn btn-block btn-outline-light active" (click)="nextPage()"
                                     *ngIf="transactionList?.length === 10"> >> </button>
                     </div>
-                    <div *ngIf="gettingTransactions && transactionList?.length === 0" class="row d-flex align-items-cente justify-content-center">
+                    <div *ngIf="gettingTransactions && transactionList?.length === 0"
+                        class="row d-flex align-items-cente justify-content-center">
                         <!-- <img src="assets/img/ressorces/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;"> -->
                         <div class="spinner-border text-primary" role="status" style="margin: 20px;">
                             <span class="visually-hidden">{{ "loading" | translate }}...</span>
@@ -243,7 +269,8 @@
     </div>
 </div>
 
-<div class="modal custom-modal fade p-20" id="payout_transaction_details" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+<div class="modal custom-modal fade p-20" id="payout_transaction_details" role="dialog" data-bs-backdrop="static"
+    data-bs-keyboard="false" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <app-transaction-details [transactionData]="selectedTransaction"></app-transaction-details>
     </div>

@@ -512,7 +512,8 @@
     "address": "Adresse",
     "date": "Date",
     "success": "Succès",
-    "error": "Erreur"
+    "error": "Erreur",
+    "emailForAlert": "Adresse(s) d'alertes"
   },
   "dashboard": {
     "title": "Tableau de bord",
@@ -699,7 +700,7 @@
   },
   "status": {
     "title": "Statuts",
-    "transaction_initialized": "Transaction initialisée",
+    "transaction_initialized": "Transaction initiée",
     "transaction_payin_pending": "Attente encaissement",
     "transaction_payin_success": "Encaissement effectué",
     "transaction_payin_error": "Erreur de paiement",
