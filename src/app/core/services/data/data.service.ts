@@ -764,12 +764,12 @@ export class DataService {
           base: 'subscription',
         },
         {
-          menuValue: 'transactionList',
-          route: '/dashboard',
+          menuValue: 'myTransactions',
+          route: '/transactions/my-transactions',
           hasSubRoute: false, // Show arrow after menu item title
           showSubRoute: true,
           icon: 'repeat',
-          base: 'transactions',
+          base: 'my-transaction',
         },
         {
           menuValue: 'profile',

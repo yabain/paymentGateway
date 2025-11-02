@@ -82,52 +82,53 @@ export class ProfileComponent implements OnInit {
   }
 
   userForm(userdata) {
-    const urlPattern =
-    /^(https?:\/\/)?([\w\-]+\.)+[a-z]{2,6}(:\d+)?(\/.*)?$/i;
-
+    const urlPattern = /^(https?:\/\/)?([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(:[0-9]{2,5})?(\/.*)?$/i;
+  
     this.form = new FormGroup({
       firstName: new FormControl(userdata?.firstName),
       lastName: new FormControl(userdata?.lastName),
       name: new FormControl(userdata?.name),
-      // email: new FormControl(userdata?.email ? userdata?.email : '', { validators: [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$')] }),
-      phone: new FormControl(userdata?.phone ? userdata?.phone : '', [Validators.required,]),
-      gender: new FormControl(userdata?.gender ? userdata?.gender : '', [Validators.required,]),
-      // accountType: new FormControl('personal', {
-      //   validators: [Validators.required],
-      // }),
-      // countryId: new FormControl(null, { validators: [Validators.required] }),
-      cityId: new FormControl(userdata?.cityId ? userdata?.cityId._id : '', { validators: [Validators.required] }),
-      language: new FormControl(userdata?.language, { validators: [Validators.required] }),
-      address: new FormControl(userdata?.address, { validators: [Validators.required] }),
-      facebook: new FormControl(userdata?.facebook, { validators: [Validators.pattern(urlPattern),] }),
-      website: new FormControl(userdata?.website, { validators: [Validators.pattern(urlPattern),] }),
-      linkedIn: new FormControl(userdata?.linkedIn, { validators: [Validators.pattern(urlPattern),] }),
-      instagram: new FormControl(userdata?.instagram, { validators: [Validators.pattern(urlPattern),] }),
-      twitter: new FormControl(userdata?.twitter, { validators: [Validators.pattern(urlPattern),] }),
+      phone: new FormControl(userdata?.phone || '', [Validators.required]),
+      gender: new FormControl(userdata?.gender || ''),
+      cityId: new FormControl(userdata?.cityId?._id || '', [Validators.required]),
+      language: new FormControl(userdata?.language || '', [Validators.required]),
+      address: new FormControl(userdata?.address || '', [Validators.required]),
+  
+      // 🌐 Liens non obligatoires, mais doivent être valides s’ils sont saisis
+      facebook: new FormControl(userdata?.facebook || '', [Validators.pattern(urlPattern)]),
+      website: new FormControl(userdata?.website || '', [Validators.pattern(urlPattern)]),
+      linkedIn: new FormControl(userdata?.linkedIn || '', [Validators.pattern(urlPattern)]),
+      instagram: new FormControl(userdata?.instagram || '', [Validators.pattern(urlPattern)]),
+      twitter: new FormControl(userdata?.twitter || '', [Validators.pattern(urlPattern)]),
     });
-
+  
     this.updateFormValidator();
   }
+  
 
   updateFormValidator() {
+    if (!this.form) return;
+  
     if (this.currentUser.accountType === 'personal') {
       this.form.get('firstName')?.setValidators([Validators.required]);
       this.form.get('lastName')?.setValidators([Validators.required]);
-      this.form.get('firstName')?.updateValueAndValidity({ emitEvent: false });
-      this.form.get('lastName')?.updateValueAndValidity({ emitEvent: false });
-      
+  
       this.form.get('name')?.clearValidators();
-      this.form.get('name')?.updateValueAndValidity({ emitEvent: false });
+      this.form.get('gender')?.clearValidators();
     } else {
       this.form.get('name')?.setValidators([Validators.required]);
-      this.form.get('name')?.updateValueAndValidity({ emitEvent: false });
-      
+  
+      this.form.get('gender')?.clearValidators();
+  
       this.form.get('firstName')?.clearValidators();
       this.form.get('lastName')?.clearValidators();
-      this.form.get('firstName')?.updateValueAndValidity({ emitEvent: false });
-      this.form.get('lastName')?.updateValueAndValidity({ emitEvent: false });
     }
+  
+    Object.keys(this.form.controls).forEach(key => {
+      this.form.get(key)?.updateValueAndValidity({ emitEvent: false });
+    });
   }
+  
 
   submit() {
     // Enable the form temporarily to check validity if it's disabled

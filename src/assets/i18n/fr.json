@@ -560,7 +560,8 @@
     "profile": "Profil",
     "organisation": "Organisation",
     "mySubscriptionList": "Mes abonements",
-    "transactionList": "Transactions"
+    "transactionList": "Transactions",
+    "myTransactions": "Mes transactions"
   },
   "flutterwave": {
     "otherCurrencyBalances": "Solde d'autres devises disponible",
