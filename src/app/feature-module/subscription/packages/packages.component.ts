@@ -635,7 +635,7 @@ export class PackagesComponent implements OnInit, OnDestroy {
       quantity: this.quantity,
       receiverAmount: this.getCleanAmount(),
 
-      planAuthor: this.selectedPlan.author._id,
+      receiverId: this.selectedPlan.author._id,
 
       status: this.paymentService.status.PAYINPENDING,
       transactionType: this.paymentService.transactionType.SUBSCRIPTION,

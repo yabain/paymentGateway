@@ -261,7 +261,7 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
       this.checkSbscriberStatus(this.planData);
       if (
         this.currentUser.admin ||
-        this.currentUser._id == this.planData.planAuthor
+        this.currentUser._id == this.planData.receiverId
       ) {
         this.planForm(this.planData);
       }
@@ -680,7 +680,7 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
       quantity: this.quantity,
       receiverAmount: this.planData.price,
 
-      planAuthor: this.planData.author._id,
+      receiverId: this.planData.author._id,
 
       status: this.paymentService.status.PAYINPENDING,
       transactionType: this.paymentService.transactionType.SUBSCRIPTION,

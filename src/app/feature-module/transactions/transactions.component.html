@@ -125,7 +125,7 @@
                           << </button>
                               <button class="btn btn-block btn-outline-light active">Page: {{ page }} on {{ metadata?.totalPages }}</button>
                               <button class="btn btn-block btn-outline-light active" (click)="nextPage()"
-                                  *ngIf="transactionList?.length === 10"> >> </button>
+                                  *ngIf="metadata?.hasNextPage"> >> </button>
                   </div>
                   <div *ngIf="gettingTransactions && transactionList?.length === 0"
                       class="row d-flex align-items-cente justify-content-center">
