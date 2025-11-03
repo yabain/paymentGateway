@@ -131,9 +131,16 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
     }, 7000);
   }
   
+  stopPolling() {
+    if (this.pollTimer) {
+      clearInterval(this.pollTimer);
+      this.pollTimer = null;
+    }
+  }
+  
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-    clearInterval(this.pollTimer);
+    this.stopPolling();
   }
 }

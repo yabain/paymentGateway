@@ -82,6 +82,14 @@ const routes: Routes = [
             (m) => m.MessagingModule,
           ),
       },
+      {
+        path: 'transactions',
+        canActivate: [AdminGuard],
+        loadChildren: () =>
+          import('./transactions/transactions.module').then(
+            (m) => m.TransactionsModule,
+          ),
+      },
 
 
 

@@ -108,11 +108,19 @@ export class AllPaymentsComponent implements OnInit, OnDestroy {
       } catch (err) {
         console.warn('polling error', err);
       }
-    }, 7000);
+    }, 10 * 1000);
+  }
+
+  stopPolling() {
+    if (this.pollTimer) {
+      clearInterval(this.pollTimer);
+      this.pollTimer = null;
+    }
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    this.stopPolling();
   }
 }

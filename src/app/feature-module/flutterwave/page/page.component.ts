@@ -48,8 +48,8 @@ export class PageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
-    this.periodePayin = '1';
-    this.periodePayout = '1';
+      this.periodePayin = '1';
+      this.periodePayout = '1';
       this.verifyRoute();
       this.refresh();
     });
@@ -106,12 +106,12 @@ export class PageComponent implements OnInit, OnDestroy {
     });
   }
 
-  selectPayoutTransaction(transaction){
+  selectPayoutTransaction(transaction) {
     this.selectedPayoutTransaction = transaction;
     this.metaPayoutTransaction = transaction.meta[0]
   }
 
-  selectPayinTransaction(transaction){
+  selectPayinTransaction(transaction) {
     this.selectedPayinTransaction = transaction;
     this.metaPayinTransaction = transaction.meta;
     this.customerPayinTransaction = transaction.customer;
@@ -147,7 +147,7 @@ export class PageComponent implements OnInit, OnDestroy {
     this.gettingTransactions = true;
   }
 
-  changeUserActiveStatus() {}
+  changeUserActiveStatus() { }
 
   refresh() {
     this.periodePayin = '1';
@@ -158,39 +158,39 @@ export class PageComponent implements OnInit, OnDestroy {
     this.startPolling();
   }
 
-  nextPayinPage(){
-    if(this.payinList.length < 10){
+  nextPayinPage() {
+    if (this.payinList.length < 10) {
       return false;
     }
-    this.payinPage +=1;
+    this.payinPage += 1;
     this.gettingPayinTransactions = true;
     return this.getPayinList(Number(this.periodePayin), this.payinPage);
   }
-  nextPayoutPage(){
-    if(this.payoutList.length < 10){
+  nextPayoutPage() {
+    if (this.payoutList.length < 10) {
       return false;
     }
-    this.payoutPage +=1;
+    this.payoutPage += 1;
     this.gettingPayoutTransactions = true;
     return this.getPayoutList(Number(this.periodePayout), this.payoutPage);
   }
 
-  previousPayinPage(){
-    if(this.payinPage < 2){
+  previousPayinPage() {
+    if (this.payinPage < 2) {
       this.payinPage = 1;
       return false;
     }
-    this.payinPage -=1;
+    this.payinPage -= 1;
     this.gettingPayinTransactions = true;
     return this.getPayinList(Number(this.periodePayin), this.payinPage);
   }
 
-  previousPayoutPage(){
-    if(this.payoutPage < 2){
+  previousPayoutPage() {
+    if (this.payoutPage < 2) {
       this.payoutPage = 1;
       return false;
     }
-    this.payoutPage -=1;
+    this.payoutPage -= 1;
     this.gettingPayoutTransactions = true;
     return this.getPayoutList(Number(this.periodePayout), this.payoutPage);
   }
@@ -207,9 +207,16 @@ export class PageComponent implements OnInit, OnDestroy {
     }, 7000);
   }
 
+  stopPolling() {
+    if (this.pollTimer) {
+      clearInterval(this.pollTimer);
+      this.pollTimer = null;
+    }
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-    clearInterval(this.pollTimer);
+    this.stopPolling();
   }
 }

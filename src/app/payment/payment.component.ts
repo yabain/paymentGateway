@@ -63,4 +63,16 @@ export class PaymentComponent {
       }
     }, 5000);
   }
+  
+
+  stopPolling() {
+    if (this.pollTimer) {
+      clearInterval(this.pollTimer);
+      this.pollTimer = null;
+    }
+  }
+  
+  ngOnDestroy(): void {
+    this.stopPolling();
+  }
 }

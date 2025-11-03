@@ -1,92 +1,127 @@
-import { Component } from '@angular/core';
-import { Sort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
-import { PaginationService, tablePageSize } from 'src/app/shared/sharedIndex';
-import { DataService, routes } from 'src/app/core/core.index';
-import {
-  apiResultFormat,
-  pageSelection,
-  transaction,
-} from 'src/app/core/models/models';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { PaymentService } from 'src/app/services/payment/payment.service';
+import { Subject, takeUntil } from 'rxjs';
+import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
   selector: 'app-transactions',
   templateUrl: './transactions.component.html',
   styleUrls: ['./transactions.component.scss'],
 })
-export class TransactionsComponent {
-  public Transactions: Array<transaction> = [];
-  isCollapsed = false;
-  showFilter = false;
-  public Toggledata = false;
-  public routes = routes;
-  // pagination variables
-  public pageSize = 10;
-  public serialNumberArray: Array<number> = [];
-  public totalData = 0;
-  dataSource!: MatTableDataSource<transaction>;
-  public searchDataValue = '';
-  //** / pagination variables
+export class TransactionsComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
+  gettingTransactions: boolean = true;
+  transactionList: any = [];
+  selectedTransaction: any;
+  page: number = 1;
+  private pollTimer: any;
+  currentUser: any;
+  metadata: any;
 
   constructor(
-    private data: DataService,
-    private pagination: PaginationService,
-    private router: Router,
+    private route: ActivatedRoute,
+    private paymentService: PaymentService,
+    private userService: UserService
   ) {
-    this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
-      if (this.router.url == this.routes.transactions) {
-        this.getTableData({ skip: res.skip, limit: res.limit });
-        this.pageSize = res.pageSize;
+  }
+
+  ngOnInit(): void {
+    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+      this.getData();
+    });
+  }
+
+  refresh() {
+    this.transactionList = [];
+    this.getData();
+  }
+
+  getData() {
+    this.getTransactionList(this.page);
+  }
+
+  selectTransaction(transaction) {
+    this.selectedTransaction = transaction;
+  }
+
+  previousPage() {
+    if (this.page < 2) {
+      this.page = 1;
+      return false;
+    }
+    this.page -= 1;
+    this.gettingTransactions = true;
+    this.transactionList = [];
+    this.scrollToTop();
+    return this.getTransactionList(this.page);
+  }
+
+  nextPage() {
+    if (this.transactionList.length < 10) {
+      return false;
+    }
+    this.page += 1;
+    this.gettingTransactions = true;
+    this.transactionList = [];
+    this.scrollToTop();
+    return this.getTransactionList(this.page);
+  }
+
+  getTransactionList(page: number = 1) {
+    this.gettingTransactions = true;
+    this.startPolling(page);
+  }
+
+  async getUserData(): Promise<any> {
+    this.currentUser = await this.userService.getCurrentUserData();
+    return this.currentUser;
+  }
+
+  async startPolling(page: number = 1) {
+    if (this.pollTimer) clearInterval(this.pollTimer);
+    await this.getUserData();
+    this.pollTimer = setInterval(async () => {
+      try {
+        this.paymentService.getAllTransactionOfUser(this.currentUser._id, page).subscribe({
+          next: (res: any) => {
+            this.transactionList = res.data;
+            console.log('transactionList: ', this.transactionList);
+            this.metadata = res.pagination;
+            this.gettingTransactions = false;
+          },
+          error: (err) => {
+            this.gettingTransactions = false;
+            console.log(err);
+          },
+        });
+        // console.log('polling');
+      } catch (err) {
+        console.warn('polling error', err);
       }
-    });
+    }, 15 * 1000);
   }
 
-  private getTableData(pageOption: pageSelection): void {
-    this.data.getTransaction().subscribe((apiRes: apiResultFormat) => {
-      this.Transactions = [];
-      this.serialNumberArray = [];
-      this.totalData = apiRes.totalData;
-      apiRes.data.map((res: transaction, index: number) => {
-        const serialNumber = index + 1;
-        if (index >= pageOption.skip && serialNumber <= pageOption.limit) {
-          res.sNo = serialNumber;
-          this.Transactions.push(res);
-          this.serialNumberArray.push(serialNumber);
-        }
+  scrollToTop(): void {
+    setTimeout(() => {
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
       });
-      this.dataSource = new MatTableDataSource<transaction>(this.Transactions);
-      this.pagination.calculatePageSize.next({
-        totalData: this.totalData,
-        pageSize: this.pageSize,
-        tableData: this.Transactions,
-        serialNumberArray: this.serialNumberArray,
-        tableData2: [],
-      });
-    });
+    }, 100);
   }
 
-  public searchData(value: string): void {
-    this.dataSource.filter = value.trim().toLowerCase();
-    this.Transactions = this.dataSource.filteredData;
-  }
-
-  public sortData(sort: Sort) {
-    const data = this.Transactions.slice();
-
-    if (!sort.active || sort.direction === '') {
-      this.Transactions = data;
-    } else {
-      this.Transactions = data.sort((a, b) => {
-        const aValue = (a as never)[sort.active];
-        const bValue = (b as never)[sort.active];
-        return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
-      });
+  stopPolling() {
+    if (this.pollTimer) {
+      clearInterval(this.pollTimer);
+      this.pollTimer = null;
     }
   }
 
-  public toggleData = false;
-  openContent() {
-    this.toggleData = !this.toggleData;
+  ngOnDestroy(): void {
+    this.stopPolling();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

@@ -111,8 +111,16 @@ export class PayinComponent implements OnInit, OnDestroy {
     }, 7000);
   }
 
+  stopPolling() {
+    if (this.pollTimer) {
+      clearInterval(this.pollTimer);
+      this.pollTimer = null;
+    }
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    this.stopPolling();
   }
 }
