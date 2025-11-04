@@ -84,7 +84,7 @@ const routes: Routes = [
       },
       {
         path: 'transactions',
-        canActivate: [AdminGuard],
+        // canActivate: [AdminGuard],
         loadChildren: () =>
           import('./transactions/transactions.module').then(
             (m) => m.TransactionsModule,

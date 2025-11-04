@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { PaymentService } from 'src/app/services/payment/payment.service';
 import { Subject, takeUntil } from 'rxjs';
 import { UserService } from 'src/app/services/user/user.service';
+import { ToastrService } from 'ngx-toastr';
+import { PrintService } from 'src/app/services/print/print.service';
 
 @Component({
   selector: 'app-transactions',
@@ -18,11 +20,14 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   private pollTimer: any;
   currentUser: any;
   metadata: any;
+  printing: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private paymentService: PaymentService,
-    private userService: UserService
+    private userService: UserService,
+    private pdfExportService: PrintService,
+    private toastr: ToastrService,
   ) {
   }
 
@@ -43,6 +48,22 @@ export class TransactionsComponent implements OnInit, OnDestroy {
 
   selectTransaction(transaction) {
     this.selectedTransaction = transaction;
+  }
+
+  public exportToPdf(transaction): void {
+    console.log('exportation de pdf');
+    this.selectTransaction(transaction);
+    if (this.selectedTransaction) {
+      this.toastr.info("Téléchargement en cours...", "PDF", {
+        timeOut: 7000,
+        closeButton: true,
+      });
+      this.printing = true;
+      setTimeout(() => {
+        this.pdfExportService.generatePdf('selectedInvoice', 'invoice_' + this.selectedTransaction.transactionRef + '.pdf');
+        this.printing = false;
+      }, 1000);
+    }
   }
 
   previousPage() {

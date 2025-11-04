@@ -1,0 +1,289 @@
+<div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+        <div class="modal-body">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeModal
+                id="closeModal" (click)="ngOnDestroy()">
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row justify-content-center">
+                <div class="col-lg-12">
+                    <div class="card invoice-info-card">
+                        <div class="card-body pb-0">
+                            <div class="invoice-item invoice-item-one">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="invoice-logo">
+                                            <img src="assets/img/ressorces/dk_logo.png" alt="logo">
+                                            <h2>{{ "payment." + transactionData?.transactionType | translate }}</h2>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="invoice-info">
+                                            <div class="invoice-head">
+                                                <h2 class="text-primary">{{ 'payment.receipt' | translate }} </h2>
+                                                <p>Ref. : {{transactionData?.transactionRef}}</p>
+                                                <p style="color: #f2a603;" *ngIf="transactionData?.status === 'transaction_payout_pending'
+                                                        || transactionData?.status === 'transaction_payin_pending'">
+                                                    <b>{{ 'payment.transactionPending' | translate }}</b>
+                                                </p>
+                                                <p style="color: #f2a603;"
+                                                    *ngIf="transactionData?.transactionType === 'transfer' && transactionData?.status === 'transaction_payin_success'">
+                                                    <b>{{ 'payment.transactionPending' | translate }}</b>
+                                                </p>
+                                                <p style="color: #f2a603;"
+                                                    *ngIf="transactionData?.transactionType === 'withdrawal' && transactionData?.status === 'transaction_payin_success'">
+                                                    <b>{{ 'payment.transactionPending' | translate }}</b>
+                                                </p>
+                                                <p style="color: #15af01;"
+                                                    *ngIf="transactionData?.status === 'transaction_payout_success'">
+                                                    <b>{{ 'payment.success' | translate }}</b>
+                                                </p>
+                                                <p style="color: #15af01;" *ngIf="transactionData?.transactionType !== 'transfer'
+                                                        && transactionData?.transactionType !== 'withdrawal'
+                                                        && transactionData?.status === 'transaction_payin_success'">
+                                                    <b>{{ 'payment.success' | translate }}</b>
+                                                </p>
+                                                <p style="color: #bf1f03;" *ngIf="transactionData?.status === 'transaction_payin_error'
+                                                    || transactionData?.status === 'transaction_payout_error'
+                                                    || transactionData?.status === 'transaction_payout_rejected'
+                                                    || transactionData?.status === 'transaction_payout_closed'
+                                                    || transactionData?.status === 'transaction_payout_error'
+                                                    || transactionData?.status === 'transaction_payin_closed'">
+                                                    <b>{{ 'payment.error' | translate }}</b>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Invoice Item -->
+                            <div class="invoice-item invoice-item-bg">
+                                <div class="invoice-circle-img">
+                                    <img src="assets/img/invoice-circle1.png" alt="" class="invoice-circle1">
+                                    <img src="assets/img/invoice-circle2.png" alt="" class="invoice-circle2">
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-12">
+                                        <div class="invoice-info">
+                                            <strong class="customer-text-one">{{ 'payment.sender' | translate
+                                                }}</strong>
+                                            <h6 class="invoice-name">{{transactionData?.clientName}}</h6>
+                                            <p class="invoice-details invoice-details-two">
+                                                {{transactionData?.senderName}} <br>
+                                                {{transactionData?.senderCountry}} <br>
+                                                {{transactionData?.senderContact}} <br>
+                                                {{transactionData?.senderEmail}} <br>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-12">
+                                        <div class="invoice-info">
+                                            <strong class="customer-text-one">{{ 'payment.receiver' | translate
+                                                }}</strong>
+                                            <!-- <h6 class="invoice-name">{{transactionData?.receiverName}}</h6> -->
+                                            <p class="invoice-details invoice-details-two">
+                                                {{transactionData?.receiverName}} <br>
+                                                {{transactionData?.receiverContact}} <br>
+                                                {{transactionData?.receiverEmail}} <br>
+                                                {{transactionData?.receiverAddress}} <br>
+                                            </p>
+                                            <!-- <h6>{{transactionData?.senderCountry}}</h6> -->
+                                            <!-- <p class="invoice-details invoice-details-two">
+                                                {{transactionData?.classAbreviation}} <br>
+                                            </p> -->
+                                            <!-- <strong class="customer-text-one">Montant déjà versé:</strong>
+                                            <p class="invoice-details invoice-details-two">
+                                                {{transactionData?.alreadyPaid}} {{transactionData?.receiverCurrency}}<br>
+                                            </p> -->
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-12">
+                                        <div class="invoice-info invoice-info-one border-0">
+                                            <p>{{ 'payment.receipt' | translate }} : {{transactionData?.transactionRef}}
+                                            </p>
+                                            <p>Id : {{transactionData?._id }}</p>
+                                            <p>Date : {{formatDate(transactionData?.createdAt)}}</p>
+                                            <br>
+                                            <!-- <p>Méthode de paiement : {{transactionData?.paymentMethode }}</p> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Invoice Item -->
+
+                            <!-- Invoice Item -->
+                            <div class="invoice-item invoice-table-wrap">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="table-responsive">
+                                            <table class="invoice-table table table-center mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>{{ 'payment.designation' | translate }}</th>
+                                                        <th *ngIf="transactionData?.transactionType === 'subscription'
+                                                            || transactionData?.transactionType === 'payment'">
+                                                            {{ 'payment.unitPrice' | translate }}</th>
+                                                        <th *ngIf="transactionData?.transactionType === 'subscription'
+                                                            || transactionData?.transactionType === 'payment'">
+                                                            {{ 'payment.quantity' | translate }}
+                                                        </th>
+                                                        <th style="text-align: right;">{{ 'payment.amount' | translate }}</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>{{ 'payment.' + transactionData?.transactionType | translate }}
+                                                            <span *ngIf="transactionData?.transactionType === 'transfer'">| {{ transactionData?.raisonForTransfer }}</span> </td>
+                                                        <td *ngIf="transactionData?.transactionType === 'subscription'
+                                                            || transactionData?.transactionType === 'payment'">
+                                                            {{unitPrice(transactionData)}}</td>
+                                                        <td *ngIf="transactionData?.transactionType === 'subscription'
+                                                            || transactionData?.transactionType === 'payment'">
+                                                            {{transactionData?.quantity}}
+                                                            <span *ngIf="transactionData?.cycle === 'dayly'">{{ "subscriptions.day" | translate }}(s)</span>
+                                                            <span *ngIf="transactionData?.cycle === 'weekly'">{{ "subscriptions.week" | translate }}(s)</span>
+                                                            <span *ngIf="transactionData?.cycle === 'monthly'">{{ "subscriptions.month" | translate }}</span>
+                                                            <span *ngIf="transactionData?.cycle === 'yearly'">{{ "subscriptions.year" | translate }}(s)</span>
+                                                        </td>
+                                                        <td class="text-end">{{transactionData?.estimation}}
+                                                            {{transactionData?.receiverCurrency}}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td *ngIf="transactionData?.transactionType === 'subscription'
+                                                            || transactionData?.transactionType === 'payment'"></td>
+                                                        <td *ngIf="transactionData?.transactionType === 'subscription'
+                                                            || transactionData?.transactionType === 'payment'"></td>
+                                                        <th></th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td *ngIf="transactionData?.transactionType === 'subscription'
+                                                            || transactionData?.transactionType === 'payment'"></td>
+                                                        <td *ngIf="transactionData?.transactionType === 'subscription'
+                                                            || transactionData?.transactionType === 'payment'"></td>
+                                                        <th></th>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Invoice Item -->
+
+                            <div class="row align-items-center justify-content-center">
+                                <!-- <div class="col-lg-6 col-md-6">
+                                    <div class="invoice-payment-box">
+                                        <h4>Références Bancaires de l'établissement</h4>
+                                        <div class="payment-details">
+                                            <p>
+                                                Banque: {{transactionData?.name}} <br>
+                                                No de compte: {{transactionData?.accountNumber}} <br>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div> -->
+                                <div class="col-lg-6 col-md-6"></div>
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="invoice-total-card">
+                                        <div class="invoice-total-box"
+                                        style="border: 2px dashed #021d66; padding: 10px; border-radius: 5px;">
+                                            <div class="invoice-total-inner">
+                                                <p>Somme :<span>{{transactionData?.estimation}}
+                                                        {{transactionData?.receiverCurrency}}</span></p>
+                                                <!-- <p>Taxes service en ligne ({{transactionData?.taxes}}%)
+                                                    :<span>{{transactionData?.taxesAmount}}
+                                                        {{transactionData?.receiverCurrency}}</span></p> -->
+                                            </div>
+                                            <div class="invoice-total-footer">
+                                                <h4>{{ 'payment.totalAmount' | translate }} <span>{{transactionData?.estimation}}
+                                                        {{transactionData?.receiverCurrency}}</span>
+                                                </h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="text-align: right !important;">
+                                    <p style="color: #f2a603;" *ngIf="transactionData?.status === 'transaction_payout_pending'
+                                            || transactionData?.status === 'transaction_payin_pending'">
+                                        <b>{{ 'payment.transactionPending' | translate }}</b>
+                                    </p>
+                                    <p style="color: #f2a603;"
+                                        *ngIf="transactionData?.transactionType === 'transfer' && transactionData?.status === 'transaction_payin_success'">
+                                        <b>{{ 'payment.transactionPending' | translate }}</b>
+                                    </p>
+                                    <p style="color: #f2a603;"
+                                        *ngIf="transactionData?.transactionType === 'withdrawal' && transactionData?.status === 'transaction_payin_success'">
+                                        <b>{{ 'payment.transactionPending' | translate }}</b>
+                                    </p>
+                                    <p style="color: #15af01;"
+                                        *ngIf="transactionData?.status === 'transaction_payout_success'">
+                                        <b>{{ 'payment.success' | translate }}</b>
+                                    </p>
+                                    <p style="color: #15af01;" *ngIf="transactionData?.transactionType !== 'transfer'
+                                            && transactionData?.transactionType !== 'withdrawal'
+                                            && transactionData?.status === 'transaction_payin_success'">
+                                        <b>{{ 'payment.success' | translate }}</b>
+                                    </p>
+                                    <p style="color: #bf1f03;" *ngIf="transactionData?.status === 'transaction_payin_error'
+                                        || transactionData?.status === 'transaction_payout_error'
+                                        || transactionData?.status === 'transaction_payout_rejected'
+                                        || transactionData?.status === 'transaction_payout_closed'
+                                        || transactionData?.status === 'transaction_payout_error'
+                                        || transactionData?.status === 'transaction_payin_closed'">
+                                        <b>{{ 'payment.error' | translate }}</b>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="invoice-sign-box">
+                                <div class="row">
+                                    <div class="col-lg-8 col-md-8">
+                                        <div class="invoice-terms"
+                                            *ngIf="transactionData?.notes && transactionData?.notes != ''">
+                                            <h6>Notes:</h6>
+                                            <p class="mb-0">{{transactionData?.notes}}</p>
+                                        </div>
+                                        <div class="invoice-terms mb-0"
+                                            *ngIf="transactionData?.terms && transactionData?.terms != ''">
+                                            <h6>Termes et Conditions:</h6>
+                                            <p class="mb-0">{{transactionData?.terms}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4">
+                                        <div class="invoice-sign text-end">
+                                            <!-- <img class="img-fluid d-inline-block"
+                        src="{{transactionData?.signatureUrl}}" alt="sign">
+                      <span class="d-block">{{transactionData?.signatureName}}</span> -->
+                                            <p style="color: #14660a; font-size: 2em;"
+                                                *ngIf="transactionData?.status === 'Completed'">
+                                                <b>PAYED</b>
+                                            </p>
+                                            <p style="color: #9f6d00; font-size: 2em;"
+                                                *ngIf="transactionData?.status === 'Pending'">
+                                                <b>PENDING</b>
+                                            </p>
+                                            <p style="color: #bf1f03; font-size: 2em;"
+                                                *ngIf="transactionData?.status === 'Rejected'">
+                                                <b>REJECTED</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer" style="
+        background: #021d66;
+        color: #fff;
+        text-align: center !important;">
+            <p>Digikuntz Payments | payments.digikuntz.com</p>
+        </div>
+    </div>
+</div>

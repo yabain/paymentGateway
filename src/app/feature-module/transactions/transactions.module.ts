@@ -5,6 +5,7 @@ import { TransactionsRoutingModule } from './transactions-routing.module';
 import { TransactionsComponent } from './transactions.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { TranslateModule } from '@ngx-translate/core';
+import { CommonItemModule } from '../common/common-item.module';
 
 
 @NgModule({
@@ -15,6 +16,7 @@ import { TranslateModule } from '@ngx-translate/core';
     CommonModule,
     TransactionsRoutingModule,
     SharedModule,
+    CommonItemModule,
     TranslateModule
   ]
 })

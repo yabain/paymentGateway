@@ -464,7 +464,16 @@
     "narration": "Narration",
     "transactionFailed": "Transaction failed",
     "opening": "Opening",
-    "ifPaymentConfirmed": "If you confirmed the payment on the Flutterwave interface, don't worry because the transaction will continue even if you close this page."
+    "ifPaymentConfirmed": "If you confirmed the payment on the Flutterwave interface, don't worry because the transaction will continue even if you close this page.",
+    "subscription": "Subscription",
+    "fundraising": "Fundraising",
+    "payment": "Payment",
+    "receipt": "Receipt",
+    "designation": "Designation",
+    "totalAmount": "Total amount",
+    "quantity": "Quantity",
+    "unitPrice": "Unit price",
+    "summary": "Summary"
   },
   "whatsapp": {
     "title": "WhatsApp center",
@@ -559,7 +568,7 @@
     "payout": "cash withdrawal",
     "profile": "Profile",
     "organisation": "Organisation",
-    "mySubscriptionList": "Mes abonements",
+    "mySubscriptionList": "Mes abonnements",
     "transactionList": "Transaction List",
     "myTransactions": "My transactions"
   },
@@ -706,7 +715,7 @@
     "transaction_payin_success": "Collection Completed",
     "transaction_payin_error": "Payment Error",
     "transaction_payin_closed": "Payment Cancelled",
-    "transaction_payout_pending": "Transfer Pending",
+    "transaction_payout_pending": "Transaction Pending",
     "transaction_payout_success": "Transfer Completed",
     "transaction_payout_rejected": "Transfer Rejected",
     "transaction_payout_error": "Transfer Error",
