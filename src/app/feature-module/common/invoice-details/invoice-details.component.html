@@ -135,7 +135,9 @@
                                                 <tbody>
                                                     <tr>
                                                         <td>{{ 'payment.' + transactionData?.transactionType | translate }}
-                                                            <span *ngIf="transactionData?.transactionType === 'transfer'">| {{ transactionData?.raisonForTransfer }}</span> </td>
+                                                            <span *ngIf="transactionData?.transactionType === 'transfer'">| {{ transactionData?.raisonForTransfer }}</span>
+                                                            <span *ngIf="transactionData?.transactionType === 'subscription'">| {{ planData?.title }}</span>
+                                                        </td>
                                                         <td *ngIf="transactionData?.transactionType === 'subscription'
                                                             || transactionData?.transactionType === 'payment'">
                                                             {{unitPrice(transactionData)}}</td>

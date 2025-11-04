@@ -769,7 +769,7 @@ export class DataService {
           hasSubRoute: false, // Show arrow after menu item title
           showSubRoute: true,
           icon: 'repeat',
-          base: 'my-transaction',
+          base: 'transactions',
         },
         {
           menuValue: 'profile',

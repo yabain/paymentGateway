@@ -5,6 +5,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { UserService } from 'src/app/services/user/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { PrintService } from 'src/app/services/print/print.service';
+import { SubscriptionService } from 'src/app/services/subscription/subscription.service';
 
 @Component({
   selector: 'app-transactions',
@@ -21,6 +22,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   currentUser: any;
   metadata: any;
   printing: boolean = false;
+  planData: any;
 
   constructor(
     private route: ActivatedRoute,
