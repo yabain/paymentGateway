@@ -66,10 +66,10 @@ export class LanguageService {
 
   setDefaultLanguage() {
     // console.log("setDefaultLanguage - no lan")
-    this.translate.setDefaultLang('en');
-    this.setLocalUserLanguage('en');
-    this.useLanguage('en');
-    return 'en';
+    this.translate.setDefaultLang('fr');
+    this.setLocalUserLanguage('fr');
+    this.useLanguage('fr');
+    return 'fr';
   }
 
   setLocalUserLanguage(lang) {
@@ -83,8 +83,8 @@ export class LanguageService {
         // this.setLocalUserLanguage(lang);
         return lang;
       } else {
-        this.setLocalUserLanguage('en');
-        return 'en';
+        this.setLocalUserLanguage('fr');
+        return 'fr';
       }
     });
   }
@@ -96,7 +96,7 @@ export class LanguageService {
       this.currentLanguage = language;
     } else {
       console.warn(`Langue non supportée: ${language}, utilisation de l'anglais par défaut`);
-      this.useLanguage('en');
+      this.useLanguage('fr');
     }
   }
 
