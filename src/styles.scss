@@ -110,7 +110,7 @@ $template-theme: mat.m2-define-light-theme(
 .tag_input {
   mat-form-field {
     width: 100%;
-    border: 1px solid #ced4da;
+    border: 1px solid #868788;
     border-radius: 5px;
 
     .mat-form-field-flex {
@@ -201,7 +201,7 @@ $template-theme: mat.m2-define-light-theme(
       width: auto;
       display: inline-block;
       margin: 0px 3px;
-      border: 1px solid #e5e5e5;
+      border: 1px solid #868788;
       color: #1b2559;
       height: 40px;
       border-radius: 8px;
@@ -1655,4 +1655,12 @@ pre .json-null {
   opacity: 0.1;
   background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="white"/></svg>');
   background-size: 50px 50px;
+}
+
+input {
+  border: 0.5px solid #828181 !important;
+}
+
+textarea {
+  border: 0.5px solid #828181 !important;
 }

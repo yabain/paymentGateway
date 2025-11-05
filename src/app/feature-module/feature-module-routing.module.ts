@@ -42,6 +42,13 @@ const routes: Routes = [
             (m) => m.SubscriptionModule,
           ),
       },
+      {
+        path: 'services',
+        loadChildren: () =>
+          import('./services/services.module').then(
+            (m) => m.ServicesModule,
+          ),
+      },
 
       // --- Admin route ----
       {

@@ -768,7 +768,7 @@ export class DataService {
           route: '/transactions/my-transactions',
           hasSubRoute: false, // Show arrow after menu item title
           showSubRoute: true,
-          icon: 'repeat',
+          icon: 'list',
           base: 'transactions',
         },
         {
@@ -846,6 +846,14 @@ export class DataService {
           showSubRoute: true,
           icon: 'repeat',
           base: 'subscription',
+        },
+        {
+          menuValue: 'services',
+          route: '/services',
+          hasSubRoute: false, // Show arrow after menu item title
+          showSubRoute: true,
+          icon: 'layers',
+          base: 'services',
         },
         {
           menuValue: 'fundraising',

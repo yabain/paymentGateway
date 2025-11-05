@@ -31,6 +31,13 @@ const routes: Routes = [
       ),
   },
   {
+    path: 'services-list-user',
+    loadChildren: () =>
+      import('./feature-module/services/service-front/services-front.module').then(
+        (m) => m.ServicesFrontModule
+      ),
+  },
+  {
     path: '',
     loadChildren: () =>
       import('./feature-module/feature-module.module').then(

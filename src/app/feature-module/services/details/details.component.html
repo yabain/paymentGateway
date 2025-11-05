@@ -1,0 +1,504 @@
+<div *ngIf="loadingData">
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex justify-content-center" style=" padding: 50px;">
+                <div class="spinner-border spinner" role="status"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="!loadingData">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card  page-tilte">
+                        <div class="main-title">
+                            <div class="row">
+                                <div class="col-md-4" style="text-align: center !important;">
+                                    <form [formGroup]="uploadPictureForm">
+                                        <div class="event-image">
+                                            <img src="{{serviceData?.imageUrl ? serviceData?.imageUrl  : imageUrl}}"
+                                                alt="" style="height: 30vh;">
+                                        </div>
+                                        <div style="text-align: left !important;" *ngIf="isAuthor()">
+                                            <span
+                                                (click)="changePicture(true);fileUploader.click()">
+                                                <i class="feather icon-camera avatar-uploader-icon shadow-soft"></i>
+                                            </span>
+                                        </div>
+                                        <input type="file" name="picture" id="picture" accept="image/*"
+                                            class="form-control ml-4" #fileUploader formControlName="pictureFile"
+                                            (change)="showPreview($event)" style="display: none;">
+                                        <div *ngIf="isChangePicture && isAuthor()">
+                                            <a class="btn btn-sm btn-secondary m-2" (click)="cancel()">{{
+                                                "action.cancel" |
+                                                translate }}</a>
+                                            <a *ngIf="!uploadingPicture" class="btn btn-sm btn-success m-2"
+                                                (click)="savePicture()">{{ "action.save" |
+                                                translate }}</a>
+                                            <a *ngIf="uploadingPicture" class="btn btn-sm btn-success" disabled>
+                                                <span class="spinner-border spinner-border-sm me-2" role="status"
+                                                    aria-hidden="true"></span>
+                                            </a>
+                                        </div>
+                                    </form>
+                                    <!-- <div class="event-image">
+                                        <img [src]="imageUrl" alt="" style="height: 400px;">
+                                    </div> -->
+                                    <div class="badge-warning"
+                                        *ngIf="servicesStatus?.existingSubscription && servicesStatus?.status">
+                                        <i class="feather icon-check-circle"></i> {{ 'services.alreadyVoteMsg' |
+                                        translate }}
+                                    </div>
+                                    <div [ngClass]="serviceData?.isActive === true ? 'badge-success':  'badge-error'"
+                                        *ngIf="currentUser && isAuthor(serviceData) || currentUser && isAdmin">
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="event-details">
+                                        <h6 *ngIf="servicesStatus?.existingSubscription && !servicesStatus?.status">
+                                            {{ 'subscriptions.renewSubscription' | translate }} <br>
+                                        </h6>
+                                        <h6 *ngIf="servicesStatus?.existingSubscription === false">
+                                            {{ 'subscriptions.subscriptionToday' | translate }} <br>
+                                        </h6>
+                                        <h6 *ngIf="servicesStatus?.existingSubscription && servicesStatus?.status">
+                                            {{ 'item.start' | translate }}: {{ getDate(servicesStatus?.startDate) }}
+                                            || {{ 'item.end' | translate }}: {{ getDate(servicesStatus?.endDate) }}<br>
+                                        </h6>
+                                        <h1>{{ serviceData?.title }}</h1>
+                                        <h6 class="event-time" style="margin-bottom: 10px;">{{ serviceData?.subTitle }}
+                                        </h6>
+                                        <h4 style="margin-bottom: 10px;">{{ serviceData?.price }} {{
+                                            serviceData?.currency}}
+                                        </h4>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <button class="btn btn-rounded btn-primary me-1" data-bs-toggle="modal"
+                                                    data-bs-target="#subscriptionModal"
+                                                    *ngIf="currentUser && !isAuthor(serviceData) && serviceData?.isActive">
+                                                    {{ 'services.vote' | translate }}</button>
+                                                <button class="btn btn-rounded btn-primary me-1" *ngIf="!currentUser"
+                                                    (click)="navigateTo('/auth/login')">
+                                                    {{ 'auth.login' | translate }}</button>
+                                            </div>
+                                            <div class="col-md-8" style="text-align: right !important;">
+                                                <button class="btn btn-rounded btn-outline-secondary me-1"
+                                                    (click)="copyUrl()">
+                                                    <i class="feather icon-share-2"></i>
+                                                    {{ 'action.share' | translate }}
+                                                </button>
+                                                <button type="button" *ngIf="isAuthor(serviceData) || isAdmin"
+                                                    class="btn btn-rounded btn-outline-secondary me-1">
+                                                    <i class="feather icon-alert-circle"></i>
+                                                </button>
+                                                <button class="btn btn-rounded btn-outline-secondary me-1"
+                                                    *ngIf="isAuthor(serviceData) || isAdmin">
+                                                    <i class="feather icon-edit"></i>
+                                                </button>
+                                                <button class="btn btn-block me-1"
+                                                    (click)="toggleActivation(serviceData?._id)" [ngClass]=" serviceData?.isActive === true ?
+                                                  'btn-outline-danger':  'btn-outline-success'"
+                                                    *ngIf="currentUser && isAuthor(serviceData) || currentUser && isAdmin">
+                                                    <i class="feather icon-power me-1"></i>
+                                                </button>
+                                                <button class="btn btn-block btn-outline-danger active"
+                                                    href="javascript:void(0);" data-bs-toggle="modal"
+                                                    data-bs-target="#delete_modal"
+                                                    *ngIf="currentUser && isAuthor(serviceData) || currentUser && isAdmin">
+                                                    <i class="feather icon-trash-2"></i>
+                                                </button>
+                                            </div>
+                                            <h6 class="col-md-12"
+                                                *ngIf="currentUser && !isAuthor(serviceData) && serviceData?.isActive">
+                                                {{ 'subscriptions.as' | translate }} <b>{{ showName(currentUser)}}</b>
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3>{{ serviceData?.title }} </h3>
+                            <h6 style="margin-bottom: 10px; color: #00000050;">{{ serviceData?.subTitle }} </h6>
+                            <a *ngFor="let option of optionsData">
+                                <button *ngIf="option?.isActive" class="btn btn-block btn-outline-dark"
+                                    style="margin-right: 10px; color: #4e4c4c;"><i class="fa-solid fa-circle-check"></i>
+                                    {{ option.title
+                                    }}</button>
+                                <button *ngIf="!option?.isActive" class="btn btn-block btn-outline-dark"><i
+                                        class="fa-solid fa-circle-check"></i> {{ option.title
+                                    }}</button>
+                            </a>
+                            <br><br>
+                            <!-- <ul>
+                                <li *ngFor="let option of optionsData" style="margin-bottom: 5px;">
+                                    <span *ngIf="option.isActive"><i class="fa-solid fa-circle-check"></i> {{ option.title
+                                        }}</span>
+                                    <span *ngIf="!option.isActive"><i class="feather icon-x-circle"></i><s> {{ option.title
+                                            }}</s></span>
+                                </li>
+                            </ul> -->
+
+                            {{ serviceData?.description }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5" style="text-align: left !important;">
+                    <div class="card customer-details-group">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-12">
+                                    <div class="customer-details">
+                                        <div class="d-flex align-items-center">
+                                            <span class="customer-widget-img d-inline-flex" style="padding-right: 0 !important;">
+                                                <img class="rounded-circle"
+                                                    [src]="serviceData ? serviceData?.author.pictureUrl : 'assets/img/new/user.png'"
+                                                    alt="image">
+                                                <!-- <span class="animate-circle"></span> -->
+                                            </span>
+                                            <div class="customer-details-cont">
+                                                <h6>{{showName(serviceData?.author)}}
+                                                </h6>
+                                                <p style="font-size: 0.5rem;">
+                                                    <b>ID: </b>{{serviceData?.author._id}}
+                                                </p>
+                                            </div>
+                                        </div><br>
+                                        <p>
+                                            <b>Email: </b>{{serviceData?.author.email}} <br>
+                                            <b>Phone: </b>{{serviceData?.author.phone}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Payers List -->
+<div class="card" *ngIf="currentUser && isAuthor(serviceData) || currentUser && isAdmin">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-8">
+                <h3>{{ 'subscriptions.subscriberList' | translate }} ({{ subscribers.length }})</h3>
+            </div>
+            <div class="col-md-4" style="text-align: right;">
+                <button class="btn btn-rounded btn-outline-secondary me-1" (click)="refresh()"><i
+                        class="feather icon-refresh-ccw"></i></button>
+                <button class="btn btn-rounded btn-outline-primary me-1" data-bs-toggle="modal"
+                    data-bs-target="#add_subscriber_modal">+ {{ 'action.add' | translate }} </button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card-table">
+                    <div class="card-body">
+                        <div class="table-scroll">
+                            <table matSort class="table table-center table-hover datatable"
+                                *ngIf="!gettingPayer && subscribers?.length > 0">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th mat-sort-header="name">{{ "auth.username" | translate }}</th>
+                                        <th mat-sort-header="phone">{{ "auth.phone" | translate }}</th>
+                                        <th mat-sort-header="dateStart">{{ "item.start" | translate }}</th>
+                                        <th mat-sort-header="dateEnd">{{ "item.end" | translate }}</th>
+                                        <th mat-sort-header="status">{{ "mail.status" | translate }}</th>
+                                        <th mat-sort-header="action">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngIf="!gettingPayer">
+                                    @for (subscription of subscribers; track subscription; let i = $index) {
+                                    <tr>
+                                        <td>
+                                            <h2 class="table-avatar">
+                                                <a class="avatar avatar-md me-2"><img class="avatar-img rounded-circle"
+                                                        [src]="subscription?.userId.pictureUrl" alt="User Image" /></a>
+                                                <a>{{
+                                                    showName(subscription?.userId)
+                                                    }}
+                                                    <span>{{ subscription?.userId.email }}</span>
+                                                </a>
+                                            </h2>
+                                        </td>
+                                        <td> {{ subscription?.userId.phone }}
+                                        </td>
+                                        <td>{{ getDate(subscription?.startDate) }}</td>
+                                        <td>{{ getDate(subscription?.endDate) }}</td>
+                                        <td>
+                                            <span [ngClass]="{
+                            'bg-success-light': subscription?.status != false,
+                            'bg-danger-light': subscription?.status === false
+                          }" class="badge badge-pill bg-success-light">{{ (subscription?.status === false ?
+                                                'users.disabled' :
+                                                'users.enabled') | translate }}</span><br
+                                                *ngIf="subscription.userId.isAdmin === true">
+                                        </td>
+                                        <td class="d-flex align-items-right">
+                                            <div class="icons-items">
+                                                <ul class="icons-list">
+                                                    <!-- <li data-bs-toggle="modal" data-bs-target="#enable_modal"
+                                                    *ngIf="customer.isActive === false" (click)="selectUser(customer)">
+                                                    <i class="feather icon-power" data-bs-toggle="tooltip"
+                                                        title="Enable user" style="color: green"></i>
+                                                </li> -->
+                                                    <li data-bs-toggle="modal" data-bs-target="#disable_modal">
+                                                        <i class="feather icon-power" data-bs-toggle="tooltip"
+                                                            title="Disable user" style="color: red"></i>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <div class="d-flex justify-content-center" *ngIf="gettingPayer" style="margin: 50px">
+                                <div class="spinner-border" role="status"></div>
+                            </div>
+                            <div *ngIf="!gettingPayer && subscribers?.length < 1"
+                                class="row d-flex align-items-center justify-content-center">
+                                <div class="col-md-12" style="display: flex;
+                                        justify-content: center;
+                                        align-items: center;">
+                                    <img src="assets/img/ressorces/nts.png" alt="" style="max-width: 150px;
+                                            height: auto;">
+                                </div>
+                                <div class="col-md-12" style="display: flex;
+                                        justify-content: center;
+                                        align-items: center;">
+                                    {{ "nts" | translate }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <app-custom-pagination></app-custom-pagination>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Subscriber List -->
+
+
+<!-- Delete Items Modal -->
+<div class="modal custom-modal fade modal-delete" id="delete_modal" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="form-header">
+                    <div class="">
+                        <span><i class="feather icon-trash" style="color: red; width: 100px !important;"></i></span>
+                    </div>
+                    <h3>{{ 'subscriptions.deletePlan' | translate }} ?</h3>
+                    <p>{{ 'subscriptions.wantDeletePlan' | translate }} <b>{{serviceData?.title}}</b></p>
+                </div>
+                <div class="modal-btn delete-action">
+                    <div class="modal-footer justify-content-center p-0">
+                        <button type="button" data-bs-dismiss="modal" class="btn btn-primary m-1"
+                            (close)="ngOnDestroy()">{{ 'action.cancel'
+                            | translate }}</button>
+                        <button type="submit" (click)="deleteService(serviceData?._id)" class="btn btn-danger m-1"
+                            data-bs-dismiss="modal">
+                            {{ 'action.delete' | translate }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Delete Items Modal -->
+
+<!-- subscribe to plan -->
+
+<div class="modal fade" id="subscriptionModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" *ngIf="!goToProceed">
+            <div class="modal-header">
+                <h5 class="modal-title align-items-center justify-content-center" id="staticBackdropLabel">
+                    {{ serviceData?.title }}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    (close)="ngOnDestroy()"></button>
+            </div>
+            <div class="modal-body">
+                <span style="font-size: 1rem; margin-bottom: 20px;" *ngIf="!checkingSubscriptionStatus">{{
+                    serviceData?.subTitle }}</span>
+                <h2 *ngIf="serviceData?.price > 0">{{ serviceData?.price }} {{ serviceData?.currency }}</h2>
+                <h2 *ngIf="serviceData?.price === 0">{{ "item.free" | translate }}</h2>
+                <ul>
+                    <li *ngFor="let option of optionsData" style="margin-bottom: 5px;">
+                        <span *ngIf="option.isActive"><i class="fa-solid fa-circle-check"></i> {{ option.title
+                            }}</span>
+                        <span *ngIf="!option.isActive"><i class="feather icon-x-circle"></i><s> {{ option.title
+                                }}</s></span>
+                    </li>
+                </ul>
+                <br><label htmlFor="bankCode" *ngIf="!checkingSubscriptionStatus && !isSubscriber">{{
+                    "subscriptions.quantity" | translate }}</label>
+
+                <input [(ngModel)]="quantity" (input)="onQuantity()" type="number" class="form-control"
+                    id="member_search1" placeholder="Search Customer" [disabled]="proceed">
+                <br>
+                <div class="step3">
+                    <div *ngIf="checkingSubscriptionStatus">
+                        <div style="display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 300px;">
+                            <div class="spinner-border" role="status"></div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="!checkingSubscriptionStatus && isSubscriber" style="text-align: center;">
+                        <div class="fee-breakdown">
+                            {{ "services.alreadyVoteMsg" | translate }}
+                        </div>
+                        <button type="button" class="btn btn-primary btn-lg me-1 mb-2" style="padding: 5px;"
+                            (click)="isSubscriber = false">{{ "services.voteAgain" | translate }}</button>
+                    </div>
+                    <div *ngIf="!checkingSubscriptionStatus && !isSubscriber">
+                        <div class="fee-breakdown">
+                            <h4><i class="fas fa-receipt"></i> {{ "subscriptions.summary" | translate }}</h4>
+                            <div class="fee-item">
+                                <span>
+                                    {{ 'payment.amount' | translate }}:
+                                    {{ serviceData?.price }}
+                                    {{ serviceData?.currency }}</span>
+                            </div>
+                            <div class="fee-item">
+                                <span>{{ "subscriptions.quantity" | translate }}</span>
+                                <span> {{ quantity }}
+                                </span>
+                            </div>
+                            <div class="fee-item">
+                                <span>{{ "payment.taxes" | translate }} ≈ </span>
+                                <span>
+                                    {{ taxesAmount }}
+                                    {{ serviceData?.currency }}</span>
+                            </div>
+                            <div class="fee-total">
+                                <span>{{ "payment.total" | translate }}</span>
+                                <span>
+                                    {{ paymentWithTaxes }}
+                                    {{ serviceData?.currency }}</span>
+                            </div>
+                        </div>
+
+                        <div class="security-notice" *ngIf="currentUser">
+                            <img src="assets/img/ressorces/flutterwave.png" alt=""
+                                style="max-width: 100px; border-radius: 5px; margin-right: 10px;">
+                            <p>{{ "payment.secureMessage" | translate }}</p>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn btn-cancel" data-bs-dismiss="modal" (close)="ngOnDestroy()"
+                                *ngIf="!checkingSubscriptionStatus && !proceed">
+                                {{ "action.close" | translate }}
+                            </button>
+                            <button class="btn2 btn-confirm"
+                                *ngIf="!checkingSubscriptionStatus && !isSubscriber && !proceed && quantity > 0"
+                                (click)="pay()" [disabled]="quantity < 1">
+                                <i class="fas fa-check"></i> {{ "payment.proceed" | translate }}
+                            </button>
+                        </div>
+                        <div class="row d-flex align-items-center justify-content-center" style="justify-content: center;
+                        align-items: center;" *ngIf="proceed">
+                            <div class="spinner-border" role="status"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-content" *ngIf="goToProceed">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="wating-msg">
+                        <img src="assets/img/ressorces/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;"
+                            *ngIf="!modalClosed && !transactionSucceded && !transactionFailed">
+                        <!-- <div class="spinner-border" role="status" *ngIf="!modalClosed && !transactionSucceded && !transactionFailed"></div> -->
+                        <p style="margin-top: 50px;" *ngIf="!modalClosed && !transactionSucceded && !transactionFailed">
+                            {{ "payment.processing-message1" | translate }}<br>
+                            {{ "payment.processing-message2" | translate }}
+                        </p>
+
+
+                        <img src="../../../assets/img/ressorces/tfailed.gif" alt="" style="max-width: 100px;;"
+                            *ngIf="!reOpen && transactionFailed">
+                        <br>
+                        <span style="color: red !important" *ngIf="!reOpen && transactionFailed">{{
+                            "payment.transactionFailed" | translate }}</span>
+                        <p style="margin-top: 50px;" *ngIf="!reOpen && transactionFailed">
+                            Click
+                            <span class="retry" (click)="openPayin()" *ngIf="!reOpen && transactionFailed">{{
+                                "payment.hereToRetry" | translate
+                                }}.</span>
+                            <span *ngIf="reOpen && transactionFailed">{{ "payment.hereToRetry" | translate }}. {{
+                                "payment.opening" | translate }}...</span>
+                        </p>
+
+                        <img src="assets/img/ressorces/flutterwave.png" alt="" style="max-width: 100px;;"
+                            *ngIf="!transactionSucceded && !transactionFailed">
+                        <p style="margin-top: 50px;" *ngIf="showRetry && !transactionSucceded && !transactionFailed">
+                            {{ "payment.processing-message4" | translate }}
+                            <span class="retry" (click)="openPayin()" *ngIf="!reOpen && !transactionSucceded">{{
+                                "payment.hereToRetry" | translate
+                                }}.</span>
+                            <span *ngIf="reOpen && !transactionSucceded">{{ "payment.hereToRetry" | translate }}. {{
+                                "payment.opening" | translate }}...</span>
+                        </p>
+
+                        <img src="assets/img/ressorces/paymentDone.gif" alt="" style="max-width: 250px;;"
+                            *ngIf="transactionSucceded && !transactionFailed">
+                        <p style="margin-top: 50px;" *ngIf="transactionSucceded && !transactionFailed">{{
+                            'payment.paymentSuccess'
+                            | translate }}</p>
+
+                        <p style="margin-top: 50px;"
+                            *ngIf="!transactionSucceded && showRetry || !transactionSucceded && transactionSucceded">
+                            <br>
+                            {{ 'payment.ifPaymentConfirmed' | translate }}
+                        </p>
+
+                        <br>
+                        <button class="btn btn-primary" *ngIf="showRetry || transactionSucceded" (click)="ngOnDestroy()"
+                            data-bs-dismiss="modal"> {{ "action.close" | translate }} </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Items Modal -->
+<!-- <div class="modal custom-modal fade modal-delete" id="add_subscriber_modal" role="dialog" data-bs-backdrop="static"
+    data-bs-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title align-items-center justify-content-center" id="staticBackdropLabel">
+                    Ajouter un abonné
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <app-add-subscriber></app-add-subscriber>
+        </div>
+    </div>
+</div> -->
+<!-- /Delete Items Modal -->

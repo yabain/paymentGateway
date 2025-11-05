@@ -37,6 +37,7 @@ export class PaymentService {
     DEPOSITE: 'deposit',
     WITHDRAWAL: 'withdrawal',
     PAYMENT: 'payment',
+    SERVICE: 'service',
     TRANSFER: 'transfer',
     FUNDRAISING: 'fundraising',
     SUBSCRIPTION: 'subscription',

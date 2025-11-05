@@ -570,7 +570,8 @@
     "organisation": "Organisation",
     "mySubscriptionList": "Mes abonnements",
     "transactionList": "Transaction List",
-    "myTransactions": "My transactions"
+    "myTransactions": "My transactions",
+    "services": "Services"
   },
   "flutterwave": {
     "otherCurrencyBalances": "Othes currency balance available",
@@ -668,6 +669,32 @@
     "renewSubscription": "Renew your subscription",
     "subscriberList": "Subscribers list",
     "subscriptionStartDate": "Subscription start date"
+  },
+  "services": {
+    "title": "Services",
+    "allServices": "All services",
+    "activeServices": "Active services",
+    "disabledServices": "Disabled services",
+    "addService": "Add service",
+    "personal": "Personal",
+    "organisation": "Organisation",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "creationDate": "Creation Date",
+    "disable": "Disable",
+    "deactivation": "Deactivation",
+    "disableMessage": "Are you sure you want to disable",
+    "enable": "Enable",
+    "activation": "Activation",
+    "enableMessage": "Are you sure you want to activate?",
+    "cancel": "Cancel",
+    "serviceDetails": "Service details",
+    "info": "Détails",
+    "add": "Ajouter un service",
+    "vote": "Vote",
+    "voteAgain": "Vote again",
+    "alreadyVoteMsg": "You have already voted",
+    "loginToVote": "Login to Vote"
   },
   "personalizer": {
     "title": "Customizer",

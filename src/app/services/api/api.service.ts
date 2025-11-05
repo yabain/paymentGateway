@@ -178,8 +178,13 @@ export class ApiService {
       switchMap((token: any) => {
         const headers = new HttpHeaders({
           'Authorization': `Bearer ${token}`
+          // Don't set Content-Type, let browser set it for FormData
         });
-        // console.log('apiUpdate: ', endpoint);
+        console.log('Uploading to:', `${this.apiUrl}/${endpoint}`);
+        console.log('FormData entries:');
+        for (let pair of data.entries()) {
+          console.log(pair[0] + ': ' + pair[1]);
+        }
         return this.http.put<any>(`${this.apiUrl}/${endpoint}`, data, { headers });
       })
     );

@@ -59,7 +59,6 @@ export class InvoiceDetailsComponent implements OnInit, OnDestroy {
     return Number(transactionData?.estimation) / Number(transactionData?.quantity);
   }
   
-
   async getPlanDataById(planId: string): Promise<any> {
     this.planData = undefined;
     this.subscriptionService.getMyPlansData(planId).subscribe((data: any) => {
