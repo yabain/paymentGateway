@@ -342,6 +342,18 @@ export class ProfileComponent implements OnInit {
  */
   showPreview(event: any) {
     if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      const maxSize = 1 * 1024 * 1024; // 1 MB en bytes
+      
+      if (file.size > maxSize) {
+        this.translate.get("profile.imageTooLarge").subscribe((res: string) => {
+          this.toastService.presentToast('error', 'Error', res || 'Image trop volumineuse (max 1 MB)', 5000);
+        });
+        event.target.value = '';
+        return;
+      }
+    
+      
       const reader = new FileReader();
       reader.onload = (e: any) => {
         this.currentUser.pictureUrl = e.target.result;

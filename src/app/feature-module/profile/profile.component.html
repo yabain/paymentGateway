@@ -49,6 +49,9 @@
         </div>
         <br>
         <div *ngIf="isChangePicture">
+          1 mb max
+        </div>
+        <div *ngIf="isChangePicture">
           <a class="btn btn-sm btn-secondary m-2" (click)="cancel()">{{ "action.cancel" |
             translate }}</a>
           <a *ngIf="!uploadingPicture" class="btn btn-sm btn-success m-2" (click)="savePicture()">{{ "action.save" |

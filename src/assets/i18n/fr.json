@@ -345,7 +345,8 @@
     "profileUpdated": "Profil mis à jour",
     "profileUpdatedError": "Erreur de mis à jour du profil",
     "invalidUrl": "Url invalid",
-    "website": "Site web"
+    "website": "Site web",
+    "imageTooLarge": "Taille de l'image trop grande (max 1mb)"
   },
   "payment": {
     "title": "Paiement",
