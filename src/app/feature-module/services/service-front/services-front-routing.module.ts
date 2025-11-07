@@ -5,11 +5,11 @@ import { ServicesFrontComponent } from './services-front.component';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'services',
+    redirectTo: 'welcome',
     pathMatch: 'full',
   },
   {
-    path: 'services',
+    path: 'services-front/:id',
     component: ServicesFrontComponent,
   },
   {
@@ -19,7 +19,7 @@ const routes: Routes = [
   {
     path: '**',
     pathMatch: 'full',
-    redirectTo: 'services',
+    redirectTo: 'welcome',
   },
 ];
 

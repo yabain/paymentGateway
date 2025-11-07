@@ -646,7 +646,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
 
 
   copyUrl() {
-    const url = environment.frontUrl + '/services-list-user/services/' + this.currentUser._id;
+    const url = environment.frontUrl + '/services-list-user/services-front/' + this.currentUser._id;
     navigator.clipboard.writeText(url).then(() => {
       this.copied = true;
 

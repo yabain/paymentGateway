@@ -694,7 +694,8 @@
     "vote": "Vote",
     "voteAgain": "Vote again",
     "alreadyVoteMsg": "You have already voted",
-    "loginToVote": "Login to Vote"
+    "loginToVote": "Login to Vote",
+    "imageTooLarge": "Taille de l'image trop grande (max 1mb)"
   },
   "personalizer": {
     "title": "Customizer",
