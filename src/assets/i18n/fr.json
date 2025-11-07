@@ -474,7 +474,8 @@
     "totalAmount": "Total amount",
     "quantity": "Quantité",
     "unitPrice": "Prix unitaire",
-    "summary": "Récapitulatif"
+    "summary": "Récapitulatif",
+    "balance": "Solde"
   },
   "whatsapp": {
     "title": "WhatsApp",

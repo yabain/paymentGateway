@@ -4,13 +4,14 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, Subject, takeUntil, of } from 'rxjs';
 import { DataService, routes } from 'src/app/core/core.index';
+import { UserService } from 'src/app/services/user/user.service';
 import {
   apiResultFormat,
   pageSelection,
   recurringinvoice,
 } from 'src/app/core/models/models';
-import { UserService } from 'src/app/services/user/user.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
+import { BalanceService } from 'src/app/services/balance/balance.service';
 
 @Component({
   selector: 'app-customer-details',
@@ -35,12 +36,14 @@ export class CustomerDetailsComponent implements OnInit, OnDestroy {
   public pageNumberArray: Array<number> = [];
   public pageSelection: Array<pageSelection> = [];
   public totalPages = 0;
+  balance: number;
 
   private destroy$ = new Subject<void>();
   gettingUserData: boolean = true;
   userData: any;
   userId!: string;
   cover: string = "assets/img/ressorces/cover.png";
+  currentUser: any;
 
   constructor(
     private data: DataService,
@@ -48,7 +51,8 @@ export class CustomerDetailsComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private toastService: ToastService,
     private router: Router,
-  ) {}
+    private balanceService: BalanceService,
+  ) { }
 
   ngOnInit(): void {
     this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
@@ -70,6 +74,7 @@ export class CustomerDetailsComponent implements OnInit, OnDestroy {
     }
     this.userId = idParam;
     this.getUserData(idParam);
+    this.getCurrentUser()
 
     // let invoiceId = idParam;
     // if (!invoiceId) {
@@ -94,12 +99,22 @@ export class CustomerDetailsComponent implements OnInit, OnDestroy {
       )
       .subscribe((user: any) => {
         this.userData = user;
+        console.log('userData: ', this.userData)
         this.gettingUserData = false;
       });
   }
 
+  getBalance(userId) {
+    this.balanceService.getBalance(userId)
+      .subscribe((data: any) => {
+        this.balance = data ? data.balance : 0;
+        console.log('balance: ', data)
+      })
+  }
+
   refresh() {
     this.getUserData(this.userId);
+    this.getCurrentUser()
   }
   getName() {
     return this.userService.showName(this.userData);
@@ -178,6 +193,7 @@ export class CustomerDetailsComponent implements OnInit, OnDestroy {
       this.getTableData();
     }
   }
+
   public moveToPage(pageNumber: number): void {
     this.currentPage = pageNumber;
     this.skip = this.pageSelection[pageNumber - 1].skip;
@@ -189,6 +205,7 @@ export class CustomerDetailsComponent implements OnInit, OnDestroy {
     }
     this.getTableData();
   }
+
   public PageSize(): void {
     this.pageSelection = [];
     this.limit = this.pageSize;
@@ -221,5 +238,13 @@ export class CustomerDetailsComponent implements OnInit, OnDestroy {
   whatsappUrl(whatsapp) {
     const data = whatsapp.replace(' ', '');
     return `https://wa.me/${data}`;
+  }
+
+  async getCurrentUser() {
+    this.currentUser = await this.userService.getCurrentUser();
+    console.log('currentUser: ', this.currentUser)
+    if (this.currentUser.isAdmin) {
+      this.getBalance(this.userId);
+    }
   }
 }

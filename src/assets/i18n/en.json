@@ -473,7 +473,8 @@
     "totalAmount": "Total amount",
     "quantity": "Quantity",
     "unitPrice": "Unit price",
-    "summary": "Summary"
+    "summary": "Summary",
+    "balance": "Balance"
   },
   "whatsapp": {
     "title": "WhatsApp center",
