@@ -46,21 +46,8 @@
             <tbody>
               <tr *ngFor="let t of transactionList">
                 <td (click)="selectTransaction(t)" href="javascript:void(0);" data-bs-toggle="modal"
-                  data-bs-target="#invoices_preview" *ngIf="t?.transactionType === 'transfer'">{{
-                  "payment.transfer" |
-                  translate }}</td>
-                <td (click)="selectTransaction(t)" href="javascript:void(0);" data-bs-toggle="modal"
-                  data-bs-target="#invoices_preview" *ngIf="t?.transactionType === 'withdrawal'">{{
-                  "payment.withdrawal" |
-                  translate }}
-                </td>
-                <td (click)="selectTransaction(t)" href="javascript:void(0);" data-bs-toggle="modal"
-                  data-bs-target="#invoices_preview" *ngIf="t?.transactionType === 'subscription'">{{
-                  "subscriptions.title"
-                  | translate }}</td>
-                <td (click)="selectTransaction(t)" href="javascript:void(0);" data-bs-toggle="modal"
-                  data-bs-target="#invoices_preview" *ngIf="t?.transactionType === 'fundraising'">{{
-                  "fundraising.title" |
+                  data-bs-target="#invoices_preview">{{
+                  "payment." + t?.transactionType |
                   translate }}</td>
                 <td (click)="selectTransaction(t)" href="javascript:void(0);" data-bs-toggle="modal"
                   data-bs-target="#invoices_preview">{{ t?.createdAt |

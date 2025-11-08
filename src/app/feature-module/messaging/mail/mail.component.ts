@@ -11,11 +11,42 @@ import { SubscriptionService } from 'src/app/services/subscription/subscription.
 import { UserService } from 'src/app/services/user/user.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { Location } from '@angular/common';
-import { MailService } from 'src/app/services/mail/mail.service';
+import { MailService } from 'src/app/services/mail/mail.service'; 
+import {
+  ChartComponent,
+  ApexAxisChartSeries,
+  ApexChart,
+  ApexXAxis,
+  ApexDataLabels,
+  ApexTitleSubtitle,
+  ApexStroke,
+  ApexGrid,
+  ApexPlotOptions,
+  ApexYAxis,
+  ApexLegend,
+  ApexTooltip,
+  ApexResponsive,
+  ApexFill,
+} from 'ng-apexcharts';
 
-interface data {
-  value: string;
-}
+
+export type ChartOptions = {
+  series: ApexAxisChartSeries | any;
+  chart: ApexChart | any;
+  xaxis: ApexXAxis | any;
+  dataLabels: ApexDataLabels | any;
+  grid: ApexGrid | any;
+  stroke: ApexStroke | any;
+  title: ApexTitleSubtitle | any;
+  plotOptions: ApexPlotOptions | any;
+  yaxis: ApexYAxis | any;
+  legend: ApexLegend | any;
+  tooltip: ApexTooltip | any;
+  responsive: ApexResponsive[] | any;
+  fill: ApexFill | any;
+  labels: string[] | any;
+  colors: string[] | any;
+};
 @Component({
   selector: 'app-mail',
   templateUrl: './mail.component.html',
@@ -47,8 +78,34 @@ export class MailComponent implements OnInit {
   selectedEmail!: any;
   
   emailBody: string = "";
+  metadata: any;
+  public chartOptionsSeven: Partial<ChartOptions>;
 
-  constructor(private mailService: MailService) { }
+  constructor(private mailService: MailService) {
+    this.chartOptionsSeven = {
+      series: [0, 0, 0, 0],
+      chart: {
+        type: 'donut',
+        width: 250,
+        height: 250,
+      },
+      labels: [0, 'Successful', 0, 'Error'],
+      responsive: [
+        {
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 200,
+              height: 200,
+            },
+            legend: {
+              position: 'bottom',
+            },
+          },
+        },
+      ],
+    };
+  }
 
   ngOnInit(): void {
     this.refresh();
@@ -106,16 +163,46 @@ export class MailComponent implements OnInit {
     this.getOutputMails();
   }
 
+  idrateCharte(success: number, error: number){
+    this.chartOptionsSeven = {
+      series: [0, success, 0, error],
+      chart: {
+        type: 'donut',
+        width: 250,
+        height: 250,
+      },
+      labels: [0, 'Successful', 0, 'Error'],
+      responsive: [
+        {
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 200,
+              height: 200,
+            },
+            legend: {
+              position: 'bottom',
+            },
+          },
+        },
+      ],
+    };
+  }
+
   getOutputMails(page: number = 1, keyword?: string) {
     this.gettingtOutputMails = true
     this.mailService.getOutputMails(page, keyword ? keyword : '')
       .subscribe({
         next: (res: any) => {
-          this.emailList = res;
+          console.log(res);
+          this.emailList = res.data;
+          this.metadata = res.pagination;
+          this.idrateCharte(this.metadata.success, this.metadata.error);
           this.gettingtOutputMails = false
         },
         error: (err) => {
           this.emailList = [];
+          this.metadata!;
           this.gettingtOutputMails = false;
           console.log(err);
         },

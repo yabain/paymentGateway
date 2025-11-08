@@ -111,8 +111,19 @@ export class UserService {
    * Retrieves data for all users.
    * @returns An observable of all users' data.
    */
-  getAllUser(): Observable<any> {
-    return this.apiService.progressiveGetWithoutId(`user`);
+  getAllUser(page: number = 1): Observable<any> {
+    return this.apiService.getWithoutId(`user/all-users` + '?page=' + page).pipe(
+      map((res: any) => {
+        if (res) {
+          return res;
+        }
+        return false;
+      }),
+      catchError((err) => {
+        console.error('Error getting favorites:', err);
+        return of(false); // Emit false if there's an error
+      }),
+    );
   }
 
   /**

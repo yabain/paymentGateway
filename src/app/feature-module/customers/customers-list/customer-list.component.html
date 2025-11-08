@@ -3,12 +3,13 @@
   <div class="content-page-header page-tilte">
     <h5 style="color: black !important">
       <img src="assets/img/new/user.png" alt="" style="max-width: 40px; margin-right: 10px;">
-      {{ "users.title" | translate }}</h5>
+      {{ "users.title" | translate }}
+    </h5>
     <div class="list-btn">
       <ul class="filter-list">
         <li *ngIf="activeSearch">
           <div class="form-custom">
-            <input [(ngModel)]="searchString" (input)="searchData(searchString)" type="text" class="form-control"
+            <input [(ngModel)]="searchString" (input)="searchUser(searchString)" type="text" class="form-control"
               id="member_search1" placeholder="Search Customer">
           </div>
         </li>
@@ -79,8 +80,8 @@
               </div>
               <div class="grid-info">
                 <span>{{ "users.allUsers" | translate }}</span>
-                <h4 *ngIf="customers.length > 1">{{ customers.length }}</h4>
-                <p *ngIf="customers.length === 0">{{ "loading" | translate }}...</p>
+                <h4 *ngIf="customers?.length > 1">{{ metadata?.totalItems }}</h4>
+                <p *ngIf="customers?.length === 0">{{ "loading" | translate }}...</p>
               </div>
             </div>
           </div>
@@ -111,8 +112,8 @@
               </div>
               <div class="grid-info">
                 <span>{{ "users.activeUsers" | translate }}</span>
-                <h4 *ngIf="customers.length > 1">{{ getActiveUsersNumber() }}</h4>
-                <p *ngIf="customers.length === 0">{{ "loading" | translate }}...</p>
+                <h4 *ngIf="customers?.length > 1">{{ metadata?.totalActive }}</h4>
+                <p *ngIf="customers?.length === 0">{{ "loading" | translate }}...</p>
               </div>
             </div>
           </div>
@@ -127,8 +128,8 @@
               </div>
               <div class="grid-info">
                 <span>{{ "users.disabledUsers" | translate }}</span>
-                <h4 *ngIf="customers.length > 1">{{ getDesctiveUsersNumber() }}</h4>
-                <p *ngIf="customers.length === 0">{{ "loading" | translate }}...</p>
+                <h4 *ngIf="customers?.length > 1">{{ metadata?.totalInactive }}</h4>
+                <p *ngIf="customers?.length === 0">{{ "loading" | translate }}...</p>
               </div>
 
             </div>
@@ -144,8 +145,8 @@
               </div>
               <div class="grid-info">
                 <span>{{ "users.adminUsers" | translate }}</span>
-                <h4 *ngIf="customers.length > 1">{{ getAdminUsersNumber() }}</h4>
-                <p *ngIf="customers.length === 0">{{ "loading" | translate }}...</p>
+                <h4 *ngIf="customers?.length > 1">{{ metadata?.adminers }}</h4>
+                <p *ngIf="customers?.length === 0">{{ "loading" | translate }}...</p>
               </div>
 
             </div>
@@ -175,7 +176,7 @@
       </div>
       <div class="col-sm-6 col-md-3">
         <div class="form-group">
-          <label htmlFor="label">Phone</label>
+          <label htmlFor="label">Whatsapp</label>
           <input id="label" type="text" class="form-control" />
         </div>
       </div>
@@ -188,19 +189,19 @@
   <div class="col-sm-12">
     <div class="card-table">
       <div class="card-body">
-        <div class="table-scroll">
-          <table matSort (matSortChange)="sortData($event)" class="table table-center table-hover datatable">
+        <div class="table-responsive">
+          <table class="table table-striped mb-0" *ngIf="!gettingUsers && customers?.length > 0">
             <thead class="thead-light">
               <tr>
-                <th mat-sort-header="name">{{ "auth.username" | translate }}</th>
-                <th mat-sort-header="phone">{{ "auth.accountType" | translate }}</th>
-                <th mat-sort-header="balance">{{ "auth.phone" | translate }}</th>
-                <th mat-sort-header="created">{{ "users.creationDate" | translate }}</th>
-                <th mat-sort-header="status">Status</th>
-                <th mat-sort-header="action">Actions</th>
+                <th>{{ "auth.username" | translate }}</th>
+                <th>{{ "auth.accountType" | translate }}</th>
+                <th>Whatsapp</th>
+                <th>{{ "users.creationDate" | translate }}</th>
+                <th>Status</th>
+                <th>Actions</th>
               </tr>
             </thead>
-            <tbody *ngIf="!gettingUsers">
+            <tbody *ngIf="!gettingUsers && customers">
               @for (customer of customers; track customer; let i = $index) {
               <tr>
                 <td>
@@ -218,21 +219,23 @@
                     <img [src]="customer.countryId.flagUrl" alt="" style="width: 20px;">
                     {{ customer.countryId.name | translate }}</span>
                 </td>
-                <td>+{{ customer.countryId.code }} {{ customer.phone }}
+                <td>{{ customer.whatsapp }}
                 </td>
-                <td>{{ getDate(customer.createdAt) }}</td>
+                <td>{{ getDate(customer.createdAt) }} {{ customer.createdAt | date: 'HH:mm' }}</td>
                 <td>
                   <span [ngClass]="{
                       'bg-success-light': customer.isActive != false,
                       'bg-danger-light': customer.isActive === false
                     }" class="badge badge-pill bg-success-light">{{ (customer.isActive === false ? 'users.disabled' :
                     'users.enabled') | translate }}</span><br *ngIf="customer.isAdmin === true">
-                  <span class="badge badge-pill bg-warning-light" *ngIf="customer.isAdmin === true" style="color: #e89b00">
-                          <!-- <i class="fa fa-universal-access" data-bs-toggle="tooltip" title="feather icon-power"></i> -->
+                  <span class="badge badge-pill bg-warning-light" *ngIf="customer.isAdmin === true"
+                    style="color: #e89b00">
+                    <!-- <i class="fa fa-universal-access" data-bs-toggle="tooltip" title="feather icon-power"></i> -->
                     Admin
                   </span><br *ngIf="customer.verified === true">
-                  <span class="badge badge-pill bg-info-light" *ngIf="customer.verified === true" style="color: #063ac0">
-                          <!-- <i class="fa fa-universal-access" data-bs-toggle="tooltip" title="feather icon-power"></i> -->
+                  <span class="badge badge-pill bg-info-light" *ngIf="customer.verified === true"
+                    style="color: #063ac0">
+                    <!-- <i class="fa fa-universal-access" data-bs-toggle="tooltip" title="feather icon-power"></i> -->
                     verified
                   </span>
                 </td>
@@ -292,12 +295,26 @@
               }
             </tbody>
           </table>
-          <div class="d-flex justify-content-center" *ngIf="gettingUsers" style="margin: 50px">
-            <div class="spinner-border" role="status"></div>
+          <div *ngIf="gettingUsers && customers?.length === 0"
+            class="row d-flex align-items-cente justify-content-center">
+            <!-- <img src="assets/img/ressorces/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;"> -->
+            <div class="spinner-border text-primary" role="status" style="margin: 20px;">
+              <span class="visually-hidden">{{ "loading" | translate }}...</span>
+            </div>
           </div>
         </div>
       </div>
-      <app-custom-pagination></app-custom-pagination>
+      <div class="card-footer">
+        <div *ngIf="!gettingUsers && customers?.length > 0">
+          <button class="btn btn-primary m-2" (click)="previousPage()" *ngIf="page !== 1">
+            << </button>
+              <button class="btn btn-block btn-outline-light active m-2">Page: {{ page }} / {{ metadata?.totalPages
+                }}</button>
+              <button class="btn btn-primary m-2" (click)="nextPage()" *ngIf="metadata?.hasNextPage">
+                >> </button>
+        </div>
+      </div>
+
 
     </div>
   </div>
@@ -358,7 +375,7 @@
                       <!-- View All -->
                       <div class="view-content">
                         <div class="viewall-One">
-                          @for (user of users; track user) {
+                          @for (user of customers; track user) {
                           <label class="custom_check w-100" [ngClass]="{ closed: !isCollapsed, open: isCollapsed }">
                             <input type="checkbox" name="username" [(ngModel)]="user.checked">
                             <span class="checkmark"></span> {{ user.name }}
@@ -495,168 +512,6 @@
                 {{ "users.cancel" | translate }}
               </button>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<div class="modal custom-modal fade" id="add_ledger" role="dialog">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content">
-      <div class="modal-header border-0 pb-0">
-        <div class="form-header modal-header-title text-start mb-0">
-          <h4 class="mb-0">Ledger</h4>
-        </div>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-
-        </button>
-      </div>
-      <div class="page-header add">
-        <div class="content-page-header add">
-          <div class="add-header">
-            <h6>Test Company</h6>
-            <p>You Pay $400</p>
-          </div>
-          <div class="list-btn">
-            <ul class="filter-list">
-              <li class="">
-                <div class="dropdown dropdown-action" matTooltip="Download">
-                  <a href="javascript:void(0);" class="btn-filters" data-bs-toggle="dropdown"
-                    aria-expanded="false"><span><i class="feather icon-download"></i></span></a>
-                  <div class="dropdown-menu dropdown-menu-right">
-                    <ul class="d-block">
-                      <li>
-                        <a class="d-flex align-items-center download-item" href="javascript:void(0);" download><i
-                            class="far fa-file-pdf me-2"></i>PDF</a>
-                      </li>
-                      <li>
-                        <a class="d-flex align-items-center download-item" href="javascript:void(0);" download><i
-                            class="far fa-file-text me-2"></i>CVS</a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <a class="btn-filters" href="javascript:void(0);" matTooltip="Print"><span><i
-                      class="feather icon-printer"></i></span> </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <!-- Table -->
-      <div class="modal-body add">
-        <div class="addnew-modal">
-          <div class="row">
-            <div class="col-sm-12">
-              <div class="card-table">
-                <div class="card-body">
-                  <div class="table-responsive">
-                    <div class="companies-table Ledger">
-                      <table matSort (matSortChange)="sortData($event)"
-                        class="table table-center table-hover datatable">
-                        <thead class="thead-light">
-                          <tr>
-                            <th mat-sort-header="id">#</th>
-                            <th mat-sort-header="date">Date</th>
-                            <th mat-sort-header="mode">Mode</th>
-                            <th mat-sort-header="amount">Amount</th>
-                            <th mat-sort-header="closingBalance">Closing Balance</th>
-                            <th>Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>
-                              <h2 class="table-avatar">
-                                <a> PAYOUT -2<span>Payment Out</span></a>
-                              </h2>
-                            </td>
-                            <td>16 Aug 2023</td>
-                            <td><span class="badge bg-success-light">Cash</span>
-                            </td>
-                            <td><span class="text-danger-light">- $100</span></td>
-                            <td>$400</td>
-                            <td class="d-flex align-items-center">
-                              <a class=" btn-action-icon me-2" href="javascript:void(0);"><i
-                                  class="feather icon-edit"></i></a>
-                              <a class=" btn-action-icon" href="javascript:void(0);"><i
-                                  class="feather icon-trash-2"></i></a>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <h2 class="table-avatar">
-                                <a> PAYIN -2<span>Payment In</span></a>
-                              </h2>
-                            </td>
-                            <td>14 Aug 2023</td>
-                            <td><span class="badge bg-success-light">Cash</span>
-                            </td>
-                            <td><span class="text-success-light">+ $200</span></td>
-                            <td>$500</td>
-                            <td class="d-flex align-items-center">
-                              <a class=" btn-action-icon me-2" href="javascript:void(0);"><i
-                                  class="feather icon-edit"></i></a>
-                              <a class=" btn-action-icon" href="javascript:void(0);"><i
-                                  class="feather icon-trash-2"></i></a>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <h2 class="table-avatar">
-                                <a> PAYOUT -1<span>Payment Out</span></a>
-                              </h2>
-                            </td>
-                            <td>13 Aug 2023</td>
-                            <td><span class="badge bg-success-light">Cash</span>
-                            </td>
-                            <td><span class="text-danger-light">- $200</span></td>
-                            <td>$300</td>
-                            <td class="d-flex align-items-center">
-                              <a class=" btn-action-icon me-2" href="javascript:void(0);"><i
-                                  class="feather icon-edit"></i></a>
-                              <a class=" btn-action-icon" href="javascript:void(0);"><i
-                                  class="feather icon-trash-2"></i></a>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <h2 class="table-avatar">
-                                <a>PAYIN -1<span>Payment In</span></a>
-                              </h2>
-                            </td>
-                            <td>12 Aug 2023</td>
-                            <td><span class="badge bg-success-light">Cash</span>
-                            </td>
-                            <td><span class="text-success-light">+$500</span></td>
-                            <td>$500</td>
-                            <td class="d-flex align-items-center">
-                              <a class=" btn-action-icon me-2" href="javascript:void(0);"><i
-                                  class="feather icon-edit"></i></a>
-                              <a class=" btn-action-icon" href="javascript:void(0);"><i
-                                  class="feather icon-trash-2"></i></a>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- /Table -->
-
-          <div class="modal-footer add">
-            <a href="javascript:void(0);" data-bs-dismiss="modal" class="btn btn-success  me-2"><i
-                class="fa-solid fa-arrow-down"></i>Credit</a>
-            <a href="javascript:void(0);" data-bs-dismiss="modal" class="btn btn-danger"><i
-                class="fa-solid fa-arrow-up"></i>Add New</a>
           </div>
         </div>
       </div>

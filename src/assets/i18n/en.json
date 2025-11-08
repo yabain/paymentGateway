@@ -474,7 +474,8 @@
     "quantity": "Quantity",
     "unitPrice": "Unit price",
     "summary": "Summary",
-    "balance": "Balance"
+    "balance": "Balance",
+    "service": "Service"
   },
   "whatsapp": {
     "title": "WhatsApp center",

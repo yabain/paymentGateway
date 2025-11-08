@@ -50,16 +50,16 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="input-block mb-3">
-                                        <label htmlFor="label">{{ "mail.server" | translate }} *</label>
-                                        <input id="label" type="text" [(ngModel)]="smtpHost" name="smtpHost"
+                                        <label htmlFor="server">{{ "mail.server" | translate }} *</label>
+                                        <input id="server" type="text" [(ngModel)]="smtpHost" name="smtpHost"
                                             class="form-control" placeholder="ex: smtp.gmail.com"
                                             [disabled]="!edition" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="input-block mb-3">
-                                        <label htmlFor="label">{{ "mail.port" | translate }} *</label>
-                                        <input id="label" type="number" [(ngModel)]="smtpPort" name="smtpPort"
+                                        <label htmlFor="port">{{ "mail.port" | translate }} *</label>
+                                        <input id="port" type="number" [(ngModel)]="smtpPort" name="smtpPort"
                                             class="form-control" placeholder="ex: 465" [disabled]="!edition" />
                                     </div>
                                 </div>
@@ -67,24 +67,24 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="input-block mb-3">
-                                        <label htmlFor="label">{{ "mail.email" | translate }} *</label>
-                                        <input id="label" type="email" [(ngModel)]="smtpUser" name="smtpUser"
+                                        <label htmlFor="email">{{ "mail.email" | translate }} *</label>
+                                        <input id="email" type="email" [(ngModel)]="smtpUser" name="smtpUser"
                                             class="form-control" [disabled]="!edition" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="input-block mb-3">
-                                        <label htmlFor="label">{{ "mail.password" | translate }} *</label>
-                                        <input id="label" type="password" [(ngModel)]="smtpPassword" name="smtpPassword"
-                                            class="form-control" [disabled]="!edition" />
+                                        <label htmlFor="password">{{ "mail.password" | translate }} *</label>
+                                        <input id="password" type="password" [(ngModel)]="smtpPassword"
+                                            name="smtpPassword" class="form-control" [disabled]="!edition" />
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="input-block mb-3">
-                                        <label htmlFor="label">{{ "mail.secure" | translate }} *</label>
-                                        <select id="label" class="form-select" [(ngModel)]="smtpSecure"
+                                        <label htmlFor="secure">{{ "mail.secure" | translate }} *</label>
+                                        <select id="secure" class="form-select" [(ngModel)]="smtpSecure"
                                             name="smtpSecure" [disabled]="!edition">
                                             <option [value]="true">{{ "mail.enabled" | translate }}</option>
                                             <option [value]="false">{{ "mail.disabled" | translate }}</option>
@@ -93,8 +93,8 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="input-block mb-3">
-                                        <label htmlFor="label">{{ "mail.encription" | translate }}</label>
-                                        <select id="label" class="form-select" [(ngModel)]="smtpEncription"
+                                        <label htmlFor="encription">{{ "mail.encription" | translate }}</label>
+                                        <select id="encription" class="form-select" [(ngModel)]="smtpEncription"
                                             name="smtpEncription" [disabled]="!edition">
                                             <option [value]="'SSL/TLS'">SSL/TLS</option>
                                             <option [value]="'STARTTLS'">STARTTLS</option>
@@ -105,9 +105,9 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="input-block mb-3">
-                                        <label htmlFor="label">{{ "mail.emailForAlert" | translate }} *</label>
-                                        <input id="label" type="text" [(ngModel)]="emailForAlert" name="emailForAlert"
-                                            class="form-control" [disabled]="!edition" />
+                                        <label htmlFor="emailForAlert">{{ "mail.emailForAlert" | translate }} *</label>
+                                        <input id="emailForAlert" type="text" [(ngModel)]="emailForAlert"
+                                            name="emailForAlert" class="form-control" [disabled]="!edition" />
                                     </div>
                                 </div>
                             </div>
@@ -191,8 +191,23 @@
                 <h5 class="card-title">{{ "mail.output" | translate }} </h5>
             </div>
             <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="chart">
+                            <apx-chart [series]="chartOptionsSeven.series" [chart]="chartOptionsSeven.chart"
+                                [labels]="chartOptionsSeven.labels"
+                                [responsive]="chartOptionsSeven.responsive"></apx-chart>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        Total: {{ metadata?.totalItem }} <br>
+                        Successful: {{ metadata?.success }} <br>
+                        Error: {{ metadata?.error }}
+                    </div>
+                </div>
+
                 <div class="table-responsive">
-                    <table class="table table-striped mb-0" *ngIf="!gettingtOutputMails && emailList.length > 0">
+                    <table class="table table-striped mb-0" *ngIf="!gettingtOutputMails && emailList?.length > 0">
                         <thead>
                             <tr>
                                 <th>{{ "mail.address" | translate }}</th>
@@ -217,12 +232,12 @@
                         </tbody>
                     </table><br>
                     <div *ngIf="!gettingtOutputMails && emailList?.length > 0">
-                        <button class="btn btn-block btn-outline-light active" (click)="previousEmailPage()"
-                            [disabled]="emailPage === 1">
+                        <button class="btn btn-primary m-2" (click)="previousEmailPage()" *ngIf="emailPage > 1">
                             << </button>
-                                <button class="btn btn-block btn-outline-light active">{{ emailPage }}</button>
-                                <button class="btn btn-block btn-outline-light active" (click)="nextEmailPage()"
-                                    [disabled]="emailList?.length < 10"> >> </button>
+                                <button class="btn btn-block btn-outline-light active m-2">Page: {{
+                                    metadata?.currentPage }} / {{ metadata?.totalPages }}</button>
+                                <button class="btn btn-primary m-2" (click)="nextEmailPage()"
+                                    *ngIf="metadata?.hasNextPage"> >> </button>
                     </div>
                     <div *ngIf="gettingtOutputMails" class="row d-flex align-items-cente justify-content-center">
                         <!-- <img src="assets/img/ressorces/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;"> -->
@@ -317,12 +332,12 @@
             <br>
             <div class="modal-body">
                 <div class="col-sm-12 col-md-12">
-                  <div class="option-space-op">
-                    <!-- Bind le HTML avec innerHTML -->
-                    <div [innerHTML]="emailBody"></div>
-                  </div>
+                    <div class="option-space-op">
+                        <!-- Bind le HTML avec innerHTML -->
+                        <div [innerHTML]="emailBody"></div>
+                    </div>
                 </div>
-              </div>
+            </div>
             <br>
             <div class="modal-body">
                 {{ "rawData" | translate }}:

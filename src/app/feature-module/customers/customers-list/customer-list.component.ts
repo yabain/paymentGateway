@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DataService, routes } from 'src/app/core/core.index';
 import {
   pageSelection,
@@ -9,17 +9,19 @@ import { MatTableDataSource } from '@angular/material/table';
 
 import { Sort } from '@angular/material/sort';
 import { PaginationService, tablePageSize } from 'src/app/shared/sharedIndex';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/services/user/user.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
-import { debounceTime, distinctUntilChanged, Subject, switchMap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, Subject, switchMap, takeUntil } from 'rxjs';
+import { DateService } from 'src/app/services/pipe/date.service';
 
 @Component({
   selector: 'app-customer-list',
   templateUrl: './customer-list.component.html',
   styleUrls: ['./customer-list.component.scss'],
 })
-export class CustomerListComponent {
+export class CustomerListComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
   // public customers: Array<customers> = [];
   public customers: Array<any> = [];
   isCollapsed = false;
@@ -30,41 +32,37 @@ export class CustomerListComponent {
   activeSearch: boolean = false;
   searchString: string = '';
   private searchTerms = new Subject<string>();
-
-  // pagination variables
-  public pageSize = 10;
-  public serialNumberArray: Array<number> = [];
-  public totalData = 0;
-  dataSource!: MatTableDataSource<customers>;
+  private pollTimer: any;
   public searchDataValue = '';
   public gettingUsers: boolean = true;
+  page: number = 1;
+  metadata: any;
+  currentUser: any;
   //** / pagination variables
   constructor(
+    private route: ActivatedRoute,
     private data: DataService,
     private pagination: PaginationService,
     private router: Router,
     private toastService: ToastService,
-    private userService: UserService
+    private userService: UserService,
+    private dateService: DateService,
   ) {
-    this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
-      if (this.router.url == this.routes.customerList) {
-        this.getUsers({ skip: res.skip, limit: res.limit });
-        this.pageSize = res.pageSize;
-      }
-    });
-    this.searchTerms.pipe(
-      debounceTime(300),              // attendre 300ms après la dernière frappe
-      distinctUntilChanged(),         // ignorer si le mot est identique
-      switchMap(term => this.userService.filterItems(term))
-    ).subscribe((userData: any) => {
-      this.handleUser({ skip: 0, limit: 10 }, userData);
-    });
   }
 
-  refresh(){
-        this.getUsers({ skip: 0, limit: 10 });
+  refresh() {
+    this.customers = [];
+    this.getCurrentUser();
   }
 
+  getData() {
+    this.getUsersList(this.page);
+  }
+  
+  getUsersList(page: number = 1) {
+    this.gettingUsers = true;
+    this.startPolling(page);
+  }
   // private getTableData(pageOption: pageSelection): void {
   //   this.data.getCustomers().subscribe((apiRes: apiResultFormat) => {
   //     this.customers = [];
@@ -98,48 +96,37 @@ export class CustomerListComponent {
   }
   
   public getDate(date: string){
-    return date.split('T')[0];
+    console.log('currentUser: ', this.currentUser)
+    return this.dateService.formatDate(date,'short', this.currentUser.language);
   }
 
+  async getCurrentUser() {
+    this.currentUser = await this.userService.getCurrentUser();
+    console.log('currentUser 00: ', this.currentUser)
+    this.getData();
+  }
   public getUsersNumber(){
     return this.customers.length;
   }
 
-  public getActiveUsersNumber(){
-    const active = this.customers.filter(invoice => invoice.isActive != false);
-    return active.length;
-  }
-
-  public getDesctiveUsersNumber(){
-    const active = this.customers.filter(invoice => invoice.isActive === false);
-    return active.length;
-  }
-
-  public getAdminUsersNumber(){
-    const active = this.customers.filter(invoice => invoice.isAdmin === true);
-    return active.length;
-  }
-
-  // searchUser(searchText: any){
-  //   this.userService.filterItems(searchText)
-  //   .subscribe((userData: any) => {
-  //     this.handleUser({ skip: 0, limit: 10 }, userData);
-  //   })
-  // }
-  searchUser(term: string): void {
-    this.searchTerms.next(term);
+  searchUser(searchText: any){
+    this.userService.filterItems(searchText)
+    .subscribe((userData: any) => {
+      this.customers = userData;
+      // this.handleUsers({ skip: 0, limit: 10 }, userData);
+    })
   }
 
   toggleSearch(){
     this.activeSearch = !this.activeSearch;
-    this.searchData('');
+    // this.searchData('');
   }
 
   changeUserActiveStatus(userId?: string){
     const userid = userId ? userId : this.selectedUser._id
     this.userService.changeStatus(userid)
     .then((res: any) => {
-      this.handleUser({ skip: 0, limit: 10 }, res);
+      // this.handleUsers({ skip: 0, limit: 10 }, res);
       this.toastService.presentToast('success', 'Done !', '', 3000);
     })
   }
@@ -148,80 +135,112 @@ export class CustomerListComponent {
     const userid = userId ? userId : this.selectedUser._id
     this.userService.changeAdminStatus(userid)
     .then((res: any) => {
-      this.handleUser({ skip: 0, limit: 10 }, res);
+      // this.handleUsers({ skip: 0, limit: 10 }, res);
       this.toastService.presentToast('success', 'Done !', '', 3000);
     })
   }
-
 
   changeUserVerifiedStatus(userId?: string){
     const userid = userId ? userId : this.selectedUser._id
     this.userService.changeVerifiedStatus(userid)
     .then((res: any) => {
-      this.handleUser({ skip: 0, limit: 10 }, res);
+      // this.handleUsers({ skip: 0, limit: 10 }, res);
       this.toastService.presentToast('success', 'Done !', '', 3000);
     })
   }
 
-  public getUsers(pageOption: pageSelection){
-    this.gettingUsers = true;
-    this.userService.getAllUser()
-    .subscribe((resp: any) => {
-      this.handleUser(pageOption, resp);
-    })
-  }
-
-  handleUser(pageOption: pageSelection, resp){
-      this.customers = [];
-      this.serialNumberArray = [];
-      this.totalData = resp.length;
-      resp.map((res: customers, index: number) => {
-        const serialNumber = index + 1;
-        if (index >= pageOption.skip && serialNumber <= pageOption.limit) {
-          res.id = serialNumber;
-          this.customers.push(res);
-          this.serialNumberArray.push(serialNumber);
-        }
-      });
-      this.dataSource = new MatTableDataSource<customers>(this.customers);
-      this.pagination.calculatePageSize.next({
-        totalData: this.totalData,
-        pageSize: this.pageSize,
-        tableData: this.customers,
-        serialNumberArray: this.serialNumberArray,
-        tableData2: [],
-      });
-      this.gettingUsers = false;
-    }
-
-  public searchData(value: string): void {
-    this.dataSource.filter = value.trim().toLowerCase();
-    this.customers = this.dataSource.filteredData;
-  }
-
-  public sortData(sort: Sort) {
-    const data = this.customers.slice();
-
-    if (!sort.active || sort.direction === '') {
-      this.customers = data;
-    } else {
-      this.customers = data.sort((a, b) => {
-        const aValue = (a as never)[sort.active];
-        const bValue = (b as never)[sort.active];
-        return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
-      });
-    }
-  }
+  // public searchData(value: string): void {
+  //   if (value) {
+  //     value = value.trim().toLowerCase();
+  //     this.customers = this.plansListBackup.filter(
+  //       (plan: any) =>
+  //         plan.title.toLowerCase().includes(value) ||
+  //         plan.subTitle.toLowerCase().includes(value) ||
+  //         plan.description.toLowerCase().includes(value),
+  //     );
+  //   } else return (this.plansList = this.plansListBackup);
+  // }
 
   openContent() {
     this.toggleData = !this.toggleData;
   }
-  users = [
-    { name: 'Pricilla Maureen', checked: false },
-    { name: 'Randall Hollis', checked: false },
-  ];
 
   toggleCollapse() {
     this.isCollapsed = !this.isCollapsed;
+  }
+
+  ngOnInit(): void {
+    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+      this.getCurrentUser();
+    });
+  }  
+
+  async startPolling(page: number = 1) {
+    if (this.pollTimer) clearInterval(this.pollTimer);
+    this.pollTimer = setInterval(async () => {
+      try {
+        this.userService.getAllUser(page).subscribe({
+          next: (res: any) => {
+            this.customers = res.data;
+            console.log('UsersList: ', this.customers);
+            this.metadata = res.pagination;
+            this.gettingUsers = false;
+          },
+          error: (err) => {
+            this.gettingUsers = false;
+            console.log(err);
+          },
+        });
+        // console.log('polling');
+      } catch (err) {
+        console.warn('polling error', err);
+      }
+    }, 15 * 1000);
+  }
+  
+  previousPage() {
+    if (this.page < 2) {
+      this.page = 1;
+      return false;
+    }
+    this.page -= 1;
+    this.gettingUsers = true;
+    this.customers = [];
+    this.scrollToTop();
+    return this.getUsersList(this.page);
+  }
+
+  nextPage() {
+    if (this.customers.length < 10) {
+      return false;
+    }
+    this.page += 1;
+    this.gettingUsers = true;
+    this.customers = [];
+    this.scrollToTop();
+    return this.getUsersList(this.page);
+  }
+
+  scrollToTop(): void {
+    setTimeout(() => {
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      });
+    }, 100);
+  }
+
+  stopPolling() {
+    if (this.pollTimer) {
+      clearInterval(this.pollTimer);
+      this.pollTimer = null;
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.stopPolling();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
