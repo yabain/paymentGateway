@@ -411,10 +411,9 @@
     <br>
     <div class="modal-body">
         <div class="form-header modal-header-title text-start mb-0"
-            *ngIf="currentUser?.isAdmin && transactionData?._id && !processing">
+            *ngIf="currentUser?.isAdmin && transactionData?._id">
             <span
-                *ngIf="transactionData?.transactionType === 'transfer' && transactionData?.status === 'transaction_payout_error'
-                || transactionData?.transactionType === 'withdrawal' && transactionData?.status === 'transaction_payout_error'">
+                *ngIf="transactionData?.status === 'transaction_payout_error'">
 
                 <button class="btn btn-rounded btn-outline-success me-1" href="javascript:void(0);"
                     data-bs-toggle="tooltip" data-bs-placement="bottom" matTooltip="accept Payment"

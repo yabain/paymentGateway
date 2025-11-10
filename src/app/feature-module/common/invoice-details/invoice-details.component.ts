@@ -16,6 +16,7 @@ import { ToastService } from 'src/app/services/toast/toast.service';
 import { Subject } from 'rxjs/internal/Subject';
 import { DateService } from 'src/app/services/pipe/date.service';
 import { SubscriptionService } from 'src/app/services/subscription/subscription.service';
+import { NumberToWordsService } from 'src/app/services/number-to-words/number-to-words.service';
 @Component({
   selector: 'app-invoice-details',
   templateUrl: './invoice-details.component.html',
@@ -23,6 +24,7 @@ import { SubscriptionService } from 'src/app/services/subscription/subscription.
 })
 export class InvoiceDetailsComponent implements OnInit, OnDestroy {
   @Input() transactionData: any;
+  @Input() inModal?: boolean = true;
   currentUser: any;
   status: string = 'transaction_initialized';
   planData: any
@@ -34,7 +36,8 @@ export class InvoiceDetailsComponent implements OnInit, OnDestroy {
     private paymentService: PaymentService,
     private toastService: ToastService,
     private dateService: DateService,
-    private subscriptionService: SubscriptionService
+    private subscriptionService: SubscriptionService,
+    private numberToWordsService: NumberToWordsService
   ) {
     this.getCurrentUser();
     console.log('transactionData', this.transactionData);
@@ -49,6 +52,11 @@ export class InvoiceDetailsComponent implements OnInit, OnDestroy {
         this.getPlanDataById(this.transactionData.planId);
       }
     }
+  }
+
+  numberToWords(value: number): string {
+    if (!value || isNaN(value)) return 'zéro';
+    return this.numberToWordsService.convert(value, this.currentUser?.language || 'fr');
   }
 
   formatDate(dateStr: string, format = 'short', lang = 'en') {

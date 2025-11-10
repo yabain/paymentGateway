@@ -109,7 +109,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
         this.paymentService.getAllTransactionOfUser(this.currentUser._id, page).subscribe({
           next: (res: any) => {
             this.transactionList = res.data;
-            console.log('transactionList: ', this.transactionList);
+            // console.log('transactionList: ', this.transactionList);
             this.metadata = res.pagination;
             this.gettingTransactions = false;
           },

@@ -70,7 +70,12 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
 
   rejectPayment(transactionId) {}
 
-  retryPayment(transactionId) {}
+  retryPayment(transactionId) {
+    this.processing = true;
+    this.paymentService.retryPayment(transactionId).subscribe((resp: any) => {
+      this.startPolling(transactionId);
+    });
+  }
 
   downloadInvoice() {}
 
