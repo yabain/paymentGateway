@@ -345,4 +345,21 @@ export class UserService {
     };
     return userSettings;
   }
+
+  getStatistics(): Observable<boolean> {
+    return this.apiService
+      .getWithoutId('user/get-statistics')
+      .pipe(
+        map((res: any) => {
+          if (res) {
+            return res;
+          }
+          return false;
+        }),
+        catchError((err) => {
+          console.error('Error getting statistics:', err);
+          return of(false);
+        }),
+      );
+  }
 }

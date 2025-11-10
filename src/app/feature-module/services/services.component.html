@@ -45,7 +45,7 @@
 
                     <li *ngIf="currentUser && !idParam">
                         <a class="btn btn-primary" href="javascript:void(0);" data-bs-toggle="modal"
-                            data-bs-target="#add_newpackage"><i class="fa fa-plus-circle me-2" aria-hidden="true"></i>{{
+                            data-bs-target="#add_service"><i class="fa fa-plus-circle me-2" aria-hidden="true"></i>{{
                             'services.addService' | translate }}</a>
                     </li>
                 </ul>
@@ -75,6 +75,9 @@
         <div class="card">
             <app-candidate *ngIf="currentUser" [service]="service" (click)="navigateTo('/services/details/' + service._id)"></app-candidate>
             <app-candidate *ngIf="!currentUser" [service]="service"></app-candidate>
+            <div [ngClass]="service?.isActive === true ? 'badge-success':  'badge-error'"
+                *ngIf="currentUser && isAuthor(service) || currentUser && isAdmin">
+            </div>
             <div class="d-flex justify-content-center package-edit" style="padding: 5px;">
                 <button type="button" (click)="selectService(service)" type="button" class="btn btn-secondary mt-1 me-1"
                     data-bs-toggle="modal" data-bs-target="#package_details">
@@ -83,10 +86,10 @@
                 <button class="btn btn-rounded btn-primary me-1" *ngIf="service.isActive && currentUser"
                     (click)="checkSbscriberStatus(service)" data-bs-toggle="modal"
                     data-bs-target="#subscriptionModal">{{
-                    'services.vote' | translate }}</button>
+                    'services.pay' | translate }}</button>
                 <button class="btn btn-rounded btn-primary me-1" *ngIf="!currentUser"
                     (click)="navigateTo('/auth/login')">
-                    {{ 'services.loginToVote' | translate }}</button>
+                    {{ 'services.loginToPay' | translate }}</button>
             </div>
         </div>
 
@@ -127,7 +130,7 @@
         {{ "nts" | translate }}
         <br><br>
         <!-- <a class="btn btn-primary m-2" href="javascript:void(0);" data-bs-toggle="modal"
-            data-bs-target="#add_newpackage"><i class="fa fa-plus-circle me-2" aria-hidden="true"></i>{{
+            data-bs-target="#add_service"><i class="fa fa-plus-circle me-2" aria-hidden="true"></i>{{
             'subscriptions.add' | translate }}</a> -->
     </div>
 </div>
@@ -142,7 +145,7 @@
 </div>
 
 <!-- Add New Service Modal -->
-<div class="modal custom-modal fade p-20" id="add_newpackage" role="dialog">
+<div class="modal custom-modal fade p-20" id="add_service" role="dialog">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header border-0">
@@ -200,15 +203,17 @@
                         <div class="col-sm-12 col-md-6">
                             <div class="input-block mb-3">
                                 <label>{{ "subscriptions.name" | translate }}</label>
-                                <input type="text" class="form-control" placeholder="" formControlName="title"
-                                    (input)="updateTitle()">
+                                <input type="text" class="form-control" 
+                                    [class.is-invalid]="submitted && form.get('title')?.invalid"
+                                    placeholder="" formControlName="title" (input)="updateTitle()">
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-6">
                             <div class="input-block mb-3">
                                 <label>{{ "subscriptions.subTitle" | translate }}</label>
-                                <input type="text" class="form-control" placeholder="" formControlName="subTitle"
-                                    (input)="updateTitle()">
+                                <input type="text" class="form-control" 
+                                    [class.is-invalid]="submitted && form.get('subTitle')?.invalid"
+                                    placeholder="" formControlName="subTitle" (input)="updateTitle()">
                             </div>
                         </div>
                         <h6>{{ "subscriptions.optionTitle" | translate }}</h6>
@@ -253,21 +258,23 @@
                         <div class="col-sm-12 col-md-12">
                             <div class="input-block mb-3">
                                 <label>{{ "subscriptions.description" | translate }}</label>
-                                <textarea type="text" class="form-control" placeholder="Enter Description"
-                                    formControlName="description"></textarea>
+                                <textarea type="text" class="form-control" 
+                                    [class.is-invalid]="submitted && form.get('description')?.invalid"
+                                    placeholder="Enter Description" formControlName="description"></textarea>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-12">
+                        <div class="col-sm-12 col-md-6">
                             <div class="input-block mb-3">
                                 <label class="d-flex justify-content-between">
                                     <span>{{ "subscriptions.price" | translate }}</span>
                                     <span class="text-primary"><i class="fa-solid fa-circle-exclamation me-2"></i>
-                                        {{ "subscriptions.zeroIfFree" | translate }}</span>
+                                        {{ currentUser?.countryId.currency }}</span>
                                 </label>
                                 <div class="input-group">
                                     <input class="form-control" style="text-align: right" type="text" id="price"
+                                        [class.is-invalid]="submitted && form.get('price')?.invalid"
                                         placeholder="" formControlName="price" (input)="formatAmount($event)" />
-                                    <span class="input-group-text">{{ currentUser?.countryId.currency }}</span>
+                                    <!-- <span class="input-group-text">{{ currentUser?.countryId.currency }}</span> -->
                                 </div>
                             </div>
                         </div>
@@ -393,7 +400,7 @@
                             {{ "services.alreadyVoteMsg" | translate }}
                         </div>
                         <button type="button" class="btn btn-primary btn-lg me-1 mb-2" style="padding: 5px;"
-                            (click)="isSubscriber = false">{{ "services.voteAgain" | translate }}</button>
+                            (click)="isSubscriber = false">{{ "services.payAgain" | translate }}</button>
                     </div>
                     <div *ngIf="!checkingSubscriptionStatus && !isSubscriber">
                         <div class="fee-breakdown">

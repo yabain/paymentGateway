@@ -38,7 +38,7 @@
                   </a>
                 </li>
                 <li>
-                  <a (click)="toggleChoice(false)" [class]="!isEmail ? 'active' : ''">{{ 'auth.phone' | translate }}
+                  <a (click)="toggleChoice(false)" [class]="!isEmail ? 'active' : ''">{{ 'auth.phone' | translate }} (Whatsapp) 
                     </a>
                 </li>
               </ul>
@@ -161,13 +161,12 @@
                 <div class="spinner-border" role="status"></div>
               </div>
             </div>
-
-
           </div>
           <div class="acc-in">
             <p>
               {{ 'auth.doNotHaveAccount' | translate}} ?
-              <a [routerLink]="routes.register">{{ 'auth.register' | translate}}</a>
+              <button class="btn btn-primary" [routerLink]="routes.register">{{ 'auth.register' | translate}}
+              </button>
             </p>
           </div>
         </div>

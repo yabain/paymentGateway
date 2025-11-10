@@ -6,6 +6,22 @@ import {
   customers,
 } from 'src/app/core/models/models';
 import { MatTableDataSource } from '@angular/material/table';
+import {
+  ChartComponent,
+  ApexAxisChartSeries,
+  ApexChart,
+  ApexXAxis,
+  ApexDataLabels,
+  ApexTitleSubtitle,
+  ApexStroke,
+  ApexGrid,
+  ApexPlotOptions,
+  ApexYAxis,
+  ApexLegend,
+  ApexTooltip,
+  ApexResponsive,
+  ApexFill,
+} from 'ng-apexcharts';
 
 import { Sort } from '@angular/material/sort';
 import { PaginationService, tablePageSize } from 'src/app/shared/sharedIndex';
@@ -15,6 +31,23 @@ import { ToastService } from 'src/app/services/toast/toast.service';
 import { debounceTime, distinctUntilChanged, Subject, switchMap, takeUntil } from 'rxjs';
 import { DateService } from 'src/app/services/pipe/date.service';
 
+export type ChartOptions = {
+  series: ApexAxisChartSeries | any;
+  chart: ApexChart | any;
+  xaxis: ApexXAxis | any;
+  dataLabels: ApexDataLabels | any;
+  grid: ApexGrid | any;
+  stroke: ApexStroke | any;
+  title: ApexTitleSubtitle | any;
+  plotOptions: ApexPlotOptions | any;
+  yaxis: ApexYAxis | any;
+  legend: ApexLegend | any;
+  tooltip: ApexTooltip | any;
+  responsive: ApexResponsive[] | any;
+  fill: ApexFill | any;
+  labels: string[] | any;
+  colors: string[] | any;
+};
 @Component({
   selector: 'app-customer-list',
   templateUrl: './customer-list.component.html',
@@ -38,6 +71,9 @@ export class CustomerListComponent implements OnInit, OnDestroy {
   page: number = 1;
   metadata: any;
   currentUser: any;
+  gettingStatistics: boolean = true;
+  public chartOptionsThree: Partial<ChartOptions>;
+
   //** / pagination variables
   constructor(
     private route: ActivatedRoute,
@@ -48,11 +84,136 @@ export class CustomerListComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private dateService: DateService,
   ) {
+    this.chartOptionsThree = {
+      series: [
+        {
+          name: 'Failed',
+          data: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        },
+        {
+          name: 'Success',
+          data: [, 0, 0, 0, 0, 0, 0, 0, 0],
+        },
+      ],
+      chart: {
+        type: 'bar',
+        height: 350,
+      },
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          columnWidth: '55%',
+        },
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      stroke: {
+        show: true,
+        width: 2,
+        colors: ['transparent'],
+      },
+      xaxis: {
+        categories: [
+          'Feb',
+          'Mar',
+          'Apr',
+          'May',
+          'Jun',
+          'Jul',
+          'Aug',
+          'Sep',
+          'Oct',
+        ],
+      },
+      yaxis: {
+        title: {
+          text: '$ (thousands)',
+        },
+      },
+      fill: {
+        opacity: 1,
+      },
+      tooltip: {
+        y: {
+          formatter: function (val: string) {
+            return '$ ' + val + ' thousands';
+          },
+        },
+      },
+    };
   }
 
   refresh() {
     this.customers = [];
     this.getCurrentUser();
+    this.getStatistics();
+  }
+
+  getStatistics() {
+    this.gettingStatistics = true;
+    this.userService.getStatistics().subscribe({
+      next: (res: any) => {
+        console.log('res charte 2: ', res);
+        this.idrateCharte2(res);
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
+  }
+  
+  idrateCharte2(res) {
+    this.chartOptionsThree = {
+      series: [
+        {
+          name: 'Organisation',
+          data: res.map((item) => item.organisation),
+        },
+        {
+          name: 'Personal',
+          data: res.map((item) => item.personal),
+        },
+      ],
+      chart: {
+        type: 'bar',
+        height: 350,
+      },
+      colors: ['#28a745', '#dc3545'],
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          columnWidth: '55%',
+        },
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      stroke: {
+        show: true,
+        width: 2,
+        colors: ['transparent'],
+      },
+      xaxis: {
+        categories: res.map((item) => item.month),
+      },
+      yaxis: {
+        title: {
+          text: 'Account(s)',
+        },
+      },
+      fill: {
+        opacity: 1,
+      },
+      tooltip: {
+        y: {
+          formatter: function (val: string) {
+            return val + ' emails';
+          },
+        },
+      },
+    };
+    this.gettingStatistics = false;
   }
 
   getData() {
@@ -96,13 +257,11 @@ export class CustomerListComponent implements OnInit, OnDestroy {
   }
   
   public getDate(date: string){
-    console.log('currentUser: ', this.currentUser)
     return this.dateService.formatDate(date,'short', this.currentUser.language);
   }
 
   async getCurrentUser() {
     this.currentUser = await this.userService.getCurrentUser();
-    console.log('currentUser 00: ', this.currentUser)
     this.getData();
   }
   public getUsersNumber(){
@@ -172,6 +331,7 @@ export class CustomerListComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.getCurrentUser();
+      this.getStatistics();
     });
   }  
 
@@ -182,7 +342,6 @@ export class CustomerListComponent implements OnInit, OnDestroy {
         this.userService.getAllUser(page).subscribe({
           next: (res: any) => {
             this.customers = res.data;
-            console.log('UsersList: ', this.customers);
             this.metadata = res.pagination;
             this.gettingUsers = false;
           },
@@ -191,7 +350,6 @@ export class CustomerListComponent implements OnInit, OnDestroy {
             console.log(err);
           },
         });
-        // console.log('polling');
       } catch (err) {
         console.warn('polling error', err);
       }

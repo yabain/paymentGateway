@@ -79,31 +79,68 @@ export class MailComponent implements OnInit {
   
   emailBody: string = "";
   metadata: any;
-  public chartOptionsSeven: Partial<ChartOptions>;
+  public chartOptionsThree: Partial<ChartOptions>;
+  gettingStatistics: boolean = true;
 
   constructor(private mailService: MailService) {
-    this.chartOptionsSeven = {
-      series: [0, 0, 0, 0],
-      chart: {
-        type: 'donut',
-        width: 250,
-        height: 250,
-      },
-      labels: [0, 'Successful', 0, 'Error'],
-      responsive: [
+    
+    this.chartOptionsThree = {
+      series: [
         {
-          breakpoint: 480,
-          options: {
-            chart: {
-              width: 200,
-              height: 200,
-            },
-            legend: {
-              position: 'bottom',
-            },
-          },
+          name: 'Failed',
+          data: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        },
+        {
+          name: 'Success',
+          data: [, 0, 0, 0, 0, 0, 0, 0, 0],
         },
       ],
+      chart: {
+        type: 'bar',
+        height: 350,
+      },
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          columnWidth: '55%',
+        },
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      stroke: {
+        show: true,
+        width: 2,
+        colors: ['transparent'],
+      },
+      xaxis: {
+        categories: [
+          'Feb',
+          'Mar',
+          'Apr',
+          'May',
+          'Jun',
+          'Jul',
+          'Aug',
+          'Sep',
+          'Oct',
+        ],
+      },
+      yaxis: {
+        title: {
+          text: '$ (thousands)',
+        },
+      },
+      fill: {
+        opacity: 1,
+      },
+      tooltip: {
+        y: {
+          formatter: function (val: string) {
+            return '$ ' + val + ' thousands';
+          },
+        },
+      },
     };
   }
 
@@ -161,33 +198,62 @@ export class MailComponent implements OnInit {
   refresh() {
     this.getSmtpData();
     this.getOutputMails();
+    this.getStatistics();
   }
-
-  idrateCharte(success: number, error: number){
-    this.chartOptionsSeven = {
-      series: [0, success, 0, error],
-      chart: {
-        type: 'donut',
-        width: 250,
-        height: 250,
-      },
-      labels: [0, 'Successful', 0, 'Error'],
-      responsive: [
+  
+  idrateCharte2(res) {
+    this.chartOptionsThree = {
+      series: [
         {
-          breakpoint: 480,
-          options: {
-            chart: {
-              width: 200,
-              height: 200,
-            },
-            legend: {
-              position: 'bottom',
-            },
-          },
+          name: 'Failed',
+          data: res.map((item) => item.failed),
+        },
+        {
+          name: 'Success',
+          data: res.map((item) => item.success),
         },
       ],
+      chart: {
+        type: 'bar',
+        height: 350,
+      },
+      colors: ['#28a745', '#dc3545'],
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          columnWidth: '55%',
+        },
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      stroke: {
+        show: true,
+        width: 2,
+        colors: ['transparent'],
+      },
+      xaxis: {
+        categories: res.map((item) => item.month),
+      },
+      yaxis: {
+        title: {
+          text: 'Emails',
+        },
+      },
+      fill: {
+        opacity: 1,
+      },
+      tooltip: {
+        y: {
+          formatter: function (val: string) {
+            return val + ' emails';
+          },
+        },
+      },
     };
+    this.gettingStatistics = false;
   }
+
 
   getOutputMails(page: number = 1, keyword?: string) {
     this.gettingtOutputMails = true
@@ -197,7 +263,6 @@ export class MailComponent implements OnInit {
           console.log(res);
           this.emailList = res.data;
           this.metadata = res.pagination;
-          this.idrateCharte(this.metadata.success, this.metadata.error);
           this.gettingtOutputMails = false
         },
         error: (err) => {
@@ -207,6 +272,19 @@ export class MailComponent implements OnInit {
           console.log(err);
         },
       });
+  }
+
+  getStatistics() {
+    this.gettingStatistics = true;
+    this.mailService.getStatistics().subscribe({
+      next: (res: any) => {
+        console.log('res charte 2: ', res);
+        this.idrateCharte2(res);
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
   }
 
 

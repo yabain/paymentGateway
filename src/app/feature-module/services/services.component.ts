@@ -42,6 +42,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
   options: any;
   form: FormGroup;
   watingCreation: boolean = false;
+  submitted: boolean = false;
   watingServicesList: boolean = true;
   servicesList: any;
   servicesListBackup: any;
@@ -304,8 +305,11 @@ export class ServicesComponent implements OnInit, OnDestroy {
       price: new FormControl(this.price, { validators: [Validators.required] }),
       options: this.fb.array([]),
     });
-
     this.addOptions();
+  }
+
+  formValid() {
+    return this.form.valid && this.optionsList.valid;
   }
 
   addOptions() {
@@ -347,10 +351,16 @@ export class ServicesComponent implements OnInit, OnDestroy {
   onSubmit() {
     if (!this.currentUser) return;
 
+    this.submitted = true;
+
     if (this.form.invalid || !this.optionsList.valid) {
-      this.form.markAllAsTouched();
-      this.optionsList.markAllAsTouched();
       this.toastService.presentToast('error', 'Invalid form', '', 5000);
+      return;
+    }
+
+    const price = +String(this.form.value.price ?? '').replace(/\s/g, '') || 0;
+    if (price < 100) {
+      this.toastService.presentToast('error', 'Error', 'Invalid Price (price < 100)', 5000);
       return;
     }
 

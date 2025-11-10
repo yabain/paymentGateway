@@ -142,4 +142,27 @@ export class MailService {
         }),
       );
   }
+
+  getStatistics(): Observable<boolean> {
+    return this.apiService
+      .getWithoutId('email/get-statistics')
+      .pipe(
+        map((res: any) => {
+          if (res) {
+            return res;
+          }
+          return false;
+        }),
+        catchError((err) => {
+          console.error('Error getting statistics:', err);
+          this.toastService.presentToast(
+            'error',
+            'Error',
+            'Error to get statistics',
+            7000,
+          );
+          return of(false);
+        }),
+      );
+  }
 }

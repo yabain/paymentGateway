@@ -184,8 +184,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
     if (idParam && idParam !== 'null' && idParam !== 'undefined') {
       [this.idParam, this.userId] = idParam.split('AAA');
     }
-    console.log('idParam', this.idParam);
-    console.log('userId', this.userId);
+    // console.log('idParam', this.idParam);
+    // console.log('userId', this.userId);
     this.getServiceDataById(this.idParam);
   }
 
@@ -211,6 +211,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
         return this.navigateTo('/');
       }
       this.serviceData = data;
+      console.log('serviceData', this.serviceData);
       this.optionsData = data.options;
 
       this.memoryImage = data.imageUrl;
@@ -247,8 +248,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
       this.isSubscriber = false;
       this.checkingSubscriptionStatus = false;
     }
-    console.log('plan', plan)
-    console.log('currentUser: ', this.currentUser);
+    // console.log('plan', plan)
+    // console.log('currentUser: ', this.currentUser);
 
     this.servicesService
       .checkSbscriberStatus(this.serviceData._id, this.currentUser._id || undefined)
@@ -340,7 +341,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
       };
       reader.readAsDataURL(event.target.files[0]);
       this.selectedImage = event.target.files[0];
-      console.log('img: ', this.selectedImage)
+      // console.log('img: ', this.selectedImage)
     } else {
       this.serviceData.imageUrl = 'assets/imgs/pictures/new_image.png';
       this.selectedImage = null;
@@ -471,6 +472,11 @@ export class DetailsComponent implements OnInit, OnDestroy {
       return;
     }
 
+    if(this.form.value.price < 100) {
+      this.toastService.presentToast('error', 'Invalid price', '', 5000);
+      return;
+    }
+
     const raw = this.form.getRawValue();
 
     raw.price = +String(raw.price ?? '').replace(/\s/g, '') || 0;
@@ -515,7 +521,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
         if (serviceData._id) {
           this.form.reset();
           this.optionsList.reset();
-          this.closeModal('add_newpackage');
+          this.closeModal('add_service');
           this.refresh();
           this.toastService.presentToast('success', 'Done !', '', 5000);
         } else {
@@ -713,7 +719,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   deleteService(planId) {
     this.servicesService.deleteService(planId).then((resp: any) => {
       this.toastService.presentToast('success', 'Done !', '', 5000);
-      this.navigateTo('/services/packages');
+      this.navigateTo('/services/services');
     });
   }
 

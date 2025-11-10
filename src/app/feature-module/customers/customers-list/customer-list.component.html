@@ -158,363 +158,269 @@
 </div>
 <!-- /Page Header -->
 
-<!-- Search Filter -->
-<div id="filter_inputs" class="card filter-card">
-  <div class="card-body pb-0">
-    <div class="row">
-      <div class="col-sm-6 col-md-3">
-        <div class="form-group">
-          <label htmlFor="label">Name</label>
-          <input id="label" type="text" class="form-control" />
-        </div>
-      </div>
-      <div class="col-sm-6 col-md-3">
-        <div class="form-group">
-          <label htmlFor="label">Email</label>
-          <input id="label" type="text" class="form-control" />
-        </div>
-      </div>
-      <div class="col-sm-6 col-md-3">
-        <div class="form-group">
-          <label htmlFor="label">Whatsapp</label>
-          <input id="label" type="text" class="form-control" />
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- /Search Filter -->
 
 <div class="row">
-  <div class="col-sm-12">
-    <div class="card-table">
-      <div class="card-body">
-        <div class="table-responsive">
-          <table class="table table-striped mb-0" *ngIf="!gettingUsers && customers?.length > 0">
-            <thead class="thead-light">
-              <tr>
-                <th>{{ "auth.username" | translate }}</th>
-                <th>{{ "auth.accountType" | translate }}</th>
-                <th>Whatsapp</th>
-                <th>{{ "users.creationDate" | translate }}</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody *ngIf="!gettingUsers && customers">
-              @for (customer of customers; track customer; let i = $index) {
-              <tr>
-                <td>
-                  <h2 class="table-avatar">
-                    <a [routerLink]="'/customer/details/' + customer._id" class="avatar avatar-md me-2"><img
-                        class="avatar-img rounded-circle" [src]="customer.pictureUrl" alt="User Image" /></a>
-                    <a [routerLink]="'/customer/details/' + customer._id">{{ getUserName(customer) }}
-                      <span>{{ customer.email }}</span>
-                    </a>
-                  </h2>
-                </td>
-                <td>
-                  {{ "users." + customer.accountType | translate }}
-                  <br><span style="color: #555454;">
-                    <img [src]="customer.countryId.flagUrl" alt="" style="width: 20px;">
-                    {{ customer.countryId.name | translate }}</span>
-                </td>
-                <td>{{ customer.whatsapp }}
-                </td>
-                <td>{{ getDate(customer.createdAt) }} {{ customer.createdAt | date: 'HH:mm' }}</td>
-                <td>
-                  <span [ngClass]="{
-                      'bg-success-light': customer.isActive != false,
-                      'bg-danger-light': customer.isActive === false
-                    }" class="badge badge-pill bg-success-light">{{ (customer.isActive === false ? 'users.disabled' :
-                    'users.enabled') | translate }}</span><br *ngIf="customer.isAdmin === true">
-                  <span class="badge badge-pill bg-warning-light" *ngIf="customer.isAdmin === true"
-                    style="color: #e89b00">
-                    <!-- <i class="fa fa-universal-access" data-bs-toggle="tooltip" title="feather icon-power"></i> -->
-                    Admin
-                  </span><br *ngIf="customer.verified === true">
-                  <span class="badge badge-pill bg-info-light" *ngIf="customer.verified === true"
-                    style="color: #063ac0">
-                    <!-- <i class="fa fa-universal-access" data-bs-toggle="tooltip" title="feather icon-power"></i> -->
-                    verified
-                  </span>
-                </td>
-                <td class="d-flex align-items-right">
-                  <div class="icons-items">
-                    <ul class="icons-list">
-                      <li data-bs-toggle="modal" data-bs-target="#enable_modal" *ngIf="customer.isActive === false"
-                        (click)="selectUser(customer)">
-                        <i class="feather icon-power" data-bs-toggle="tooltip" title="Enable user"
-                          style="color: green"></i>
-                      </li>
-                      <li data-bs-toggle="modal" data-bs-target="#disable_modal" *ngIf="customer.isActive != false"
-                        (click)="selectUser(customer)">
-                        <i class="feather icon-power" data-bs-toggle="tooltip" title="Disable user"
-                          style="color: red"></i>
-                      </li>
-                    </ul>
-                  </div>
-                  <!-- <a [routerLink]="routes.customerLedger" class="btn btn-greys me-2"><i
-                      class="fa-regular fa-eye me-1"></i> Ledger</a> -->
-                  <div class="dropdown dropdown-action">
-                    <a href="javascript:void(0);" class="btn-action-icon" data-bs-toggle="dropdown"
-                      aria-expanded="false"><i class="fas fa-ellipsis-v"></i></a>
-                    <div class="dropdown-menu dropdown-menu-end">
-                      <ul>
-                        <!-- <li>
-                          <a class="dropdown-item" [routerLink]="routes.editCustomer"><i
-                              class="far fa-edit me-2"></i>Edit</a>
-                        </li> -->
-                        <li *ngIf="customer.isActive === false">
-                          <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#enable_modal"
-                            (click)="selectUser(customer)"><i class="feather icon-power"></i>{{ "users.enable" |
-                            translate }}</a>
-                        </li>
-                        <li *ngIf="customer.isActive != false">
-                          <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#disable_modal"
-                            (click)="selectUser(customer)"><i class="feather icon-power"></i>{{ "users.disable" |
-                            translate }}</a>
-                        <li>
-                          <a class="dropdown-item"
-                            (click)="selectUser(customer); changeUserVerifiedStatus(customer._id)">
-                            <i class="feather icon-check-circle"></i>Verification</a>
-                        <li *ngIf="customer.isAdmin != true">
-                          <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#setAdmin_modal"
-                            (click)="selectUser(customer)"><i
-                              class="feather icon-check-circle me-2"></i>Administration</a>
-                        </li>
-                        <li *ngIf="customer.isAdmin === true">
-                          <a class="dropdown-item" (click)="selectUser(customer); changeUserAdminStatus(customer._id)">
-                            <i class="fa fa-universal-access me-2"></i>Administration</a>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-              }
-            </tbody>
-          </table>
-          <div *ngIf="gettingUsers && customers?.length === 0"
-            class="row d-flex align-items-cente justify-content-center">
-            <!-- <img src="assets/img/ressorces/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;"> -->
-            <div class="spinner-border text-primary" role="status" style="margin: 20px;">
-              <span class="visually-hidden">{{ "loading" | translate }}...</span>
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-md-8">
+            <div class="chart" *ngIf="!gettingStatistics">
+              <apx-chart [series]="chartOptionsThree.series" [chart]="chartOptionsThree.chart"
+                [dataLabels]="chartOptionsThree.dataLabels" [plotOptions]="chartOptionsThree.plotOptions"
+                [yaxis]="chartOptionsThree.yaxis" [legend]="chartOptionsThree.legend" [fill]="chartOptionsThree.fill"
+                [stroke]="chartOptionsThree.stroke" [tooltip]="chartOptionsThree.tooltip"
+                [xaxis]="chartOptionsThree.xaxis"></apx-chart>
+            </div>
+            <div *ngIf="gettingStatistics" class="row d-flex align-items-cente justify-content-center">
+              <div class="spinner-border text-primary" role="status" style="margin: 20px;">
+                <span class="visually-hidden">{{ "loading" | translate }}...</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <p style="color: black" *ngIf="metadata">
+              Total: {{ metadata?.totalItem }} <br><br>
+              <span style="color: #04c714;">O</span> Personal: {{ metadata?.totalPersonal }} <br><br>
+              <span style="color: #044ddf;">O</span> Organisation: {{ metadata?.totalOrganisation }}
+            </p>
+            <div *ngIf="!metadata" class="row d-flex align-items-cente justify-content-center">
+              <div class="spinner-border text-primary" role="status" style="margin: 20px;">
+                <span class="visually-hidden">{{ "loading" | translate }}...</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="card-footer">
-        <div *ngIf="!gettingUsers && customers?.length > 0">
-          <button class="btn btn-primary m-2" (click)="previousPage()" *ngIf="page !== 1">
-            << </button>
-              <button class="btn btn-block btn-outline-light active m-2">Page: {{ page }} / {{ metadata?.totalPages
-                }}</button>
-              <button class="btn btn-primary m-2" (click)="nextPage()" *ngIf="metadata?.hasNextPage">
-                >> </button>
-        </div>
-      </div>
 
-
-    </div>
-  </div>
-</div>
-
-<!-- Add Asset -->
-<div class="toggle-sidebar ledge" [ngClass]="{'open-filter' : toggleData === true}">
-  <div class="sidebar-layout-filter">
-    <div class="sidebar-header ledge">
-      <h5>PayIn</h5>
-      <a href="javascript:void(0);" (click)="openContent()" (keydown.enter)="openContent()" tabindex="0"
-        class="sidebar-closes"><i class="fa-regular fa-circle-xmark"></i></a>
-    </div>
-    <div class="sidebar-header submenu">
-      <h6>Test Company</h6>
-      <p class="text-success-light">Balance: $400</p>
-    </div>
-    <div class="sidebar-body">
-      <form action="#" autocomplete="off">
-        <!-- Customer -->
-        <div class="accordion accordion-last" id="accordionMain1">
-          <div class="card-header-new" id="headingOne">
-            <h6 class="filter-title">
-              <a href="javascript:void(0);" class="w-100" data-bs-toggle="collapse" data-bs-target="#collapseOne"
-                aria-expanded="true" aria-controls="collapseOne">
-                Customers
-                <span class="float-end"><i class="fa-solid fa-chevron-down"></i></span>
-              </a>
-            </h6>
-          </div>
-
-          <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample1">
-            <div class="card-body-chat">
-              <div class="row">
-                <div class="col-md-12">
-                  <div id="checkBoxes1">
-                    <div class="form-custom">
-                      <input type="text" class="form-control" id="member_search1" placeholder="Search Customer">
-                      <span><img src="assets/img/icons/search.svg" alt="img"></span>
-                    </div>
-                    <div class="selectBox-cont">
-                      <label class="custom_check w-100">
-                        <input type="checkbox" name="username">
-                        <span class="checkmark"></span> John Smith
-                      </label>
-                      <label class="custom_check w-100">
-                        <input type="checkbox" name="username">
-                        <span class="checkmark"></span> Johnny Charles
-                      </label>
-                      <label class="custom_check w-100">
-                        <input type="checkbox" name="username">
-                        <span class="checkmark"></span> Robert George
-                      </label>
-                      <label class="custom_check w-100">
-                        <input type="checkbox" name="username">
-                        <span class="checkmark"></span> Sharonda Letha
-                      </label>
-                      <!-- View All -->
-                      <div class="view-content">
-                        <div class="viewall-One">
-                          @for (user of customers; track user) {
-                          <label class="custom_check w-100" [ngClass]="{ closed: !isCollapsed, open: isCollapsed }">
-                            <input type="checkbox" name="username" [(ngModel)]="user.checked">
-                            <span class="checkmark"></span> {{ user.name }}
-                          </label>
-                          }
-                        </div>
-                        <div class="view-all">
-                          <a (click)="toggleCollapse()" href="javascript:void(0);" class="viewall-button-One"><span
-                              class="me-2">{{ isCollapsed ? "Close All" : "View All" }}</span><span><i
-                                class="fa fa-circle-chevron-down"></i></span></a>
-                        </div>
-                      </div>
-                      <!-- /View All -->
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="card-table">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-striped mb-0" *ngIf="!gettingUsers && customers?.length > 0">
+                    <thead class="thead-light">
+                      <tr>
+                        <th>{{ "auth.username" | translate }}</th>
+                        <th>{{ "auth.accountType" | translate }}</th>
+                        <th>Whatsapp</th>
+                        <th>{{ "users.creationDate" | translate }}</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody *ngIf="!gettingUsers && customers">
+                      @for (customer of customers; track customer; let i = $index) {
+                      <tr>
+                        <td>
+                          <h2 class="table-avatar">
+                            <a [routerLink]="'/customer/details/' + customer._id" class="avatar avatar-md me-2"><img
+                                class="avatar-img rounded-circle" [src]="customer.pictureUrl" alt="User Image" /></a>
+                            <a [routerLink]="'/customer/details/' + customer._id">{{ getUserName(customer) }}
+                              <span>{{ customer.email }}</span>
+                            </a>
+                          </h2>
+                        </td>
+                        <td>
+                          {{ "users." + customer.accountType | translate }}
+                          <br><span style="color: #555454;">
+                            <img [src]="customer.countryId.flagUrl" alt="" style="width: 20px;">
+                            {{ customer.countryId.name | translate }}</span>
+                        </td>
+                        <td>{{ customer.whatsapp }}
+                        </td>
+                        <td>{{ getDate(customer.createdAt) }} {{ customer.createdAt | date: 'HH:mm' }}</td>
+                        <td>
+                          <span [ngClass]="{
+                      'bg-success-light': customer.isActive != false,
+                      'bg-danger-light': customer.isActive === false
+                    }" class="badge badge-pill bg-success-light">{{ (customer.isActive === false ? 'users.disabled' :
+                            'users.enabled') | translate }}</span><br *ngIf="customer.isAdmin === true">
+                          <span class="badge badge-pill bg-warning-light" *ngIf="customer.isAdmin === true"
+                            style="color: #e89b00">
+                            <!-- <i class="fa fa-universal-access" data-bs-toggle="tooltip" title="feather icon-power"></i> -->
+                            Admin
+                          </span><br *ngIf="customer.verified === true">
+                          <span class="badge badge-pill bg-info-light" *ngIf="customer.verified === true"
+                            style="color: #063ac0">
+                            <!-- <i class="fa fa-universal-access" data-bs-toggle="tooltip" title="feather icon-power"></i> -->
+                            verified
+                          </span>
+                        </td>
+                        <td class="d-flex align-items-right">
+                          <div class="icons-items">
+                            <ul class="icons-list">
+                              <li data-bs-toggle="modal" data-bs-target="#enable_modal"
+                                *ngIf="customer.isActive === false" (click)="selectUser(customer)">
+                                <i class="feather icon-power" data-bs-toggle="tooltip" title="Enable user"
+                                  style="color: green"></i>
+                              </li>
+                              <li data-bs-toggle="modal" data-bs-target="#disable_modal"
+                                *ngIf="customer.isActive != false" (click)="selectUser(customer)">
+                                <i class="feather icon-power" data-bs-toggle="tooltip" title="Disable user"
+                                  style="color: red"></i>
+                              </li>
+                            </ul>
+                          </div>
+                          <!-- <a [routerLink]="routes.customerLedger" class="btn btn-greys me-2"><i
+                      class="fa-regular fa-eye me-1"></i> Ledger</a> -->
+                          <div class="dropdown dropdown-action">
+                            <a href="javascript:void(0);" class="btn-action-icon" data-bs-toggle="dropdown"
+                              aria-expanded="false"><i class="fas fa-ellipsis-v"></i></a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                              <ul>
+                                <!-- <li>
+                          <a class="dropdown-item" [routerLink]="routes.editCustomer"><i
+                              class="far fa-edit me-2"></i>Edit</a>
+                        </li> -->
+                                <li *ngIf="customer.isActive === false">
+                                  <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#enable_modal"
+                                    (click)="selectUser(customer)"><i class="feather icon-power"></i>{{ "users.enable" |
+                                    translate }}</a>
+                                </li>
+                                <li *ngIf="customer.isActive != false">
+                                  <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#disable_modal"
+                                    (click)="selectUser(customer)"><i class="feather icon-power"></i>{{ "users.disable"
+                                    |
+                                    translate }}</a>
+                                <li>
+                                  <a class="dropdown-item"
+                                    (click)="selectUser(customer); changeUserVerifiedStatus(customer._id)">
+                                    <i class="feather icon-check-circle"></i>Verification</a>
+                                <li *ngIf="customer.isAdmin != true">
+                                  <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#setAdmin_modal"
+                                    (click)="selectUser(customer)"><i
+                                      class="feather icon-check-circle me-2"></i>Administration</a>
+                                </li>
+                                <li *ngIf="customer.isAdmin === true">
+                                  <a class="dropdown-item"
+                                    (click)="selectUser(customer); changeUserAdminStatus(customer._id)">
+                                    <i class="fa fa-universal-access me-2"></i>Administration</a>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                      }
+                    </tbody>
+                  </table>
+                  <div *ngIf="gettingUsers && customers?.length === 0"
+                    class="row d-flex align-items-cente justify-content-center">
+                    <!-- <img src="assets/img/ressorces/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;"> -->
+                    <div class="spinner-border text-primary" role="status" style="margin: 20px;">
+                      <span class="visually-hidden">{{ "loading" | translate }}...</span>
                     </div>
                   </div>
                 </div>
               </div>
+              <div class="card-footer">
+                <div *ngIf="!gettingUsers && customers?.length > 0">
+                  <button class="btn btn-primary m-2" (click)="previousPage()" *ngIf="page !== 1">
+                    << </button>
+                      <button class="btn btn-block btn-outline-light active m-2">Page: {{ page }} / {{
+                        metadata?.totalPages
+                        }}</button>
+                      <button class="btn btn-primary m-2" (click)="nextPage()" *ngIf="metadata?.hasNextPage">
+                        >> </button>
+                </div>
+              </div>
+
+
             </div>
           </div>
         </div>
-        <!-- /Customer -->
-        <div class="accordion" id="accordionMain2">
-          <div class="col-lg-12 col-sm-12">
-            <div class="input-block mb-3">
-              <label for="Amount">Enter Amount</label>
-              <input type="text" class="form-control" placeholder="Enter Amount">
-            </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Disable Items Modal -->
+  <div class="modal custom-modal fade" id="disable_modal" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="form-header">
+            <h3>{{ "users.deactivation" | translate }}</h3>
+            <p>{{ "users.disableMessage" | translate }} <b style="color: black;">{{ selectedUser ?
+                getUserName(selectedUser) : ''}}</b> ?</p>
           </div>
-          <div class="col-lg-12 col-md-12">
-            <div class="input-block mb-3">
-              <label for="Payment">Payment Date</label>
-              <div class="cal-icon cal-icon-info">
-                <input type="text" class="datetimepicker form-control" placeholder="Select Date" bsDatepicker
-                  [bsConfig]="{ adaptivePosition: true }">
+          <div class="modal-btn delete-action">
+            <div class="row">
+              <div class="col-6">
+                <button type="reset" data-bs-dismiss="modal" (click)="changeUserActiveStatus()"
+                  class="w-100 btn btn-primary paid-continue-btn">
+                  {{ "users.disable" | translate }}
+                </button>
+              </div>
+              <div class="col-6">
+                <button type="submit" data-bs-dismiss="modal" class="w-100 btn btn-primary paid-cancel-btn">
+                  {{ "users.cancel" | translate }}
+                </button>
               </div>
             </div>
           </div>
-          <div class="input-block mb-3 notes-form-group-info">
-            <label for="Notes">Notes</label>
-            <textarea class="form-control" placeholder="Enter your notes"></textarea>
-          </div>
-          <div class="modal-footer">
-            <a href="javascript:void(0);" data-bs-dismiss="modal" class="btn btn-back cancel-btn me-2">Cancel</a>
-            <a href="javascript:void(0);" data-bs-dismiss="modal" class="btn btn-primary paid-continue-btn">Add
-              Payment</a>
-          </div>
         </div>
-      </form>
+      </div>
     </div>
   </div>
-</div>
-<!--/Add Asset -->
 
-<!-- Disable Items Modal -->
-<div class="modal custom-modal fade" id="disable_modal" role="dialog">
-  <div class="modal-dialog modal-dialog-centered modal-md">
-    <div class="modal-content">
-      <div class="modal-body">
-        <div class="form-header">
-          <h3>{{ "users.deactivation" | translate }}</h3>
-          <p>{{ "users.disableMessage" | translate }} <b style="color: black;">{{ selectedUser ?
-              getUserName(selectedUser) : ''}}</b> ?</p>
-        </div>
-        <div class="modal-btn delete-action">
-          <div class="row">
-            <div class="col-6">
-              <button type="reset" data-bs-dismiss="modal" (click)="changeUserActiveStatus()"
-                class="w-100 btn btn-primary paid-continue-btn">
-                {{ "users.disable" | translate }}
-              </button>
-            </div>
-            <div class="col-6">
-              <button type="submit" data-bs-dismiss="modal" class="w-100 btn btn-primary paid-cancel-btn">
-                {{ "users.cancel" | translate }}
-              </button>
+  <!-- Enable Items Modal -->
+  <div class="modal custom-modal fade" id="enable_modal" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="form-header">
+            <h3>{{ "users.activation" | translate }}</h3>
+            <p>{{ "users.enableMessage" | translate }} <b style="color: black;">{{ selectedUser ?
+                getUserName(selectedUser) : ''}}</b> ?</p>
+          </div>
+          <div class="modal-btn delete-action">
+            <div class="row">
+              <div class="col-6">
+                <button type="reset" data-bs-dismiss="modal" (click)="changeUserActiveStatus()"
+                  class="w-100 btn btn-primary paid-continue-btn">
+                  {{ "users.enable" | translate }}
+                </button>
+              </div>
+              <div class="col-6">
+                <button type="submit" data-bs-dismiss="modal" class="w-100 btn btn-primary paid-cancel-btn">
+                  {{ "users.cancel" | translate }}
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Enable Items Modal -->
-<div class="modal custom-modal fade" id="enable_modal" role="dialog">
-  <div class="modal-dialog modal-dialog-centered modal-md">
-    <div class="modal-content">
-      <div class="modal-body">
-        <div class="form-header">
-          <h3>{{ "users.activation" | translate }}</h3>
-          <p>{{ "users.enableMessage" | translate }} <b style="color: black;">{{ selectedUser ?
-              getUserName(selectedUser) : ''}}</b> ?</p>
-        </div>
-        <div class="modal-btn delete-action">
-          <div class="row">
-            <div class="col-6">
-              <button type="reset" data-bs-dismiss="modal" (click)="changeUserActiveStatus()"
-                class="w-100 btn btn-primary paid-continue-btn">
-                {{ "users.enable" | translate }}
-              </button>
-            </div>
-            <div class="col-6">
-              <button type="submit" data-bs-dismiss="modal" class="w-100 btn btn-primary paid-cancel-btn">
-                {{ "users.cancel" | translate }}
-              </button>
+  <!-- Disable Items Modal -->
+  <div class="modal custom-modal fade" id="setAdmin_modal" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="form-header">
+            <h3>Admin</h3>
+            <p>{{ "users.setAdminMsg1" | translate }} <b style="color: black;">{{ selectedUser ?
+                getUserName(selectedUser) : ''}}</b> {{ "users.setAdminMsg2" | translate }} ?</p>
+          </div>
+          <div class="modal-btn delete-action">
+            <div class="row">
+              <div class="col-6">
+                <button type="reset" data-bs-dismiss="modal" (click)="changeUserAdminStatus()"
+                  class="w-100 btn btn-primary paid-continue-btn">
+                  {{ "users.setAdmin" | translate }}
+                </button>
+              </div>
+              <div class="col-6">
+                <button type="submit" data-bs-dismiss="modal" class="w-100 btn btn-primary paid-cancel-btn">
+                  {{ "users.cancel" | translate }}
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-
-<!-- Disable Items Modal -->
-<div class="modal custom-modal fade" id="setAdmin_modal" role="dialog">
-  <div class="modal-dialog modal-dialog-centered modal-md">
-    <div class="modal-content">
-      <div class="modal-body">
-        <div class="form-header">
-          <h3>Admin</h3>
-          <p>{{ "users.setAdminMsg1" | translate }} <b style="color: black;">{{ selectedUser ?
-              getUserName(selectedUser) : ''}}</b> {{ "users.setAdminMsg2" | translate }} ?</p>
-        </div>
-        <div class="modal-btn delete-action">
-          <div class="row">
-            <div class="col-6">
-              <button type="reset" data-bs-dismiss="modal" (click)="changeUserAdminStatus()"
-                class="w-100 btn btn-primary paid-continue-btn">
-                {{ "users.setAdmin" | translate }}
-              </button>
-            </div>
-            <div class="col-6">
-              <button type="submit" data-bs-dismiss="modal" class="w-100 btn btn-primary paid-cancel-btn">
-                {{ "users.cancel" | translate }}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>

@@ -46,6 +46,7 @@
     "loginForDonation": "Se connecter pour un don",
     "logout": "Se déconnecter",
     "register": "S'enregistrer",
+    "registerFree": "Je créé mon compte gratuitement",
     "username": "Nom d'utilisateur",
     "email": "E-mail",
     "doNotHaveAccount": "Vous n'avez pas de compte",
@@ -694,10 +695,10 @@
     "serviceDetails": "Détails du service",
     "info": "Détails",
     "add": "Ajouter un service",
-    "vote": "Voter",
-    "voteAgain": "Voter à nouveau",
-    "alreadyVoteMsg": "Vous avez déjà éffectué un vote",
-    "loginToVote": "Voter / Connexion"
+    "pay": "Payer",
+    "payAgain": "Payer à nouveau",
+    "alreadyPayMsg": "Vous avez déjà éffectué un paiement",
+    "loginToPay": "Connexion / Payer"
   },
   "personalizer": {
     "title": "Personnalisateur",

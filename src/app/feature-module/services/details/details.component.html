@@ -78,7 +78,7 @@
                                                 <button class="btn btn-rounded btn-primary me-1" data-bs-toggle="modal"
                                                     data-bs-target="#subscriptionModal"
                                                     *ngIf="currentUser && !isAuthor(serviceData) && serviceData?.isActive">
-                                                    {{ 'services.vote' | translate }}</button>
+                                                    {{ 'services.pay' | translate }}</button>
                                                 <button class="btn btn-rounded btn-primary me-1" *ngIf="!currentUser"
                                                     (click)="navigateTo('/auth/login')">
                                                     {{ 'auth.login' | translate }}</button>
@@ -158,8 +158,8 @@
                                 <div class="col-xl-12 col-lg-12 col-md-12 col-12">
                                     <div class="customer-details">
                                         <div class="d-flex align-items-center">
-                                            <span class="customer-widget-img d-inline-flex" style="padding-right: 0 !important;">
-                                                <img class="rounded-circle"
+                                            <span class="customer-widget-img d-inline-flex" style="padding-right: 0 !important; margin-right: 30px;">
+                                                <img class="rounded-circle profilesidebar"
                                                     [src]="serviceData ? serviceData?.author.pictureUrl : 'assets/img/new/user.png'"
                                                     alt="image">
                                                 <!-- <span class="animate-circle"></span> -->
@@ -371,7 +371,7 @@
                             {{ "services.alreadyVoteMsg" | translate }}
                         </div>
                         <button type="button" class="btn btn-primary btn-lg me-1 mb-2" style="padding: 5px;"
-                            (click)="isSubscriber = false">{{ "services.voteAgain" | translate }}</button>
+                            (click)="isSubscriber = false">{{ "services.payAgain" | translate }}</button>
                     </div>
                     <div *ngIf="!checkingSubscriptionStatus && !isSubscriber">
                         <div class="fee-breakdown">

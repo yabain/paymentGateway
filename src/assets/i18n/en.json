@@ -46,6 +46,7 @@
     "loginForDonation": "Login make donation",
     "logout": "Log out",
     "register": "Sign Up",
+    "registerFree": "Sign up for free",
     "username": "Username",
     "email": "Email",
     "doNotHaveAccount": "Don't have an account",
@@ -122,7 +123,7 @@
     "selectCity": "Select your city",
     "allreadyHaveAccount": "Already have an account?",
     "leftLoginMessage": "Access to our dashboard, Please login to continue your session!",
-    "leftLoginSubMessage": "Gestion des factures sans effort pour votre entreprise",
+    "leftLoginSubMessage": "Effortless invoice management for your business",
     "leftRegisterMessage": "Take control of your invoicing process. Sign up for a account today.",
     "leftRegisterSubMessage": "Effortless Invoice Management for Your Business"
   },
@@ -691,13 +692,13 @@
     "enableMessage": "Are you sure you want to activate?",
     "cancel": "Cancel",
     "serviceDetails": "Service details",
-    "info": "Détails",
-    "add": "Ajouter un service",
-    "vote": "Vote",
-    "voteAgain": "Vote again",
-    "alreadyVoteMsg": "You have already voted",
-    "loginToVote": "Login to Vote",
-    "imageTooLarge": "Taille de l'image trop grande (max 1mb)"
+    "info": "Details",
+    "add": "Add service",
+    "pay": "Payer",
+    "payAgain": "Pay again",
+    "alreadyPayMsg": "You have already pay",
+    "loginToPay": "Login to pay",
+    "imageTooLarge": "Image too large (max 1mb)"
   },
   "personalizer": {
     "title": "Customizer",
