@@ -478,7 +478,9 @@
     "balance": "Balance",
     "service": "Service",
     "invoice": "Invoice",
-    "inWords": "In words"
+    "inWords": "In words",
+    "scanToViewInvoice": "Scan to View invoice",
+    "invoiceRef": "References"
   },
   "whatsapp": {
     "title": "WhatsApp center",

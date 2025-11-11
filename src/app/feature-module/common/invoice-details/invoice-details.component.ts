@@ -28,6 +28,7 @@ export class InvoiceDetailsComponent implements OnInit, OnDestroy {
   currentUser: any;
   status: string = 'transaction_initialized';
   planData: any
+  logoUrl: string = 'assets/img/ressorces/dk_logo.png';
 
   @ViewChild('closeModal') closeModal: ElementRef;
 
@@ -40,7 +41,6 @@ export class InvoiceDetailsComponent implements OnInit, OnDestroy {
     private numberToWordsService: NumberToWordsService
   ) {
     this.getCurrentUser();
-    console.log('transactionData', this.transactionData);
   }
 
   ngOnInit(): void {

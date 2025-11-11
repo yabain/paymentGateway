@@ -479,7 +479,9 @@
     "balance": "Solde",
     "service": "Service",
     "invoice": "Facture",
-    "inWords": "en lettre"
+    "inWords": "en lettre",
+    "scanToViewInvoice": "Voir la facture",
+    "invoiceRef": "Réferences"
   },
   "whatsapp": {
     "title": "WhatsApp",

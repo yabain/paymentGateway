@@ -50,6 +50,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
 
   selectTransaction(transaction) {
     this.selectedTransaction = transaction;
+    console.log('selectedTransaction: ', this.selectedTransaction);
   }
 
   public exportToPdf(transaction): void {

@@ -411,7 +411,7 @@
     <br>
     <div class="modal-body">
         <div class="form-header modal-header-title text-start mb-0"
-            *ngIf="currentUser?.isAdmin && transactionData?._id">
+            *ngIf="currentUser?.isAdmin && transactionData?._id && !processing">
             <span
                 *ngIf="transactionData?.status === 'transaction_payout_error'">
 

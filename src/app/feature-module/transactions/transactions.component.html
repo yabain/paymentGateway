@@ -147,9 +147,9 @@
 
 
 <div class="modal custom-modal fade invoices-preview" id="invoices_preview" role="dialog">
-  <app-invoice-details [transactionData]="selectedTransaction"></app-invoice-details>
+  <app-invoice-details [transactionData]="selectedTransaction" [inModal]="true"></app-invoice-details>
 </div>
 
-<div *ngIf="printing" id="selectedInvoice">
+<div *ngIf="printing" id="selectedInvoice" style="min-width: 2000px;">
   <app-invoice-details [transactionData]="selectedTransaction" [inModal]="false"></app-invoice-details>
 </div>

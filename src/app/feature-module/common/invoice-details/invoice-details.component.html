@@ -1,5 +1,13 @@
 <div class="modal-dialog modal-dialog-centered modal-xl">
-    <div class="main-wrapper invoice-one">
+    <style *ngIf="printing">
+        .modal-dialog { max-width: none !important; width: 100% !important; }
+        .row { flex-wrap: nowrap !important; }
+        .col, [class*="col-"] { flex: 0 0 auto !important; min-width: 0 !important; }
+        @media (max-width: 768px) {
+            .col-lg-4, .col-lg-6, .col-md-6, .col-md-12 { flex: 0 0 auto !important; width: auto !important; }
+        }
+    </style>
+    <div class="main-wrapper invoice-one" style="margin: 0 !important;">
         <div class="modal-content">
             <div class="modal-body" *ngIf="inModal">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeModal
@@ -11,11 +19,18 @@
                     <span class="line"></span>
                     <div class="invoice-header">
                         <div class="inv-header-left">
-                            <h4 style="color: #021d66">{{ 'payment.invoice' | translate }}</h4>
+                            <img [src]="logoUrl" alt="" style="max-width: 150px;" *ngIf="transactionData?.transactionType === 'transfer' 
+                            || transactionData?.transactionType === 'transfer'
+                            || transactionData?.transactionType === 'withdrawal'">
+                            <h4 class="organisation-name" *ngIf="transactionData?.transactionType != 'transfer'
+                            && transactionData?.transactionType != 'transfer'
+                            && transactionData?.transactionType != 'withdrawal'">{{transactionData?.senderName}}</h4>
                             <div class="company-details">
                                 <div class="gst-details">
                                     <h6>{{ "payment." + transactionData?.transactionType | translate }}</h6>
-                                    <!-- <span>Address:15 Hodges Mews,<br> High Wycombe HP12 3JL, United Kingdom.</span> -->
+                                    <span *ngIf="transactionData?.transactionType != 'subscriptio'" style="font-size: 13px;">
+                                        {{planData?.title}}<br> {{planData?.subTitle}}
+                                    </span>
                                 </div>
                                 <div class="address-bg"></div>
                             </div>
@@ -24,7 +39,7 @@
                             <a href="javascript:void(0);">
                                 <!-- Kanaku -->
                                 <!-- <img src="assets/img/logo2.png" alt="Logo"> -->
-                                <h3>{{transactionData?.senderName}}</h3>
+                                <h3>{{ 'payment.invoice' | translate }}</h3>
                             </a>
                             <h6>Ref. : {{transactionData?.transactionRef}}</h6>
                             <h6>Date : {{transactionData?.updatedAt | date: 'dd/MM/yyyy' }}</h6>
@@ -88,6 +103,7 @@
                                         <!-- <h6 class="invoice-name">{{transactionData?.receiverName}}</h6> -->
                                         <p class="invoice-details invoice-details-two">
                                             {{transactionData?.receiverName}} <br>
+                                            {{transactionData?.receiverCountry}} <br>
                                             {{transactionData?.receiverContact}} <br>
                                             {{transactionData?.receiverEmail}} <br>
                                             {{transactionData?.receiverAddress}} <br>
@@ -141,9 +157,9 @@
                                                 <td>1</td>
                                                 <td>{{ 'payment.' + transactionData?.transactionType | translate
                                                     }}
-                                                    <span *ngIf="transactionData?.transactionType === 'transfer'">|
+                                                    <span *ngIf="transactionData?.transactionType === 'transfer'">
                                                         {{ transactionData?.raisonForTransfer }}</span>
-                                                    <span *ngIf="transactionData?.transactionType === 'subscription'">|
+                                                    <span *ngIf="transactionData?.transactionType === 'subscription'">
                                                         {{ planData?.title }}</span>
                                                 </td>
                                                 <td *ngIf="transactionData?.transactionType === 'subscription'
@@ -164,14 +180,6 @@
                                                 <td class="text-end">{{transactionData?.estimation}}
                                                     {{transactionData?.receiverCurrency}}
                                                 </td>
-                                            </tr>
-                                            <tr>
-                                                <td></td>
-                                                <td *ngIf="transactionData?.transactionType === 'subscription'
-                                                        || transactionData?.transactionType === 'payment'"></td>
-                                                <td *ngIf="transactionData?.transactionType === 'subscription'
-                                                        || transactionData?.transactionType === 'payment'"></td>
-                                                <th></th>
                                             </tr>
                                             <tr>
                                                 <td></td>
@@ -237,12 +245,12 @@
                                 <div class="payment-info">
                                     <div class="qr">
                                         <img src="assets/img/qr-code.svg" alt="qr">
-                                        <h6 class="scan-details">Scan to View Receipt</h6>
+                                        <h6 class="scan-details"> {{ 'payment.scanToViewInvoice' | translate }} </h6>
                                     </div>
                                     <div class="pay-details">
-                                        <span class="payment-title">Payment Info:</span>
-                                        <div><span>Debit Card :</span> 465 *************645</div>
-                                        <div class="mb-0"><span>Amount :</span> $1,815</div>
+                                        <span class="payment-title"> {{ 'payment.invoiceRef' | translate }} :</span>
+                                        <div><span>Id :</span> {{ transactionData?._id}} </div>
+                                        <div class="mb-0"><span>Ref. :</span> {{transactionData?.transactionRef}}</div>
                                     </div>
 
                                 </div>
