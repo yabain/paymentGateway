@@ -16,7 +16,6 @@
     <p>{{ plan.subTitle }} </p>
     <h2 *ngIf="plan.price > 0">{{ plan.price }} {{ plan.currency }}</h2>
     <h2 *ngIf="plan.price === 0">{{ "item.free" | translate }}</h2>
-    <h4 *ngIf="plan.test">{{ plan.test }} Votes</h4>
     <!-- <h6>{{ 'subscriptions.WhatIncluded' | translate }}</h6>
         <ul>
             <li *ngFor="let option of optionsData">

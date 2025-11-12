@@ -7,4 +7,5 @@
     <p class="card-description">{{ service.subTitle }}</p>
     <h5 *ngIf="service.price > 0">{{ service.price }} {{ service.currency }}</h5>
     <h5 *ngIf="service.price === 0">{{ "item.free" | translate }}</h5>
+    <p *ngIf="service.test">{{ service.test }} Votes</p>
 </div>
