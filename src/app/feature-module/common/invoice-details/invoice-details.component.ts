@@ -17,6 +17,8 @@ import { Subject } from 'rxjs/internal/Subject';
 import { DateService } from 'src/app/services/pipe/date.service';
 import { SubscriptionService } from 'src/app/services/subscription/subscription.service';
 import { NumberToWordsService } from 'src/app/services/number-to-words/number-to-words.service';
+import * as QRCode from 'qrcode';
+
 @Component({
   selector: 'app-invoice-details',
   templateUrl: './invoice-details.component.html',
@@ -24,11 +26,12 @@ import { NumberToWordsService } from 'src/app/services/number-to-words/number-to
 })
 export class InvoiceDetailsComponent implements OnInit, OnDestroy {
   @Input() transactionData: any;
-  @Input() inModal?: boolean = true;
+  @Input() inModal?: boolean = false;
   currentUser: any;
   status: string = 'transaction_initialized';
   planData: any
   logoUrl: string = 'assets/img/ressorces/dk_logo.png';
+  qrCode: string;
 
   @ViewChild('closeModal') closeModal: ElementRef;
 
@@ -48,6 +51,7 @@ export class InvoiceDetailsComponent implements OnInit, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['transactionData'] && this.transactionData) {
+      this.qrCode = 'https://payments.digikuntz.com/invoice/' + this.transactionData._id;
       if (this.transactionData.transactionType === 'subscription') {
         this.getPlanDataById(this.transactionData.planId);
       }

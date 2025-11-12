@@ -481,7 +481,9 @@
     "invoice": "Facture",
     "inWords": "en lettre",
     "scanToViewInvoice": "Voir la facture",
-    "invoiceRef": "Réferences"
+    "invoiceRef": "Réferences",
+    "terms1": "digiKUNTZ Payments n'est pas responsable des transactions entre utilisateurs",
+    "terms2": "Avant toute transaction, Assurez-vous que l'utilisateur est authentifié"
   },
   "whatsapp": {
     "title": "WhatsApp",

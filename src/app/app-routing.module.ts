@@ -4,6 +4,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import { PaymentComponent } from './payment/payment.component';
 import { LoggedInGuard } from './core/guards/loggedIn/logged-in.guard';
 import { PageComponent } from './front/page/page.component';
+import { InvoiceComponent } from './invoice/invoice.component';
 
 const routes: Routes = [
   {
@@ -22,6 +23,10 @@ const routes: Routes = [
   {
     path: 'package-details/:id',
     component: PageComponent,
+  },
+  {
+    path: 'invoice/:id',
+    component: InvoiceComponent,
   },
   {
     path: 'payment',

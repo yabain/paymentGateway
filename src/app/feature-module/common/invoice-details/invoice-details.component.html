@@ -1,12 +1,12 @@
 <div class="modal-dialog modal-dialog-centered modal-xl">
-    <style *ngIf="printing">
+    <!-- <style *ngIf="inModal === false">
         .modal-dialog { max-width: none !important; width: 100% !important; }
         .row { flex-wrap: nowrap !important; }
         .col, [class*="col-"] { flex: 0 0 auto !important; min-width: 0 !important; }
         @media (max-width: 768px) {
             .col-lg-4, .col-lg-6, .col-md-6, .col-md-12 { flex: 0 0 auto !important; width: auto !important; }
         }
-    </style>
+    </style> -->
     <div class="main-wrapper invoice-one" style="margin: 0 !important;">
         <div class="modal-content">
             <div class="modal-body" *ngIf="inModal">
@@ -14,6 +14,8 @@
                     id="closeModal" (click)="ngOnDestroy()">
                 </button>
             </div>
+            <br *ngIf="inModal === false">
+            <br *ngIf="inModal === false">
             <div class="invoice-wrapper download_section">
                 <div class="inv-content">
                     <span class="line"></span>
@@ -226,7 +228,7 @@
                                                 {{transactionData?.receiverCurrency}}</span></p> -->
                                     </div>
                                     <div class="invoice-total-footer">
-                                        <h4>{{ 'payment.totalAmount' | translate }}
+                                        <h4>{{ 'payment.totalAmount' | translate }}: 
                                             <span>{{transactionData?.estimation}}
                                                 {{transactionData?.receiverCurrency}}</span>
                                         </h4>
@@ -244,7 +246,8 @@
                             <div class="col md-6">
                                 <div class="payment-info">
                                     <div class="qr">
-                                        <img src="assets/img/qr-code.svg" alt="qr">
+                                        <qrcode *ngIf="qrCode" [qrdata]="qrCode" [width]="150"
+                                            [colorDark]="'#021D66FF'" class="qr-class"></qrcode>
                                         <h6 class="scan-details"> {{ 'payment.scanToViewInvoice' | translate }} </h6>
                                     </div>
                                     <div class="pay-details">
@@ -260,9 +263,8 @@
                                 <div class="terms-condition">
                                     <span>Terms & Conditions:</span>
                                     <ol>
-                                        <li> Goods Once sold cannot be taken back or exchanged</li>
-                                        <li> We are not the manufactures, company will stand for warrenty as per their
-                                            terms and conditions.</li>
+                                        <li> {{ 'payment.terms1' | translate }}</li>
+                                        <li> {{ 'payment.terms2' | translate }}.</li>
                                     </ol>
                                 </div>
                             </div>

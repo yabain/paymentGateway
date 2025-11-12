@@ -25,6 +25,8 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { ToastService } from './services/toast/toast.service';
 import { DataTablesModule } from 'angular-datatables';
 import { FrontModule } from './front/front.module';
+import { CommonItemModule } from './feature-module/common/common-item.module';
+import { InvoiceComponent } from './invoice/invoice.component';
 // import { TransactionDetailsComponent } from './feature-module/common/transaction-details/transaction-details.component';
 // import { JsonViewerComponent } from './feature-module/common/json-viewer/json-viewer.component';
 
@@ -39,6 +41,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     WelcomeComponent,
     TermsComponent,
     PaymentComponent,
+    InvoiceComponent
     // TransactionDetailsComponent,
     // JsonViewerComponent
   ],
@@ -60,6 +63,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AngularFirestoreModule,
     DataTablesModule,
     FrontModule,
+    CommonItemModule
   ],
   providers: [ { provide: LOCALE_ID, useValue: "fr-FR" },
     AuthService, UserService, CryptService, ShareLinkService, SystemService, DatePipe,
