@@ -47,23 +47,12 @@
                             <tr *ngFor="let t of transactionList" data-bs-toggle="modal"
                                 data-bs-target="#payment_transaction_details">
                                 <td (click)="selectTransaction(t)" href="javascript:void(0);" data-bs-toggle="modal"
-                                    data-bs-target="#payment_transaction_details"
-                                    *ngIf="t?.transactionType === 'transfer'">{{ "payment.transfer" | translate }}</td>
-                                <td (click)="selectTransaction(t)" href="javascript:void(0);" data-bs-toggle="modal"
-                                    data-bs-target="#payment_transaction_details"
-                                    *ngIf="t?.transactionType === 'withdrawal'">{{ "payment.withdrawal" | translate }}
+                                    data-bs-target="#payment_transaction_details">
+                                    {{ "payment." + t?.transactionType | translate }}
                                 </td>
+                                
                                 <td (click)="selectTransaction(t)" href="javascript:void(0);" data-bs-toggle="modal"
-                                    data-bs-target="#payment_transaction_details"
-                                    *ngIf="t?.transactionType === 'subscription'">{{ "subscriptions.title" | translate
-                                    }}</td>
-                                <td (click)="selectTransaction(t)" href="javascript:void(0);" data-bs-toggle="modal"
-                                    data-bs-target="#payment_transaction_details"
-                                    *ngIf="t?.transactionType === 'fundraising'">{{ "fundraising.title" | translate }}
-                                </td>
-                                <td (click)="selectTransaction(t)" href="javascript:void(0);" data-bs-toggle="modal"
-                                    data-bs-target="#payment_transaction_details">{{ t?.createdAt | date:'dd-MM-yyyy
-                                    HH:mm:ss'}}</td>
+                                    data-bs-target="#payment_transaction_details">{{ t?.createdAt | date:'dd-MM-yyyy HH:mm:ss'}}</td>
                                 <!-- <td (click)="selectTransaction(t)" href="javascript:void(0);"
                             data-bs-toggle="modal"
                                 data-bs-target="#payment_transaction_details">{{ t?.estimation | number:'1.2-2' }} {{ t?.senderCurrency }}</td>
