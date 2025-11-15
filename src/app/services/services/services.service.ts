@@ -65,7 +65,19 @@ export class ServicesService {
   }
 
   getMyServicesList(userId): Observable<any | undefined> {
-    return this.apiService.getById('service/planList', userId).pipe(
+    return this.apiService.getById('service/serviceList', userId).pipe(
+      map((data) => {
+        return data;
+      }),
+      catchError((error) => {
+        console.error('Error fetching plan statistics:', error);
+        return of([]);
+      }),
+    );
+  }
+
+  getMyServicesListStat(userId): Observable<any | undefined> {
+    return this.apiService.getById('service-payment/item-statistics', userId).pipe(
       map((data) => {
         return data;
       }),

@@ -9,16 +9,16 @@ interface data {
   styleUrls: ['./item.component.scss'],
 })
 export class ItemComponent implements OnInit {
-  @Input() plan: any;
-  @Input() currentUser: any;
+  @Input() service: any;
   optionsData: any = [];
+  picture: string = 'assets/img/ressorces/generic.jpeg';
 
   constructor(
   ) {}
 
   ngOnInit(): void {
-    // console.log('plan: ', this.plan);
-    this.optionsData = this.plan ? this.plan.options : [];
+    // console.log('service: ', this.service);
+    this.optionsData = this.service ? this.service.options : [];
   }
 
 

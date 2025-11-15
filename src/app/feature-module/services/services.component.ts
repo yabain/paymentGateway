@@ -83,6 +83,8 @@ export class ServicesComponent implements OnInit, OnDestroy {
   reOpen: boolean = false;
   transactionSucceded: boolean = false;
   transactionFailed: boolean = false;
+  watingServicesListStat: boolean = true;
+  servicesListStat: any
 
   openContent() {
     this.toggleData = !this.toggleData;
@@ -100,7 +102,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
     private systemService: SystemService,
     private fw: FlutterwaveService,
     private storage: StorageService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getId();
@@ -147,7 +149,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
     return Number.isInteger(nombre) ? nombre : Math.ceil(nombre);
   }
 
-  
+
   isAuthor(service: any, user: any = this.currentUser) {
     // console.log('service: ', service)
     return user._id.toString() === service.author._id.toString() ? true : false;
@@ -250,8 +252,25 @@ export class ServicesComponent implements OnInit, OnDestroy {
           this.watingServicesList = false;
           this.servicesList = data;
           this.servicesListBackup = data;
+          this.getMyServicesListStat(userId);
         });
     }
+  }
+
+  getMyServicesListStat(userId: string = this.currentUser._id) {
+    this.watingServicesListStat = true;
+    this.servicesService
+      .getMyServicesListStat(userId)
+      .subscribe((data: any) => {
+        console.log('servicesListStat geted: ', data);
+        this.servicesListStat = data;
+        this.watingServicesListStat = false;
+      });
+  }
+
+  returnQuantity(serviceId: string){
+    const resp = this.servicesListStat.find(item => item.serviceId === serviceId);
+    return resp ? resp.quantity : 0;
   }
 
   refresh() {
@@ -495,7 +514,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
           try {
             this.modalClosed = true;
             // this.verifyAndClosePayin();
-          } catch {}
+          } catch { }
           // TODO: display a "payment canceled" message or refresh the status
         }
       }, 600);
