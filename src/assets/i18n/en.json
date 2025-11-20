@@ -701,9 +701,11 @@
     "info": "Details",
     "add": "Add service",
     "pay": "Payer",
+    "vote": "Vote",
     "payAgain": "Pay again",
     "alreadyPayMsg": "You have already pay",
     "loginToPay": "Login to pay",
+    "loginToVote": "Login to Vote",
     "imageTooLarge": "Image too large (max 1mb)"
   },
   "personalizer": {

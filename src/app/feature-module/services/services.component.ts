@@ -66,6 +66,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
   paymentWithTaxes: number = 0;
   copied = false;
   url: string = '';
+  isElection: boolean = true;
 
   public routes = routes;
   public selectedValue1 = '';
@@ -127,6 +128,17 @@ export class ServicesComponent implements OnInit, OnDestroy {
 
   calculateTaxesAmount(): number {
     this.estimation = this.quantity * this.selectedService.price;
+    if (this.isElection) {
+      if (this.quantity === 10) {
+        this.estimation = 900;
+      }
+      if (this.quantity === 20) {
+        this.estimation = 1800;
+      }
+      if (this.quantity === 100) {
+        this.estimation = 9000;
+      }
+    }
     return this.aroundValue(this.estimation * (this.invoiceTaxes / 100));
   }
 
@@ -268,7 +280,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
       });
   }
 
-  returnQuantity(serviceId: string){
+  returnQuantity(serviceId: string) {
     const resp = this.servicesListStat.find(item => item.serviceId === serviceId);
     return resp ? resp.quantity : 0;
   }

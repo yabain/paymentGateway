@@ -702,9 +702,12 @@
     "info": "Détails",
     "add": "Ajouter un service",
     "pay": "Payer",
+    "vote": "Voter",
     "payAgain": "Payer à nouveau",
     "alreadyPayMsg": "Vous avez déjà éffectué un paiement",
-    "loginToPay": "Connexion / Payer"
+    "loginToPay": "Connexion / Payer",
+    "loginToVote": "Connexion / Voter",
+    "imageTooLarge": "Image trop grande (max 1mb)"
   },
   "personalizer": {
     "title": "Personnalisateur",
