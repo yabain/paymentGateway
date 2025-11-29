@@ -1,4 +1,22 @@
-<section class="hero" id="home">
+
+<div class="row d-flex align-items-center justify-content-center" *ngIf="loading">
+    <div style="display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 300px;">
+        <img src="../../../../assets/img/new/yaba-in_logo.png" alt="Yaba-In">
+    </div>
+</div>
+<div class="row d-flex align-items-center justify-content-center" *ngIf="loading">
+    <div style="display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 300px;">
+        <div class="spinner-border" role="status"></div>
+    </div>
+</div>
+
+<section class="hero" id="home" *ngIf="!loading">
     <div class="hero-bg"></div>
     <div class="hero-container">
         <div class="hero-left">
@@ -65,7 +83,7 @@
 </section>
 
 
-<section class="collections" id="collections">
+<section class="collections" id="collections" *ngIf="!loading">
     <div class="section-header">
         <h2 class="section-title">Candidat(e)s</h2>
         <p class="section-subtitle">Qui seront le Roi et la reine de la culture ?</p>
@@ -76,7 +94,7 @@
 </section>
 
 
-<section class="contact" id="contact">
+<section class="contact" id="contact" *ngIf="!loading">
     <div class="contact-container">
         <div class="contact-header">
             <h2 class="section-title">Get In Touch</h2>
@@ -156,7 +174,7 @@
     </div>
 </section>
 
-<footer>
+<footer *ngIf="!loading">
     <div class="footer-bottom">
         <p style="color: white;">&copy; 2025 Yaba-In. All rights reserved. </p>
     </div>

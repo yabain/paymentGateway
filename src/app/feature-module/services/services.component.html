@@ -90,11 +90,11 @@
                 <button class="btn btn-rounded btn-primary me-1" *ngIf="service.isActive && currentUser"
                     (click)="checkSbscriberStatus(service)" data-bs-toggle="modal"
                     data-bs-target="#subscriptionModal">
-                    {{'services.' + isElection ? 'vote': 'pay' | translate }}
+                    {{ ('services.' + (isElection ? 'vote' : 'pay')) | translate }}
                     </button>
                 <button class="btn btn-rounded btn-primary me-1" *ngIf="!currentUser"
                     (click)="navigateTo('/auth/login')">
-                    {{ 'services.' + isElection ? 'loginToVote': 'loginToPay'  | translate }}</button>
+                    {{ (isElection === true ? 'services.loginToVote' : 'services.loginToPay') | translate }}</button>
             </div>
         </div>
 
