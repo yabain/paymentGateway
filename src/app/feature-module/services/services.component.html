@@ -73,11 +73,11 @@
         </div> -->
 
         <div class="card">
-            <app-candidate *ngIf="currentUser && isElection" [service]="service" (click)="navigateTo('/services/details/' + service._id)"></app-candidate>
-            <app-candidate *ngIf="!currentUser && isElection" [service]="service"></app-candidate>
+            <app-candidate *ngIf="currentUser && isElection && currentUser.email != 'dkuser123@email.com'" [service]="service" (click)="navigateTo('/services/details/' + service._id)"></app-candidate>
+            <app-candidate *ngIf="!currentUser && isElection || currentUser.email === 'dkuser123@email.com'" [service]="service"></app-candidate>
 
-            <app-item *ngIf="currentUser && !isElection" [service]="service" (click)="navigateTo('/services/details/' + service._id)"></app-item>
-            <app-item *ngIf="!currentUser && !isElection" [service]="service"></app-item>
+            <app-item *ngIf="currentUser && !isElection && currentUser.email != 'dkuser123@email.com'" [service]="service" (click)="navigateTo('/services/details/' + service._id)"></app-item>
+            <app-item *ngIf="!currentUser && !isElection || currentUser.email === 'dkuser123@email.com'" [service]="service"></app-item>
             <!-- <div [ngClass]="service?.isActive === true ? 'badge-success':  'badge-error'"
                 *ngIf="currentUser && isAuthor(service) || currentUser && isAdmin">
             </div> -->
