@@ -160,4 +160,16 @@ export class SubscriptionService {
       catchError((error) => of({ error })),
     );
   }
+
+  getSubscriptionItems(subscriptionId, subscriberId): Observable<any> {
+    return this.apiService.getById('subscription/get-items', subscriptionId + 'AAA' + subscriberId).pipe(
+      map((data) => {
+        return data;
+      }),
+      catchError((error) => {
+        console.error('Error fetching subscription item:', error);
+        return of([]);
+      }),
+    );
+  }
 }

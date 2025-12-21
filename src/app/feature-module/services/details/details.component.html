@@ -214,7 +214,7 @@
                                 <thead class="thead-light">
                                     <tr>
                                         <th mat-sort-header="name">{{ "auth.username" | translate }}</th>
-                                        <th mat-sort-header="phone">{{ "auth.phone" | translate }}</th>
+                                        <th mat-sort-header="phone">{{ "sideMenu.whatsapp" | translate }}</th>
                                         <th mat-sort-header="dateStart">{{ "item.start" | translate }}</th>
                                         <th mat-sort-header="dateEnd">{{ "item.end" | translate }}</th>
                                         <th mat-sort-header="status">{{ "mail.status" | translate }}</th>
@@ -235,7 +235,7 @@
                                                 </a>
                                             </h2>
                                         </td>
-                                        <td> {{ subscription?.userId.phone }}
+                                        <td> {{ subscription?.userId.whatsapp }}
                                         </td>
                                         <td>{{ getDate(subscription?.startDate) }}</td>
                                         <td>{{ getDate(subscription?.endDate) }}</td>

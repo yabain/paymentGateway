@@ -11,7 +11,7 @@ import { SubscriptionService } from 'src/app/services/subscription/subscription.
 import { ItemComponent } from './packages/item/item.component';
 import { FrontModule } from 'src/app/front/front.module';
 import { DetailsComponent } from './packages/details/details.component';
-
+import { SubscriptionDetailsComponent } from './subscription-details/subscription-details.component';
 
 @NgModule({
   declarations: [
@@ -19,15 +19,16 @@ import { DetailsComponent } from './packages/details/details.component';
     SubscriptionListComponent,
     PackagesComponent,
     ItemComponent,
-    DetailsComponent
+    DetailsComponent,
+    SubscriptionDetailsComponent
   ],
   imports: [
     CommonModule,
     SubscriptionRoutingModule,
     SharedModule,
     TranslateModule,
-    FrontModule
+    FrontModule,
   ],
-  providers: [SubscriptionService]
+  providers: [SubscriptionService],
 })
 export class SubscriptionModule { }

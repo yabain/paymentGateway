@@ -154,6 +154,7 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
       .getSubscribersList(this.planData._id)
       .subscribe((data: any) => {
         this.subscribers = data;
+        console.log('subscribers', this.subscribers);
         this.gettingSubscribers = false;
       });
   }
@@ -701,7 +702,11 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
   }
 
   createSubscriptionItem(){
+  }
 
+  openSubscription(subscription, subscriberId){
+    console.log('openSubscription', subscription, subscriberId);
+    return this.navigateTo('/subscription/subscription-details/' + subscription + '&&' + subscriberId);
   }
 
   ngOnDestroy(): void {

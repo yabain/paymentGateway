@@ -4,6 +4,7 @@ import { SubscriptionComponent } from './subscription.component';
 import { PackagesComponent } from './packages/packages.component';
 import { SubscriptionListComponent } from './subscription-list/subscription-list.component';
 import { DetailsComponent } from './packages/details/details.component';
+import { SubscriptionDetailsComponent } from './subscription-details/subscription-details.component';
 
 const routes: Routes = [
   {
@@ -24,6 +25,10 @@ const routes: Routes = [
         component: PackagesComponent,
       },
     ],
+  },
+  {
+    path: 'subscription-details/:id',
+    component: SubscriptionDetailsComponent,
   },
   {
     path: 'details/:id',

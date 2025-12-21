@@ -206,7 +206,7 @@
     <div class="card-header">
         <div class="row">
             <div class="col-md-8">
-                <h3>{{ 'subscriptions.subscriberList' | translate }} ({{ subscribers.length }})</h3>
+                <h3>{{ 'subscriptions.subscriberList' | translate }} ({{ subscribers.length }}) 00</h3>
             </div>
             <div class="col-md-4" style="text-align: right;">
                 <button class="btn btn-rounded btn-outline-secondary me-1" (click)="refresh()"
@@ -227,7 +227,7 @@
                                 <thead class="thead-light">
                                     <tr>
                                         <th mat-sort-header="name">{{ "auth.username" | translate }}</th>
-                                        <th mat-sort-header="phone">{{ "auth.phone" | translate }}</th>
+                                        <th mat-sort-header="phone">{{ "sideMenu.whatsapp" | translate }}</th>
                                         <th mat-sort-header="dateStart">{{ "item.start" | translate }}</th>
                                         <th mat-sort-header="dateEnd">{{ "item.end" | translate }}</th>
                                         <th mat-sort-header="status">{{ "mail.status" | translate }}</th>
@@ -236,7 +236,7 @@
                                 </thead>
                                 <tbody *ngIf="!gettingSubscribers">
                                     @for (subscription of subscribers; track subscription; let i = $index) {
-                                    <tr>
+                                    <tr (click)="openSubscription(subscription._id, subscription.userId._id)">
                                         <td>
                                             <h2 class="table-avatar">
                                                 <a class="avatar avatar-md me-2"><img class="avatar-img rounded-circle"
@@ -248,7 +248,7 @@
                                                 </a>
                                             </h2>
                                         </td>
-                                        <td> {{ subscription?.userId.phone }}
+                                        <td> {{ subscription?.userId.whatsapp || subscription?.userId.phone }}
                                         </td>
                                         <td>{{ getDate(subscription?.startDate) }}</td>
                                         <td>{{ getDate(subscription?.endDate) }}</td>

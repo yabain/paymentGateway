@@ -11,6 +11,8 @@ import { SharedModule } from '../shared/shared.module';
 import { PageComponent } from './page/page.component';
 import { FooterComponent } from './footer/footer.component';
 import { AddSubscriberComponent } from './add-subscriber/add-subscriber.component';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { CalendarComponent } from './calendar/calendar.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, '../assets/i18n/', '.json');
@@ -21,9 +23,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     PackageDetailsComponent,
     PageComponent,
     FooterComponent,
-    AddSubscriberComponent
+    AddSubscriberComponent,
+    CalendarComponent
   ],
-  exports: [PackageDetailsComponent, PageComponent, FooterComponent],
   providers: [],
   imports: [
     CommonModule,
@@ -31,6 +33,14 @@ export function HttpLoaderFactory(http: HttpClient) {
     TranslateModule,
     SharedModule,
     FormsModule,
-    ReactiveFormsModule,],
+    ReactiveFormsModule,
+    FullCalendarModule
+  ],
+    exports: [
+      PackageDetailsComponent,
+      PageComponent,
+      FooterComponent,
+      CalendarComponent,
+      FullCalendarModule],
 })
 export class FrontModule {}
