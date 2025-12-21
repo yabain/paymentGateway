@@ -64,8 +64,8 @@ export class PaymentService {
     );
   }
 
-  proceedWithdarawal(data): Observable<any> {
-    console.log('proceedWithdarawal data: ', data);
+  proceedWithdrawal(data): Observable<any> {
+    console.log('proceedWithdrawal data: ', data);
     return from(this.apiService.create(`fw/withdrawal`, data)).pipe(
       map((resp) => {
         return resp;

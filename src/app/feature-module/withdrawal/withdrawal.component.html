@@ -95,10 +95,16 @@
                         </div>
                       </div>
                     </div>
+                    <div class="text-end">
+                      <label (click)="withdrawalAll()">
+                        {{ "payment.withdrawalAll" | translate }}
+                      </label>
+                    </div>
+                    <br>
                     <div class="row">
                       <div class="col-md-12">
                         <p style="background: #fda430; color: black; padding: 10px; border-radius: 5px;">
-                          {{ "payment.warningMessage" | translate }}
+                          {{ "payment.warningMinValueMessage" | translate }} {{ minVal }} {{ currentUser.countryId.currency }}
                         </p>
                       </div>
                     </div>
@@ -128,14 +134,16 @@
                       <h5 class="card-title">{{ "payment.chooseReceptionMethod" | translate }}</h5><br>
                       <div class="step2">
                         <div class="payment-methods">
-                          <div (click)="selectMethod('BANK')"
-                            [ngClass]="selectedMethod === 'BANK' ? 'method-card active' : 'method-card'">
+
+                          <div class="method-card" (click)="selectMethod('MTN')"
+                            *ngIf="currentUser.countryId.code === '237'"
+                            [ngClass]="selectedMethod === 'MTN' ? 'method-card active' : 'method-card'">
                             <div class="method-icon">
-                              <i class="fas fa-university"></i>
+                              <img src="assets/img/ressorces/mtn_money.webp" alt="" class="method-img">
                             </div>
                             <div class="method-info">
-                              <h3>{{ "payment.bank" | translate }}</h3>
-                              <p>{{ "payment.bankDescription" | translate }}</p>
+                              <h3>MTN Mobile Money</h3>
+                              <p>{{ "payment.mtnDescription" | translate }}</p>
                             </div>
                           </div>
 
@@ -151,15 +159,14 @@
                             </div>
                           </div>
 
-                          <div class="method-card" (click)="selectMethod('MTN')"
-                            *ngIf="currentUser.countryId.code === '237'"
-                            [ngClass]="selectedMethod === 'MTN' ? 'method-card active' : 'method-card'">
+                          <div (click)="selectMethod('BANK')"
+                            [ngClass]="selectedMethod === 'BANK' ? 'method-card active' : 'method-card'">
                             <div class="method-icon">
-                              <img src="assets/img/ressorces/mtn_money.webp" alt="" class="method-img">
+                              <i class="fas fa-university"></i>
                             </div>
                             <div class="method-info">
-                              <h3>MTN Mobile Money</h3>
-                              <p>{{ "payment.mtnDescription" | translate }}</p>
+                              <h3>{{ "payment.bank" | translate }}</h3>
+                              <p>{{ "payment.bankDescription" | translate }}</p>
                             </div>
                           </div>
 
@@ -195,7 +202,7 @@
                                 <div class="input-group">
                                   <span class="input-group-text">+{{ currentUser?.countryId?.code }}</span>
                                   <input id="receiverMobileAccountNumber" type="telephone" class="form-control"
-                                    placeholder="691229122" [(ngModel)]="receiverMobileAccountNumber"
+                                    placeholder="xxxxxxxxx" [(ngModel)]="receiverMobileAccountNumber"
                                     name="receiverMobileAccountNumber" (input)="canNext2()" />
                                 </div>
                               </div>
@@ -293,6 +300,27 @@
                         <div class="amount-secondary"> </div>
                       </div>
 
+                      <div class="fee-breakdown">
+                        <h4><i class="fas fa-receipt"></i> {{ "payment.withdrawalAmount" | translate }}</h4>
+                        <div class="fee-item">
+                          <span>{{ "payment.amountToBeReceived" | translate }}</span>
+                          <span>{{amountToBeReceived}} {{ currentUser?.countryId.currency }}</span>
+                        </div>
+                        <!-- <div class="fee-item">
+                          <span>{{ "payment.equivalentTo" | translate }}</span>
+                          <span>{{estimation}} {{ currentUser?.countryId.currency }}</span>
+                        </div> -->
+                        <div class="fee-item">
+                          <span>{{ "payment.feeDetails" | translate }}</span>
+                          <span>0 {{ currentUser?.countryId.currency }}</span>
+                        </div>
+                        <div class="fee-total">
+                          <span>{{ "payment.total" | translate }}</span>
+                          <span>{{ transactionData?.paymentWithTaxes }} {{ currentUser?.countryId.currency }}</span>
+                        </div>
+                      </div>
+                      
+
                       <div class="security-notice">
                         <img src="assets/img/ressorces/flutterwave.png" alt=""
                           style="max-width: 100px; border-radius: 5px; margin-right: 10px;">
@@ -324,19 +352,19 @@
         <!-- ========= Colonne de résumé ========= -->
         <aside class="card summary" aria-live="polite">
           <div class="inline" style="justify-content:space-between; margin-bottom:8px">
-            <b>Solde disponible</b><br>
+            <b>{{ "payment.balance" | translate }} </b><br>
             <h3 *ngIf="!waittingBalance">{{ balance || 00 }} {{ currentUser.countryId.currency }}</h3>
             <h6 *ngIf="waittingBalance">
               <div class="spinner-border" role="status"></div></h6>
           </div>
           <div class="amount" id="sumBalance">—</div>
           <div class="row">
-            <span class="col-md-6">Montant du retrait</span>
+            <span class="col-md-6">{{ "payment.withdrawalAmount" | translate }}</span>
             <b class="col-md-6" style="text-align: right">{{ amountToBeReceived }} {{ currentUser?.countryId.currency
               }}</b>
           </div><br>
           <div class="row">
-            <span class="col-md-5">Frais de retrait</span>
+            <span class="col-md-5">{{ "payment.feeDetails" | translate }}</span>
             <b class="col-md-7" style="text-align: right">0 {{
               currentUser.countryId.currency }}</b>
           </div>

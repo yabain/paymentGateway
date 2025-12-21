@@ -27,7 +27,7 @@ import { FlutterwaveService } from 'src/app/services/flutterwave/flutterwave.ser
   encapsulation: ViewEncapsulation.None,
 })
 export class WithdrawalComponent implements OnInit {
-  selectedMethod: string = 'BANK';
+  selectedMethod: string = 'MTN';
   step: number = 1;
   invoiceTaxes: number = 5;
   currentUser: any | undefined;
@@ -63,6 +63,8 @@ export class WithdrawalComponent implements OnInit {
   selectedBank: any;
 
   result!: any;
+
+  minVal: number = 1000;
 
   constructor(
     private toastService: ToastService,
@@ -136,15 +138,17 @@ export class WithdrawalComponent implements OnInit {
   }
 
   formatAmount(event: any) {
-    let value = event.target.value.replace(/\s/g, ''); // Supprime les espaces existants
-    value = value.replace(/\D/g, ''); // Supprime tout ce qui n'est pas un chiffre
+    const raw = event?.target?.value ?? '';
+    const formatted = this.formatAmountValue(raw);
+    this.amountToBeReceived = formatted;
+    if (event?.target) {
+      event.target.value = formatted;
+    }
+  }
 
-    // Ajoute un espace tous les 3 chiffres
-    value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-
-    // Met à jour la valeur dans le modèle et l'input
-    this.amountToBeReceived = value;
-    event.target.value = value;
+  private formatAmountValue(value: string | number): string {
+    let normalized = String(value).replace(/\s/g, '').replace(/\D/g, '');
+    return normalized.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
   }
 
   getCleanAmount(): number {
@@ -240,7 +244,7 @@ export class WithdrawalComponent implements OnInit {
   canNext(): boolean {
     // return true;
     if (
-      this.estimation < 1000 ||
+      this.estimation < this.minVal ||
       this.watingEstimation ||
       this.waitingUserData ||
       this.waitingExchangeRate
@@ -345,7 +349,7 @@ export class WithdrawalComponent implements OnInit {
     console.log('Payment data:', this.transactionData);
     // return ;
     this.paymentService
-      .proceedWithdarawal(this.transactionData)
+      .proceedWithdrawal(this.transactionData)
       .subscribe((res: any) => {
         console.log('the end of the transaction: ', res);
           this.proceed = false;
@@ -393,7 +397,7 @@ export class WithdrawalComponent implements OnInit {
       senderCountry: this.currentUser.countryId.name,
       senderCurrency: this.currentUser.countryId.currency,
 
-      raisonForTransfer: 'Withdarawal',
+      raisonForTransfer: 'Withdrawal',
 
       receiverName: this.userService.showName(this.currentUser),
       receiverEmail: this.currentUser.email,
@@ -601,5 +605,10 @@ export class WithdrawalComponent implements OnInit {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  withdrawalAll() {
+    this.amountToBeReceived = this.formatAmountValue(this.balance || 0);
+    this.convertCurrency();
   }
 }
