@@ -132,7 +132,8 @@
     "updateMessage": "A major update to the digiKUNTZ Payments system is available.",
     "updateMessage2": "This update is mandatory to ensure the security and consistency of your data.",
     "updateMessage3": "Your page will be refreshed multiple times, and the system will update automatically.",
-    "downloadApp": "Download the app"
+    "downloadApp": "Download the app",
+    "download": "Download"
   },
   "network": {
     "offline": "You seem to be experiencing connectivity issues.",

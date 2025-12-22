@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { routes } from 'src/app/core/core.index';
 import { Location } from '@angular/common';
 import { SubscriptionService } from 'src/app/services/subscription/subscription.service';
+import { environment } from 'src/environments/environment.prod';
 
 
 @Component({
@@ -18,6 +19,7 @@ export class SubscriptionDetailsComponent {
   loadingData: boolean = true;
   items: any[] = [];
   raw: any = [];
+  frontUrl: string = environment.frontUrl;
 
   constructor(
     private route: ActivatedRoute,
@@ -29,12 +31,13 @@ export class SubscriptionDetailsComponent {
   }
 
 
+  public getDate(date: string) {
+    return date.split('T')[0];
+  }
+
   getId() {
-    
     this.url = this.location.path();
-
     const idParam = this.route.snapshot.paramMap.get('id');
-
     if (idParam && idParam !== 'null' && idParam !== 'undefined') {
      [this.subscriptionId, this.subscriberId] = idParam.split('&&');
     }
