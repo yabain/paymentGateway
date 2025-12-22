@@ -3,12 +3,14 @@ import { CalendarOptions } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
+import multiMonthPlugin from '@fullcalendar/multimonth';
 import interactionPlugin from '@fullcalendar/interaction';
 import { TranslateService } from '@ngx-translate/core';
 import { forkJoin, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-calendar',
+  styleUrls: ['./calendar.component.scss'],
   templateUrl: './calendar.component.html'
 })
 export class CalendarComponent implements OnChanges, OnInit, OnDestroy {
@@ -27,12 +29,20 @@ export class CalendarComponent implements OnChanges, OnInit, OnDestroy {
   private langChangeSubscription?: Subscription;
 
   calendarOptions: CalendarOptions = {
-    plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
-    initialView: 'dayGridMonth',
+    plugins: [dayGridPlugin, timeGridPlugin, listPlugin, multiMonthPlugin, interactionPlugin],
+    initialView: 'multiMonthYear',
     headerToolbar: {
       left: 'prev,next today',
       center: 'title',
-      right: 'timeGridDay,dayGridMonth,dayGridYear'
+      right: 'timeGridDay,dayGridMonth,multiMonthYear'
+    },
+    views: {
+      multiMonthYear: {
+        type: 'multiMonth',
+        duration: { months: 12 },
+        multiMonthMaxColumns: 3,
+        fixedWeekCount: false
+      }
     },
     buttonText: {
       today: 'Today',
@@ -42,7 +52,7 @@ export class CalendarComponent implements OnChanges, OnInit, OnDestroy {
       week: 'Week',
       dayGridMonth: 'Month',
       timeGridDay: 'Day',
-      dayGridYear: 'Year'
+      multiMonthYear: 'Year'
     },
     events: [],
     height: 'auto',
@@ -96,6 +106,14 @@ export class CalendarComponent implements OnChanges, OnInit, OnDestroy {
       // Recréer complètement l'objet pour que Angular détecte le changement
       this.calendarOptions = {
         ...this.calendarOptions,
+        views: {
+          multiMonthYear: {
+            type: 'multiMonth',
+            duration: { months: 12 },
+            multiMonthMaxColumns: 3,
+            fixedWeekCount: false
+          }
+        },
         buttonText: {
           today: translations.today,
           month: translations.month,
@@ -104,7 +122,7 @@ export class CalendarComponent implements OnChanges, OnInit, OnDestroy {
           week: translations.week,
           dayGridMonth: translations.month,
           timeGridDay: translations.day,
-          dayGridYear: translations.year
+          multiMonthYear: translations.year
         }
       };
     });

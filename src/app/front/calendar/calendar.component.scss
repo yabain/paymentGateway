@@ -1,12 +1,24 @@
-/* footer.component.scss */
-.footer {
-    position: relative;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: #021d66;
-    color: #fff;
-    text-align: center;
-    padding: 10px 0;
-  }
+// Styles pour tous les boutons du calendrier
+::ng-deep .fc-button,
+::ng-deep .fc-button-primary {
+  background: #021d66 !important;
+  color: #fff !important;
+  border: none !important;
+}
+
+// Styles pour les boutons actifs
+::ng-deep .fc-button-active,
+::ng-deep .fc-button-primary.fc-button-active,
+::ng-deep .fc-state-active {
+  background: #f57c11 !important;
+  color: #fff !important;
+}
+
+// Styles pour les boutons au survol (optionnel, pour garder la cohérence)
+::ng-deep .fc-button:hover:not(.fc-button-active),
+::ng-deep .fc-button-primary:hover:not(.fc-button-active) {
+  background: #021d66 !important;
+  color: #fff !important;
+  opacity: 0.9;
+}
   
