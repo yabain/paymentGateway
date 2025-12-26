@@ -136,6 +136,7 @@ export class LoginComponent implements OnInit {
    * Handles form submission for user login
    */
   onSubmit() {
+    let data: any = {}
     if (this.isEmail) {
       if (!this.form.valid) {
         this.form.markAllAsTouched();
@@ -143,16 +144,20 @@ export class LoginComponent implements OnInit {
       }
     } else {
       const phone = this.form2.value.whatsapp;
-      this.form2.value.whatsapp = this.selectedCountry.code + ' ' + phone.toString();
       if (!this.form2.valid) {
         this.form.markAllAsTouched();
         return;
+      }
+      data = {
+        password: this.form2.value.password,
+        type: "phone",
+        whatsapp: '+' + this.selectedCountry.code + ' ' + phone.toString()
       }
     }
 
     this.isLoading = true;
     this.authService
-      .login(this.isEmail ? this.form.value : this.form2.value)
+      .login(this.isEmail ? this.form.value : data)
       .then((user: any) => {
         if (user) {
           if (user === false) {

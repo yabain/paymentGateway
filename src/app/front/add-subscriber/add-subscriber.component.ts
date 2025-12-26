@@ -88,7 +88,12 @@ export class AddSubscriberComponent implements OnInit {
     this.subscriptionService.addSubscriber(this.form.value)
     .subscribe({
       next: (response) => {
-          if (response) {
+          const hasError =
+            !!response?.error ||
+            (!!response?.statusCode && Number(response.statusCode) >= 400) ||
+            response?.statusCode === 404;
+
+          if (!hasError) {
             this.toastService.presentToast(
               'success',
               'Subscriber added successfully',
@@ -102,9 +107,9 @@ export class AddSubscriberComponent implements OnInit {
             this.waittingSubscription = false;
           } else {
             this.toastService.presentToast(
-              'danger',
+              'error',
               'Error',
-              'No response',
+              'This email or whatsapp already exist',
               10000,
             );
             console.error('Error no resp:', response);
@@ -114,7 +119,7 @@ export class AddSubscriberComponent implements OnInit {
       },
       error: (err) => {
           this.toastService.presentToast(
-            'danger',
+            'error',
             'Error',
             'Error to subscribe user: ' + err.message || 'Unknown error',
             10000,
@@ -139,6 +144,7 @@ export class AddSubscriberComponent implements OnInit {
         validators: [Validators.required],
       }),
       phone: new FormControl(null, { validators: [Validators.required] }),
+      whatsapp: new FormControl(null),
       balance: new FormControl(0, { validators: [Validators.required] }),
       countryId: new FormControl(null, { validators: [Validators.required] }),
       cityId: new FormControl(null, { validators: [Validators.required] }),
@@ -150,7 +156,7 @@ export class AddSubscriberComponent implements OnInit {
       email: new FormControl(null, {
         validators: [Validators.required, Validators.email],
       }),
-      password: new FormControl('12345678', {
+      password: new FormControl('00000000', {
         validators: [Validators.required, Validators.minLength(8)],
       }),
       subscriptionStartDate: new FormControl(null, {
@@ -163,7 +169,7 @@ export class AddSubscriberComponent implements OnInit {
   }
 
   onSubmit() {
-    // Vérification numéro
+    this.form.value.phone = this.form.value.phone.replace(/\D/g, '');
 
     if (!this.form.valid) {
       this.form.markAllAsTouched();
@@ -187,6 +193,7 @@ export class AddSubscriberComponent implements OnInit {
       );
       return;
     }
+    this.form.value.whatsapp = this.contryCode + ' ' + this.form.value.phone.replace(/\D/g, '');
     this.createSubscriptionItem();
   }
 

@@ -51,7 +51,7 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
   isAdmin: boolean = false;
   optionsData: any = [];
   checkingSubscriptionStatus: boolean = true;
-  isSubscriber: boolean = true;
+  isSubscriber: boolean = false;
   proceed: boolean = false;
   private destroy$ = new Subject<void>();
   private pollTimer: any;
@@ -234,15 +234,14 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
       this.isSubscriber = false;
       this.checkingSubscriptionStatus = false;
     }
-    console.log('plan', plan)
-    console.log('currentUser: ', this.currentUser);
 
     this.subscriptionService
       .checkSbscriberStatus(this.planData._id, this.currentUser._id || undefined)
       .then((data: any) => {
+        console.log('data', data);
         this.subscriptionStatus = data;
         if (data.existingSubscription) {
-          this.isSubscriber = true;
+          this.isSubscriber = data?.status ? data.status : false;
           if (data.status) {
             this.futureDate = new Date(data.endDate);
             this.startCountdown(this.futureDate);
@@ -707,6 +706,14 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
   openSubscription(subscription, subscriberId){
     console.log('openSubscription', subscription, subscriberId);
     return this.navigateTo('/subscription/subscription-details/' + subscription + '&&' + subscriberId);
+  }
+
+
+  changeSubscriptionActiveStatus(subscriptionId: string) {
+    this.subscriptionService.changeSubscriptionStatus(subscriptionId).then((res: any) => {
+      this.refresh();
+      this.toastService.presentToast('success', 'Done !', '', 3000);
+    });
   }
 
   ngOnDestroy(): void {

@@ -72,8 +72,9 @@
                                         </div>
                                         <h6
                                             *ngIf="subscriptionStatus?.existingSubscription && subscriptionStatus?.status">
-                                            {{ 'item.start' | translate }}: {{ getDate(subscriptionStatus?.startDate) }} 
-                                            || {{ 'item.end' | translate }}: {{ getDate(subscriptionStatus?.endDate) }}<br>
+                                            {{ 'item.start' | translate }}: {{ getDate(subscriptionStatus?.startDate) }}
+                                            || {{ 'item.end' | translate }}: {{ getDate(subscriptionStatus?.endDate)
+                                            }}<br>
                                         </h6>
                                         <h1>{{ planData?.title }}</h1>
                                         <h6 class="event-time" style="margin-bottom: 10px;">{{ planData?.subTitle }}
@@ -144,7 +145,8 @@
                             <h6 style="margin-bottom: 10px; color: #00000050;">{{ planData?.subTitle }} </h6>
                             <a *ngFor="let option of optionsData">
                                 <button *ngIf="option?.isActive" class="btn btn-block btn-outline-dark"
-                                    style="margin-right: 10px; color: #4e4c4c;"><i class="fa-solid fa-circle-check"></i> {{ option.title
+                                    style="margin-right: 10px; color: #4e4c4c;"><i class="fa-solid fa-circle-check"></i>
+                                    {{ option.title
                                     }}</button>
                                 <button *ngIf="!option?.isActive" class="btn btn-block btn-outline-dark"><i
                                         class="fa-solid fa-circle-check"></i> {{ option.title
@@ -209,8 +211,8 @@
                 <h3>{{ 'subscriptions.subscriberList' | translate }} ({{ subscribers.length }}) 00</h3>
             </div>
             <div class="col-md-4" style="text-align: right;">
-                <button class="btn btn-rounded btn-outline-secondary me-1" (click)="refresh()"
-                   ><i class="feather icon-refresh-ccw"></i></button>
+                <button class="btn btn-rounded btn-outline-secondary me-1" (click)="refresh()"><i
+                        class="feather icon-refresh-ccw"></i></button>
                 <button class="btn btn-rounded btn-outline-primary me-1" data-bs-toggle="modal"
                     data-bs-target="#add_subscriber_modal">+ {{ 'action.add' | translate }} </button>
             </div>
@@ -236,8 +238,8 @@
                                 </thead>
                                 <tbody *ngIf="!gettingSubscribers">
                                     @for (subscription of subscribers; track subscription; let i = $index) {
-                                    <tr (click)="openSubscription(subscription._id, subscription.userId._id)">
-                                        <td>
+                                    <tr>
+                                        <td (click)="openSubscription(subscription._id, subscription.userId._id)">
                                             <h2 class="table-avatar">
                                                 <a class="avatar avatar-md me-2"><img class="avatar-img rounded-circle"
                                                         [src]="subscription?.userId.pictureUrl" alt="User Image" /></a>
@@ -248,10 +250,13 @@
                                                 </a>
                                             </h2>
                                         </td>
-                                        <td> {{ subscription?.userId.whatsapp || subscription?.userId.phone }}
+                                        <td (click)="openSubscription(subscription._id, subscription.userId._id)"> {{
+                                            subscription?.userId.whatsapp || subscription?.userId.phone }}
                                         </td>
-                                        <td>{{ getDate(subscription?.startDate) }}</td>
-                                        <td>{{ getDate(subscription?.endDate) }}</td>
+                                        <td (click)="openSubscription(subscription._id, subscription.userId._id)">{{
+                                            getDate(subscription?.startDate) }}</td>
+                                        <td (click)="openSubscription(subscription._id, subscription.userId._id)">{{
+                                            getDate(subscription?.endDate) }}</td>
                                         <td>
                                             <span [ngClass]="{
                             'bg-success-light': subscription?.status != false,
@@ -269,9 +274,19 @@
                                                     <i class="feather icon-power" data-bs-toggle="tooltip"
                                                         title="Enable user" style="color: green"></i>
                                                 </li> -->
-                                                    <li data-bs-toggle="modal" data-bs-target="#disable_modal">
-                                                        <i class="feather icon-power" data-bs-toggle="tooltip"
-                                                            title="Disable user" style="color: red"></i>
+                                                    <li (click)="changeSubscriptionActiveStatus(subscription?._id)"
+                                                        *ngIf="subscription?.status != true">
+                                                        <a class="btn-filters btn-hover" href="javascript:void(0);"
+                                                            data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                            matTooltip="Enable"><span><i class="feather icon-power"
+                                                                    style="color: #04c714"></i></span></a>
+                                                    </li>
+                                                    <li (click)="changeSubscriptionActiveStatus(subscription?._id)"
+                                                        *ngIf="subscription?.status === true">
+                                                        <a class="btn-filters btn-hover" href="javascript:void(0);"
+                                                            data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                            matTooltip="Disable"><span><i class="feather icon-power"
+                                                                    style="color: #df0404"></i></span></a>
                                                     </li>
                                                 </ul>
                                             </div>

@@ -51,6 +51,18 @@ export class SubscriptionService {
       throw error;
     }
   }
+  
+  async changeSubscriptionStatus(subscriptionId): Promise<any> {
+    try {
+      const response = await this.apiService
+        .update('subscription/status', subscriptionId, {})
+        .toPromise();
+      return response;
+    } catch (error) {
+      console.error('Error to change plan status:', error);
+      throw error;
+    }
+  }
 
   async deletePlan(planId): Promise<any> {
     try {
