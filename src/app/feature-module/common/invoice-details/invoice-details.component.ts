@@ -27,11 +27,13 @@ import * as QRCode from 'qrcode';
 export class InvoiceDetailsComponent implements OnInit, OnDestroy {
   @Input() transactionData: any;
   @Input() inModal?: boolean = false;
+  showInvoice: boolean = true;
   currentUser: any;
   status: string = 'transaction_initialized';
   planData: any
   logoUrl: string = 'assets/img/ressorces/dk_logo.png';
   qrCode: string;
+  itemData: any;
 
   @ViewChild('closeModal') closeModal: ElementRef;
 
@@ -47,6 +49,21 @@ export class InvoiceDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.showInvoice = this.transactionData.transactionType === "subscription" ? false : true;
+    console.log('InvoiceDetailsComponent', this.transactionData);
+  }
+
+  getItemOfSubscription(transactionId){
+    this.subscriptionService.getItemSubscriptionByTransactionId(transactionId)
+    .subscribe((data: any) => {
+      console.log('getItemOfSubscription', data);
+      this.itemData = data;
+      this.showInvoice = true;
+    })
+  }
+
+  getDate(dateStr: string) {
+    return this.dateService.formatDate(dateStr, 'short', this.currentUser?.language || 'fr');
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -54,6 +71,7 @@ export class InvoiceDetailsComponent implements OnInit, OnDestroy {
       this.qrCode = 'https://payments.digikuntz.com/invoice/' + this.transactionData._id;
       if (this.transactionData.transactionType === 'subscription') {
         this.getPlanDataById(this.transactionData.planId);
+        this.getItemOfSubscription(this.transactionData._id);
       }
     }
   }

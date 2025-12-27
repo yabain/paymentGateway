@@ -112,6 +112,18 @@ export class SubscriptionService {
     );
   }
 
+  getItemSubscriptionByTransactionId(transactionId): Observable<any | undefined> {
+    return this.apiService.getById('subscription/get-item-by-transactionId', transactionId).pipe(
+      map((data) => {
+        return data;
+      }),
+      catchError((error) => {
+        console.error('Error fetching plan statistics:', error);
+        return of(false);
+      }),
+    );
+  }
+
   getAllPlansList(): Observable<any | undefined> {
     return this.apiService.progressiveGetWithoutId('plans').pipe(
       map((data) => {

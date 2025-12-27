@@ -371,7 +371,8 @@ export class ProfileComponent implements OnInit {
   }
 
   whatsappUrl(whatsapp) {
-    const data = whatsapp.replace(' ', '');
+    let data = whatsapp.replace(' ', '');
+    data = data.replace('+', '');
     return `https://wa.me/${data}`;
   }
 }

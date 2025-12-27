@@ -1,3 +1,6 @@
+
+
+
 <div class="modal-dialog modal-dialog-centered modal-xl">
     <!-- <style *ngIf="inModal === false">
         .modal-dialog { max-width: none !important; width: 100% !important; }
@@ -16,21 +19,35 @@
             </div>
             <br *ngIf="inModal === false">
             <br *ngIf="inModal === false">
-            <div class="invoice-wrapper download_section">
+            <div *ngIf="!showInvoice"
+            class="row d-flex align-items-cente justify-content-center">
+            <div class="spinner-border text-primary" role="status" style="margin: 20px;">
+              <span class="visually-hidden">{{ "loading" | translate }}...</span>
+            </div>
+          </div>
+            <div *ngIf="showInvoice" class="invoice-wrapper download_section">
                 <div class="inv-content">
                     <span class="line"></span>
                     <div class="invoice-header">
                         <div class="inv-header-left">
-                            <img [src]="logoUrl" alt="" style="max-width: 150px;" *ngIf="transactionData?.transactionType === 'transfer' 
+                            <!-- <img [src]="logoUrl" alt="" style="max-width: 150px;" *ngIf="transactionData?.transactionType === 'transfer' 
                             || transactionData?.transactionType === 'transfer'
-                            || transactionData?.transactionType === 'withdrawal'">
-                            <h4 class="organisation-name" *ngIf="transactionData?.transactionType != 'transfer'
-                            && transactionData?.transactionType != 'transfer'
-                            && transactionData?.transactionType != 'withdrawal'">{{transactionData?.senderName}}</h4>
+                            || transactionData?.transactionType === 'withdrawal'"> -->
+                            <img [src]="logoUrl" alt="" style="max-width: 150px;">
+
+                            <h4 class="organisation-name" *ngIf="
+                            transactionData?.transactionType != 'transfer'
+                            && transactionData?.transactionType != 'withdrawal'">{{transactionData?.receiverName}}</h4>
+
+                            <h4 class="organisation-name" *ngIf="
+                            transactionData?.transactionType === 'transfer'
+                            || transactionData?.transactionType === 'withdrawal'">{{transactionData?.senderName}}</h4>
+                            
                             <div class="company-details">
                                 <div class="gst-details">
                                     <h6>{{ "payment." + transactionData?.transactionType | translate }}</h6>
-                                    <span *ngIf="transactionData?.transactionType != 'subscriptio'" style="font-size: 13px;">
+                                    <span *ngIf="transactionData?.transactionType === 'subscription'"
+                                        style="font-size: 13px;">
                                         {{planData?.title}}<br> {{planData?.subTitle}}
                                     </span>
                                 </div>
@@ -169,15 +186,20 @@
                                                     {{unitPrice(transactionData)}}</td>
                                                 <td *ngIf="transactionData?.transactionType === 'subscription'
                                                         || transactionData?.transactionType === 'payment'">
-                                                    {{transactionData?.quantity}}
-                                                    <span *ngIf="transactionData?.cycle === 'dayly'">{{
+                                                    <span *ngIf="transactionData?.cycle === 'dayly'">
+                                                        {{transactionData?.quantity}} {{
                                                         "subscriptions.day" | translate }}(s)</span>
-                                                    <span *ngIf="transactionData?.cycle === 'weekly'">{{
+                                                    <span *ngIf="transactionData?.cycle === 'weekly'">
+                                                        {{transactionData?.quantity}} {{
                                                         "subscriptions.week" | translate }}(s)</span>
-                                                    <span *ngIf="transactionData?.cycle === 'monthly'">{{
+                                                    <span *ngIf="transactionData?.cycle === 'monthly'">
+                                                        {{transactionData?.quantity}} {{
                                                         "subscriptions.month" | translate }}</span>
-                                                    <span *ngIf="transactionData?.cycle === 'yearly'">{{
+                                                    <span *ngIf="transactionData?.cycle === 'yearly'">
+                                                        {{transactionData?.quantity}} {{
                                                         "subscriptions.year" | translate }}(s)</span>
+                                                        <span *ngIf="itemData?.dateStart">
+                                                            {{ getDate(itemData?.dateStart) }} / {{ getDate(itemData?.dateEnd) }}</span>
                                                 </td>
                                                 <td class="text-end">{{transactionData?.estimation}}
                                                     {{transactionData?.receiverCurrency}}
@@ -228,7 +250,7 @@
                                                 {{transactionData?.receiverCurrency}}</span></p> -->
                                     </div>
                                     <div class="invoice-total-footer">
-                                        <h4>{{ 'payment.totalAmount' | translate }}: 
+                                        <h4>{{ 'payment.totalAmount' | translate }}:
                                             <span>{{transactionData?.estimation}}
                                                 {{transactionData?.receiverCurrency}}</span>
                                         </h4>
@@ -238,7 +260,9 @@
                         </div>
                     </div>
                     <div class="total-amountdetails">
-                        <p>{{ 'payment.totalAmount' | translate }} ({{ 'payment.inWords' | translate }}): <span> {{ numberToWords(transactionData?.estimation) }} {{transactionData?.receiverCurrency}}</span>
+                        <p>{{ 'payment.totalAmount' | translate }} ({{ 'payment.inWords' | translate }}): <span> {{
+                                numberToWords(transactionData?.estimation) }}
+                                {{transactionData?.receiverCurrency}}</span>
                         </p>
                     </div>
                     <div class="bank-details">
@@ -246,8 +270,8 @@
                             <div class="col md-6">
                                 <div class="payment-info">
                                     <div class="qr">
-                                        <qrcode *ngIf="qrCode" [qrdata]="qrCode" [width]="150"
-                                            [colorDark]="'#021D66FF'" class="qr-class"></qrcode>
+                                        <qrcode *ngIf="qrCode" [qrdata]="qrCode" [width]="150" [colorDark]="'#021D66FF'"
+                                            class="qr-class"></qrcode>
                                         <h6 class="scan-details"> {{ 'payment.scanToViewInvoice' | translate }} </h6>
                                     </div>
                                     <div class="pay-details">
