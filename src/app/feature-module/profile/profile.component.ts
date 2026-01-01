@@ -38,6 +38,7 @@ export class ProfileComponent implements OnInit {
   allCities: any = [];
   description: string
   descriptionEdition: boolean = false;
+  // canEdit: boolean = false;
 
   constructor(
     private Router: Router,
@@ -53,10 +54,21 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.scrollToTop();
     this.getDatas();
     this.profilePictureForm();
   }
 
+  scrollToTop(): void {
+    setTimeout(() => {
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      });
+    }, 100);
+  }
+  
   about() {
     this.changePass = false;
     this.personalDetails = true;

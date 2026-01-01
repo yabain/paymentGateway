@@ -1,8 +1,12 @@
+
+<div class="d-flex justify-content-center" *ngIf="gettingUserData" style="margin: 50px">
+    <div class="spinner-border" role="status"></div>
+  </div>
+<app-head-profile [userData]="userData" *ngIf="!gettingUserData"></app-head-profile>
 <br>
 <div class="d-flex justify-content-center" *ngIf="loadingData" style="margin: 50px">
     <div class="spinner-border" role="status"></div>
 </div>
-<app-calendar [events]="items" *ngIf="!loadingData && raw.length > 0"></app-calendar>
 <br>
 <div class="card-body">
     <div class="row">
@@ -71,4 +75,6 @@
         </div>
     </div>
 </div>
-<br>
+<br><br>
+<h1>Calendar</h1>
+<app-calendar [events]="items" *ngIf="!loadingData && raw.length > 0"></app-calendar>

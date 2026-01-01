@@ -1,97 +1,8 @@
 <!-- Page Wrapper -->
+<app-head-profile [userData]="currentUser" [canEdit]="true"></app-head-profile>
 <div class="content container-fluid">
   <div class="row justify-content-lg-center">
     <div class="col-lg-12">
-
-      <div class="profile-cover">
-        <div class="profile-cover-wrap">
-          <img class="profile-cover-img" src="{{cover}}" alt="">
-        </div>
-      </div>
-
-      <div class="text-center mb-5">
-        <form [formGroup]="uploadPictureForm" class="" style="text-align: center;"
-          *ngIf="currentUser && uploadPictureForm">
-          <div class="avatar avatar-xxl profile-cover-avatar">
-            <img class="avatar-img" src="{{userData?.pictureUrl ? userData?.pictureUrl  : 'assets/img/new/user.png'}}"
-              alt="">
-            <span class="avatar-edit" (click)="changePicture(true);fileUploader.click()">
-              <i class="feather icon-camera avatar-uploader-icon shadow-soft"></i>
-            </span>
-            <input type="file" name="picture" id="picture" accept="image/*" class="form-control ml-4" #fileUploader
-              formControlName="pictureFile" (change)="showPreview($event)" style="display: none;">
-          </div>
-        </form>
-        <div class="div">
-          <span class="badge m-1 rounded-pill badge-outline-success"
-            *ngIf="currentUser && !currentUser?.premium && currentUser?.verified && !currentUser?.warning">
-            <i class="feather icon-check-circle"></i> {{ "badge.verified" | translate }}</span>
-          <span class="badge m-1 rounded-pill badge-outline-warning" *ngIf="currentUser && currentUser?.warning">
-            <i class="feather icon-alert-triangle"></i> {{ 'profile.warningAccount' | translate }}</span>
-          <span class="badge m-1 badge-gradient-success"
-            *ngIf="currentUser && currentUser?.premium && !currentUser?.warning">
-            <i class="feather icon-zap"></i> Premium</span>
-          <span class="badge m-1 badge-soft-warning badge-border"
-            *ngIf="currentUser && !currentUser?.verified && !currentUser?.warning">
-            <i class="feather icon-disc"></i> {{ "badge.notVerified" | translate }}</span>
-          <span class="badge m-1 badge-soft-danger badge-border"
-            *ngIf="currentUser && !currentUser?.verified && currentUser?.isActive === false">
-            <i class="feather icon-user-x"></i> {{ "badge.inactive" | translate }}</span>
-          <span class="badge m-1 badge-soft-dark badge-border" *ngIf="currentUser && currentUser?.inVerification">
-            <i class="feather icon-refresh-ccw"></i> {{ "badge.inVerification" | translate }}</span>
-          <span class="badge m-1 badge-gradient-primary" *ngIf="currentUser && currentUser?.isAdmin">
-            <i class="feather icon-slack"></i> Admin</span>
-          <div name="checkmark-done-outline" class="verified-badge"
-            *ngIf="currentUser && currentUser?.verified && !currentUser?.vip && !currentUser?.warning && !currentUser?.premium ">
-          </div>
-          <p *ngIf="currentUser && currentUser?.warning" class="warning-message">{{ 'profile.warningAccount' |
-            translate }}</p>
-        </div>
-        <br>
-        <div *ngIf="isChangePicture">
-          1 mb max
-        </div>
-        <div *ngIf="isChangePicture">
-          <a class="btn btn-sm btn-secondary m-2" (click)="cancel()">{{ "action.cancel" |
-            translate }}</a>
-          <a *ngIf="!uploadingPicture" class="btn btn-sm btn-success m-2" (click)="savePicture()">{{ "action.save" |
-            translate }}</a>
-          <a *ngIf="uploadingPicture" class="btn btn-sm btn-success" disabled>
-            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-          </a>
-        </div>
-        <h2>
-          {{ showName(userData) }}
-          <!-- <i class="fas fa-certificate text-primary small" data-bs-toggle="tooltip" data-placement="top" title="" data-original-title="Verified"></i> -->
-        </h2>
-        <ul class="list-inline" *ngIf="userData">
-          <li class="list-inline-item" *ngIf="userData?._id">
-            ID: <span style="margin-left: 5px;">{{userData?._id ?
-              userData?._id : ''}}</span>
-          </li>
-        </ul>
-
-        <a target="_blank" [href]="userData?.website" class="btn btn-light btn-sm me-1" *ngIf="userData && userData?.website">
-          <img src="assets/img/ressorces/web.webp" alt="" style="width: 25px; margin-right: 5px;">
-        </a>
-        <a target="_blank" [href]="userData?.linkedIn" class="btn btn-light btn-sm me-1" *ngIf="userData && userData?.linkedIn">
-          <img src="assets/img/ressorces/linkedIn.png" alt="" style="width: 25px; margin-right: 5px;">
-        </a>
-        <a target="_blank" [href]="userData?.facebook" class="btn btn-light btn-sm me-1" *ngIf="userData && userData?.facebook">
-          <img src="assets/img/ressorces/facebook.png" alt="" style="width: 20px; margin-right: 5px;">
-        </a>
-        <a target="_blank" [href]="userData?.instagram" class="btn btn-light btn-sm me-1" *ngIf="userData && userData?.instagram">
-          <img src="assets/img/ressorces/instagram.png" alt="" style="width: 25px; margin-right: 5px;">
-        </a>
-        <a target="_blank" [href]="userData?.twitter" class="btn btn-light btn-sm me-1" *ngIf="userData && userData?.twitter">
-          <img src="assets/img/ressorces/x.webp" alt="" style="width: 25px; margin-right: 5px;">
-        </a>
-        <a target="_blank" [href]="whatsappUrl(userData?.whatsapp)" class="btn btn-light btn-sm me-1" *ngIf="userData && userData?.whatsapp">
-          <img src="assets/img/ressorces/whatsapp.webp" alt="" style="width: 25px; margin-right: 5px;">
-        </a>
-        
-        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" *ngIf="!userData"></span>
-      </div>
 
       <!-- account reported as dangerous -->
       <div class="alert alert-warning alert-dismissible fade show" role="alert"
@@ -139,7 +50,8 @@
                   translate }}</a>
                 <a class="btn btn-sm btn-success" (click)="submit()" *ngIf="edition && !loading">{{ "action.save" |
                   translate }}</a>
-                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" *ngIf="loading"></span>
+                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"
+                  *ngIf="loading"></span>
               </h5>
               <div *ngIf="currentUser && currentUser?.verified && edition">
                 <br>
@@ -276,8 +188,7 @@
                     <small class="text-dark">{{ "profile.website" | translate }}</small>
                     <input type="text" formControlName="website" class="form-control"
                       [class.is-invalid]="form.get('website')?.invalid && form.get('website')?.touched">
-                    <div class="invalid-feedback"
-                      *ngIf="form.get('website')?.invalid && form.get('website')?.touched">
+                    <div class="invalid-feedback" *ngIf="form.get('website')?.invalid && form.get('website')?.touched">
                       {{ "profile.invalidUrl" | translate }}
                     </div>
                   </li>
@@ -309,8 +220,7 @@
                     <small class="text-dark">Twitter</small>
                     <input type="text" formControlName="twitter" class="form-control"
                       [class.is-invalid]="form.get('twitter')?.invalid && form.get('twitter')?.touched">
-                    <div class="invalid-feedback"
-                      *ngIf="form.get('twitter')?.invalid && form.get('twitter')?.touched">
+                    <div class="invalid-feedback" *ngIf="form.get('twitter')?.invalid && form.get('twitter')?.touched">
                       {{ "profile.invalidUrl" | translate }}
                     </div>
                   </li>
@@ -355,7 +265,8 @@
               <a class="btn btn-sm btn-success" (click)="saveDescription()" *ngIf="descriptionEdition && !loading2">
                 <i class="feather icon-edit"></i>
                 {{ "action.save" | translate }}</a>
-              <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" *ngIf="loading2"></span>
+              <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"
+                *ngIf="loading2"></span>
             </div>
             <div class="card-body card-body-height" *ngIf="userData">
               <p *ngIf="currentUser && !descriptionEdition">{{ description }} </p>

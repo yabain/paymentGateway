@@ -4,6 +4,9 @@ import { routes } from 'src/app/core/core.index';
 import { Location } from '@angular/common';
 import { SubscriptionService } from 'src/app/services/subscription/subscription.service';
 import { environment } from 'src/environments/environment.prod';
+import { UserService } from 'src/app/services/user/user.service';
+import { catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 
 @Component({
@@ -20,11 +23,15 @@ export class SubscriptionDetailsComponent {
   items: any[] = [];
   raw: any = [];
   frontUrl: string = environment.frontUrl;
+  userData: any;
+  gettingUserData: boolean = true;
 
   constructor(
     private route: ActivatedRoute,
     private location: Location,
-    private subscriptionService: SubscriptionService
+    private subscriptionService: SubscriptionService,
+    private userService: UserService,
+    private router: Router
   ) {
     this.getId();
     this.scrollToTop();
@@ -41,10 +48,32 @@ export class SubscriptionDetailsComponent {
     if (idParam && idParam !== 'null' && idParam !== 'undefined') {
      [this.subscriptionId, this.subscriberId] = idParam.split('&&');
     }
-
     console.log('paramId: ', this.subscriptionId, this.subscriberId);
-
     this.getSubscriptionItems(this.subscriptionId, this.subscriberId);
+    this.getUserData(this.subscriberId);
+  }
+
+  
+  getUserData(userId) {
+    this.gettingUserData = true;
+    this.userService
+      .getUser(userId)
+      .pipe(
+        catchError((error: any) => {
+          console.log('error: ', error);
+          this.gettingUserData = false;
+          this.router.navigateByUrl('/dashboard');
+          return of({
+            error: true,
+            message: error.message || 'An error occurred',
+          });
+        }),
+      )
+      .subscribe((user: any) => {
+        this.userData = user;
+        console.log('userData: ', this.userData)
+        this.gettingUserData = false;
+      });
   }
 
   scrollToTop(): void {

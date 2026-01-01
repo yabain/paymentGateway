@@ -180,7 +180,7 @@
           </div>
           <div class="col-md-4">
             <p style="color: black" *ngIf="metadata">
-              Total: {{ metadata?.totalItem }} <br><br>
+              Total : {{ metadata?.totalPersonal + metadata?.totalOrganisation }} {{ "auth.user" | translate }}s<br><br>
               <span style="color: #04c714;">O</span> Personal: {{ metadata?.totalPersonal }} <br><br>
               <span style="color: #044ddf;">O</span> Organisation: {{ metadata?.totalOrganisation }}
             </p>

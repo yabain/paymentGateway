@@ -5,9 +5,13 @@ import { ProfileRoutingModule } from './profile-routing.module';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { HeadProfileComponent } from './head-profile/head-profile.component';
 
 @NgModule({
-  declarations: [ProfileComponent],
+  declarations: [
+    ProfileComponent,
+    HeadProfileComponent
+  ],
   imports: [
     CommonModule,
     ProfileRoutingModule,
@@ -15,5 +19,6 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     TranslateModule,
     ReactiveFormsModule,
     FormsModule],
+    exports: [ProfileComponent, HeadProfileComponent],
 })
 export class ProfileModule { }

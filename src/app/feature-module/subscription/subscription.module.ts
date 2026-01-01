@@ -12,6 +12,7 @@ import { ItemComponent } from './packages/item/item.component';
 import { FrontModule } from 'src/app/front/front.module';
 import { DetailsComponent } from './packages/details/details.component';
 import { SubscriptionDetailsComponent } from './subscription-details/subscription-details.component';
+import { ProfileModule } from '../profile/profile.module';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { SubscriptionDetailsComponent } from './subscription-details/subscriptio
     SharedModule,
     TranslateModule,
     FrontModule,
+    ProfileModule
   ],
   providers: [SubscriptionService],
 })
