@@ -1,18 +1,15 @@
-
-
-
 <div class="modal-dialog modal-dialog-centered modal-xl">
-    <!-- <style *ngIf="inModal === false">
-        .modal-dialog { max-width: none !important; width: 100% !important; }
+    <style *ngIf="inModal === false">
+        .modal-dialog { max-width: 2300px !important; width: 2300px !important; }
         .row { flex-wrap: nowrap !important; }
         .col, [class*="col-"] { flex: 0 0 auto !important; min-width: 0 !important; }
         @media (max-width: 768px) {
             .col-lg-4, .col-lg-6, .col-md-6, .col-md-12 { flex: 0 0 auto !important; width: auto !important; }
         }
-    </style> -->
+    </style>
     <div class="main-wrapper invoice-one" style="margin: 0 !important;">
         <div class="modal-content">
-            <div class="modal-body" *ngIf="inModal">
+            <div class="modal-body row d-flex align-items-right" *ngIf="inModal">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeModal
                     id="closeModal" (click)="ngOnDestroy()">
                 </button>

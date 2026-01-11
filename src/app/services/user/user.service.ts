@@ -237,8 +237,6 @@ export class UserService {
     }
   }
 
-
-
   async changeStatus(userId): Promise<any> {
     try {
       const response = await this.apiService.update('user/update-status', userId, {}).toPromise();

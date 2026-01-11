@@ -83,10 +83,10 @@
             <div class="dash-count">
               <div class="dash-title">{{ "dashboard.allUsers" | translate }}</div>
               <div class="dash-counts">
-                <p>
+                <p *ngIf="!gettingUserStats">
                   {{userStats.usersNumber}}
-                  <img src="assets/img/new/loader.gif" width="15px" alt="" *ngIf="gettingUserStats">
                 </p>
+                  <img src="assets/img/new/loader.gif" width="15px" alt="" *ngIf="gettingUserStats">
               </div>
             </div>
           </div>
@@ -112,9 +112,10 @@
               <i class="fas fa-credit-card"></i>
             </span>
             <div class="dash-count">
-              <div class="dash-title">{{ "dashboard.allPayments" | translate }}</div>
+              <div class="dash-title">{{ "dashboard.allTransactions" | translate }}</div>
               <div class="dash-counts">
-                <p>0</p>
+                <p *ngIf="!gettingPaymentsStats">{{ paymentsStats }}</p>
+                <img src="assets/img/new/loader.gif" width="15px" alt="" *ngIf="gettingPaymentsStats">
               </div>
             </div>
           </div>

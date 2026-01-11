@@ -145,11 +145,10 @@
 </div>
 <!-- /Search Filter -->
 
-
 <div class="modal custom-modal fade invoices-preview" id="invoices_preview" role="dialog">
   <app-invoice-details [transactionData]="selectedTransaction" [inModal]="true"></app-invoice-details>
 </div>
 
-<div *ngIf="printing" id="selectedInvoice" style="min-width: 1200px;">
+<div *ngIf="printing" id="selectedInvoice" style="min-width: 2500px !important;">
   <app-invoice-details [transactionData]="selectedTransaction" [inModal]="false"></app-invoice-details>
 </div>

@@ -22,6 +22,7 @@ import { BalanceService } from 'src/app/services/balance/balance.service';
 import { SubscriptionService } from 'src/app/services/subscription/subscription.service';
 import { SystemService } from 'src/app/services/system/system.service';
 import { UserService } from 'src/app/services/user/user.service';
+import { PaymentService } from 'src/app/services/payment/payment.service';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries | any;
@@ -74,6 +75,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   balance: number = 0;
   plansStats: any = 0;
   gettingPlansStats: boolean = true;
+  gettingPaymentsStats: boolean = true;
+  paymentsStats: any = 0;
 
   constructor(
     private sideBar: SideBarService,
@@ -85,6 +88,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private systemService: SystemService,
     private exchange: ExchangeService,
     private balanceService: BalanceService,
+    private paymentService: PaymentService,
   ) {}
 
   async ngOnInit() {
@@ -130,8 +134,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.userName = this.userName.split(' ')[0]; // Get only the first name
             if (this.currentUserData.isAdmin === true) {
               this.gettingUserStats = true;
-              this.userStats = this.getUsersStatistics();
-              this.plansStats = this.getPlansStatistics();
+              this.getUsersStatistics();
+              this.getPlansStatistics();
+              this.getPaymentsStatistics();
             }
           }
           this.getBalance();
@@ -160,6 +165,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
     } catch (error) {
       console.error('Error fetching users stats:', error);
       this.gettingUserStats = false;
+    }
+  }
+
+  async getPaymentsStatistics() {
+    try {
+      const response = await this.paymentService.getStatistics().toPromise();
+      if (response) {
+        this.paymentsStats = response.totalTransactions;
+        this.gettingPaymentsStats = false;
+      } else {
+        console.error('No data found in response');
+        this.gettingPaymentsStats = false;
+      }
+    } catch (error) {
+      console.error('Error fetching users stats:', error);
+      this.gettingPaymentsStats = false;
     }
   }
 
