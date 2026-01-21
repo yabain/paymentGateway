@@ -73,15 +73,15 @@
         </div> -->
 
         <div class="card">
-            <app-candidate *ngIf="currentUser && isElection && currentUser.email !== 'dkuser123@email.com'" [service]="service" (click)="navigateTo('/services/details/' + service._id)"></app-candidate>
-            <app-candidate *ngIf="!currentUser && isElection || isElection && currentUser.email === 'dkuser123@email.com'" [service]="service"></app-candidate>
+            <!-- <app-candidate *ngIf="currentUser && currentUser.email !== 'dkuser123@email.com'" [service]="service" (click)="navigateTo('/services/details/' + service._id)"></app-candidate>
+            <app-candidate *ngIf="!currentUser || currentUser.email === 'dkuser123@email.com'" [service]="service"></app-candidate> -->
 
-            <app-item *ngIf="currentUser && !isElection && currentUser.email != 'dkuser123@email.com'" [service]="service" (click)="navigateTo('/services/details/' + service._id)"></app-item>
-            <app-item *ngIf="!currentUser && !isElection || !isElection && currentUser.email === 'dkuser123@email.com'" [service]="service"></app-item>
+            <app-item *ngIf="currentUser && currentUser.email !== 'dkuser123@email.com'" [service]="service" (click)="navigateTo('/services/details/' + service._id)"></app-item>
+            <app-item *ngIf="!currentUser || currentUser.email === 'dkuser123@email.com'" [service]="service"></app-item>
             <!-- <div [ngClass]="service?.isActive === true ? 'badge-success':  'badge-error'"
                 *ngIf="currentUser && isAuthor(service) || currentUser && isAdmin">
             </div> -->
-            <div *ngIf="!watingServicesListStat && !service.test"> {{returnQuantity(service._id)}} Votes</div>
+            <div *ngIf="!watingServicesListStat && !service.test"> {{returnQuantity(service._id)}} Items</div>
             <div class="d-flex justify-content-center package-edit" style="padding: 5px;">
                 <button type="button" (click)="selectService(service)" type="button" class="btn btn-secondary mt-1 me-1"
                     data-bs-toggle="modal" data-bs-target="#package_details">
@@ -90,11 +90,11 @@
                 <button class="btn btn-rounded btn-primary me-1" *ngIf="service.isActive && currentUser"
                     (click)="checkSbscriberStatus(service)" data-bs-toggle="modal"
                     data-bs-target="#subscriptionModal">
-                    {{ ('services.' + (isElection ? 'vote' : 'pay')) | translate }}
+                    {{ 'services.pay' | translate }}
                     </button>
                 <button class="btn btn-rounded btn-primary me-1" *ngIf="!currentUser"
                     (click)="navigateTo('/auth/login')">
-                    {{ (isElection === true ? 'services.loginToVote' : 'services.loginToPay') | translate }}</button>
+                    {{ 'services.loginToPay' | translate }}</button>
             </div>
         </div>
 
@@ -402,7 +402,7 @@
 
                     <div *ngIf="!checkingSubscriptionStatus && isSubscriber" style="text-align: center;">
                         <div class="fee-breakdown">
-                            {{ "services.alreadyVoteMsg" | translate }}
+                            {{ "services.alreadyPayMsg" | translate }}
                         </div>
                         <button type="button" class="btn btn-primary btn-lg me-1 mb-2" style="padding: 5px;"
                             (click)="isSubscriber = false">{{ "services.payAgain" | translate }}</button>

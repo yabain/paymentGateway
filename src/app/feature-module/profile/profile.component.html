@@ -277,7 +277,8 @@
               <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
             </div>
           </div>
-          <div class="card">
+          <app-dev [ableToShow]="ableToShow" [userData]="currentUser" *ngIf="userData && !loading"></app-dev>
+          <!-- <div class="card">
             <div class="card-header">
               <h5 class="card-title">{{ "profile.activity" | translate }}</h5>
             </div>
@@ -296,7 +297,7 @@
             <div class="card-body" *ngIf="!userData" style="text-align: center;">
               <img src="assets/img/new/loader.gif" width="20px">
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>

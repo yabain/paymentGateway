@@ -6,11 +6,13 @@ import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HeadProfileComponent } from './head-profile/head-profile.component';
+import { DevComponent } from './dev/dev.component';
 
 @NgModule({
   declarations: [
     ProfileComponent,
-    HeadProfileComponent
+    HeadProfileComponent,
+    DevComponent
   ],
   imports: [
     CommonModule,
@@ -19,6 +21,6 @@ import { HeadProfileComponent } from './head-profile/head-profile.component';
     TranslateModule,
     ReactiveFormsModule,
     FormsModule],
-    exports: [ProfileComponent, HeadProfileComponent],
+    exports: [ProfileComponent, HeadProfileComponent, DevComponent],
 })
 export class ProfileModule { }

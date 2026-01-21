@@ -38,6 +38,7 @@ export class ProfileComponent implements OnInit {
   allCities: any = [];
   description: string
   descriptionEdition: boolean = false;
+  ableToShow: boolean = false;
   // canEdit: boolean = false;
 
   constructor(
@@ -267,6 +268,7 @@ export class ProfileComponent implements OnInit {
       this.description = this.currentUser.description;
       // Start in view mode with controls disabled to avoid template [disabled]
       this.form.disable({ emitEvent: false });
+      this.ableToShow = this.verifyUserConditions(this.currentUser) ? true : false;
       this.loading = false;
     }
     console.log(this.currentUser)
@@ -380,6 +382,13 @@ export class ProfileComponent implements OnInit {
 
   showName(userData: any): string {
     return this.userService.showName(userData);
+  }
+
+  verifyUserConditions(user): boolean {
+    if (user.accountType !== 'organisation' && user.isAdmin !== true) return false;
+    if (user.isActive !== true) return false;
+    if (user.verified !== true) return false;
+    return true;
   }
 
   whatsappUrl(whatsapp) {

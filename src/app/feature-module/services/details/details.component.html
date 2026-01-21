@@ -48,7 +48,7 @@
                                     </div> -->
                                     <div class="badge-warning"
                                         *ngIf="servicesStatus?.existingSubscription && servicesStatus?.status">
-                                        <i class="feather icon-check-circle"></i> {{ 'services.alreadyVoteMsg' |
+                                        <i class="feather icon-check-circle"></i> {{ 'services.alreadyPayMsg' |
                                         translate }}
                                     </div>
                                     <div [ngClass]="serviceData?.isActive === true ? 'badge-success':  'badge-error'"
@@ -368,7 +368,7 @@
 
                     <div *ngIf="!checkingSubscriptionStatus && isSubscriber" style="text-align: center;">
                         <div class="fee-breakdown">
-                            {{ "services.alreadyVoteMsg" | translate }}
+                            {{ "services.alreadyPayMsg" | translate }}
                         </div>
                         <button type="button" class="btn btn-primary btn-lg me-1 mb-2" style="padding: 5px;"
                             (click)="isSubscriber = false">{{ "services.payAgain" | translate }}</button>

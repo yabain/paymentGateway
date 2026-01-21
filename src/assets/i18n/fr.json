@@ -349,7 +349,8 @@
     "profileUpdatedError": "Erreur de mis à jour du profil",
     "invalidUrl": "Url invalid",
     "website": "Site web",
-    "imageTooLarge": "Taille de l'image trop grande (max 1mb)"
+    "imageTooLarge": "Taille de l'image trop grande (max 1mb)",
+    "devSpace": "Espace Dev"
   },
   "payment": {
     "title": "Paiement",
@@ -488,7 +489,8 @@
     "scanToViewInvoice": "Voir la facture",
     "invoiceRef": "Réferences",
     "terms1": "digiKUNTZ Payments n'est pas responsable des transactions entre utilisateurs",
-    "terms2": "Avant toute transaction, Assurez-vous que l'utilisateur est authentifié"
+    "terms2": "Avant toute transaction, Assurez-vous que l'utilisateur est authentifié",
+    "apiCall": "API Call"
   },
   "whatsapp": {
     "title": "WhatsApp",

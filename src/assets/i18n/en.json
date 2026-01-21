@@ -487,7 +487,8 @@
     "scanToViewInvoice": "Scan to View invoice",
     "invoiceRef": "References",
     "terms1": "digiKUNTZ Payments is not responsible for transactions between users",
-    "terms2": "Before any transaction, ensure the user is authenticated"
+    "terms2": "Before any transaction, ensure the user is authenticated",
+    "apiCall": "API Call"
   },
   "whatsapp": {
     "title": "WhatsApp center",
