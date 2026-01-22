@@ -39,10 +39,9 @@ export class DevComponent implements OnInit {
       .then((data: any) => {
         console.log('resp data', data);
         if (data) {
-          console.log('Decripted secret: ', this.cryptService.decryptPayload(data.secretKey))
-          this.keyData = data;
           data.secretKey = this.cryptService.decryptPayload(data.secretKey);
           data.publicKey = this.cryptService.decryptPayload(data.publicKey);
+          this.keyData = data;
         } else return null;
       }
       )
