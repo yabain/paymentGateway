@@ -37,11 +37,11 @@ export class DevComponent implements OnInit {
   async getKeyData() {
     this.devService.getMyKeys()
       .then((data: any) => {
-        console.log('resp data', data);
         if (data) {
           data.secretKey = this.cryptService.decryptPayload(data.secretKey);
           data.publicKey = this.cryptService.decryptPayload(data.publicKey);
           this.keyData = data;
+          console.log('resp data', data);
         } else return null;
       }
       )
