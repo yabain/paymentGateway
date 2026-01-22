@@ -349,8 +349,7 @@
     "profileUpdatedError": "Erreur de mis à jour du profil",
     "invalidUrl": "Url invalid",
     "website": "Site web",
-    "imageTooLarge": "Taille de l'image trop grande (max 1mb)",
-    "devSpace": "Espace Dev"
+    "imageTooLarge": "Taille de l'image trop grande (max 1mb)"
   },
   "payment": {
     "title": "Paiement",
@@ -819,6 +818,19 @@
     "renewSubscription": "Renouvellez votre abonnement",
     "subscriberList": "Liste des abonnés",
     "subscriptionStartDate": "Date de début de l'abonnement"
+  },
+  "dev": {
+    "title": "Espace Dev",
+    "apiKey": "API Key",
+    "generateKey": "Generate a new key",
+    "key": "Key",
+    "showKey": "Show key",
+    "hiddeKey": "Hidde key",
+    "keyWarning": "En activant cette fonctionnalité, vous autorisez des applications tiers à initier des transaction depuis votre compte au moyen de vos clés API.",
+    "msgToGetKey": "Pour activer votre clé d'intégration pour vos application propre, vous devez vous assurer d'avoir ces exigentce",
+    "step1": "Avoir un compte de type Organisation",
+    "step2": "Avoir passé l'étape de vérification",
+    "step3": "Avoir activé activé l'accès à votre compte via API"
   },
   "rawData": "Données brutes",
   "tool": "Outil",

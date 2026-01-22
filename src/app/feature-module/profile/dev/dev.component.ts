@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { CryptService } from 'src/app/services/crypt/crypt.service';
 import { DevService } from 'src/app/services/dev/dev.service';
@@ -27,6 +28,7 @@ export class DevComponent implements OnInit {
     private userService: UserService,
     private devService: DevService,
     private toastService: ToastService,
+    private translate: TranslateService,
   ) {
   }
 

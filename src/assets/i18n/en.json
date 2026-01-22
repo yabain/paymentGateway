@@ -348,7 +348,8 @@
     "profileUpdated": "Profile has been updated",
     "profileUpdatedError": "Profile update error",
     "invalidUrl": "Invalid url",
-    "website": "Website"
+    "website": "Website",
+    "imageTooLarge": "Image size too large (max 1MB)"
   },
   "payment": {
     "title": "Payment",
@@ -816,6 +817,19 @@
     "renewSubscription": "Renew your subscription",
     "subscriberList": "Subscriber list",
     "subscriptionStartDate": "Subscription start date"
+  },
+  "dev": {
+    "title": "Dev tools",
+    "apiKey": "API Key",
+    "generateKey": "Generate a new key",
+    "key": "Key",
+    "showKey": "Show key",
+    "hiddeKey": "Hidde key",
+    "keyWarning": "By enabling this feature, you authorize third-party applications to initiate transactions from your account using your API keys.",
+    "msgToGetKey": "To enable your integration keys for your own application, you must ensure you meet these requirements",
+    "step1": "Have an Organization account",
+    "step2": "Have passed the verification step",
+    "step3": "Have enabled API access to your account"
   },
   "rawData": "Raw data",
   "tool": "Tool",
