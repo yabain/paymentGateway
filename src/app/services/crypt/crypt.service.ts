@@ -46,20 +46,15 @@ export class CryptService {
     return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
   }
 
-  // encryptData2(data: any){
-  //   if(data == null || data == undefined || data == "") return null;
-  //   let xxx = CryptoJS.AES.encrypt(data, this.key).toString();
-  //   xxx = xxx.replaceAll("/", "AaAaAaA");
-  //   return xxx;
-  // } 
 
 
-  //  decryptData2(data: any){
-  //   if(data == null || data == undefined || data == "") return null;
-  //   data = data.replaceAll("AaAaAaA", "/");
-  //   const bytes = CryptoJS.AES.decrypt(data, this.key);
-  //   return bytes.toString(CryptoJS.enc.Utf8);
-  // }
+
+
+
+  // Encrypt for backend data to encrypt
+  encryptPayload(payload: string): string{
+    return payload;
+  }
 
   // Decript for backend data encrypted
   decryptPayload(payload: string): string {

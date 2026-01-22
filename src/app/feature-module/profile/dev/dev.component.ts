@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { CryptService } from 'src/app/services/crypt/crypt.service';
 import { DevService } from 'src/app/services/dev/dev.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
+import { ToastService } from 'src/app/services/toast/toast.service';
 import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
@@ -24,8 +25,8 @@ export class DevComponent implements OnInit {
     private storage: StorageService,
     private toastr: ToastrService,
     private userService: UserService,
-    private cryptService: CryptService,
-    private devService: DevService
+    private devService: DevService,
+    private toastService: ToastService,
   ) {
   }
 
@@ -38,8 +39,6 @@ export class DevComponent implements OnInit {
     this.devService.getMyKeys()
       .then((data: any) => {
         if (data) {
-          data.secretKey = this.cryptService.decryptPayload(data.secretKey);
-          data.publicKey = this.cryptService.decryptPayload(data.publicKey);
           this.keyData = data;
           console.log('resp data', data);
         } else return null;
@@ -78,10 +77,18 @@ export class DevComponent implements OnInit {
       })
   }
 
-  decryptKey(key) {
-    const decryptedKey = this.cryptService.decryptPayload(key);
-    // this.copy(decryptedKey);
-    return decryptedKey;
+  toggleStatus(){
+    this.updatingStatus = true;
+    this.devService.updateKeyStatus(!this.keyData.status)
+      .then((data: any) => {
+        console.log('data toggle status: ', data);
+        if (data) {
+          this.keyData = data;
+          this.toastService.presentToast('success', 'Done !', '', 5 * 1000);
+        } else return null;
+        this.updatingStatus = false;
+      })
+
   }
 
   async generateKey() {

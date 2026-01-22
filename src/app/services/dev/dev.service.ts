@@ -34,7 +34,7 @@ export class DevService {
 
   async updateKeyStatus(status): Promise<any> {
     try {
-      const response = await this.apiService.updateWithoutId(`dev/update-key`, {status}).toPromise();
+      const response = await this.apiService.updateWithoutId(`dev/update-status`, {status}).toPromise();
       return response;
     } catch (error) {
       console.error('Error fetching users stats:', error);

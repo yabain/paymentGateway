@@ -1,9 +1,25 @@
 <div class="card">
   <div class="card-header d-flex justify-content-between">
     <h5 class="card-title">{{ "profile.devSpace" | translate }}</h5>
-    <p>API Kes</p>
+    <p>API Key</p>
+    <div *ngIf="ableToShow && keyData && !updatingStatus">
+      <span *ngIf="keyData?.status != true"
+          style="background-color: #850404; color: #fff; padding: 3px 5px; border-radius: 3px;">
+          {{ "users.disabled" | translate }}
+      </span>
+      <span *ngIf="keyData?.status === true"
+          style="background-color: #04c714; color: #fff; padding: 3px 5px; border-radius: 3px;">
+          {{ "users.enabled" | translate }}
+      </span>
+      <button class="btn btn-block me-1"
+          (click)="toggleStatus()" [ngClass]="keyData?.status === true ?
+        'btn-outline-danger':  'btn-outline-success'">
+          <i class="feather icon-power me-1"></i>
+      </button>
+    </div>
+    <span *ngIf="ableToShow && updatingStatus || !keyData && ableToShow" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
   </div>
-  <div class="card-body card-body-height" *ngIf="keyData && keyData.status === true">
+  <div class="card-body card-body-height" *ngIf="ableToShow && keyData?.status === true">
     <div *ngIf="showKey" (click)="toggleShowKey()">
       Show key <i class="feather icon-eye-off" style="margin-left: 10px;"></i>
     </div>
@@ -46,15 +62,26 @@
       <textarea class="form-control" rows="8" *ngIf="currentUser && descriptionEdition" name="" id=""
         [(ngModel)]="description"></textarea> -->
   </div>
-  <div class="card-body card-body-height" *ngIf="!keyData">
+
+  <div class="card-body card-body-height" *ngIf="ableToShow && !keyData">
     <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
   </div>
-  <!-- <div class="card-body" *ngIf="!ableToShow || keyData.status !== true" style="text-align: left;">
-    Pour obtenir vos clés d'intégration, vous devez vous assurer d'avoir ces exigentces: <br>
+
+  <div class="card-body" *ngIf="ableToShow" style="text-align: justify;">
+    <p>En activant cette fonctionnalité,
+      vous autorisez des applications tiers
+      à initier des transaction depuis votre
+      compte au moyen de vos clés API.
+    </p>
+  </div>
+
+
+  <div class="card-body" *ngIf="!ableToShow" style="text-align: left;">
+    Pour obtenir vos clés d'intégration pour vos application propre, vous devez vous assurer d'avoir ces exigentces: <br>
     <ul>
       <li>1. Avoir un compte de type Organisation</li>
       <li>2. Avoir passé l'étape de vérification</li>
       <li>3. Avoir activé activé l'accès à votre compte via API</li>
     </ul>
-  </div> -->
+  </div>
 </div>
