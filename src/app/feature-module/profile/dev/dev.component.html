@@ -3,7 +3,7 @@
     <h5 class="card-title">{{ "profile.devSpace" | translate }}</h5>
     <p>API Kes</p>
   </div>
-  <div class="card-body card-body-height" *ngIf="ableToShow && keyData && keyData.status === true">
+  <div class="card-body card-body-height" *ngIf="keyData && keyData.status === true">
     <div *ngIf="showKey" (click)="toggleShowKey()">
       Show key <i class="feather icon-eye-off" style="margin-left: 10px;"></i>
     </div>
@@ -46,8 +46,8 @@
       <textarea class="form-control" rows="8" *ngIf="currentUser && descriptionEdition" name="" id=""
         [(ngModel)]="description"></textarea> -->
   </div>
-  <div class="card-body card-body-height" *ngIf="ableToShow">
-    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" *ngIf="!keyData"></span>
+  <div class="card-body card-body-height" *ngIf="!keyData">
+    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
   </div>
   <!-- <div class="card-body" *ngIf="!ableToShow || keyData.status !== true" style="text-align: left;">
     Pour obtenir vos clés d'intégration, vous devez vous assurer d'avoir ces exigentces: <br>
