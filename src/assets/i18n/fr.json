@@ -830,7 +830,12 @@
     "msgToGetKey": "Pour activer votre clé d'intégration pour vos application propre, vous devez vous assurer d'avoir ces exigentce",
     "step1": "Avoir un compte de type Organisation",
     "step2": "Avoir passé l'étape de vérification",
-    "step3": "Avoir activé activé l'accès à votre compte via API"
+    "step3": "Avoir activé activé l'accès à votre compte via API",
+    "resetKey": "Réinitialisation de clé",
+    "reset": "Réinitialisation",
+    "confirmReset": "Confirmation de Réinitialisation",
+    "confirmResetKey": "Êtes-vous certain de vouloir réinitialiser votre clé d'intégration",
+    "resetKeyWarning": "En effectuant cette réinitialisation, les précédentes clés ne seront plus valide. Si vous les aviez intégré dans des applications tiers, cela ne fonctionnera plus jusqu'à ce que vous les mettez à jour avec les nouvelle."
   },
   "rawData": "Données brutes",
   "tool": "Outil",

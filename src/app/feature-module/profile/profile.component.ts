@@ -158,7 +158,7 @@ export class ProfileComponent implements OnInit {
       Object.keys(this.form.controls).forEach(key => {
         const control = this.form.get(key);
         if (control && control.invalid) {
-          console.log(`Field ${key}:`, control.errors);
+          console.error(`Field ${key}:`, control.errors);
         }
       });
       
@@ -177,7 +177,6 @@ export class ProfileComponent implements OnInit {
       .subscribe
       ({
         next: (userData) => {
-          console.log('userData: ', userData)
           if (!userData || userData.error) {
             this.translate.get("profile.profileUpdatedError").subscribe((res: string) => {
               this.toastService.presentToast('error', 'Error', res, 10000);
@@ -228,14 +227,12 @@ export class ProfileComponent implements OnInit {
   }
 
   saveDescription(){
-    console.log('description: ', this.description);
     this.loading2 = true;
 
     this.userService.updateUserProfile({description: this.description})
       .subscribe
       ({
         next: (userData) => {
-          console.log('userData: ', userData)
           if (!userData) {
             this.translate.get("profile.profileUpdatedError").subscribe((res: string) => {
               this.toastService.presentToast('error', 'Error', res, 10000);
@@ -271,7 +268,6 @@ export class ProfileComponent implements OnInit {
       this.ableToShow = this.verifyUserConditions(this.currentUser) ? true : false;
       this.loading = false;
     }
-    console.log(this.currentUser)
   }
 
   /**
@@ -287,7 +283,6 @@ export class ProfileComponent implements OnInit {
       .subscribe
       ({
         next: (userData) => {
-          // console.log('userData: ', userData)
           if (userData.error) {
             this.translate.get("profile.profileUpdatedError").subscribe((res: string) => {
               this.toastService.presentToast('error', 'Error', res, 10000);

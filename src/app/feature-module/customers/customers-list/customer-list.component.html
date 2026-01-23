@@ -334,93 +334,93 @@
       </div>
     </div>
   </div>
-
-  <!-- Disable Items Modal -->
-  <div class="modal custom-modal fade" id="disable_modal" role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-md">
-      <div class="modal-content">
-        <div class="modal-body">
-          <div class="form-header">
-            <h3>{{ "users.deactivation" | translate }}</h3>
-            <p>{{ "users.disableMessage" | translate }} <b style="color: black;">{{ selectedUser ?
-                getUserName(selectedUser) : ''}}</b> ?</p>
-          </div>
-          <div class="modal-btn delete-action">
-            <div class="row">
-              <div class="col-6">
-                <button type="reset" data-bs-dismiss="modal" (click)="changeUserActiveStatus()"
-                  class="w-100 btn btn-primary paid-continue-btn">
-                  {{ "users.disable" | translate }}
-                </button>
-              </div>
-              <div class="col-6">
-                <button type="submit" data-bs-dismiss="modal" class="w-100 btn btn-primary paid-cancel-btn">
-                  {{ "users.cancel" | translate }}
-                </button>
-              </div>
+</div>
+<!-- Disable Items Modal -->
+<div class="modal custom-modal fade" id="disable_modal" role="dialog">
+  <div class="modal-dialog modal-dialog-centered modal-md">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="form-header">
+          <h3>{{ "users.deactivation" | translate }}</h3>
+          <p>{{ "users.disableMessage" | translate }} <b style="color: black;">{{ selectedUser ?
+              getUserName(selectedUser) : ''}}</b> ?</p>
+        </div>
+        <div class="modal-btn delete-action">
+          <div class="row">
+            <div class="col-6">
+              <button type="reset" data-bs-dismiss="modal" (click)="changeUserActiveStatus()"
+                class="w-100 btn btn-primary paid-continue-btn">
+                {{ "users.disable" | translate }}
+              </button>
+            </div>
+            <div class="col-6">
+              <button type="submit" data-bs-dismiss="modal" class="w-100 btn btn-primary paid-cancel-btn">
+                {{ "users.cancel" | translate }}
+              </button>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- Enable Items Modal -->
-  <div class="modal custom-modal fade" id="enable_modal" role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-md">
-      <div class="modal-content">
-        <div class="modal-body">
-          <div class="form-header">
-            <h3>{{ "users.activation" | translate }}</h3>
-            <p>{{ "users.enableMessage" | translate }} <b style="color: black;">{{ selectedUser ?
-                getUserName(selectedUser) : ''}}</b> ?</p>
-          </div>
-          <div class="modal-btn delete-action">
-            <div class="row">
-              <div class="col-6">
-                <button type="reset" data-bs-dismiss="modal" (click)="changeUserActiveStatus()"
-                  class="w-100 btn btn-primary paid-continue-btn">
-                  {{ "users.enable" | translate }}
-                </button>
-              </div>
-              <div class="col-6">
-                <button type="submit" data-bs-dismiss="modal" class="w-100 btn btn-primary paid-cancel-btn">
-                  {{ "users.cancel" | translate }}
-                </button>
-              </div>
+<!-- Enable Items Modal -->
+<div class="modal custom-modal fade" id="enable_modal" role="dialog">
+  <div class="modal-dialog modal-dialog-centered modal-md">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="form-header">
+          <h3>{{ "users.activation" | translate }}</h3>
+          <p>{{ "users.enableMessage" | translate }} <b style="color: black;">{{ selectedUser ?
+              getUserName(selectedUser) : ''}}</b> ?</p>
+        </div>
+        <div class="modal-btn delete-action">
+          <div class="row">
+            <div class="col-6">
+              <button type="reset" data-bs-dismiss="modal" (click)="changeUserActiveStatus()"
+                class="w-100 btn btn-primary paid-continue-btn">
+                {{ "users.enable" | translate }}
+              </button>
+            </div>
+            <div class="col-6">
+              <button type="submit" data-bs-dismiss="modal" class="w-100 btn btn-primary paid-cancel-btn">
+                {{ "users.cancel" | translate }}
+              </button>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- Disable Items Modal -->
-  <div class="modal custom-modal fade" id="setAdmin_modal" role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-md">
-      <div class="modal-content">
-        <div class="modal-body">
-          <div class="form-header">
-            <h3>Admin</h3>
-            <p>{{ "users.setAdminMsg1" | translate }} <b style="color: black;">{{ selectedUser ?
-                getUserName(selectedUser) : ''}}</b> {{ "users.setAdminMsg2" | translate }} ?</p>
-          </div>
-          <div class="modal-btn delete-action">
-            <div class="row">
-              <div class="col-6">
-                <button type="reset" data-bs-dismiss="modal" (click)="changeUserAdminStatus()"
-                  class="w-100 btn btn-primary paid-continue-btn">
-                  {{ "users.setAdmin" | translate }}
-                </button>
-              </div>
-              <div class="col-6">
-                <button type="submit" data-bs-dismiss="modal" class="w-100 btn btn-primary paid-cancel-btn">
-                  {{ "users.cancel" | translate }}
-                </button>
-              </div>
+<!-- Disable Items Modal -->
+<div class="modal custom-modal fade" id="setAdmin_modal" role="dialog">
+  <div class="modal-dialog modal-dialog-centered modal-md">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="form-header">
+          <h3>Admin</h3>
+          <p>{{ "users.setAdminMsg1" | translate }} <b style="color: black;">{{ selectedUser ?
+              getUserName(selectedUser) : ''}}</b> {{ "users.setAdminMsg2" | translate }} ?</p>
+        </div>
+        <div class="modal-btn delete-action">
+          <div class="row">
+            <div class="col-6">
+              <button type="reset" data-bs-dismiss="modal" (click)="changeUserAdminStatus()"
+                class="w-100 btn btn-primary paid-continue-btn">
+                {{ "users.setAdmin" | translate }}
+              </button>
+            </div>
+            <div class="col-6">
+              <button type="submit" data-bs-dismiss="modal" class="w-100 btn btn-primary paid-cancel-btn">
+                {{ "users.cancel" | translate }}
+              </button>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>

@@ -829,7 +829,12 @@
     "msgToGetKey": "To enable your integration keys for your own application, you must ensure you meet these requirements",
     "step1": "Have an Organization account",
     "step2": "Have passed the verification step",
-    "step3": "Have enabled API access to your account"
+    "step3": "Have enabled API access to your account",
+    "resetKey": "Reset API Key",
+    "reset": "Reset",
+    "confirmReset": "Confirm reset",
+    "confirmResetKey": "Are you sure you want to reset your integration key",
+    "resetKeyWarning": "Performing this reset will invalidate any previous keys. If you had them integrated into third-party applications, they will no longer work until you update them with the new ones."
   },
   "rawData": "Raw data",
   "tool": "Tool",

@@ -42,6 +42,16 @@ export class DevService {
     }
   }
 
+  async resetKey(): Promise<any> {
+    try {
+      const response = await this.apiService.updateWithoutId(`dev/reset-key`, {}).toPromise();
+      return response;
+    } catch (error) {
+      console.error('Error fetching users stats:', error);
+      throw error;
+    }
+  }
+
   async generateKey()
   {
     try {

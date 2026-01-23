@@ -1,25 +1,25 @@
 <div class="card">
   <div class="card-header d-flex justify-content-between">
     <h5 class="card-title">{{ "dev.title" | translate }}</h5>
-    <p>API Key</p>
     <div *ngIf="ableToShow && keyData && !updatingStatus">
       <span *ngIf="keyData?.status != true"
-          style="background-color: #850404; color: #fff; padding: 3px 5px; border-radius: 3px;">
-          {{ "users.disabled" | translate }}
+        style="background-color: #850404; color: #fff; padding: 3px 5px; border-radius: 3px;">
+        {{ "users.disabled" | translate }}
       </span>
       <span *ngIf="keyData?.status === true"
-          style="background-color: #04c714; color: #fff; padding: 3px 5px; border-radius: 3px;">
-          {{ "users.enabled" | translate }}
+        style="background-color: #04c714; color: #fff; padding: 3px 5px; border-radius: 3px;">
+        {{ "users.enabled" | translate }}
       </span>
-      <button class="btn btn-block me-1"
-          (click)="toggleStatus()" [ngClass]="keyData?.status === true ?
+      <button class="btn btn-block me-1" (click)="toggleStatus()" [ngClass]="keyData?.status === true ?
         'btn-outline-danger':  'btn-outline-success'">
-          <i class="feather icon-power me-1"></i>
+        <i class="feather icon-power me-1"></i>
       </button>
     </div>
-    <span *ngIf="ableToShow && updatingStatus || !keyData && ableToShow" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+    <span *ngIf="ableToShow && updatingStatus || !keyData && ableToShow" class="spinner-border spinner-border-sm me-2"
+      role="status" aria-hidden="true"></span>
   </div>
   <div class="card-body card-body-height" *ngIf="ableToShow && keyData?.status === true">
+    <p>API Key management</p>
     <div *ngIf="showKey" (click)="toggleShowKey()">
       {{ "dev.showKey" | translate }} <i class="feather icon-eye-off" style="margin-left: 10px;"></i>
     </div>
@@ -27,10 +27,10 @@
       {{ "dev.hiddeKey" | translate }} <i class="feather icon-eye" style="margin-left: 10px;"></i>
     </div>
     <br><br>
-    <small class="text-dark">User Id 
+    <small class="text-dark">User Id
       <i class="feather icon-copy me-2" style="margin-left: 10px;" (click)="copy(keyData?.userId)"></i></small>
-      <input *ngIf="showKey" type="text" class="form-control" [value]="keyData?.userId || ''" disabled>
-      <input *ngIf="!showKey" type="text" class="form-control" value="**************" disabled>
+    <input *ngIf="showKey" type="text" class="form-control" [value]="keyData?.userId || ''" disabled>
+    <input *ngIf="!showKey" type="text" class="form-control" value="**************" disabled>
     <br>
     <small class="text-dark">Secret Key
       <i class="feather icon-copy me-2" style="margin-left: 10px;" (click)="copy(keyData?.secretKey)"></i>
@@ -68,6 +68,7 @@
   </div>
 
   <div class="card-body" *ngIf="!ableToShow || ableToShow && keyData?.status !== true" tyle="text-align: left;">
+    <p>API Key management</p>
     {{ "dev.msgToGetKey" | translate }}: <br>
     <ul>
       <li>1. {{ "dev.step1" | translate }}</li>
@@ -80,4 +81,42 @@
     <p>{{ "dev.keyWarning" | translate }}</p>
   </div>
 
+  <div class="card-body">
+    <button class="btn btn-block me-1 btn-outline-danger" data-bs-toggle="modal" data-bs-target="#resetKey_modal">
+      {{ 'dev.resetKey' | translate }}
+    </button>
+  </div>
+
+</div>
+
+<!-- Disable Items Modal -->
+<div class="modal custom-modal fade" id="resetKey_modal" role="dialog">
+  <div class="modal-dialog modal-dialog-centered modal-md">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="form-header">
+          <h3>{{ 'dev.confirmReset' | translate }}</h3>
+          <p>
+            <b>{{ 'dev.confirmResetKey' | translate }} ?</b>
+            <br>{{ "dev.resetKeyWarning" | translate }}
+          </p>
+        </div>
+        <div class="modal-btn delete-action">
+          <div class="row">
+            <div class="col-6">
+              <button type="reset" data-bs-dismiss="modal" (click)="resetKey()"
+                class="w-100 btn btn-danger paid-continue-btn">
+                {{ "dev.reset" | translate }}
+              </button>
+            </div>
+            <div class="col-6">
+              <button type="submit" data-bs-dismiss="modal" class="w-100 btn btn-primary paid-cancel-btn">
+                {{ "users.cancel" | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
