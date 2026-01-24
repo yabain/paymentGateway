@@ -77,6 +77,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   gettingPlansStats: boolean = true;
   gettingPaymentsStats: boolean = true;
   paymentsStats: any = 0;
+  currency: string = ''
 
   constructor(
     private sideBar: SideBarService,
@@ -89,7 +90,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private exchange: ExchangeService,
     private balanceService: BalanceService,
     private paymentService: PaymentService,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
@@ -100,13 +101,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.checkNetwork();
   }
 
-  getBalance(){
+  getBalance() {
     this.waittingBalance = true;
     this.balanceService.getBalance()
-    .subscribe((data: any) => {
-      this.balance = data ? data.balance : 0;
-      this.waittingBalance = false
-    })
+      .subscribe((data: any) => {
+        this.balance = data ? data.balance : 0;
+        this.waittingBalance = false
+      })
   }
 
   scrollToTop(): void {
@@ -129,22 +130,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
             return;
           }
           this.currentUserData = userData;
-          if (this.currentUserData) {
-            this.userName = this.userService.showName(this.currentUserData);
-            this.userName = this.userName.split(' ')[0]; // Get only the first name
-            if (this.currentUserData.isAdmin === true) {
-              this.gettingUserStats = true;
-              this.getUsersStatistics();
-              this.getPlansStatistics();
-              this.getPaymentsStatistics();
-            }
-          }
-          this.getBalance();
+          this.currency = userData.countryId.currency
+          this.getLocations()
           this.getExchangeRate();
-          this.getLocations();
+          this.getBalance();
+          this.userName = this.userService.showName(this.currentUserData);
+          this.userName = this.userName.split(' ')[0]; // Get only the first name
+          if (this.currentUserData.isAdmin === true) {
+            this.gettingUserStats = true;
+            this.getUsersStatistics();
+            this.getPlansStatistics();
+            this.getPaymentsStatistics();
+          }
         },
         (e) => {
-          console.log('error to get current User: ', e);
+          console.error('error to get current User: ', e);
         },
       )
       .catch((e) => {
@@ -152,6 +152,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       });
   }
 
+  
   async getUsersStatistics() {
     try {
       const response = await this.userService.getUsersStatistics();
@@ -184,7 +185,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  async getPlansStatistics(){
+  async getPlansStatistics() {
     try {
       const response = await this.planService.getPlansStatistics();
       if (response) {
@@ -217,12 +218,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
             console.error('Failed to fetch exchange rate data');
           }
           setTimeout(() => {
-          this.gettingExchangeRate = false;
+            this.gettingExchangeRate = false;
           }, 3000)
         },
         (error) => {
           setTimeout(() => {
-          this.gettingExchangeRate = false;
+            this.gettingExchangeRate = false;
           }, 3000)
           console.error('Error fetching exchange rate:', error);
         },

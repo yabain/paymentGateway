@@ -16,6 +16,7 @@ export class BalanceService {
 
   // For admin only
   getBalance(userId?: string): Observable<any | undefined> {
+    console.log('in get balance in balance service');
     return this.apiService.getWithToken(userId ? 'balance/' + userId : 'balance').pipe(
       map((data) => {
         return data;

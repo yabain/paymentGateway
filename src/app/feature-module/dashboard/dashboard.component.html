@@ -14,7 +14,7 @@
           {{ 'dashboard.welcome' | translate }} {{ userName }} !
         </h4>
         <p>{{ 'dashboard.subTitleWelcome' | translate }}</p>
-        <h3 style="color: #fff; font-weight: bolder;" *ngIf="!waittingBalance">{{ balance || 00 }} {{ currentUserData.countryId.currency }}</h3>
+        <h3 style="color: #fff; font-weight: bolder;" *ngIf="!waittingBalance">{{ balance || 00 }} {{ currency }} <span style="margin-left: 10px; font-size: 15px" (click)="getBalance()"><i class="feather icon-refresh-ccw"></i></span></h3>
         <h6 style="color: #fff; font-weight: bolder;" *ngIf="waittingBalance"><div class="spinner-border" role="status"></div></h6>
         <div class="dash-btns">
           <a [routerLink]="'/send-money'" class="btn view-btn">{{ 'dashboard.sendMoney' | translate }}
@@ -195,7 +195,7 @@
             <div class="col-auto" *ngIf="currentUserData">
               <a [routerLink]="routes.companies" class="btn-right btn btn-sm btn-outline-primary">
                 <img [src]="currentUserData?.countryId.flagUrl" alt="" class="flag" />
-                {{ currentUserData.countryId.currency }}
+                {{ currentUserData?.countryId.currency }}
               </a>
             </div>
           </div>
@@ -213,7 +213,7 @@
                           1 {{rate.currency}}</span></a>
                     </h2>
                   </td>
-                  <td>= {{exchangeTo(rate.currency)}} {{currentUserData.countryId.currency}}</td>
+                  <td>= {{exchangeTo(rate.currency)}} {{currentUserData?.countryId.currency}}</td>
                   <td class="text-end">
                     <a [routerLink]="'/send-money/' + rate._id" class="view-companies btn">
                       {{ "action.send" | translate }}

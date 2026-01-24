@@ -33,7 +33,6 @@ export class FirestoreService {
           return data[field]; // Returns only the requested field's value.
         } else {
             throw new Error(`Field "${field}" does not exist in document "${ref}".`);
-          //  console.log(`Field "${field}" does not exist in document "${ref}".`);
         }
       })
     );
@@ -49,12 +48,10 @@ export class FirestoreService {
   readSubField(ref: string, fieldPath: string): Observable<any> {
     return this.firestore.doc(ref).valueChanges().pipe(
       map((doc) => {
-    //    console.log('Entire Document:', doc); // Log the document data
         if (!doc) {
           throw new Error(`Document "${ref}" does not exist.`);
         }
         const value = fieldPath.split('.').reduce((acc, key) => acc && acc[key], doc);
-    //    console.log(`Value at "${fieldPath}":`, value); // Log the value at the sub-field path
         return value;
       })
     );

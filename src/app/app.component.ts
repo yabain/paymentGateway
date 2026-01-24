@@ -78,7 +78,6 @@ export class AppComponent implements OnInit, OnDestroy {
   getId() {
     this.url = this.location.path();
     this.isTermsPage = this.url.endsWith('terms');
-    // console.log("isTermsPage: ", this.isTermsPage)
   }
 
   checkNetwork() {
