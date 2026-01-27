@@ -28,6 +28,7 @@ import { FrontModule } from './front/front.module';
 import { CommonItemModule } from './feature-module/common/common-item.module';
 import { InvoiceComponent } from './invoice/invoice.component';
 import { DevService } from './services/dev/dev.service';
+import { ApiDocComponent } from './front/api-doc/api-doc.component';
 // import { TransactionDetailsComponent } from './feature-module/common/transaction-details/transaction-details.component';
 // import { JsonViewerComponent } from './feature-module/common/json-viewer/json-viewer.component';
 
@@ -42,7 +43,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     WelcomeComponent,
     TermsComponent,
     PaymentComponent,
-    InvoiceComponent
+    InvoiceComponent,
+    ApiDocComponent
     // TransactionDetailsComponent,
     // JsonViewerComponent
   ],
@@ -64,7 +66,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AngularFirestoreModule,
     DataTablesModule,
     FrontModule,
-    CommonItemModule
+    CommonItemModule,
   ],
   providers: [ { provide: LOCALE_ID, useValue: "fr-FR" },
     AuthService, UserService, CryptService, ShareLinkService, SystemService, DatePipe,

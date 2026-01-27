@@ -1,0 +1,273 @@
+<header class="hero">
+    <div class="hero__content">
+        <img src="assets/img/ressorces/dk_logo.png" alt="Logo" (click)="navigateTo(frontUrl)" />
+        <p class="hero__eyebrow">Documentation API</p>
+    </div>
+</header>
+
+<div class="container">
+    <!-- <h1 class="hero__title">Intégration de </h1> -->
+    <p class="hero__subtitle" style="text-align: justify;">
+        Grâce à digiKUNTZ Payments, vous bénéficiez d’un écosystème complet de solutions de paiement vous permettant
+        de créer et gérer des liens de paiement directs, des plans d’abonnement, des collectes de fonds, ainsi que
+        la vente de produits et services numériques ou physiques.
+    </p>
+    <div class="hero__meta">
+        <span>Domain: <code>https://app.digikuntz.com</code></span>
+        <span>Base URL: <code>/dev</code></span>
+        <span>Format: JSON</span>
+    </div>
+</div>
+<main class="container layout">
+    <aside class="side-nav">
+        <button (click)="selectSection('intro')" class="tab-btn"
+            [ngClass]="selectedSection === 'intro' ? 'is-active' : ''" data-tab="intro">Introduction</button>
+        <button (click)="selectSection('transactions')" class="tab-btn"
+            [ngClass]="selectedSection === 'transactions' ? 'is-active' : ''"
+            data-tab="transactions">Transaction</button>
+        <button (click)="selectSection('balance')" class="tab-btn"
+            [ngClass]="selectedSection === 'balance' ? 'is-active' : ''" data-tab="balance">Balance</button>
+        <button (click)="selectSection('auth')" class="tab-btn"
+                [ngClass]="selectedSection === 'auth' ? 'is-active' : ''" data-tab="history">Historique</button>
+    </aside>
+
+    <section class="content">
+        <div class="tab-panel" id="intro" [ngClass]="selectedSection === 'intro' ? 'is-active' : ''">
+            <h2 class="section-title">Introduction</h2>
+            <p style="text-align: justify;">
+                Au-delà de ses fonctionnalités, digiKUNTZ Payments met à votre disposition une API de paiement robuste
+                et
+                sécurisée, vous offrant la possibilité de connecter votre compte digiKUNTZ Payments à vos propres
+                applications tierces, sites web ou systèmes métiers. Cette intégration vous permet d’initier des
+                transactions, d’encaisser des paiements et de centraliser l’ensemble de vos flux financiers sur un seul
+                et
+                unique compte.
+                <br><br>
+                Conçue pour répondre aux besoins des développeurs et des entreprises, l’API digiKUNTZ Payments offre une
+                grande flexibilité d’intégration, une gestion simplifiée des paiements, ainsi qu’un haut niveau de
+                fiabilité.
+                Elle s’adapte aussi bien aux projets de petite envergure qu’aux applications à fort volume
+                de transactions, tout en garantissant une expérience de paiement fluide pour vos utilisateurs.
+                <br><br>
+                L’API digiKUNTZ Payments permet aux développeurs et aux entreprises d’intégrer de manière simple,
+                sécurisée et flexible les services de paiement de la plateforme digiKUNTZ au sein de leurs applications,
+                sites web ou systèmes métiers.
+                <br><br>
+                Cette API expose un ensemble de points d’entrée permettant d’initier des paiements (pay-in), de suivre
+                l’état des transactions, de consulter les soldes, ainsi que de gérer les clés d’accès nécessaires à
+                l’authentification des requêtes. Elle est conçue pour centraliser l’ensemble de vos flux financiers sur
+                un compte unique tout en garantissant la traçabilité, la fiabilité et la sécurité des opérations.
+                <br><br>
+                La documentation présente les différents endpoints disponibles, leurs méthodes HTTP, les paramètres
+                requis, les formats de requêtes et les mécanismes d’authentification associés. Les échanges avec l’API
+                s’effectuent au format JSON et reposent soit sur une authentification par jeton JWT, soit sur
+                l’utilisation d’une paire userId et secretKey, selon le type d’endpoint.
+                <br><br>
+                Que vous développiez une application de paiement ponctuel, un système d’abonnement ou une plateforme à
+                fort volume de transactions, l’API digiKUNTZ Payments s’adapte à vos besoins et vous offre une base
+                fiable pour construire des expériences de paiement performantes et évolutives..
+            </p>
+            <br>
+            <h5>Étapes d’obtention des clés API</h5>
+
+            <div class="endpoint">
+                <div class="endpoint__header">
+                    <span class="badge badge--get">1</span>
+                    Création d’un compte de type Organisation
+                </div>
+                <p>
+                    Seuls les comptes de type Organisation sont éligibles à l’obtention des API de paiement. Ce type de
+                    compte
+                    permet d’accéder aux fonctionnalités avancées nécessaires à l’intégration et à l’exploitation des
+                    services
+                    de paiement via API.
+                </p>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint__header">
+                    <span class="badge badge--get">2</span>
+                    Vérification d’identité (KYC)
+                </div>
+                <p>
+                    Vous devez compléter la procédure de vérification de vos informations en vous rendant dans <b>Profil
+                        >
+                        Certifier mon identité</b>. <br>
+                    À défaut, vous pouvez transmettre les éléments requis par email à l’adresse contact&#64;yaba-in.com. <br><br>
+
+                    Les documents suivants sont obligatoires : <br>
+                </p>
+                <ol>
+                    <li>
+                        • Votre identifiant de compte digiKUNTZ Payments (visible sous votre nom dans la page Profil)
+                    </li>
+                    <li>
+                        • Le logo de votre organisation
+                    </li>
+                    <li>
+                        • Une lettre d’engagement certifiant que l’API ne sera pas utilisée à des fins illégales
+                    </li>
+                    <li>
+                        • Une attestation de non-redevance datant de moins de trois mois
+                    </li>
+                    <li>
+                        • Votre registre de commerce
+                    </li>
+                </ol><br>
+                <p>
+                    Une réponse vous sera communiquée dans un délai maximum de 72 heures après réception et validation des
+                    documents.
+                </p>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint__header">
+                    <span class="badge badge--get">3</span>
+                    Activation de la clé API
+                </div>
+                <p>
+                    Une fois votre compte validé, rendez-vous dans <b>Profil > Espace Dev</b>, puis activez votre clé API.
+                    <br><br>
+                    L’activation de cette fonctionnalité autorise des applications tierces à initier des transactions depuis
+                    votre compte digiKUNTZ Payments à l’aide de vos clés API. Il vous incombe de conserver ces clés de manière
+                    sécurisée et de ne jamais les exposer publiquement.
+                </p>
+            </div>
+        </div>
+
+        <div class="tab-panel" id="transactions" [ngClass]="selectedSection === 'transactions' ? 'is-active' : ''">
+            <h2 class="section-title">Transactions</h2>
+            <article class="endpoint">
+                <div class="endpoint__header">
+                    <span class="badge badge--post">POST</span>
+                    <code>/dev/transaction/:userId/:secretKey</code>
+                </div>
+                <p>Creer un paiement (payin) via API.</p>
+                <div class="endpoint__grid">
+                    <div>
+                        <h3>Params</h3>
+                        <ul>
+                            <li><code>userId</code> (string)</li>
+                            <li><code>secretKey</code> (string)</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Body</h3>
+                        <pre ngNonBindable><code>&#123;
+  "estimation": 100,
+  "raisonForTransfer": "Test",
+  "userEmail": "email&#64;example.com",
+  "userPhone": "691224472",
+  "userCountry": "Cameroon",
+  "senderName": "Kevin"
+&#125;</code></pre>
+                    </div>
+                    <div>
+                        <h3>Response</h3>
+                        <pre ngNonBindable><code>&#123;
+  "id": "6977ef263980e24b64996062",
+  "status": "pending",
+  "transactionRef": "txPayin-1769467686449-6ce86896",
+  "amount": 100,
+  "paymentCurrency": "XAF",
+  "paymentWithTaxe": 105,
+  "paymentLink": "Lien de paiement"
+&#125;</code></pre>
+                        <br>
+                        <b>Statuts: </b> pending - success - closed - error
+                    </div>
+                </div>
+            </article>
+            <article class="endpoint">
+                <div class="endpoint__header">
+                    <span class="badge badge--get">GET</span>
+                    <code>/dev/transaction/:userId/:secretKey</code>
+                </div>
+                <p>Recuperer les détails de la transaction.</p>
+                <div class="endpoint__grid">
+                    <div>
+                        <h3>Params</h3>
+                        <ul>
+                            <li><code>userId</code> (string)</li>
+                            <li><code>secretKey</code> (string)</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Body</h3>
+                        <pre ngNonBindable><code>&#123;
+  "id": "6977ef263980e24b64996062"
+&#125;</code></pre>
+                    </div>
+                    <div>
+                        <h3>Response</h3>
+                        <pre ngNonBindable><code>&#123;
+  "id": "6977ef263980e24b64996062",
+  "status": "success",
+  "data": &#123;
+      "estimation": "30",
+      "transactionRef": "IN959#260126224806",
+      "invoiceTaxes": "2",
+      "paymentWithTaxes": "32",
+      "raisonForTransfer": "Test M",
+      "receiverCurrency": "XAF",
+      "transactionType": "apiCall",
+      "paymentLink": "",
+      "createdAt": "2026-01-26T22:48:06.461Z",
+      "updatedAt": "2026-01-26T22:54:30.231Z"
+      &#125;
+&#125;
+</code></pre>
+                        <br>
+                        <b>Statuts: </b> pending - success - closed - error
+                    </div>
+                </div>
+            </article>
+        </div>
+
+        <div class="tab-panel" id="balance" [ngClass]="selectedSection === 'balance' ? 'is-active' : ''">
+            <h2 class="section-title">Balance</h2>
+
+            <article class="endpoint">
+                <div class="endpoint__header">
+                    <span class="badge badge--get">GET</span>
+                    <code>/dev/balance/:userId/:secretKey</code>
+                </div>
+                <p>Consulter le solde d'un utilisateur.</p>
+                <div class="endpoint__grid">
+                    <div>
+                        <h3>Params</h3>
+                        <ul>
+                            <li><code>userId</code> (string)</li>
+                            <li><code>secretKey</code> (string)</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Body</h3>
+                        <p>Aucun.</p>
+                    </div>
+                    <div>
+                        <h3>Response</h3>
+                        <pre ngNonBindable><code>&#123;
+  "balance": 85000,
+  "currency": "XAF",
+  "lastUpdate": "2026-01-26T22:54:30.219Z"
+&#125;</code></pre>
+                    </div>
+                </div>
+            </article>
+        </div>
+
+
+        <div class="tab-panel" id="history" [ngClass]="selectedSection === 'auth' ? 'is-active' : ''">
+            <h2 class="section-title">Historique</h2>
+            <p>
+                Consultez l'historique de vos transactions depuis votre tableau de board dans la page <b>Mes transactions</b>. <br>
+                Les transactions initiées via l’API portent la mention ApiCall.
+            </p>
+        </div>
+    </section>
+</main>
+
+<footer class="footer">
+    <p>Documentation generee pour le module dev.</p>
+</footer>

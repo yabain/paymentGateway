@@ -82,6 +82,12 @@
   </div>
 
   <div class="card-body">
+    <a href="https://Payments.digikuntz.com/api-doc" target="_blank"><button class="btn btn-block me-1 btn-outline-primary">
+      Consulter la documentation
+    </button></a>
+  </div><br>
+
+  <div class="card-body" *ngIf="ableToShow && keyData">
     <button class="btn btn-block me-1 btn-outline-danger" data-bs-toggle="modal" data-bs-target="#resetKey_modal">
       {{ 'dev.resetKey' | translate }}
     </button>

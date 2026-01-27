@@ -5,6 +5,7 @@ import { PaymentComponent } from './payment/payment.component';
 import { LoggedInGuard } from './core/guards/loggedIn/logged-in.guard';
 import { PageComponent } from './front/page/page.component';
 import { InvoiceComponent } from './invoice/invoice.component';
+import { ApiDocComponent } from './front/api-doc/api-doc.component';
 
 const routes: Routes = [
   {
@@ -15,6 +16,10 @@ const routes: Routes = [
   {
     path: 'welcome',
     component: WelcomeComponent,
+  },
+  {
+    path: 'api-doc',
+    component: ApiDocComponent,
   },
   {
     path: 'test',
