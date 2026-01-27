@@ -9,7 +9,6 @@ import { environment } from 'src/environments/environment';
 })
 export class ApiDocComponent {
   selectedSection = 'intro'
-  email: string = environment.email;
   frontUrl: string = environment.frontUrl;
 
   constructor(private router: Router) {}
