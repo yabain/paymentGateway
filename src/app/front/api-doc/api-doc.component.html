@@ -26,7 +26,7 @@
             [ngClass]="selectedSection === 'transactions' ? 'is-active' : ''"
             data-tab="transactions">Transactions</button>
         <button (click)="selectSection('balance')" class="tab-btn"
-            [ngClass]="selectedSection === 'balance' ? 'is-active' : ''" data-tab="balance">Balance</button>
+            [ngClass]="selectedSection === 'balance' ? 'is-active' : ''" data-tab="balance">Solde</button>
         <button (click)="selectSection('auth')" class="tab-btn"
                 [ngClass]="selectedSection === 'auth' ? 'is-active' : ''" data-tab="history">Historique</button>
     </aside>
@@ -225,7 +225,7 @@
         </div>
 
         <div class="tab-panel" id="balance" [ngClass]="selectedSection === 'balance' ? 'is-active' : ''">
-            <h2 class="section-title">Balance</h2>
+            <h2 class="section-title">Solde</h2>
 
             <article class="endpoint">
                 <div class="endpoint__header">
