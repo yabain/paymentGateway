@@ -45,9 +45,9 @@ export class ApiDocComponent {
     this.changingLang = true;
 
         this.language.useLanguage(lang);
-        // this.translate.get('lang.langChanged').subscribe((res: string) => {
-        //   this.toastService.presentToast('success', 'Done!', res, 2000);
-        // });
+        this.translate.get('lang.langChanged').subscribe((res: string) => {
+          this.toastService.presentToast('success', 'Done!', res, 2000);
+        });
         this.getLanguage();
         this.changingLang = false;
   }
