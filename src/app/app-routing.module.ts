@@ -6,6 +6,7 @@ import { LoggedInGuard } from './core/guards/loggedIn/logged-in.guard';
 import { PageComponent } from './front/page/page.component';
 import { InvoiceComponent } from './invoice/invoice.component';
 import { ApiDocComponent } from './front/api-doc/api-doc.component';
+import { PortalComponent } from './front/portal/portal.component';
 
 const routes: Routes = [
   {
@@ -24,6 +25,10 @@ const routes: Routes = [
   {
     path: 'test',
     component: PaymentComponent,
+  },
+  {
+    path: 'portal',
+    component: PortalComponent,
   },
   {
     path: 'package-details/:id',

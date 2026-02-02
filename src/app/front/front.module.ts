@@ -13,6 +13,7 @@ import { FooterComponent } from './footer/footer.component';
 import { AddSubscriberComponent } from './add-subscriber/add-subscriber.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarComponent } from './calendar/calendar.component';
+import { PortalComponent } from './portal/portal.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, '../assets/i18n/', '.json');
@@ -24,7 +25,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     PageComponent,
     FooterComponent,
     AddSubscriberComponent,
-    CalendarComponent
+    CalendarComponent,
+    PortalComponent
   ],
   providers: [],
   imports: [

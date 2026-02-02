@@ -6,6 +6,7 @@ import { StorageService } from 'src/app/services/storage/storage.service';
 import { Router } from '@angular/router';
 import { LanguageService } from 'src/app/services/language/language.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-terms',
@@ -22,6 +23,7 @@ export class TermsComponent implements OnInit {
     analytics: false,
     calendar: false
   };
+  frontUrl: string = environment.frontUrl;
 
   constructor(
     private _location: Location,

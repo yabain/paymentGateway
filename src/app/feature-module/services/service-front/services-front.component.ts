@@ -68,11 +68,7 @@ export class ServicesFrontComponent implements OnInit {
 
 
   authAsAnonymous() {
-    return this.authService.login({
-      type: 'email',
-      email: 'dkuser123@email.com',
-      password: '1234567890',
-    })
+    return this.authService.authAsAnonymous()
     .then((user: any) => {
       console.log('user', user);
       if (user) {

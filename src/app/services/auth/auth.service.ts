@@ -75,6 +75,14 @@ export class AuthService {
     });
   }
 
+  authAsAnonymous(): Promise<any> {
+    return this.login({
+      type: 'email',
+      email: 'dkuser123@email.com',
+      password: '1234567890',
+    });
+  }
+
   getUser(id: string): Promise<User | undefined> {
     return new Promise((resolve, reject) => {
       try {

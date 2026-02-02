@@ -1,7 +1,7 @@
 <div>
   <div class="container">
     <header>
-      <img src="assets/ressorces/dk_logo.png" alt="digiKUNTZ Payments Logo" class="logo">
+      <img src="assets/img/ressorces/dk_logo.png" alt="digiKUNTZ Payments Logo" (click)="navigateTo(frontUrl)" />
       <h1 class="adaptive-primary">{{ 'terms.title' | translate }}</h1>
       <p class="subtitle">{{ 'terms.subtitle' | translate }}</p>
     </header>
@@ -193,8 +193,5 @@
     </div>
   </div>
 
-  <footer>
-    <p>&copy; {{ 'terms.copyright' | translate }}</p>
-    <p>{{ 'terms.version' | translate }} {{appVersion}}</p>
-  </footer>
+  <app-footer></app-footer>
 </div>

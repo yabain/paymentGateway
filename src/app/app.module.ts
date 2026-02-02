@@ -46,7 +46,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     InvoiceComponent,
     ApiDocComponent
     // TransactionDetailsComponent,
-    // JsonViewerComponent
+    // JsonViewerComponent,
   ],
   imports: [
     BrowserModule,

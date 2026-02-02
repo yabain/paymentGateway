@@ -393,6 +393,17 @@
                         <span *ngIf="planData?.cycle === 'yearly'">{{ 'subscriptions.year' |
                             translate }}</span>
                     </option>
+                    <option [value]="2">
+                        2
+                        <span *ngIf="planData?.cycle === 'dayly'">{{ 'subscriptions.day' |
+                            translate }}</span>
+                        <span *ngIf="planData?.cycle === 'weekly'">{{ 'subscriptions.week' |
+                            translate }}</span>
+                        <span *ngIf="planData?.cycle === 'monthly'">{{ 'subscriptions.month' |
+                            translate }}</span>
+                        <span *ngIf="planData?.cycle === 'yearly'">{{ 'subscriptions.year' |
+                            translate }}</span>
+                    </option>
                     <option [value]="3">
                         3
                         <span *ngIf="planData?.cycle === 'dayly'">{{ 'subscriptions.day' |
