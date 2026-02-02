@@ -36,8 +36,12 @@ export class ProfileComponent implements OnInit {
   memoryImage: string;
   selectedImage: any;
   allCities: any = [];
-  description: string
+  description: string;
+  headTitlePortal: string;
+  headTextPortal: string;
   descriptionEdition: boolean = false;
+  headTitlePortalEdition: boolean = false;
+  headTextPortalEdition: boolean = false;
   ableToShow: boolean = false;
   // canEdit: boolean = false;
 
@@ -118,7 +122,6 @@ export class ProfileComponent implements OnInit {
     this.updateFormValidator();
   }
   
-
   updateFormValidator() {
     if (!this.form) return;
   
@@ -141,7 +144,6 @@ export class ProfileComponent implements OnInit {
       this.form.get(key)?.updateValueAndValidity({ emitEvent: false });
     });
   }
-  
 
   submit() {
     // Enable the form temporarily to check validity if it's disabled
@@ -222,28 +224,60 @@ export class ProfileComponent implements OnInit {
     }
   }
 
+  editHeadTitlePortalPage() {
+    this.headTitlePortalEdition = !this.headTitlePortalEdition;
+    if (this.headTitlePortalEdition) {
+      return;
+    } else {
+      this.headTitlePortal = this.currentUser.headTitlePortal || '';
+    }
+  }
+
+  editHeadTextPortalPage() {
+    this.headTextPortalEdition = !this.headTextPortalEdition;
+    if (this.headTextPortalEdition) {
+      return;
+    } else {
+      this.headTextPortal = this.currentUser.headTextPortal || '';
+    }
+  }
+
   getDatas() {
     this.getCurrentUser();
   }
 
-  saveDescription(){
+  saveData(val: string = 'description'){
     this.loading2 = true;
-
-    this.userService.updateUserProfile({description: this.description})
+    let data: any;
+    if(val === "headTitlePortal") data = {
+      headTitlePortal: this.headTitlePortal
+    }
+    else if(val === "headTextPortal") data = {
+      headTextPortal: this.headTextPortal
+    }
+    else  data = {
+      description: this.description
+    }
+    console.log('valeur de data: ', data);
+    this.userService.updateUserProfile(data)
       .subscribe
       ({
         next: (userData) => {
+          console.log('resp to update profile: ', userData);
           if (!userData) {
             this.translate.get("profile.profileUpdatedError").subscribe((res: string) => {
               this.toastService.presentToast('error', 'Error', res, 10000);
             });
           } else {
+            console.log('update local profile data: ', userData);
             this.userService.setCurrentUser(userData);
             this.translate.get("profile.profileUpdated").subscribe((res: string) => {
               this.toastService.presentToast('success', 'Done !', res, 10000);
             })
             this.getDatas();
             this.descriptionEdition = false;
+            this.headTextPortalEdition = false;
+            this.headTitlePortalEdition = false;
             this.loading2 = false;
           }
         },
@@ -257,12 +291,15 @@ export class ProfileComponent implements OnInit {
 
   async getCurrentUser() {
     this.currentUser = await this.userService.getCurrentUser();
+    console.log('current User: ', this.currentUser);
     this.userData = this.currentUser;
     this.memoryImage = this.currentUser.pictureUrl;
     if (this.currentUser) {
       this.userForm(this.currentUser);
       this.getCities();
       this.description = this.currentUser.description;
+      this.headTitlePortal = this.currentUser.headTitlePortal;
+      this.headTextPortal = this.currentUser.headTextPortal;
       // Start in view mode with controls disabled to avoid template [disabled]
       this.form.disable({ emitEvent: false });
       this.ableToShow = this.verifyUserConditions(this.currentUser) ? true : false;
@@ -322,13 +359,11 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-
   profilePictureForm() {
     this.uploadPictureForm = new FormGroup({
       pictureFile: new FormControl(undefined, Validators.required),
     });
   }
-
 
   cancel() {
     if (this.currentUser) {

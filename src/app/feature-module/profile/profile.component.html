@@ -254,24 +254,72 @@
         </div>
         <div class="col-lg-4">
           <div class="card">
-            <div class="card-header d-flex justify-content-between">
-              <h5 class="card-title">{{ "profile.description" | translate }}</h5>
-              <a class="btn btn-sm btn-white" (click)="editDescription()" *ngIf="!descriptionEdition && !loading2">
-                <i class="feather icon-edit"></i>
-                {{ "action.edit" | translate }}</a>
-              <a class="btn btn-sm btn-white" (click)="editDescription()" *ngIf="descriptionEdition && !loading2">
-                <i class="feather icon-edit"></i>
-                {{ "action.cancel" | translate }}</a>
-              <a class="btn btn-sm btn-success" (click)="saveDescription()" *ngIf="descriptionEdition && !loading2">
-                <i class="feather icon-edit"></i>
-                {{ "action.save" | translate }}</a>
-              <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"
-                *ngIf="loading2"></span>
-            </div>
             <div class="card-body card-body-height" *ngIf="userData">
+              <div class="d-flex justify-content-between">
+                <h5 class="card-title">{{ "profile.aboutYou" | translate }}</h5>
+                <a class="btn btn-sm btn-white" (click)="editDescription()" *ngIf="!descriptionEdition && !loading2">
+                  <i class="feather icon-edit"></i>
+                  {{ "action.edit" | translate }}</a>
+                <a class="btn btn-sm btn-white" (click)="editDescription()" *ngIf="descriptionEdition && !loading2">
+                  <i class="feather icon-edit"></i>
+                  {{ "action.cancel" | translate }}</a>
+                <a class="btn btn-sm btn-success" (click)="saveData()" *ngIf="descriptionEdition && !loading2">
+                  <i class="feather icon-edit"></i>
+                  {{ "action.save" | translate }}</a>
+                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"
+                  *ngIf="loading2"></span>
+              </div>
               <p *ngIf="currentUser && !descriptionEdition">{{ description }} </p>
               <textarea class="form-control" rows="8" *ngIf="currentUser && descriptionEdition" name="" id=""
                 [(ngModel)]="description"></textarea>
+            </div>
+            <div class="card-body" *ngIf="!userData" style="text-align: center;">
+              <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            </div>
+          </div>
+          <div class="card" *ngIf="userData && userData?.accountType === 'organisation' || currentUser?.isAdmin === true">
+            <div class="card-body card-body-height" *ngIf="userData">
+              <div class="d-flex justify-content-between">
+                <h5 class="card-title">{{ "portal.headTitle" | translate }}</h5>
+                <a class="btn btn-sm btn-white" (click)="editHeadTitlePortalPage()" *ngIf="!headTitlePortalEdition && !loading2">
+                  <i class="feather icon-edit"></i>
+                  {{ "action.edit" | translate }}</a>
+                <a class="btn btn-sm btn-white" (click)="editHeadTitlePortalPage()" *ngIf="headTitlePortalEdition && !loading2">
+                  <i class="feather icon-edit"></i>
+                  {{ "action.cancel" | translate }}</a>
+                <a class="btn btn-sm btn-success" (click)="saveData('headTitlePortal')" *ngIf="headTitlePortalEdition && !loading2">
+                  <i class="feather icon-edit"></i>
+                  {{ "action.save" | translate }}</a>
+                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"
+                  *ngIf="loading2"></span>
+              </div>
+              <p *ngIf="currentUser && !headTitlePortalEdition">{{ headTitlePortal }} </p>
+              <textarea class="form-control" rows="8" maxlength="55" *ngIf="currentUser && headTitlePortalEdition" name="" id=""
+                [(ngModel)]="headTitlePortal"></textarea><span *ngIf="headTitlePortalEdition">max 55</span>
+            </div>
+            <div class="card-body" *ngIf="!userData" style="text-align: center;">
+              <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            </div>
+          </div>
+          <div class="card" *ngIf="userData && userData?.accountType === 'organisation' || currentUser?.isAdmin === true">
+            <div class="card-body card-body-height" *ngIf="userData">
+              <div class="d-flex justify-content-between">
+                <h5 class="card-title">{{ "portal.headText" | translate }}</h5>
+                <a class="btn btn-sm btn-white" (click)="editHeadTextPortalPage()" *ngIf="!headTextPortalEdition && !loading2">
+                  <i class="feather icon-edit"></i>
+                  {{ "action.edit" | translate }}</a>
+                <a class="btn btn-sm btn-white" (click)="editHeadTextPortalPage()" *ngIf="headTextPortalEdition && !loading2">
+                  <i class="feather icon-edit"></i>
+                  {{ "action.cancel" | translate }}</a>
+                <a class="btn btn-sm btn-success" (click)="saveData('headTextPortal')" *ngIf="headTextPortalEdition && !loading2">
+                  <i class="feather icon-edit"></i>
+                  {{ "action.save" | translate }}</a>
+                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"
+                  *ngIf="loading2"></span>
+              </div>
+              <p *ngIf="currentUser && !headTextPortalEdition">{{ headTextPortal }} </p>
+              <textarea class="form-control" rows="8" maxlength="350" *ngIf="currentUser && headTextPortalEdition" name="" id=""
+                [(ngModel)]="headTextPortal"></textarea> <span *ngIf="headTextPortalEdition">max 350</span>
             </div>
             <div class="card-body" *ngIf="!userData" style="text-align: center;">
               <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>

@@ -345,6 +345,8 @@
     "changeWhatsapp": "Change my whatsapp number",
     "activity": "Activity",
     "description": "Description",
+    "aboutYou": "About you",
+    "aboutUs": "About us",
     "profileUpdated": "Profile has been updated",
     "profileUpdatedError": "Profile update error",
     "invalidUrl": "Invalid url",
@@ -875,6 +877,11 @@
     "response": "Response",
     "status": "Status",
     "footer": "digiKUNTZ Payments 2025"
+  },
+  "portal": {
+    "title": "Portal",
+    "headTitle": "Title on your portal",
+    "headText": "Head description on your portal"
   },
   "rawData": "Raw data",
   "tool": "Tool",

@@ -209,7 +209,7 @@ https://templatemo.com/tm-599-noir-fashion
 
 :root {
 	--primary: #0a0a0a;
-	--accent: #ff3366;
+	--accent: #F57C11;
 	--accent-hover: #ff1149;
 	--text-light: #ffffff;
 	--text-muted: #999;
@@ -579,7 +579,7 @@ nav.scrolled {
 	height: 150%;
 	top: -25%;
 	left: -25%;
-	background: conic-gradient(from 180deg at 50% 50%, #ff3366 0deg, #000 60deg, #ff3366 120deg, #000 180deg, #ff3366 240deg, #000 300deg, #ff3366 360deg);
+	background: conic-gradient(from 180deg at 50% 50%, #f4a662 0deg, #010d30 60deg, #F57C11 120deg, #010d30 180deg, #F57C11 240deg, #010d30 300deg, #F57C11 360deg);
 	animation: spin 20s linear infinite;
 	opacity: 0.15;
 }
@@ -621,7 +621,7 @@ nav.scrolled {
 .hero-badge {
 	display: inline-block;
 	padding: 8px 20px;
-	background: rgba(255, 51, 102, 0.1);
+	background: #f57b113d;
 	border: 1px solid var(--accent);
 	color: var(--accent);
 	font-size: 11px;
@@ -638,7 +638,7 @@ nav.scrolled {
 	position: absolute;
 	width: 30px;
 	height: 100%;
-	background: linear-gradient(90deg, transparent, rgba(255, 51, 102, 0.5), transparent);
+	background: linear-gradient(90deg, transparent, #F57C11, transparent);
 	left: -30px;
 	animation: shimmer 3s ease infinite;
 }
@@ -684,7 +684,7 @@ nav.scrolled {
 }
 
 .hero-title .accent {
-	background: linear-gradient(90deg, #ff9269, #ff6690);
+	background: linear-gradient(90deg, #ff9269, #F57C11);
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
 	font-style: italic;
@@ -792,7 +792,7 @@ nav.scrolled {
 
 .cta-button.primary:hover {
 	transform: translateY(-2px);
-	box-shadow: 0 20px 40px rgba(255, 51, 102, 0.3);
+	box-shadow: 0 20px 40px #F57C11;
 }
 
 .cta-button.outline {
@@ -1071,7 +1071,7 @@ nav.scrolled {
 
 .collection-card {
 	position: relative;
-	background: linear-gradient(135deg, #021d66, #0531a9);
+	background: linear-gradient(135deg, #021d66, #4895ef);
 	overflow: hidden;
 	cursor: pointer;
 	transition: all 0.5s ease;
@@ -1557,7 +1557,7 @@ nav.scrolled {
 }
 
 .contact-form-wrapper {
-	background: linear-gradient(135deg, #021d66, #002eac);
+	background: linear-gradient(135deg, #021d66, #042ea4);
 	padding: 50px;
 	border-radius: 10px;
 	position: relative;
@@ -1668,7 +1668,7 @@ nav.scrolled {
 
 .contact-info {
 	padding: 50px;
-	background: linear-gradient(135deg, #cb6002, #f57b11);
+	background: linear-gradient(135deg, #fffaf3, #fffaf3);
 	border-radius: 10px;
 	border: 1px solid rgba(255, 51, 102, 0.1);
 }
@@ -1688,12 +1688,12 @@ nav.scrolled {
 .info-icon {
 	width: 60px;
 	height: 60px;
-	background: linear-gradient(135deg, #a3652e, #a3652e);
+	background: linear-gradient(135deg, #F57C11, #F57C11);
 	border-radius: 12px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	font-size: 24px;
+	font-size: 20px;
 	flex-shrink: 0;
 	box-shadow: 0 5px 15px rgba(255, 51, 102, 0.2);
   color: white;
@@ -1705,7 +1705,6 @@ nav.scrolled {
 	text-transform: uppercase;
 	letter-spacing: 1.5px;
 	font-weight: 700;
-  color: white;
 }
 
 .info-content p {

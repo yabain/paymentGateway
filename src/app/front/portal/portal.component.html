@@ -111,12 +111,16 @@
             </div>
 
             <div class="contact-info">
-                <h2 style="color: white;">Test of location</h2> <br>
+                <h2>Test of location</h2>
+                <br>
+                <p class="section-subtitle">We'd love to hear from you</p>
+                <br>
+                <br>
                 <div class="info-item">
                     <div class="info-icon"><i class="feather icon-map-pin"></i></div>
                     <div class="info-content">
                         <h3>Location</h3>
-                        <p style="color: white;">Carrefour Prison<br>
+                        <p>Carrefour Prison, Entréé ELECAM<br>
                         </p>
                     </div>
                 </div>
@@ -125,7 +129,7 @@
                     <div class="info-icon"><i class="feather icon-phone"></i></div>
                     <div class="info-content">
                         <h3>Call Us</h3>
-                        <p style="color: white;">Main: <a href="tel:+66021234567">+237 694949617</a><br>
+                        <p>Main: <a href="tel:+66021234567">+237 694949617</a><br>
                             </p>
                     </div>
                 </div>
@@ -134,13 +138,20 @@
                     <div class="info-icon"><i class="feather icon-mail"></i></div>
                     <div class="info-content">
                         <h3>Email Us</h3>
-                        <p style="color: white;">General: <a href="mailto:contact@yaba-in.com">contact&#64;yaba-in.com</a><br>
+                        <p>General: <a href="mailto:contact@yaba-in.com">contact&#64;yaba-in.com</a><br>
                             </p>
                     </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-icon"><i class="feather icon-mail"></i></div>
+                    <div class="info-icon"><i class="feather icon-mail"></i></div>
+                    <div class="info-icon"><i class="feather icon-mail"></i></div>
+                    <div class="info-icon"><i class="feather icon-mail"></i></div>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<app-footer></app-footer>
+<app-footer *ngIf="!loading"></app-footer>
