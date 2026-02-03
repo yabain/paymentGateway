@@ -16,27 +16,29 @@
 <div *ngIf="!loading">
     <header id="top">
         <div class="wrapper-2">
-                    <img class="logo" [src]="userData?.pictureUrl" [alt]="showName(userData)" style="max-width: 80px; margin: 5px 20px;">
-                    <!-- {{showName(userData)}} -->
-                     <!-- <span class="logo">{{showName(userData)}}</span> -->
+            <img class="logo" [src]="userData?.pictureUrl" [alt]="showName(userData)"
+                style="max-width: 80px; margin: 5px 20px;">
+            <!-- {{showName(userData)}} -->
+            <!-- <span class="logo">{{showName(userData)}}</span> -->
             <nav>
                 <ul id="navigation">
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#about">About Us</a></li>
-                    <li><a href="#services">Services</a></li>
-                    <li><a href="#portfolio">Portfolio</a></li>
+                    <li><a href="#home">{{'portal.nav.home' | translate}}</a></li>
+                    <li><a href="#about">{{'portal.nav.service' | translate}}</a></li>
+                    <li><a href="#services">{{'portal.nav.fundraising' | translate}}</a></li>
+                    <li><a href="#portfolio">{{'portal.nav.plans' | translate}}</a></li>
                     <li *ngIf="!currentUser"><a class="nav-cta" href="#">{{ 'auth.login' | translate }}</a></li>
                 </ul>
             </nav>
         </div>
     </header>
-    <section
-        id="banner"
-        [style.background]="userData?.banner ? 'url(' + userData.banner + ') no-repeat center' : 'url(' + cover + ') no-repeat center'"
-    ><a name="home"></a>
+    <section id="banner"
+        [style.background]="userData?.cover ? 'url(' + userData?.cover + ') no-repeat center' : 'url(' + cover + ') no-repeat center'">
+        <a name="home"></a>
         <div class="wrapper">
-            <h2 [style.color]="userData?.headTitlePortalColor ? userData?.headTitlePortalColor : '#fff'">{{userData?.headTitlePortal}}</h2>
-            <p class="subtitle" [style.color]="userData?.headTextPortalColor ? userData?.headTextPortalColor : '#fff'">{{userData?.headTextPortal}}</p>
+            <h2 [style.color]="userData?.headTitlePortalColor ? userData?.headTitlePortalColor : '#fff'">
+                {{userData?.headTitlePortal}}</h2>
+            <p class="subtitle" [style.color]="userData?.headTextPortalColor ? userData?.headTextPortalColor : '#fff'">
+                {{userData?.headTextPortal}}</p>
         </div>
     </section>
 
@@ -55,53 +57,52 @@
     </section>
 
     <section class="features-section">
-        <div class="wrapper">
+        <div class="wrapper-2">
             <ul class="feature-squares">
                 <li>
                     <div class="image">
                         <img src="assets/img/new/icon-eye.png" alt="feature icon">
                     </div>
                     <div class="text">
-                        <h5>Attention to Detail</h5>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ut dignissim sapien. Mauris
-                            congue faucibus enim, vel molestie lectus.</p>
+                        <h5>{{ 'portal.attention.title' | translate }}</h5>
+                        <p>{{ 'portal.attention.desc' | translate }}</p>
                     </div>
                 </li>
+
                 <li>
                     <div class="image">
                         <img src="assets/img/new/icon-clock.png" alt="feature icon">
                     </div>
                     <div class="text">
-                        <h5>Save Time</h5>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ut dignissim sapien. Mauris
-                            congue faucibus enim, vel molestie lectus.</p>
+                        <h5>{{ 'portal.saveTime.title' | translate }}</h5>
+                        <p>{{ 'portal.saveTime.desc' | translate }}</p>
                     </div>
                 </li>
+
                 <li>
                     <div class="image">
                         <img src="assets/img/new/icon-dashboard.png" alt="feature icon">
                     </div>
                     <div class="text">
-                        <h5>Complete Control</h5>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ut dignissim sapien. Mauris
-                            congue faucibus enim, vel molestie lectus.</p>
+                        <h5>{{ 'portal.control.title' | translate }}</h5>
+                        <p>{{ 'portal.control.desc' | translate }}</p>
                     </div>
                 </li>
+
                 <li>
                     <div class="image">
                         <img src="assets/img/new/icon-headset.png" alt="feature icon">
                     </div>
                     <div class="text">
-                        <h5>24/7 Support</h5>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ut dignissim sapien. Mauris
-                            congue faucibus enim, vel molestie lectus.</p>
+                        <h5>{{ 'portal.support.title' | translate }}</h5>
+                        <p>{{ 'portal.support.desc' | translate }}</p>
                     </div>
                 </li>
+
                 <div class="clear"></div>
             </ul>
         </div>
     </section>
-
 
 
     <!-- 
@@ -112,8 +113,8 @@
     <section class="contact" id="contact">
         <div class="contact-container">
             <div class="contact-header">
-                <h2 class="section-title">Get In Touch</h2>
-                <p class="section-subtitle">We'd love to hear from you</p>
+                <h2 class="section-title">{{ 'portal.contactTitleSection' | translate }}</h2>
+                <p class="section-subtitle">{{ 'portal.contactSubtitleSection' | translate }}</p>
             </div>
 
             <div class="contact-content">
@@ -121,51 +122,63 @@
                     <form id="contactForm">
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="firstName">First Name</label>
-                                <input type="text" id="firstName" name="firstName" placeholder="Samuel" required>
+                                <label for="firstName">{{ 'portal.firstName.label' | translate }}</label>
+                                <input type="text" id="firstName" name="firstName"
+                                    [placeholder]="'portal.firstName.placeholder' | translate" required>
                             </div>
+
                             <div class="form-group">
-                                <label for="lastName">Last Name</label>
-                                <input type="text" id="lastName" name="lastName" placeholder="TAMO" required>
+                                <label for="lastName">{{ 'portal.lastName.label' | translate }}</label>
+                                <input type="text" id="lastName" name="lastName"
+                                    [placeholder]="'portal.lastName.placeholder' | translate" required>
                             </div>
                         </div>
+
                         <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" name="email" placeholder="john@example.com" required>
+                            <label for="email">{{ 'portal.email.label' | translate }}</label>
+                            <input type="email" id="email" name="email"
+                                [placeholder]="'portal.email.placeholder' | translate" required>
                         </div>
+
                         <div class="form-group">
-                            <label for="subject">Subject</label>
-                            <input type="text" id="subject" name="subject" placeholder="How can we help?" required>
+                            <label for="subject">{{ 'portal.subject.label' | translate }}</label>
+                            <input type="text" id="subject" name="subject"
+                                [placeholder]="'portal.subject.placeholder' | translate" required>
                         </div>
+
                         <div class="form-group">
-                            <label for="message">Message</label>
-                            <textarea id="message" name="message" placeholder="Tell us more about your inquiry..."
-                                required></textarea>
+                            <label for="message">{{ 'portal.message.label' | translate }}</label>
+                            <textarea id="message" name="message"
+                                [placeholder]="'portal.message.placeholder' | translate" required></textarea>
                         </div>
-                        <button type="submit" class="form-submit">Send Message</button>
+
+                        <button type="submit" class="form-submit">
+                            {{ 'portal.submit' | translate }}
+                        </button>
                     </form>
                 </div>
 
                 <div class="contact-info">
-                    <h2>Test of location</h2>
+                    <h2>{{ 'portal.info.title' | translate }}</h2>
                     <br>
-                    <p class="section-subtitle">We'd love to hear from you</p>
-                    <br>
-                    <br>
+                    <!-- <p class="section-subtitle">{{ 'portal.info.subtitle' | translate }}</p> -->
+                    <br><br>
+
                     <div class="info-item">
                         <div class="info-icon"><i class="feather icon-map-pin"></i></div>
                         <div class="info-content">
-                            <h3>Location</h3>
-                            <p>{{userData?.address}}<br>
-                            </p>
+                            <h3>{{ 'portal.info.location.title' | translate }}</h3>
+                            <p>{{ userData?.address }}<br></p>
                         </div>
                     </div>
 
                     <div class="info-item">
                         <div class="info-icon"><i class="feather icon-phone"></i></div>
                         <div class="info-content">
-                            <h3>Call Us</h3>
-                            <p>Main: <a href="tel:+66021234567">+{{userData?.countryId.code}} {{userData?.phone}}</a><br>
+                            <h3>{{ 'portal.info.call.title' | translate }}</h3>
+                            <p>
+                                {{ 'portal.info.call.prefix' | translate }}
+                                <a href="tel:+66021234567">+{{ userData?.countryId.code }} {{ userData?.phone }}</a><br>
                             </p>
                         </div>
                     </div>
@@ -173,38 +186,50 @@
                     <div class="info-item">
                         <div class="info-icon"><i class="feather icon-mail"></i></div>
                         <div class="info-content">
-                            <h3>Email Us</h3>
-                            <p>General: <a [href]="'mailto:' + userData?.email">{{userData?.email}}</a><br>
+                            <h3>{{ 'portal.info.email.title' | translate }}</h3>
+                            <p>
+                                {{ 'portal.info.email.prefix' | translate }}
+                                <a [href]="'mailto:' + userData?.email">{{ userData?.email }}</a><br>
                             </p>
                         </div>
                     </div>
 
                     <div class="info-item">
-                        
-                <a target="_blank" [href]="userData?.website" class="btn btn-light btn-sm me-1 social"
-                *ngIf="userData && userData?.website">
-                <img src="assets/img/ressorces/web.webp" alt="" style="width: 25px">
-            </a>
-            <a target="_blank" [href]="userData?.linkedIn" class="btn btn-light btn-sm me-1 social"
-                *ngIf="userData && userData?.linkedIn">
-                <img src="assets/img/ressorces/linkedIn.png" alt="" style="width: 25px">
-            </a>
-            <a target="_blank" [href]="userData?.facebook" class="btn btn-light btn-sm me-1 social"
-                *ngIf="userData && userData?.facebook">
-                <img src="assets/img/ressorces/facebook.png" alt="" style="width: 20px">
-            </a>
-            <a target="_blank" [href]="userData?.instagram" class="btn btn-light btn-sm me-1 social"
-                *ngIf="userData && userData?.instagram">
-                <img src="assets/img/ressorces/instagram.png" alt="" style="width: 25px">
-            </a>
-            <a target="_blank" [href]="userData?.twitter" class="btn btn-light btn-sm me-1 social"
-                *ngIf="userData && userData?.twitter">
-                <img src="assets/img/ressorces/x.webp" alt="" style="width: 25px">
-            </a>
-            <a target="_blank" [href]="whatsappUrl(userData?.whatsapp)" class="btn btn-light btn-sm me-1 social"
-                *ngIf="userData && userData?.whatsapp">
-                <img src="assets/img/ressorces/whatsapp.webp" alt="" style="width: 25px">
-            </a>
+                        <a target="_blank" [href]="userData?.website" class="btn btn-light btn-sm me-1 social"
+                            *ngIf="userData && userData?.website">
+                            <img src="assets/img/ressorces/web.webp" [attr.alt]="'portal.social.website' | translate"
+                                style="width: 25px">
+                        </a>
+
+                        <a target="_blank" [href]="userData?.linkedIn" class="btn btn-light btn-sm me-1 social"
+                            *ngIf="userData && userData?.linkedIn">
+                            <img src="assets/img/ressorces/linkedIn.png"
+                                [attr.alt]="'portal.social.linkedin' | translate" style="width: 25px">
+                        </a>
+
+                        <a target="_blank" [href]="userData?.facebook" class="btn btn-light btn-sm me-1 social"
+                            *ngIf="userData && userData?.facebook">
+                            <img src="assets/img/ressorces/facebook.png"
+                                [attr.alt]="'portal.social.facebook' | translate" style="width: 20px">
+                        </a>
+
+                        <a target="_blank" [href]="userData?.instagram" class="btn btn-light btn-sm me-1 social"
+                            *ngIf="userData && userData?.instagram">
+                            <img src="assets/img/ressorces/instagram.png"
+                                [attr.alt]="'portal.social.instagram' | translate" style="width: 25px">
+                        </a>
+
+                        <a target="_blank" [href]="userData?.twitter" class="btn btn-light btn-sm me-1 social"
+                            *ngIf="userData && userData?.twitter">
+                            <img src="assets/img/ressorces/x.webp" [attr.alt]="'portal.social.twitter' | translate"
+                                style="width: 25px">
+                        </a>
+
+                        <a target="_blank" [href]="whatsappUrl(userData?.whatsapp)"
+                            class="btn btn-light btn-sm me-1 social" *ngIf="userData && userData?.whatsapp">
+                            <img src="assets/img/ressorces/whatsapp.webp"
+                                [attr.alt]="'portal.social.whatsapp' | translate" style="width: 25px">
+                        </a>
                     </div>
                 </div>
             </div>
@@ -214,11 +239,11 @@
     <footer>
         <div class="wrapper-2">
             <img class="logo" [src]="userData?.pictureUrl" alt="" style="max-width: 80px; margin: 5px 20px;">
-            
+
             <div class="footer-left">
                 <p class="copyright">{{showName(userData)}}</p>
-                <p class="footer-links"><a href="#">+{{userData?.countryId.code}} {{userData?.phone}}</a> I<a
-                        href="#"> {{userData?.email}} </a></p>
+                <p class="footer-links"><a href="#">+{{userData?.countryId.code}} {{userData?.phone}}</a> I<a href="#">
+                        {{userData?.email}} </a></p>
             </div>
             <div class="footer-right">
                 <!-- <a href="#" class="social facebook">Facebook</a>

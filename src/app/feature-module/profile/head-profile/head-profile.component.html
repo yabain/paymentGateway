@@ -2,9 +2,33 @@
     <div class="col-lg-12">
 
         <div class="profile-cover">
+
+            <form [formGroup]="uploadCoverForm" class="" style="text-align: center;"
+                *ngIf="userData && uploadCoverForm">
             <div class="profile-cover-wrap">
-                <img class="profile-cover-img" src="{{cover}}" alt="">
+                <img class="profile-cover-img" src="{{userData?.cover ? userData?.cover  : cover}}" alt="">
             </div>
+            <span class="avatar-edit" (click)="changeCover(true);fileUploaderCover.click()"
+                *ngIf="canEdit && !isChangeCover">
+                <i class="feather icon-camera avatar-uploader-icon shadow-soft"></i>
+            </span>
+            <input type="file" name="cover" id="cover" accept="image/*" class="form-control ml-4" #fileUploaderCover
+                formControlName="coverFile" (change)="showCoverPreview($event)" style="display: none;">
+
+            <div *ngIf="isChangeCover">
+                1 mb max
+            </div>
+            <div *ngIf="isChangeCover">
+                <a class="btn btn-sm btn-secondary m-2" (click)="cancelCover()">{{ "action.cancel" |
+                    translate }}</a>
+                <a *ngIf="!uploadingCover" class="btn btn-sm btn-success m-2" (click)="saveCover()">{{ "action.save"
+                    |
+                    translate }}</a>
+                <a *ngIf="uploadingCover" class="btn btn-sm btn-success" disabled>
+                    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                </a>
+            </div>
+            </form>
         </div>
 
         <div class="text-center mb-5">
@@ -13,7 +37,8 @@
                 <div class="avatar avatar-xxl profile-cover-avatar">
                     <img class="avatar-img"
                         src="{{userData?.pictureUrl ? userData?.pictureUrl  : 'assets/img/new/user.png'}}" alt="">
-                    <span class="avatar-edit" (click)="changePicture(true);fileUploader.click()" *ngIf="canEdit">
+                    <span class="avatar-edit" (click)="changePicture(true);fileUploader.click()"
+                        *ngIf="canEdit && !isChangePicture">
                         <i class="feather icon-camera avatar-uploader-icon shadow-soft"></i>
                     </span>
                     <input type="file" name="picture" id="picture" accept="image/*" class="form-control ml-4"

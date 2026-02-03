@@ -882,7 +882,75 @@
   "portal": {
     "title": "Portail",
     "headTitle": "Titre sur votre portail",
-    "headText": "Description principale sur votre portail"
+    "headText": "Description principale sur votre portail",
+    "attention": {
+      "title": "Attention aux détails",
+      "desc": "Chaque transaction est contrôlée avec précision : vérifications automatiques, détection de fraude et journalisation complète. Vous bénéficiez d’un paiement fiable, conforme et traçable à chaque étape."
+    },
+    "saveTime": {
+      "title": "Gagnez du temps",
+      "desc": "Payez en quelques clics grâce à une intégration rapide (API, plugins, liens de paiement). Automatisez la facturation des abonnements, les relances et les rapprochements pour vous concentrer sur votre activité."
+    },
+    "control": {
+      "title": "Contrôle total",
+      "desc": "Pilotez tout depuis un tableau de bord clair : paiements, remboursements, litiges et exports comptables. Définissez des rôles, des limites et des notifications pour garder la main sur vos flux."
+    },
+    "support": {
+      "title": "Assistance 24/7",
+      "desc": "Une équipe disponible à tout moment pour vous aider, avec un support réactif et des guides pratiques. En cas d’incident, vous êtes accompagné jusqu’à la résolution."
+    },
+    "contactTitleSection": "Contactez-nous",
+    "contactSubtitleSection": "Nous serions ravis d’échanger avec vous",
+    "firstName": {
+      "label": "Prénom",
+      "placeholder": "Samuel"
+    },
+    "lastName": {
+      "label": "Nom",
+      "placeholder": "TAMO"
+    },
+    "email": {
+      "label": "E-mail",
+      "placeholder": "john@example.com"
+    },
+    "subject": {
+      "label": "Objet",
+      "placeholder": "Comment pouvons-nous vous aider ?"
+    },
+    "message": {
+      "label": "Message",
+      "placeholder": "Dites-nous en plus sur votre demande..."
+    },
+    "submit": "Envoyer",
+    "info": {
+      "title": "Nos coordonnées",
+      "subtitle": "Nous serions ravis d’échanger avec vous",
+      "location": {
+        "title": "Adresse"
+      },
+      "call": {
+        "title": "Appelez-nous",
+        "prefix": "Principal :"
+      },
+      "email": {
+        "title": "Écrivez-nous",
+        "prefix": "Général :"
+      }
+    },
+    "social": {
+      "website": "Website",
+      "linkedin": "LinkedIn",
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "twitter": "X (Twitter)",
+      "whatsapp": "WhatsApp"
+    },
+    "nav": {
+      "home": "Acceuil",
+      "service": "Services/Produits",
+      "fundraising": "Collecte de fonds",
+      "plans": "Plans"
+    }
   },
   "rawData": "Données brutes",
   "tool": "Outil",

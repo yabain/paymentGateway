@@ -29,10 +29,15 @@ export class HeadProfileComponent implements OnInit {
   cover: string = "assets/img/ressorces/cover.png";
   countries: any;
   uploadingPicture = false;
+  uploadingCover = false;
   uploadPictureForm: FormGroup;
+  uploadCoverForm: FormGroup;
   isChangePicture = false;
+  isChangeCover = false;
   memoryImage: string;
+  memoryCover: string;
   selectedImage: any;
+  selectedCover: any;
   allCities: any = [];
   description: string
   descriptionEdition: boolean = false;
@@ -52,6 +57,7 @@ export class HeadProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.profilePictureForm();
+    this.profileCoverForm();
   }
  
 
@@ -95,6 +101,44 @@ export class HeadProfileComponent implements OnInit {
   }
 
   /**
+   * Saves the selected profile cover.
+   */
+  saveCover() {
+    if (!this.uploadCoverForm.valid) {
+      this.toastService.presentToast('error', 'Error', 'Invalid Picture');
+      return;
+    }
+    this.uploadingCover = true;
+    this.userService.updateUserCover(this.selectedCover)
+      .subscribe
+      ({
+        next: (userData) => {
+          // console.log('userData: ', userData)
+          if (userData.error) {
+            this.translate.get("profile.profileUpdatedError").subscribe((res: string) => {
+              this.toastService.presentToast('error', 'Error', res, 10000);
+            });
+          } else {
+            this.translate.get("profile.profileUpdated").subscribe((res: string) => {
+              this.toastService.presentToast('success', 'Done !', res, 10000);
+            })
+            this.userService.setCurrentUser(userData);
+            this.userData.pictureUrl = userData.pictureUrl;
+            this.refresh();
+            this.isChangeCover = false;
+          }
+          this.uploadingCover = false;
+        },
+        error: (error) => {
+          this.translate.get("profile.profileUpdatedError").subscribe((res: string) => {
+            this.toastService.presentToast('error', 'Error', res, 10000);
+          });
+          this.isChangeCover = false;
+          this.uploadingCover = false;
+        },
+      });
+  }
+  /**
    * Refreshes the page.
    */
   refresh(): void {
@@ -108,10 +152,15 @@ export class HeadProfileComponent implements OnInit {
     });
   }
 
-
   profilePictureForm() {
     this.uploadPictureForm = new FormGroup({
       pictureFile: new FormControl(undefined, Validators.required),
+    });
+  }
+
+  profileCoverForm() {
+    this.uploadCoverForm = new FormGroup({
+      coverFile: new FormControl(undefined, Validators.required),
     });
   }
 
@@ -123,12 +172,22 @@ export class HeadProfileComponent implements OnInit {
     }
   }
 
+  cancelCover() {
+    if (this.userData) {
+      this.userData.cover = this.memoryCover;
+      this.isChangeCover = false;
+    }
+  }
+
   /**
    * Toggles the state of profile picture change.
    * @param value - Boolean indicating change state
    */
   changePicture(value: boolean) {
     this.isChangePicture = value;
+  }
+  changeCover(value: boolean) {
+    this.isChangeCover = value;
   }
 
   /**
@@ -158,6 +217,32 @@ export class HeadProfileComponent implements OnInit {
     } else {
       this.userData.pictureUrl = 'assets/imgs/pictures/new_image.png';
       this.selectedImage = null;
+    }
+  }
+
+  showCoverPreview(event: any) {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      const maxSize = 2 * 1024 * 1024; // 2 MB en bytes
+      
+      if (file.size > maxSize) {
+        this.translate.get("profile.imageTooLarge").subscribe((res: string) => {
+          this.toastService.presentToast('error', 'Error', res || 'Image trop volumineuse (max 1 MB)', 5000);
+        });
+        event.target.value = '';
+        return;
+      }
+    
+      
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.userData.cover = e.target.result;
+      };
+      reader.readAsDataURL(event.target.files[0]);
+      this.selectedCover = event.target.files[0];
+    } else {
+      this.userData.cover = this.cover;
+      this.selectedCover = null;
     }
   }
 

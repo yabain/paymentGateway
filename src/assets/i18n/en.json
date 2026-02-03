@@ -881,7 +881,75 @@
   "portal": {
     "title": "Portal",
     "headTitle": "Title on your portal",
-    "headText": "Head description on your portal"
+    "headText": "Head description on your portal",
+    "attention": {
+        "title": "Attention to Detail",
+        "desc": "Every transaction is thoroughly checked: automated verification, fraud detection, and full logging. You get secure, compliant, and traceable payments at every step."
+      },
+      "saveTime": {
+        "title": "Save Time",
+        "desc": "Pay in a few clicks with fast integration (API, plugins, payment links). Automate subscription billing, reminders, and reconciliation to stay focused on your business."
+      },
+      "control": {
+        "title": "Complete Control",
+        "desc": "Manage everything from a clear dashboard: payments, refunds, disputes, and accounting exports. Set roles, limits, and alerts to stay in control of your cash flow."
+      },
+      "support": {
+        "title": "24/7 Support",
+        "desc": "A team is available anytime to help you, with responsive support and practical guides. If an incident occurs, we stay with you until it’s resolved."
+      },
+      "contactTitleSection": "Get In Touch",
+      "contactSubtitleSection": "We'd love to hear from you",
+      "firstName": {
+        "label": "First Name",
+        "placeholder": "Samuel"
+      },
+      "lastName": {
+        "label": "Last Name",
+        "placeholder": "TAMO"
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "john@example.com"
+      },
+      "subject": {
+        "label": "Subject",
+        "placeholder": "How can we help?"
+      },
+      "message": {
+        "label": "Message",
+        "placeholder": "Tell us more about your inquiry..."
+      },
+      "submit": "Send Message",
+      "info": {
+        "title": "Contact Information",
+        "subtitle": "We'd love to hear from you",
+        "location": {
+          "title": "Location"
+        },
+        "call": {
+          "title": "Call Us",
+          "prefix": "Main:"
+        },
+        "email": {
+          "title": "Email Us",
+          "prefix": "General:"
+        }
+      },
+      "social": {
+        "website": "Website",
+        "linkedin": "LinkedIn",
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "twitter": "X (Twitter)",
+        "whatsapp": "WhatsApp"
+      },
+      "nav": {
+        "home": "Home",
+        "service": "Services/Products",
+        "fundraising": "Fundraising",
+        "plans": "Plans"
+      }
   },
   "rawData": "Raw data",
   "tool": "Tool",

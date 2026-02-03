@@ -163,6 +163,21 @@ export class UserService {
     );
   }
 
+  updateUserCover(imageFile?: File): Observable<any> {
+    const data = new FormData();
+    if (imageFile) {
+      data.append('coverFile', imageFile);
+    } else {
+      return of({ error: true, message: 'No file provided' });
+    }
+
+    return from(this.apiService.uploadPicture('user/cover', data)).pipe(
+      catchError(error => {
+        return of({ error: true, message: error.message || 'An error occurred: update user\'s cover' });
+      })
+    );
+  }
+
   /**
    * Navigates to the login page.
    */

@@ -43,6 +43,13 @@ export class PortalComponent {
     });
   }
 
+  useLanguage(lang) {
+        this.language.useLanguage(lang);
+        // this.translate.get('lang.langChanged').subscribe((res: string) => {
+        //   this.toastService.presentToast('success', 'Done!', res, 2000);
+        // });
+  }
+
   getId() {
     const idParam = this.route.snapshot.paramMap.get('id');
 
@@ -81,6 +88,7 @@ export class PortalComponent {
           this.router.navigate(['/']);
         }
         this.userData = user;
+        this.useLanguage(user.language);
         console.log('userData: ', this.userData)
         this.gettingUserData = false;
         this.loading = false;
