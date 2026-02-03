@@ -75,11 +75,6 @@ export class CustomerDetailsComponent implements OnInit, OnDestroy {
     this.userId = idParam;
     this.getUserData(idParam);
     this.getCurrentUser()
-
-    // let invoiceId = idParam;
-    // if (!invoiceId) {
-    //   this.router.navigate(['/']);
-    // }
   }
 
   getUserData(userId) {

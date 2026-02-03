@@ -13,145 +13,246 @@
     </div>
 </div>
 
-<section class="hero" id="home" *ngIf="!loading">
-    <div class="hero-bg"></div>
-    <div class="hero-container">
-        <div class="hero-left">
-            <img src="../../../assets/img/ressorces/dk_logo.png" alt="" style="width: 150px; margin: 5px 20px;">
-            <br>
-            <div class="hero-badge">Samedi 6 Decembre 2025</div>
-            <h1 class="hero-title">
-                <!-- <span class="line"><span>The</span></span>
-
-                <span class="line"><span>Celebration <span class="accent">Impact</span></span></span>
-                <span class="line"><span>Day</span></span> -->
-                <span class="line"><span>Qui Sera le/la Prochain(e) dfgdfgzerfsdfsd sdfs dfsdfs</span></span>
-                <!-- <span class="line"><span>Day</span></span> -->
-            </h1>
-
-            <p class="hero-description">
-                Votez pour votre Miss ou Mister favori et faites briller celui qui mérite de porter la couronne de la Culture.
-                Votez pour votre Miss ou Mister favori et faites briller celui qui mérite de porter la couronne de la Culture.
-            </p>
-
+<div *ngIf="!loading">
+    <header id="top">
+        <div class="wrapper-2">
+                    <img class="logo" [src]="userData?.pictureUrl" [alt]="showName(userData)" style="max-width: 80px; margin: 5px 20px;">
+                    <!-- {{showName(userData)}} -->
+                     <!-- <span class="logo">{{showName(userData)}}</span> -->
+            <nav>
+                <ul id="navigation">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#portfolio">Portfolio</a></li>
+                    <li *ngIf="!currentUser"><a class="nav-cta" href="#">{{ 'auth.login' | translate }}</a></li>
+                </ul>
+            </nav>
         </div>
-        <div class="hero-right">
-            <div class="hero-image-wrapper">
-                <div class="hero-carousel">
-                    <div class="carousel-slide active">
-                        <img src="../../../../assets/img/ci/flyer.png" alt="Fashion Model 1">
-                    </div>
-                    <!-- <div class="carousel-slide">
-                        <img src="../../../../assets/img/ci/CI1.png" alt="Fashion Model 2">
-                    </div>
-                    <div class="carousel-slide">
-                        <img src="../../../../assets/img/ci/ci2.png" alt="Fashion Model 3">
-                    </div> -->
-                    <div class="carousel-overlay"></div>
-                    <div class="carousel-indicators">
-                        <span class="indicator active" data-slide="0"></span>
-                        <span class="indicator" data-slide="1"></span>
-                        <span class="indicator" data-slide="2"></span>
-                    </div>
-                </div>
+    </header>
+    <section
+        id="banner"
+        [style.background]="userData?.banner ? 'url(' + userData.banner + ') no-repeat center' : 'url(' + cover + ') no-repeat center'"
+    ><a name="home"></a>
+        <div class="wrapper">
+            <h2 [style.color]="userData?.headTitlePortalColor ? userData?.headTitlePortalColor : '#fff'">{{userData?.headTitlePortal}}</h2>
+            <p class="subtitle" [style.color]="userData?.headTextPortalColor ? userData?.headTextPortalColor : '#fff'">{{userData?.headTextPortal}}</p>
+        </div>
+    </section>
+
+    <section class="text-section" *ngIf="!loading && userData?.description && userData?.description !== ''">
+        <div class="wrapper">
+            <div class="image align-left">
+                <img src="assets/img/new/light.png" alt="light bulb" class="align-left">
             </div>
-        </div>
-    </div>
-    <div class="scroll-indicator">
-        <span></span>
-    </div>
-</section>
-
-<section class="collections" id="collections" *ngIf="!loading">
-    <div class="section-header">
-        <h2 class="section-title">Candidat(e)s</h2>
-        <p class="section-subtitle">Qui seront le Roi et la reine de la culture ?</p>
-    </div>
-    <div>
-        <!-- <app-services></app-services> -->
-    </div>
-</section>
-
-
-<section class="contact" id="contact" *ngIf="!loading">
-    <div class="contact-container">
-        <div class="contact-header">
-            <h2 class="section-title">Get In Touch</h2>
-            <p class="section-subtitle">We'd love to hear from you</p>
-        </div>
-
-        <div class="contact-content">
-            <div class="contact-form-wrapper">
-                <form id="contactForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="firstName">First Name</label>
-                            <input type="text" id="firstName" name="firstName" placeholder="Samuel" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="lastName">Last Name</label>
-                            <input type="text" id="lastName" name="lastName" placeholder="TAMO" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" placeholder="john@example.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="subject">Subject</label>
-                        <input type="text" id="subject" name="subject" placeholder="How can we help?" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Message</label>
-                        <textarea id="message" name="message" placeholder="Tell us more about your inquiry..."
-                            required></textarea>
-                    </div>
-                    <button type="submit" class="form-submit">Send Message</button>
-                </form>
+            <div class="text align-left">
+                <h3>{{ 'profile.aboutUs' | translate }}</h3>
+                <!-- <p class="subtitle">See Your Ideas Brought to Life</p> -->
+                <p>{{ userData?.description }}</p>
             </div>
+            <div class="clear"></div>
+        </div>
+    </section>
 
-            <div class="contact-info">
-                <h2>Test of location</h2>
-                <br>
+    <section class="features-section">
+        <div class="wrapper">
+            <ul class="feature-squares">
+                <li>
+                    <div class="image">
+                        <img src="assets/img/new/icon-eye.png" alt="feature icon">
+                    </div>
+                    <div class="text">
+                        <h5>Attention to Detail</h5>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ut dignissim sapien. Mauris
+                            congue faucibus enim, vel molestie lectus.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="image">
+                        <img src="assets/img/new/icon-clock.png" alt="feature icon">
+                    </div>
+                    <div class="text">
+                        <h5>Save Time</h5>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ut dignissim sapien. Mauris
+                            congue faucibus enim, vel molestie lectus.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="image">
+                        <img src="assets/img/new/icon-dashboard.png" alt="feature icon">
+                    </div>
+                    <div class="text">
+                        <h5>Complete Control</h5>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ut dignissim sapien. Mauris
+                            congue faucibus enim, vel molestie lectus.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="image">
+                        <img src="assets/img/new/icon-headset.png" alt="feature icon">
+                    </div>
+                    <div class="text">
+                        <h5>24/7 Support</h5>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ut dignissim sapien. Mauris
+                            congue faucibus enim, vel molestie lectus.</p>
+                    </div>
+                </li>
+                <div class="clear"></div>
+            </ul>
+        </div>
+    </section>
+
+
+
+    <!-- 
+<div class="card" style="position: fixed;" *ngIf="!loading">
+    <img [src]="userData?.pictureUrl" alt="" style="max-width: 80px; margin: 5px 20px;">
+</div><br><br><br><br> -->
+
+    <section class="contact" id="contact">
+        <div class="contact-container">
+            <div class="contact-header">
+                <h2 class="section-title">Get In Touch</h2>
                 <p class="section-subtitle">We'd love to hear from you</p>
-                <br>
-                <br>
-                <div class="info-item">
-                    <div class="info-icon"><i class="feather icon-map-pin"></i></div>
-                    <div class="info-content">
-                        <h3>Location</h3>
-                        <p>Carrefour Prison, Entréé ELECAM<br>
-                        </p>
-                    </div>
+            </div>
+
+            <div class="contact-content">
+                <div class="contact-form-wrapper">
+                    <form id="contactForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">First Name</label>
+                                <input type="text" id="firstName" name="firstName" placeholder="Samuel" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name</label>
+                                <input type="text" id="lastName" name="lastName" placeholder="TAMO" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="john@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" name="subject" placeholder="How can we help?" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" placeholder="Tell us more about your inquiry..."
+                                required></textarea>
+                        </div>
+                        <button type="submit" class="form-submit">Send Message</button>
+                    </form>
                 </div>
 
-                <div class="info-item">
-                    <div class="info-icon"><i class="feather icon-phone"></i></div>
-                    <div class="info-content">
-                        <h3>Call Us</h3>
-                        <p>Main: <a href="tel:+66021234567">+237 694949617</a><br>
+                <div class="contact-info">
+                    <h2>Test of location</h2>
+                    <br>
+                    <p class="section-subtitle">We'd love to hear from you</p>
+                    <br>
+                    <br>
+                    <div class="info-item">
+                        <div class="info-icon"><i class="feather icon-map-pin"></i></div>
+                        <div class="info-content">
+                            <h3>Location</h3>
+                            <p>{{userData?.address}}<br>
                             </p>
+                        </div>
                     </div>
-                </div>
 
-                <div class="info-item">
-                    <div class="info-icon"><i class="feather icon-mail"></i></div>
-                    <div class="info-content">
-                        <h3>Email Us</h3>
-                        <p>General: <a href="mailto:contact@yaba-in.com">contact&#64;yaba-in.com</a><br>
+                    <div class="info-item">
+                        <div class="info-icon"><i class="feather icon-phone"></i></div>
+                        <div class="info-content">
+                            <h3>Call Us</h3>
+                            <p>Main: <a href="tel:+66021234567">+{{userData?.countryId.code}} {{userData?.phone}}</a><br>
                             </p>
+                        </div>
                     </div>
-                </div>
 
-                <div class="info-item">
-                    <div class="info-icon"><i class="feather icon-mail"></i></div>
-                    <div class="info-icon"><i class="feather icon-mail"></i></div>
-                    <div class="info-icon"><i class="feather icon-mail"></i></div>
-                    <div class="info-icon"><i class="feather icon-mail"></i></div>
+                    <div class="info-item">
+                        <div class="info-icon"><i class="feather icon-mail"></i></div>
+                        <div class="info-content">
+                            <h3>Email Us</h3>
+                            <p>General: <a [href]="'mailto:' + userData?.email">{{userData?.email}}</a><br>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        
+                <a target="_blank" [href]="userData?.website" class="btn btn-light btn-sm me-1 social"
+                *ngIf="userData && userData?.website">
+                <img src="assets/img/ressorces/web.webp" alt="" style="width: 25px">
+            </a>
+            <a target="_blank" [href]="userData?.linkedIn" class="btn btn-light btn-sm me-1 social"
+                *ngIf="userData && userData?.linkedIn">
+                <img src="assets/img/ressorces/linkedIn.png" alt="" style="width: 25px">
+            </a>
+            <a target="_blank" [href]="userData?.facebook" class="btn btn-light btn-sm me-1 social"
+                *ngIf="userData && userData?.facebook">
+                <img src="assets/img/ressorces/facebook.png" alt="" style="width: 20px">
+            </a>
+            <a target="_blank" [href]="userData?.instagram" class="btn btn-light btn-sm me-1 social"
+                *ngIf="userData && userData?.instagram">
+                <img src="assets/img/ressorces/instagram.png" alt="" style="width: 25px">
+            </a>
+            <a target="_blank" [href]="userData?.twitter" class="btn btn-light btn-sm me-1 social"
+                *ngIf="userData && userData?.twitter">
+                <img src="assets/img/ressorces/x.webp" alt="" style="width: 25px">
+            </a>
+            <a target="_blank" [href]="whatsappUrl(userData?.whatsapp)" class="btn btn-light btn-sm me-1 social"
+                *ngIf="userData && userData?.whatsapp">
+                <img src="assets/img/ressorces/whatsapp.webp" alt="" style="width: 25px">
+            </a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<app-footer *ngIf="!loading"></app-footer>
+    <footer>
+        <div class="wrapper-2">
+            <img class="logo" [src]="userData?.pictureUrl" alt="" style="max-width: 80px; margin: 5px 20px;">
+            
+            <div class="footer-left">
+                <p class="copyright">{{showName(userData)}}</p>
+                <p class="footer-links"><a href="#">+{{userData?.countryId.code}} {{userData?.phone}}</a> I<a
+                        href="#"> {{userData?.email}} </a></p>
+            </div>
+            <div class="footer-right">
+                <!-- <a href="#" class="social facebook">Facebook</a>
+                <a href="#" class="social twitter">Facebook</a>
+                <a href="#" class="social google">Facebook</a> -->
+
+                <a target="_blank" [href]="userData?.website" class="btn btn-light btn-sm me-1 social"
+                    *ngIf="userData && userData?.website">
+                    <img src="assets/img/ressorces/web.webp" alt="" style="width: 25px">
+                </a>
+                <a target="_blank" [href]="userData?.linkedIn" class="btn btn-light btn-sm me-1 social"
+                    *ngIf="userData && userData?.linkedIn">
+                    <img src="assets/img/ressorces/linkedIn.png" alt="" style="width: 25px">
+                </a>
+                <a target="_blank" [href]="userData?.facebook" class="btn btn-light btn-sm me-1 social"
+                    *ngIf="userData && userData?.facebook">
+                    <img src="assets/img/ressorces/facebook.png" alt="" style="width: 20px">
+                </a>
+                <a target="_blank" [href]="userData?.instagram" class="btn btn-light btn-sm me-1 social"
+                    *ngIf="userData && userData?.instagram">
+                    <img src="assets/img/ressorces/instagram.png" alt="" style="width: 25px">
+                </a>
+                <a target="_blank" [href]="userData?.twitter" class="btn btn-light btn-sm me-1 social"
+                    *ngIf="userData && userData?.twitter">
+                    <img src="assets/img/ressorces/x.webp" alt="" style="width: 25px">
+                </a>
+                <a target="_blank" [href]="whatsappUrl(userData?.whatsapp)" class="btn btn-light btn-sm me-1 social"
+                    *ngIf="userData && userData?.whatsapp">
+                    <img src="assets/img/ressorces/whatsapp.webp" alt="" style="width: 25px">
+                </a>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </footer>
+    <div class="footer-class">Powered by digiKuntz Payments</div>
+    <app-footer></app-footer>
+</div>

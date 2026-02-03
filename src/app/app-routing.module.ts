@@ -27,7 +27,7 @@ const routes: Routes = [
     component: PaymentComponent,
   },
   {
-    path: 'portal',
+    path: 'portal/:id',
     component: PortalComponent,
   },
   {

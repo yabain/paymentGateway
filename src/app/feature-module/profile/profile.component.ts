@@ -38,7 +38,9 @@ export class ProfileComponent implements OnInit {
   allCities: any = [];
   description: string;
   headTitlePortal: string;
+  headTitlePortalColor: string;
   headTextPortal: string;
+  headTextPortalColor: string
   descriptionEdition: boolean = false;
   headTitlePortalEdition: boolean = false;
   headTextPortalEdition: boolean = false;
@@ -230,6 +232,7 @@ export class ProfileComponent implements OnInit {
       return;
     } else {
       this.headTitlePortal = this.currentUser.headTitlePortal || '';
+      this.headTitlePortalColor = this.currentUser.headTitlePortalColor || '';
     }
   }
 
@@ -239,6 +242,7 @@ export class ProfileComponent implements OnInit {
       return;
     } else {
       this.headTextPortal = this.currentUser.headTextPortal || '';
+      this.headTextPortalColor = this.currentUser.headTextPortalColor || '';
     }
   }
 
@@ -250,10 +254,12 @@ export class ProfileComponent implements OnInit {
     this.loading2 = true;
     let data: any;
     if(val === "headTitlePortal") data = {
-      headTitlePortal: this.headTitlePortal
+      headTitlePortal: this.headTitlePortal,
+      headTitlePortalColor: this.headTitlePortalColor
     }
     else if(val === "headTextPortal") data = {
-      headTextPortal: this.headTextPortal
+      headTextPortal: this.headTextPortal,
+      headTextPortalColor: this.headTextPortalColor
     }
     else  data = {
       description: this.description
@@ -300,6 +306,8 @@ export class ProfileComponent implements OnInit {
       this.description = this.currentUser.description;
       this.headTitlePortal = this.currentUser.headTitlePortal;
       this.headTextPortal = this.currentUser.headTextPortal;
+      this.headTextPortalColor = this.currentUser.headTextPortalColor;
+      this.headTitlePortalColor = this.currentUser.headTitlePortalColor;
       // Start in view mode with controls disabled to avoid template [disabled]
       this.form.disable({ emitEvent: false });
       this.ableToShow = this.verifyUserConditions(this.currentUser) ? true : false;
@@ -311,6 +319,7 @@ export class ProfileComponent implements OnInit {
    * Saves the selected profile picture.
    */
   savePicture() {
+    console.log("test 0000")
     if (!this.uploadPictureForm.valid) {
       this.toastService.presentToast('error', 'Error', 'Invalid Picture');
       return;
@@ -330,7 +339,7 @@ export class ProfileComponent implements OnInit {
             })
             this.userService.setCurrentUser(userData);
             // this.currentUser.pictureUrl = userData.pictureUrl;
-            this.refresh();
+            // this.refresh();
             this.isChangePicture = false;
           }
           this.uploadingPicture = false;
