@@ -5382,6 +5382,24 @@ table .badge {
   -ms-transition: all 0.2s ease;
   transition: all 0.2s ease;
 }
+
+.btn-edit {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  cursor: pointer;
+  display: inline-flex;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  /* color: #677788;
+  background-color: #fff; */
+  box-shadow: 0 3px 6px 0 rgba(140, 152, 164, 0.25);
+  border-radius: 10px;
+  -webkit-transition: all 0.2s ease;
+  -ms-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+
 .avatar-edit svg {
   width: 18px;
 }
@@ -12586,6 +12604,27 @@ body.filter-opened {
   color: #677788;
   background-color: #fff;
   border-radius: 50%;
+  transition: 0.2s;
+  box-shadow: 0 3px 6px 0 rgba(140, 152, 164, 0.25);
+}
+
+.btn-edit {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  cursor: pointer;
+  border-radius: 10px;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -ms-flex-align: center;
+  align-items: center;
+  /* color: #677788;
+  background-color: #fff; */
+  border-radius: 10px;
   transition: 0.2s;
   box-shadow: 0 3px 6px 0 rgba(140, 152, 164, 0.25);
 }

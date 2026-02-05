@@ -281,6 +281,32 @@
             *ngIf="userData && userData?.accountType === 'organisation' || currentUser?.isAdmin === true">
             <div class="card-body card-body-height" *ngIf="userData">
               <div class="d-flex justify-content-between">
+                <h5 class="card-title">{{ "portal.title" | translate }}</h5>
+                <div *ngIf="!loading3">
+                  <span *ngIf="userData?.portal === true"
+                    style="background-color: #04850e; color: #fff; padding: 3px 5px; border-radius: 3px;">
+                    {{ "users.enabled" | translate }}
+                  </span>
+                  <span *ngIf="userData?.portal != true"
+                    style="background-color: #850404; color: #fff; padding: 3px 5px; border-radius: 3px;">
+                    {{ "users.disabled" | translate }}
+                  </span>
+                  <span (click)="changeUserPortalStatus()" class="btn btn-light" *ngIf="userData?.portal != true">
+                    <a class="btn-filters btn-hover" href="javascript:void(0);" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                      matTooltip="Enable"><span><i class="feather icon-power" style="color: #04c714"></i></span></a>
+                  </span>
+                  <span (click)="changeUserPortalStatus()" class="btn btn-light" *ngIf="userData?.portal === true">
+                    <a class="btn-filters btn-hover" href="javascript:void(0);" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                      matTooltip="Disable"><span><i class="feather icon-power" style="color: #df0404"></i></span></a>
+                  </span>
+                </div>
+                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"
+                  *ngIf="loading3"></span>
+              </div>
+              <p *ngIf="currentUser">{{ headTitlePortal }} </p>
+            </div>
+            <div class="card-body card-body-height" *ngIf="userData">
+              <div class="d-flex justify-content-between">
                 <h5 class="card-title">{{ "portal.headTitle" | translate }}</h5>
                 <a class="btn btn-sm btn-white" (click)="editHeadTitlePortalPage()"
                   *ngIf="!headTitlePortalEdition && !loading2">

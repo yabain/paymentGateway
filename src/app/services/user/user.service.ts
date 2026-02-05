@@ -262,6 +262,16 @@ export class UserService {
     }
   }
 
+  async changePortalStatus(userId): Promise<any> {
+    try {
+      const response = await this.apiService.update('user/update-portalStatus', userId, {}).toPromise();
+      return response;
+    } catch (error) {
+      console.error('Error to change Portal status:', error);
+      throw error;
+    }
+  }
+
   async changeAdminStatus(userId): Promise<any> {
     try {
       const response = await this.apiService.update('user/update-adminStatus', userId, {}).toPromise();

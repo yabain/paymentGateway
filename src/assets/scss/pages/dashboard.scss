@@ -201,6 +201,29 @@
 		width: 18px;
 	}
 }
+.btn-edit {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	cursor: pointer;
+	border-radius: 10px;
+	display: -ms-inline-flexbox;
+	display: inline-flex;
+	-ms-flex-negative: 0;
+	flex-shrink: 0;
+	-ms-flex-pack: center;
+	justify-content: center;
+	-ms-flex-align: center;
+	align-items: center;
+	color: #677788;
+	background-color: #fff;
+	border-radius: 10px;
+	transition: .2s;
+	box-shadow: 0 3px 6px 0 rgba(140,152,164,.25);
+	svg {
+		width: 18px;
+	}
+}
 .error-page {
 	align-items: center;
     color: #1f1f1f;

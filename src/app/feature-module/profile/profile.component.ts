@@ -26,6 +26,7 @@ export class ProfileComponent implements OnInit {
   form: FormGroup;
   loading: boolean = false;
   loading2: boolean = false;
+  loading3: boolean = true;
   userId: any;
   cover: string = "assets/img/ressorces/cover.png";
   currentUser: any;
@@ -295,10 +296,23 @@ export class ProfileComponent implements OnInit {
       });
   }
 
+  changeUserPortalStatus(userId?: string){
+    this.loading3 = true;
+    const userid = userId ? userId : this.currentUser._id;
+    this.userService.changePortalStatus(userid).then((res: any) => {
+      if(res){
+        this.currentUser = this.userData = res;
+        this.toastService.presentToast('success', 'Done !', '', 3000);
+        this.userService.setCurrentUser(res);
+        this.loading3 = false;
+      }
+    });
+  }
+
   async getCurrentUser() {
     this.currentUser = await this.userService.getCurrentUser();
-    console.log('current User: ', this.currentUser);
     this.userData = this.currentUser;
+    this.loading3 = false;
     this.memoryImage = this.currentUser.pictureUrl;
     if (this.currentUser) {
       this.userForm(this.currentUser);

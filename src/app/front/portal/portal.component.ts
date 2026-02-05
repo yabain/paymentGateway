@@ -17,6 +17,9 @@ export class PortalComponent {
   userId!: string;
   cover: string = "../../../assets/img/ressorces/cover.png";
   currentUser: any;
+  en: any = '';
+  fr: any = '';
+  selectedLanguage: any = '';
 
   constructor(
     private userService: UserService,
@@ -24,7 +27,11 @@ export class PortalComponent {
     private language: LanguageService,
     private route: ActivatedRoute,
     private router: Router,
-  ) {}
+  ) {
+    this.getLanguage();
+    this.en = this.language.en;
+    this.fr = this.language.fr;
+  }
   
   ngOnInit(): void {
     this.verifyUser();
@@ -43,13 +50,6 @@ export class PortalComponent {
     });
   }
 
-  useLanguage(lang) {
-        this.language.useLanguage(lang);
-        // this.translate.get('lang.langChanged').subscribe((res: string) => {
-        //   this.toastService.presentToast('success', 'Done!', res, 2000);
-        // });
-  }
-
   getId() {
     const idParam = this.route.snapshot.paramMap.get('id');
 
@@ -60,6 +60,16 @@ export class PortalComponent {
       this.userId = null;
       this.router.navigate(['/dashboard']);
     }
+  }
+
+  async getLanguage() {
+    this.selectedLanguage = await this.language.getDefaultLanguage();
+    this.selectedLanguage = this.selectedLanguage === 'en' ? this.en : this.fr;
+  }
+
+  useLanguage(lang) {
+        this.language.useLanguage(lang);
+        this.selectedLanguage = lang === 'en' ? this.en : this.fr;
   }
 
   whatsappUrl(whatsapp) {
@@ -83,9 +93,10 @@ export class PortalComponent {
         }),
       )
       .subscribe((user: any) => {
-        if(user.accountType !== 'organisation' && user.isAdmin !== true || user.isActive === false){
+        if(user.accountType !== 'organisation' && user.isAdmin !== true || user.isActive !== true || user.portal !== true){
           this.userId = null;
           this.router.navigate(['/']);
+          return;
         }
         this.userData = user;
         this.useLanguage(user.language);

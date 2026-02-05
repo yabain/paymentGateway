@@ -539,6 +539,25 @@
 		width: 18px;
 	}
 }
+.btn-edit {
+	position: $__absolute;
+	bottom: 0;
+	right: 0;
+	cursor: $__pointer;
+	display: $__inline__flex;
+	-ms-flex-negative: 0;
+	flex-shrink: 0;
+	@extend %align-items-center;
+    @extend %justify-content-center;
+	// color: #677788;
+	// background-color: $__white;
+	box-shadow: 0 3px 6px 0 rgb(140 152 164 / 25%);
+    @include rounded(5%);
+    @include transition(all 0.2s ease);
+	svg {
+		width: 18px;
+	}
+}
 .header-seven {
     background-color: #F0F1F5;
     @include rounded(0);
