@@ -1,9 +1,9 @@
 <div class="page-header">
     <div class="content-page-header page-tilte">
-        <!-- <h5 *ngIf="!isAdmin" style="color: black !important;">
-            {{ 'services.title' | translate }}
+        <h5 style="color: black !important;">
+            {{ 'services.servicesProducts' | translate }}
         </h5>
-        <h5 *ngIf="isAdmin" style="color: black !important;">
+        <!-- <h5 *ngIf="isAdmin" style="color: black !important;">
             {{ 'services.allServices' | translate }}
         </h5> -->
         <div class="page-content">
@@ -33,10 +33,10 @@
                             {{ 'action.share' | translate }}
                         </button>
                     </li>
-                    <li>
+                    <!-- <li>
                         <a class="btn-filters btn-hover" data-bs-toggle="tooltip" data-bs-placement="bottom"
                             matTooltip="List-View"><span><i class="feather icon-list"></i></span></a>
-                    </li>
+                    </li> -->
                     <li>
                         <a class="btn-filters btn-hover" href="javascript:void(0);" data-bs-toggle="tooltip"
                             data-bs-placement="bottom" matTooltip="Refresh" (click)="refresh()"><span><i

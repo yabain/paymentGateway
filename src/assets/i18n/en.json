@@ -38,7 +38,8 @@
     "retry": "Retry",
     "share": "Share",
     "copy": "Copy",
-    "report": "Report"
+    "report": "Report",
+    "change": "Change"
   },
   "auth": {
     "login": "Log in",
@@ -589,7 +590,8 @@
     "mySubscriptionList": "Mes abonnements",
     "transactionList": "Transaction List",
     "myTransactions": "My transactions",
-    "services": "Services"
+    "services": "Services",
+    "servicesProducts": "Products / Services"
   },
   "flutterwave": {
     "otherCurrencyBalances": "Othes currency balance available",
@@ -691,6 +693,7 @@
   },
   "services": {
     "title": "Services",
+    "servicesProducts": "Products / Services",
     "allServices": "All services",
     "activeServices": "Active services",
     "disabledServices": "Disabled services",
@@ -945,6 +948,7 @@
         "whatsapp": "WhatsApp"
       },
       "nav": {
+        "title": "Menu portail",
         "home": "Home",
         "service": "Services/Products",
         "fundraising": "Fundraising",

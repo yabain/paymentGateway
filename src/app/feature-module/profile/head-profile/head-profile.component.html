@@ -10,7 +10,7 @@
             </div>
             <span class="btn-edit btn btn-light" (click)="changeCover(true);fileUploaderCover.click()"
                 *ngIf="canEdit && !isChangeCover">
-                <i class="feather icon-camera avatar-uploader-icon shadow-soft"></i> Change
+                <i class="feather icon-camera avatar-uploader-icon shadow-soft"></i> {{ 'action.change' | translate }}
             </span>
             <input type="file" name="cover" id="cover" accept="image/*" class="form-control ml-4" #fileUploaderCover
                 formControlName="coverFile" (change)="showCoverPreview($event)" style="display: none;">

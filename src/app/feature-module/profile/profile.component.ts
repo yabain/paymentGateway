@@ -309,6 +309,8 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  async toggleService(){}
+
   async getCurrentUser() {
     this.currentUser = await this.userService.getCurrentUser();
     this.userData = this.currentUser;

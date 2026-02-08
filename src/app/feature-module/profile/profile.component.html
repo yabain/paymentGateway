@@ -292,20 +292,22 @@
                     {{ "users.disabled" | translate }}
                   </span>
                   <span (click)="changeUserPortalStatus()" class="btn btn-light" *ngIf="userData?.portal != true">
-                    <a class="btn-filters btn-hover" href="javascript:void(0);" data-bs-toggle="tooltip" data-bs-placement="bottom"
-                      matTooltip="Enable"><span><i class="feather icon-power" style="color: #04c714"></i></span></a>
+                    <a class="btn-filters btn-hover" href="javascript:void(0);" data-bs-toggle="tooltip"
+                      data-bs-placement="bottom" matTooltip="Enable"><span><i class="feather icon-power"
+                          style="color: #04c714"></i></span></a>
                   </span>
                   <span (click)="changeUserPortalStatus()" class="btn btn-light" *ngIf="userData?.portal === true">
-                    <a class="btn-filters btn-hover" href="javascript:void(0);" data-bs-toggle="tooltip" data-bs-placement="bottom"
-                      matTooltip="Disable"><span><i class="feather icon-power" style="color: #df0404"></i></span></a>
+                    <a class="btn-filters btn-hover" href="javascript:void(0);" data-bs-toggle="tooltip"
+                      data-bs-placement="bottom" matTooltip="Disable"><span><i class="feather icon-power"
+                          style="color: #df0404"></i></span></a>
                   </span>
                 </div>
                 <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"
                   *ngIf="loading3"></span>
               </div>
-              <p *ngIf="currentUser">{{ headTitlePortal }} </p>
+              <!-- <p *ngIf="currentUser">{{ headTitlePortal }} </p> -->
             </div>
-            <div class="card-body card-body-height" *ngIf="userData">
+            <div class="card-body card-body-height" *ngIf="userData && userData?.portal === true">
               <div class="d-flex justify-content-between">
                 <h5 class="card-title">{{ "portal.headTitle" | translate }}</h5>
                 <a class="btn btn-sm btn-white" (click)="editHeadTitlePortalPage()"
@@ -327,20 +329,21 @@
               <textarea class="form-control" rows="8" maxlength="55" *ngIf="currentUser && headTitlePortalEdition"
                 name="" id="" [(ngModel)]="headTitlePortal"></textarea><span *ngIf="headTitlePortalEdition">max
                 55</span>
-                <div *ngIf="currentUser && headTitlePortalEdition">
-                  <br><br>
-                  <label for="" style="margin-right: 10px;">Color Code:</label>
-                  <input type="text" placeholder="#fff" [(ngModel)]="headTitlePortalColor">
-                </div>
+              <div *ngIf="currentUser && headTitlePortalEdition">
+                <br><br>
+                <label for="" style="margin-right: 10px;">Color Code:</label>
+                <input type="text" placeholder="#fff" [(ngModel)]="headTitlePortalColor">
+              </div>
               <div>
-                <span style="margin-right: 10px;">Color: </span> <button class="btn" style="border: 1px solid #000;" [style.background-color]="headTitlePortalColor"></button> {{headTitlePortalColor}}
+                <span style="margin-right: 10px;">Color: </span> <button class="btn" style="border: 1px solid #000;"
+                  [style.background-color]="headTitlePortalColor"></button> {{headTitlePortalColor}}
               </div>
             </div>
             <div class="card-body" *ngIf="!userData" style="text-align: center;">
               <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
             </div>
             <br>
-            <div class="card-body card-body-height" *ngIf="userData">
+            <div class="card-body card-body-height" *ngIf="userData && userData?.portal === true">
               <div class="d-flex justify-content-between">
                 <h5 class="card-title">{{ "portal.headText" | translate }}</h5>
                 <a class="btn btn-sm btn-white" (click)="editHeadTextPortalPage()"
@@ -362,20 +365,50 @@
               <textarea class="form-control" rows="8" maxlength="350" *ngIf="currentUser && headTextPortalEdition"
                 name="" id="" [(ngModel)]="headTextPortal"></textarea> <span *ngIf="headTextPortalEdition">max
                 350</span>
-                <div *ngIf="currentUser && headTextPortalEdition">
-                  <br><br>
-                  <label for="" style="margin-right: 10px;">Color Code:</label>
-                  <input type="text" placeholder="#fff" [(ngModel)]="headTextPortalColor">
-                </div>
-              <div>
-                <span style="margin-right: 10px;">Color: </span> <button class="btn" style="border: 1px solid #000;" [style.background-color]="headTextPortalColor"></button> {{headTextPortalColor}}
+              <div *ngIf="currentUser && headTextPortalEdition">
+                <br><br>
+                <label for="" style="margin-right: 10px;">Color Code:</label>
+                <input type="text" placeholder="#fff" [(ngModel)]="headTextPortalColor">
               </div>
+              <div>
+                <span style="margin-right: 10px;">Color: </span> <button class="btn" style="border: 1px solid #000;"
+                  [style.background-color]="headTextPortalColor"></button> {{headTextPortalColor}}
+              </div>
+            </div>
+            <br>
+            <div class="card-body card-body-height" *ngIf="userData && userData?.portal === true">
+              <div class="d-flex justify-content-between">
+                <h5 class="card-title">{{ "portal.nav.title" | translate }}</h5>
+              </div><br>
+              <div class="status-toggle justify-content-between">
+                <div class="d-flex align-left">
+                  <span style="margin-right: 10px;">{{ 'sideMenu.servicesProducts' | translate }}: </span>
+                  <span>{{ userData?.portalServices === true ? ('users.enabled' | translate) : ('users.disabled' | translate) }}</span>
+                </div>
+                <span>
+                  <input id="rating_1" class="check" type="checkbox" [checked]="userData?.portalServices === true" (click)="toggleService()"/>
+                  <label for="rating_1" class="checktoggle checkbox-bg">checkbox</label>
+                </span>
+              </div>
+              <br>
+              <div class="status-toggle justify-content-between">
+                <div class="d-flex align-left">
+                  <span style="margin-right: 10px;">{{ 'payment.fundraising' | translate }}: </span>
+                  <span>{{ userData?.portalFundraising === true ? ('users.enabled' | translate) : ('users.disabled' | translate) }}</span>
+                </div>
+                <span>
+                  <input id="rating_1" class="check" type="checkbox" [checked]="userData?.portalFundraising === true" (click)="toggleService()"/>
+                  <label for="rating_1" class="checktoggle checkbox-bg">checkbox</label>
+                </span>
+              </div>
+              <br>
             </div>
             <div class="card-body" *ngIf="!userData" style="text-align: center;">
               <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
             </div>
             <br>
-            <a target="_blank" [href]="'https://payment.digikuntz.com/portal/' + userData?._id" style="margin: 10px" class="btn btn-primary">View my portal</a>
+            <a target="_blank" [href]="'https://payments.digikuntz.com/portal/' + userData?._id" style="margin: 10px"
+              class="btn btn-primary" *ngIf="userData && userData?.portal === true">View my portal</a>
           </div>
           <app-dev [ableToShow]="ableToShow" [userData]="currentUser" *ngIf="userData && !loading"></app-dev>
           <!-- <div class="card">

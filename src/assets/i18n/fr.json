@@ -38,7 +38,8 @@
     "retry": "Réessayer",
     "share": "Partager",
     "copy": "Copier",
-    "report": "Signaler"
+    "report": "Signaler",
+    "change": "Changer"
   },
   "auth": {
     "login": "Se connecter",
@@ -589,7 +590,8 @@
     "mySubscriptionList": "Mes abonnements",
     "transactionList": "Transactions",
     "myTransactions": "Mes transactions",
-    "services": "Services"
+    "services": "Services",
+    "servicesProducts": "Produits / Services"
   },
   "flutterwave": {
     "otherCurrencyBalances": "Solde d'autres devises disponible",
@@ -691,6 +693,7 @@
   },
   "services": {
     "title": "Services",
+    "servicesProducts": "Produits / Services",
     "allServices": "Tous les services",
     "activeServices": "Services actifs",
     "disabledServices": "Services désactivés",
@@ -946,6 +949,7 @@
       "whatsapp": "WhatsApp"
     },
     "nav": {
+      "title": "Menu portail",
       "home": "Acceuil",
       "service": "Services/Produits",
       "fundraising": "Collecte de fonds",

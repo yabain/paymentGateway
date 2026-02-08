@@ -24,7 +24,7 @@
                                         <div style="text-align: left !important;" *ngIf="isAuthor()">
                                             <span
                                                 (click)="changePicture(true);fileUploader.click()">
-                                                <i class="feather icon-camera avatar-uploader-icon shadow-soft"></i>
+                                                <i class="feather icon-camera avatar-uploader-icon shadow-soft"></i> {{ 'action.change' | translate }}
                                             </span>
                                         </div>
                                         <input type="file" name="picture" id="picture" accept="image/*"
