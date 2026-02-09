@@ -1,150 +1,148 @@
 <header class="hero">
-    <div class="hero__content">
-      <img src="assets/img/ressorces/dk_logo.png" alt="digiKUNTZ Payments Logo" (click)="navigateTo(frontUrl)" />
-      <p class="hero__eyebrow">{{ 'apidoc.documentation' | translate }}</p>
-    </div>
-  
-    <ul class="nav nav-tabs user-menu">
-      <li class="nav-item dropdown language-show">
-        <a href="javascript:void(0)" class="user-link nav-link" data-bs-toggle="dropdown">
-          <span class="user-content">
-            <span class="user-name" style="margin-right: 10px;">
-              <span class="spinner-border spinner-border-sm me-2" role="status" *ngIf="changingLang"></span>
-              <img [src]="selectedLanguage[0]?.flagImage" alt="" style="width: 15px; height: 12px;" *ngIf="!changingLang">
-              {{ selectedLanguage[0]?.name | translate }} <i class="fa-solid fa-chevron-down"></i>
-            </span>
-          </span>
-        </a>
-        <div class="dropdown-menu menu-drop-user">
-          <div class="profilemenu">
-            <div class="subscription-menu">
-              <ul>
-                <li>
-                  <a class="dropdown-item" (click)="useLanguage('en')">
-                    <img [src]="en[0].flagImage" alt="" style="width: 15px;">
-                    {{ en[0].name | translate }}
-                  </a>
-                </li>
-                <li>
-                  <a class="dropdown-item" (click)="useLanguage('fr')">
-                    <img [src]="fr[0].flagImage" alt="" style="width: 15px;">
-                    {{ fr[0].name | translate }}
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </li>
-    </ul>
-  </header>
-  
-  <div class="container">
-    <p class="hero__subtitle" style="text-align: justify;">
-      {{ 'apidoc.headParagraphe' | translate }}
-    </p>
-    <div class="hero__meta">
-      <span>{{ 'apidoc.domain' | translate }} <code>https://app.digikuntz.com</code></span>
-      <span>{{ 'apidoc.baseUrl' | translate }} <code>/dev</code></span>
-      <span>{{ 'apidoc.format' | translate }}</span>
-    </div>
+  <div class="hero__content">
+    <img src="assets/img/ressorces/dk_logo.png" alt="digiKUNTZ Payments Logo" (click)="navigateTo(frontUrl)" />
+    <p class="hero__eyebrow">{{ 'apidoc.documentation' | translate }}</p>
   </div>
-  
-  <main class="container layout">
-    <aside class="side-nav">
-      <button (click)="selectSection('intro')" class="tab-btn"
-        [ngClass]="selectedSection === 'intro' ? 'is-active' : ''">
-        {{ 'apidoc.introduction' | translate }}
-      </button>
-      <button (click)="selectSection('transactions')" class="tab-btn"
-        [ngClass]="selectedSection === 'transactions' ? 'is-active' : ''">
-        {{ 'apidoc.transactions' | translate }}
-      </button>
-      <button (click)="selectSection('balance')" class="tab-btn"
-        [ngClass]="selectedSection === 'balance' ? 'is-active' : ''">
-        {{ 'apidoc.balance' | translate }}
-      </button>
-      <button (click)="selectSection('auth')" class="tab-btn"
-        [ngClass]="selectedSection === 'auth' ? 'is-active' : ''">
-        {{ 'apidoc.history' | translate }}
-      </button>
-    </aside>
-  
-    <section class="content">
-      <!-- INTRO -->
-      <div class="tab-panel" id="intro" [ngClass]="selectedSection === 'intro' ? 'is-active' : ''">
-        <h2 class="section-title">{{ 'apidoc.introduction' | translate }}</h2>
-  
-        <p style="text-align: justify;">
-          {{ 'apidoc.introP1' | translate }}<br><br>
-          {{ 'apidoc.introP2' | translate }}<br><br>
-          {{ 'apidoc.introP3' | translate }}<br><br>
-          {{ 'apidoc.introP4' | translate }}<br><br>
-          {{ 'apidoc.introP5' | translate }}<br><br>
-          {{ 'apidoc.introP6' | translate }}
-        </p>
-  
-        <br>
-        <h5>{{ 'apidoc.getKeySteps' | translate }}</h5>
-  
-        <div class="endpoint">
-          <div class="endpoint__header">
-            <span class="badge badge--get">1</span>
-            {{ 'apidoc.accountCreation' | translate }}
+
+  <ul class="nav nav-tabs user-menu">
+    <li class="nav-item dropdown language-show">
+      <a href="javascript:void(0)" class="user-link nav-link" data-bs-toggle="dropdown">
+        <span class="user-content">
+          <span class="user-name" style="margin-right: 10px;">
+            <span class="spinner-border spinner-border-sm me-2" role="status" *ngIf="changingLang"></span>
+            <img [src]="selectedLanguage[0]?.flagImage" alt="" style="width: 15px; height: 12px;" *ngIf="!changingLang">
+            {{ selectedLanguage[0]?.name | translate }} <i class="fa-solid fa-chevron-down"></i>
+          </span>
+        </span>
+      </a>
+      <div class="dropdown-menu menu-drop-user">
+        <div class="profilemenu">
+          <div class="subscription-menu">
+            <ul>
+              <li>
+                <a class="dropdown-item" (click)="useLanguage('en')">
+                  <img [src]="en[0].flagImage" alt="" style="width: 15px;">
+                  {{ en[0].name | translate }}
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" (click)="useLanguage('fr')">
+                  <img [src]="fr[0].flagImage" alt="" style="width: 15px;">
+                  {{ fr[0].name | translate }}
+                </a>
+              </li>
+            </ul>
           </div>
-          <p>{{ 'apidoc.accountCreationParagraph' | translate }}</p>
-        </div>
-  
-        <div class="endpoint">
-          <div class="endpoint__header">
-            <span class="badge badge--get">2</span>
-            {{ 'apidoc.idVerification' | translate }}
-          </div>
-          <p>{{ 'apidoc.idVerificationParagraph' | translate }}</p>
-  
-          <p><b>{{ 'apidoc.idVerificationDocsTitle' | translate }}</b></p>
-          <ol>
-            <li>- {{ 'apidoc.idDoc1' | translate }}</li>
-            <li>- {{ 'apidoc.idDoc2' | translate }}</li>
-            <li>- {{ 'apidoc.idDoc3' | translate }}</li>
-            <li>- {{ 'apidoc.idDoc4' | translate }}</li>
-            <li>- {{ 'apidoc.idDoc5' | translate }}</li>
-          </ol>
-  
-          <br>
-          <p>{{ 'apidoc.idVerificationDelay' | translate }}</p>
-        </div>
-  
-        <div class="endpoint">
-          <div class="endpoint__header">
-            <span class="badge badge--get">3</span>
-            {{ 'apidoc.apiKeyActivation' | translate }}
-          </div>
-          <p>{{ 'apidoc.apiKeyActivationParagraph' | translate }}</p>
         </div>
       </div>
-  
-      <!-- TRANSACTIONS -->
-      <div class="tab-panel" id="transactions" [ngClass]="selectedSection === 'transactions' ? 'is-active' : ''">
-        <h2 class="section-title">{{ 'apidoc.transactions' | translate }}</h2>
-  
-        <article class="endpoint">
-          <div class="endpoint__header">
-            <span class="badge badge--post">POST</span>
-            <code>/dev/transaction/:userId/:secretKey</code>
+    </li>
+  </ul>
+</header>
+
+<div class="container">
+  <p class="hero__subtitle" style="text-align: justify;">
+    {{ 'apidoc.headParagraphe' | translate }}
+  </p>
+  <div class="hero__meta">
+    <span>{{ 'apidoc.domain' | translate }} <code>https://app.digikuntz.com</code></span>
+    <span>{{ 'apidoc.baseUrl' | translate }} <code>/dev</code></span>
+    <span>{{ 'apidoc.format' | translate }}</span>
+  </div>
+</div>
+
+<main class="container layout">
+  <aside class="side-nav">
+    <button (click)="selectSection('intro')" class="tab-btn" [ngClass]="selectedSection === 'intro' ? 'is-active' : ''">
+      {{ 'apidoc.introduction' | translate }}
+    </button>
+    <button (click)="selectSection('transactions')" class="tab-btn"
+      [ngClass]="selectedSection === 'transactions' ? 'is-active' : ''">
+      {{ 'apidoc.transactions' | translate }}
+    </button>
+    <button (click)="selectSection('balance')" class="tab-btn"
+      [ngClass]="selectedSection === 'balance' ? 'is-active' : ''">
+      {{ 'apidoc.balance' | translate }}
+    </button>
+    <button (click)="selectSection('auth')" class="tab-btn" [ngClass]="selectedSection === 'auth' ? 'is-active' : ''">
+      {{ 'apidoc.history' | translate }}
+    </button>
+  </aside>
+
+  <section class="content">
+    <!-- INTRO -->
+    <div class="tab-panel" id="intro" [ngClass]="selectedSection === 'intro' ? 'is-active' : ''">
+      <h2 class="section-title">{{ 'apidoc.introduction' | translate }}</h2>
+
+      <p style="text-align: justify;">
+        {{ 'apidoc.introP1' | translate }}<br><br>
+        {{ 'apidoc.introP2' | translate }}<br><br>
+        {{ 'apidoc.introP3' | translate }}<br><br>
+        {{ 'apidoc.introP4' | translate }}<br><br>
+        {{ 'apidoc.introP5' | translate }}<br><br>
+        {{ 'apidoc.introP6' | translate }}
+      </p>
+
+      <br>
+      <h5>{{ 'apidoc.getKeySteps' | translate }}</h5>
+
+      <div class="endpoint">
+        <div class="endpoint__header">
+          <span class="badge badge--get">1</span>
+          {{ 'apidoc.accountCreation' | translate }}
+        </div>
+        <p>{{ 'apidoc.accountCreationParagraph' | translate }}</p>
+      </div>
+
+      <div class="endpoint">
+        <div class="endpoint__header">
+          <span class="badge badge--get">2</span>
+          {{ 'apidoc.idVerification' | translate }}
+        </div>
+        <p>{{ 'apidoc.idVerificationParagraph' | translate }}</p>
+
+        <p><b>{{ 'apidoc.idVerificationDocsTitle' | translate }}</b></p>
+        <ol>
+          <li>- {{ 'apidoc.idDoc1' | translate }}</li>
+          <li>- {{ 'apidoc.idDoc2' | translate }}</li>
+          <li>- {{ 'apidoc.idDoc3' | translate }}</li>
+          <li>- {{ 'apidoc.idDoc4' | translate }}</li>
+          <li>- {{ 'apidoc.idDoc5' | translate }}</li>
+        </ol>
+
+        <br>
+        <p>{{ 'apidoc.idVerificationDelay' | translate }}</p>
+      </div>
+
+      <div class="endpoint">
+        <div class="endpoint__header">
+          <span class="badge badge--get">3</span>
+          {{ 'apidoc.apiKeyActivation' | translate }}
+        </div>
+        <p>{{ 'apidoc.apiKeyActivationParagraph' | translate }}</p>
+      </div>
+    </div>
+
+    <!-- TRANSACTIONS -->
+    <div class="tab-panel" id="transactions" [ngClass]="selectedSection === 'transactions' ? 'is-active' : ''">
+      <h2 class="section-title">{{ 'apidoc.transactions' | translate }}</h2>
+
+      <article class="endpoint">
+        <div class="endpoint__header">
+          <span class="badge badge--post">POST</span>
+          <code>/dev/transaction</code>
+        </div>
+        <p>{{ 'apidoc.createPayment' | translate }}</p>
+        <div class="endpoint__grid">
+          <div>
+            <h3>Headers</h3>
+            <ul>
+              <li><code>x-user-id</code> (string)</li>
+              <li><code>x-secret-key</code> (string)</li>
+            </ul>
           </div>
-          <p>{{ 'apidoc.createPayment' | translate }}</p>
-            <div class="endpoint__grid">
-                <div>
-                    <h3>Params</h3>
-                    <ul>
-                        <li><code>userId</code> (string)</li>
-                        <li><code>secretKey</code> (string)</li>
-                    </ul>
-                </div>
-                <div>
-                    <h3>Body</h3>
-                    <pre ngNonBindable><code>&#123;
+          <div>
+            <h3>Body</h3>
+            <pre ngNonBindable><code>&#123;
 "estimation": 100,
 "raisonForTransfer": "Test",
 "userEmail": "email&#64;example.com",
@@ -152,47 +150,47 @@
 "userCountry": "Cameroon",
 "senderName": "Kevin"
 &#125;</code></pre>
-                </div>
-                <div>
-                    <h3>{{ 'apidoc.response' | translate }}</h3>
-                    <pre ngNonBindable><code>&#123;
+          </div>
+          <div>
+            <h3>{{ 'apidoc.response' | translate }}</h3>
+            <pre ngNonBindable><code>&#123;
 "id": "6977ef263980e24b64996062",
 "status": "pending",
 "transactionRef": "txPayin-1769467686449-6ce86896",
 "amount": 100,
 "paymentCurrency": "XAF",
-"paymentWithTaxe": 105,
+"paymentWithTaxes": 105,
 "paymentLink": "Lien de paiement"
 &#125;</code></pre>
-                    <br>
-                    <b>Statuts: </b> pending - success - closed - error
-                </div>
-            </div>
-        </article>
-  
-        <article class="endpoint">
-          <div class="endpoint__header">
-            <span class="badge badge--get">GET</span>
-            <code>/dev/transaction/:userId/:secretKey</code>
+            <br>
+            <b>Statuts: </b> pending - success - closed - error
           </div>
-          <p>{{ 'apidoc.getTransaction' | translate }}</p>
-            <div class="endpoint__grid">
-                <div>
-                    <h3>Params</h3>
-                    <ul>
-                        <li><code>userId</code> (string)</li>
-                        <li><code>secretKey</code> (string)</li>
-                    </ul>
-                </div>
-                <div>
-                    <h3>Body</h3>
-                    <pre ngNonBindable><code>&#123;
-"id": "6977ef263980e24b64996062"
-&#125;</code></pre>
-                </div>
-                <div>
-                    <h3>{{ 'apidoc.response' | translate }}</h3>
-                    <pre ngNonBindable><code>&#123;
+        </div>
+      </article>
+
+      <article class="endpoint">
+        <div class="endpoint__header">
+          <span class="badge badge--get">GET</span>
+          <code>/dev/transaction?transactionId=6977ef263980e24b64996062</code>
+        </div>
+        <p>{{ 'apidoc.getTransaction' | translate }}</p>
+        <div class="endpoint__grid">
+          <div>
+            <h3>Headers</h3>
+            <ul>
+              <li><code>x-user-id</code> (string)</li>
+              <li><code>x-secret-key</code> (string)</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Query</h3>
+            <ul>
+              <li><code>transactionId</code> (string)</li>
+            </ul>
+          </div>
+          <div>
+            <h3>{{ 'apidoc.response' | translate }}</h3>
+            <pre ngNonBindable><code>&#123;
 "id": "6977ef263980e24b64996062",
 "status": "success",
 "data": &#123;
@@ -209,53 +207,124 @@
   &#125;
 &#125;
 </code></pre>
-                    <br>
-                    <b>Statuts: </b> pending - success - closed - error
-                </div>
-            </div>
-        </article>
-      </div>
-  
-      <!-- BALANCE -->
-      <div class="tab-panel" id="balance" [ngClass]="selectedSection === 'balance' ? 'is-active' : ''">
-        <h2 class="section-title">{{ 'apidoc.balance' | translate }}</h2>
-  
-        <article class="endpoint">
-          <div class="endpoint__header">
-            <span class="badge badge--get">GET</span>
-            <code>/dev/balance/:userId/:secretKey</code>
+            <br>
+            <b>Statuts: </b> pending - success - closed - error
           </div>
-          <p>{{ 'apidoc.checkBalance' | translate }}</p>
-          <div class="endpoint__grid">
-              <div>
-                  <h3>Params</h3>
-                  <ul>
-                      <li><code>userId</code> (string)</li>
-                      <li><code>secretKey</code> (string)</li>
-                  </ul>
-              </div>
-              <div>
-                  <h3>Body</h3>
-                  <p>Aucun.</p>
-              </div>
-              <div>
-                  <h3>{{ 'apidoc.response' | translate }}</h3>
-                  <pre ngNonBindable><code>&#123;
-  "balance": 85000,
-  "currency": "XAF",
-  "lastUpdate": "2026-01-26T22:54:30.219Z"
-  &#125;</code></pre>
-              </div>
-          </div>
+        </div>
       </article>
-      </div>
-      <!-- HISTORY -->
-      <div class="tab-panel" id="history" [ngClass]="selectedSection === 'auth' ? 'is-active' : ''">
-        <h2 class="section-title">{{ 'apidoc.history' | translate }}</h2>
-        <p>{{ 'apidoc.historyParagraph' | translate }}</p>
-      </div>
-    </section>
-  </main>
-  
-  <app-footer></app-footer>
-  
+
+      <article class="endpoint">
+        <div class="endpoint__header">
+          <span class="badge badge--get">GET</span>
+          <code>/dev/transactions?page=1&limit=20</code>
+        </div>
+        <p>Récupère la liste paginée des transactions.</p>
+
+        <div class="endpoint__grid">
+          <div>
+            <h3>Headers</h3>
+            <ul>
+              <li><code>x-user-id</code> (string, requis)</li>
+              <li><code>x-secret-key</code> (string, requis)</li>
+            </ul>
+          </div>
+
+          <div>
+            <h3>Query</h3>
+            <ul>
+              <li><code>page</code> (number, optionnel, défaut: 1)</li>
+              <li><code>limit</code> (number, optionnel, défaut: 20, max: 100)</li>
+            </ul>
+          </div>
+
+          <div>
+            <h3>{{ 'apidoc.response' | translate }}</h3>
+            <pre ngNonBindable><code>&#123;
+        "data": [
+          &#123;
+            "_id": "id",
+            "estimation": "25",
+            "transactionRef": "IN231#260205190756",
+            "txRef": "txPayin-1770318476131-71a4fb63",
+            "invoiceTaxes": "0",
+            "paymentWithTaxes": "25",
+            "raisonForTransfer": "netflix-paiment",
+            "receiverAmount": "25",
+            "receiverContact": "670000000",
+            "receiverCountry": "Cameroon",
+            "receiverCurrency": "XAF",
+            "receiverEmail": "receiver&#64;gmail.com",
+            "receiverName": null,
+            "senderContact": "696080087",
+            "senderCountry": "Cameroon",
+            "senderCurrency": "XAF",
+            "senderEmail": "sender&#64;gmail.com",
+            "senderId": "id",
+            "senderName": "API Call: moobilpay",
+            "taxesAmount": "0",
+            "status": "transaction_payin_error",
+            "userId": "id",
+            "transactionType": "apiCall",
+            "receiverId": "id",
+            "createdAt": "2026-02-05T19:07:56.148Z",
+            "updatedAt": "2026-02-06T03:08:00.164Z",
+            "__v": 0
+          &#125;
+        ],
+        "pagination": &#123;
+          "currentPage": 1,
+          "limit": 20,
+          "totalPages": 3,
+          "totalItems": 52,
+          "hasNextPage": true
+        &#125;
+      &#125;</code></pre>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- BALANCE -->
+    <div class="tab-panel" id="balance" [ngClass]="selectedSection === 'balance' ? 'is-active' : ''">
+      <h2 class="section-title">{{ 'apidoc.balance' | translate }}</h2>
+
+      <article class="endpoint">
+        <div class="endpoint__header">
+          <span class="badge badge--get">GET</span>
+          <code>/dev/balance</code>
+        </div>
+        <p>{{ 'apidoc.checkBalance' | translate }}</p>
+        <div class="endpoint__grid">
+          <div>
+            <h3>Headers</h3>
+            <ul>
+              <li><code>x-user-id</code> (string)</li>
+              <li><code>x-secret-key</code> (string)</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Body</h3>
+            <p>Aucun.</p>
+          </div>
+          <div>
+            <h3>{{ 'apidoc.response' | translate }}</h3>
+            <pre ngNonBindable><code>&#123;
+"balance": 85000,
+"currency": "XAF",
+"lastUpdate": "2026-01-26T22:54:30.219Z"
+&#125;</code></pre>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <!-- HISTORY -->
+    <div class="tab-panel" id="history" [ngClass]="selectedSection === 'auth' ? 'is-active' : ''">
+      <h2 class="section-title">{{ 'apidoc.history' | translate }}</h2>
+      <p>{{ 'apidoc.historyParagraph' | translate }}</p>
+    </div>
+  </section>
+</main>
+
+<app-footer></app-footer>
