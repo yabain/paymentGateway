@@ -9,6 +9,7 @@ import { ToastService } from 'src/app/services/toast/toast.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { LanguageService } from 'src/app/services/language/language.service';
 import { DateService } from 'src/app/services/pipe/date.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-profile',
@@ -16,6 +17,7 @@ import { DateService } from 'src/app/services/pipe/date.service';
   styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
+  frontUrl: string = environment.frontUrl;
   changePass = false;
   personalDetails = true;
   userData: any;
@@ -87,6 +89,16 @@ export class ProfileComponent implements OnInit {
   }
   editModal(template: TemplateRef<any>) {
     this.id = 1;
+  }
+
+
+  copy(data: string) {
+    navigator.clipboard.writeText(data).then(() => {
+      // Réinitialise le message après 2 secondes
+      this.toastr.success('Copied !');
+    }).catch(err => {
+      console.error('Impossible de copier : ', err);
+    });
   }
 
   update() {
@@ -309,7 +321,32 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  async toggleService(){}
+  async toggleService(option: string){
+    let val: any;
+    if(option === 'portalSubscription'){
+      val = {
+        portalSubscription: !this.userData.portalSubscription
+      }
+    }
+    else if(option === 'portalServices'){
+      val = {
+        portalServices: !this.userData.portalServices
+      }
+    }
+    else{
+      val = {
+        portalFundraising: !this.userData.portalFundraising
+      }
+    }
+    this.userService.updateUserItems(val)
+    .subscribe((res: any) => {
+      if(!res || !res.email) return false;
+      this.currentUser = this.userData = res;
+      this.toastService.presentToast('success', 'Done !', '', 3000);
+      this.userService.setCurrentUser(res);
+      return res;
+    })
+  }
 
   async getCurrentUser() {
     this.currentUser = await this.userService.getCurrentUser();

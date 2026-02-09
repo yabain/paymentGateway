@@ -884,6 +884,7 @@
   },
   "portal": {
     "title": "Portail",
+    "messageOnDesabled": "Activez le portail pour configurer la page d'acceuil de votre organisation.",
     "headTitle": "Titre sur votre portail",
     "headText": "Description principale sur votre portail",
     "attention": {
@@ -951,10 +952,12 @@
     "nav": {
       "title": "Menu portail",
       "home": "Acceuil",
-      "service": "Services/Produits",
+      "service": "Services / Produits",
       "fundraising": "Collecte de fonds",
       "plans": "Plans"
-    }
+    },
+    "copy": "Copier le lien",
+    "viewPortal": "Voir le portail"
   },
   "rawData": "Données brutes",
   "tool": "Outil",
@@ -981,5 +984,6 @@
   "BANK": "Banque",
   "DATE_FORMAT": "dd/MM/yyyy",
   "nts": "Rien à afficher !",
-  "loading": "Chargement"
+  "loading": "Chargement",
+  "color": "Couleur"
 }

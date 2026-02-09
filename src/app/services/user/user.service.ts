@@ -141,6 +141,15 @@ export class UserService {
       );
   }
 
+  updateUserItems(userData: any): Observable<any> {
+    return from(this.apiService.updateWithoutId(`user/update-items`, userData))
+      .pipe(
+        catchError(error => {
+          return of({ error: true, message: error.message || 'An error occurred' });
+        })
+      );
+  }
+
   /**
    * Updates the profile picture of a specified user.
    * @param userId - The user ID.

@@ -4,6 +4,7 @@ import { catchError, of } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { LanguageService } from 'src/app/services/language/language.service';
 import { UserService } from 'src/app/services/user/user.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-portal',
@@ -11,6 +12,7 @@ import { UserService } from 'src/app/services/user/user.service';
   styleUrls: ['./portal.component.scss'],
 })
 export class PortalComponent {
+  frontUrl: string = environment.frontUrl;
   loading: boolean = true;
   gettingUserData: boolean = true;
   userData: any;

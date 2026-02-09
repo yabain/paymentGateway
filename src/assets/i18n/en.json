@@ -883,6 +883,7 @@
   },
   "portal": {
     "title": "Portal",
+    "messageOnDesabled": "Activate the portal to configure your organisation's homepage.",
     "headTitle": "Title on your portal",
     "headText": "Head description on your portal",
     "attention": {
@@ -950,10 +951,12 @@
       "nav": {
         "title": "Menu portail",
         "home": "Home",
-        "service": "Services/Products",
+        "service": "Services / Products",
         "fundraising": "Fundraising",
         "plans": "Plans"
-      }
+      },
+    "copy": "Copy the link",
+    "viewPortal": "View portal"
   },
   "rawData": "Raw data",
   "tool": "Tool",
@@ -980,5 +983,6 @@
   "BANK": "Bank",
   "DATE_FORMAT": "MM/dd/yyyy",
   "nts": "Nothing to show!",
-  "loading": "Loading"
+  "loading": "Loading",
+  "color": "Color"
 }

@@ -21,11 +21,11 @@
             <!-- {{showName(userData)}} -->
             <!-- <span class="logo">{{showName(userData)}}</span> -->
             <nav>
-                <ul id="navigation">
-                    <li><a href="#home">{{'portal.nav.home' | translate}}</a></li>
-                    <li><a href="#about">{{'portal.nav.service' | translate}}</a></li>
-                    <li><a href="#services">{{'portal.nav.fundraising' | translate}}</a></li>
-                    <li><a href="#portfolio">{{'portal.nav.plans' | translate}}</a></li>
+                <ul id="navigation" *ngIf="userData?.accountType === 'organisation' && userData?.isActive === true || userData?.isAdmin === true">
+                    <li><a [routerLink]="'/portal/' + userId">{{'portal.nav.home' | translate}}</a></li>
+                    <li *ngIf="userData?.portalServices"><a>{{'portal.nav.service' | translate}}</a></li>
+                    <li *ngIf="userData?.portalSubscription"><a href="#portfolio">{{'portal.nav.plans' | translate}}</a></li>
+                    <li *ngIf="userData?.portalFundraising"><a href="#services">{{'portal.nav.fundraising' | translate}}</a></li>
                     <li *ngIf="!currentUser"><a class="nav-cta" href="#">{{ 'auth.login' | translate }}</a></li>
 
                     <li class="nav-item dropdown language-show">
