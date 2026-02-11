@@ -60,7 +60,7 @@ export class PortalComponent {
       this.getUserData(idParam);
     } else {
       this.userId = null;
-      this.router.navigate(['/dashboard']);
+      this.navigateTo('/dashboard');
     }
   }
 
@@ -87,7 +87,7 @@ export class PortalComponent {
         catchError((error: any) => {
           console.log('error: ', error);
           this.gettingUserData = false;
-          this.router.navigateByUrl('/dashboard');
+          this.navigateTo('/dashboard');
           return of({
             error: true,
             message: error.message || 'An error occurred',
@@ -97,7 +97,7 @@ export class PortalComponent {
       .subscribe((user: any) => {
         if(user.accountType !== 'organisation' && user.isAdmin !== true || user.isActive !== true || user.portal !== true){
           this.userId = null;
-          this.router.navigate(['/']);
+          this.navigateTo('/');
           return;
         }
         this.userData = user;
@@ -130,6 +130,10 @@ export class PortalComponent {
 
   showName(userData){
     return this.userService.showName(userData);
+  }
+
+  navigateTo(route: string){
+    return this.router.navigate([route]);
   }
 
 }

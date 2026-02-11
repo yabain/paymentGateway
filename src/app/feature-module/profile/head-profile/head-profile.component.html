@@ -19,12 +19,12 @@
                 1 mb max
             </div>
             <div *ngIf="isChangeCover">
-                <a class="btn btn-sm btn-secondary m-2" (click)="cancelCover()">{{ "action.cancel" |
+                <a class="btn-cancel-edit btn btn-sm btn-secondary m-2" (click)="cancelCover()">{{ "action.cancel" |
                     translate }}</a>
                 <a *ngIf="!uploadingCover" class="btn-edit btn btn-sm btn-success m-2" (click)="saveCover()">{{ "action.save"
                     |
                     translate }}</a>
-                <a *ngIf="uploadingCover" class="btn btn-sm btn-success" disabled>
+                <a *ngIf="uploadingCover" class="btn-edit btn btn-sm btn-success" disabled>
                     <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
                 </a>
             </div>

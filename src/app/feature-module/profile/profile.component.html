@@ -263,7 +263,7 @@
                 <a class="btn btn-sm btn-white" (click)="editDescription()" *ngIf="descriptionEdition && !loading2">
                   <i class="feather icon-edit"></i>
                   {{ "action.cancel" | translate }}</a>
-                <a class="btn btn-sm btn-success" (click)="saveData()" *ngIf="descriptionEdition && !loading2">
+                <a class="btn btn-sm btn-success" (click)="saveDescription()" *ngIf="descriptionEdition && !loading2">
                   <i class="feather icon-edit"></i>
                   {{ "action.save" | translate }}</a>
                 <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"
@@ -279,24 +279,24 @@
           </div>
           <div class="card"
             *ngIf="userData && userData?.accountType === 'organisation' || currentUser?.isAdmin === true">
-            <div class="card-body card-body-height" *ngIf="userData">
+            <div class="card-body card-body-height" *ngIf="!loadingSettings">
               <div class="d-flex justify-content-between">
                 <h5 class="card-title">{{ "portal.title" | translate }}</h5>
                 <div *ngIf="!loading3">
-                  <span *ngIf="userData?.portal === true"
+                  <span *ngIf="userSettings?.portal === true"
                     style="background-color: #04850e; color: #fff; padding: 3px 5px; border-radius: 3px;">
                     {{ "users.enabled" | translate }}
                   </span>
-                  <span *ngIf="userData?.portal != true"
+                  <span *ngIf="userSettings?.portal != true"
                     style="background-color: #850404; color: #fff; padding: 3px 5px; border-radius: 3px;">
                     {{ "users.disabled" | translate }}
                   </span>
-                  <span (click)="changeUserPortalStatus()" class="btn btn-light" *ngIf="userData?.portal != true">
+                  <span (click)="changeUserPortalStatus()" class="btn btn-light" *ngIf="userSettings?.portal != true">
                     <a class="btn-filters btn-hover" href="javascript:void(0);" data-bs-toggle="tooltip"
                       data-bs-placement="bottom" matTooltip="Enable"><span><i class="feather icon-power"
                           style="color: #04c714"></i></span></a>
                   </span>
-                  <span (click)="changeUserPortalStatus()" class="btn btn-light" *ngIf="userData?.portal === true">
+                  <span (click)="changeUserPortalStatus()" class="btn btn-light" *ngIf="userSettings?.portal === true">
                     <a class="btn-filters btn-hover" href="javascript:void(0);" data-bs-toggle="tooltip"
                       data-bs-placement="bottom" matTooltip="Disable"><span><i class="feather icon-power"
                           style="color: #df0404"></i></span></a>
@@ -305,11 +305,11 @@
                 <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"
                   *ngIf="loading3"></span>
               </div>
-              <p *ngIf="userData && userData?.portal !== true">
+              <p *ngIf="userData && userSettings?.portal !== true">
                 <br>
                 {{ "portal.messageOnDesabled" | translate}} </p>
             </div>
-            <div class="card-body card-body-height" *ngIf="userData && userData?.portal === true">
+            <div class="card-body card-body-height" *ngIf="!loadingSettings && userData && userSettings?.portal === true">
               <div class="d-flex justify-content-between">
                 <h5 class="card-title">{{ "portal.headTitle" | translate }}</h5>
                 <a class="btn btn-sm btn-white" (click)="editHeadTitlePortalPage()"
@@ -320,7 +320,7 @@
                   *ngIf="headTitlePortalEdition && !loading2">
                   <i class="feather icon-edit"></i>
                   {{ "action.cancel" | translate }}</a>
-                <a class="btn btn-sm btn-success" (click)="saveData('headTitlePortal')"
+                <a class="btn btn-sm btn-success" (click)="saveSettingsData('headTitlePortal')"
                   *ngIf="headTitlePortalEdition && !loading2">
                   <i class="feather icon-edit"></i>
                   {{ "action.save" | translate }}</a>
@@ -342,10 +342,10 @@
               </div>
               <br>
             </div>
-            <div class="card-body" *ngIf="!userData" style="text-align: center;">
+            <div class="card-body" *ngIf="loadingSettings" style="text-align: center;">
               <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
             </div>
-            <div class="card-body card-body-height" *ngIf="userData && userData?.portal === true">
+            <div class="card-body card-body-height" *ngIf="!loadingSettings && userData && userSettings?.portal === true">
               <div class="d-flex justify-content-between">
                 <h5 class="card-title">{{ "portal.headText" | translate }}</h5>
                 <a class="btn btn-sm btn-white" (click)="editHeadTextPortalPage()"
@@ -356,7 +356,7 @@
                   *ngIf="headTextPortalEdition && !loading2">
                   <i class="feather icon-edit"></i>
                   {{ "action.cancel" | translate }}</a>
-                <a class="btn btn-sm btn-success" (click)="saveData('headTextPortal')"
+                <a class="btn btn-sm btn-success" (click)="saveSettingsData('headTextPortal')"
                   *ngIf="headTextPortalEdition && !loading2">
                   <i class="feather icon-edit"></i>
                   {{ "action.save" | translate }}</a>
@@ -378,31 +378,31 @@
               </div>
               <br>
             </div>
-            <div class="card-body card-body-height" *ngIf="userData && userData?.portal === true">
+            <div class="card-body card-body-height" *ngIf="!loadingSettings && userData && userSettings?.portal === true">
               <div class="d-flex justify-content-between">
                 <h5 class="card-title">{{ "portal.nav.title" | translate }}</h5>
               </div><br>
               <div class="status-toggle justify-content-between">
                 <div class="d-flex align-left">
                   <span style="margin-right: 10px;">{{ 'portal.nav.plans' | translate }}: </span>
-                  <span class="badge badge-label bg-danger" [ngClass]="userData?.portalSubscription === true ? 'bg-success' : 'bg-danger'">
-                    {{ userData?.portalSubscription === true ? ('users.enabled' | translate) : ('users.disabled' | translate) }}
+                  <span class="badge badge-label bg-danger" [ngClass]="userSettings?.portalSubscription === true ? 'bg-success' : 'bg-danger'">
+                    {{ userSettings?.portalSubscription === true ? ('users.enabled' | translate) : ('users.disabled' | translate) }}
                   </span>
                 </div>
                 <span>
-                  <input id="portalSubscription" class="check" type="checkbox" [checked]="userData?.portalSubscription" (click)="toggleService('portalSubscription')"/>
+                  <input id="portalSubscription" class="check" type="checkbox" [checked]="userSettings?.portalSubscription" (click)="toggleService('portalSubscription')"/>
                   <label for="portalSubscription" class="checktoggle checkbox-bg">checkbox</label>
                 </span>
               </div><br>
               <div class="status-toggle justify-content-between">
                 <div class="d-flex align-left">
                   <span style="margin-right: 10px;">{{ 'sideMenu.servicesProducts' | translate }}: </span>
-                  <span class="badge badge-label bg-danger" [ngClass]="userData?.portalServices === true ? 'bg-success' : 'bg-danger'">
-                    {{ userData?.portalServices === true ? ('users.enabled' | translate) : ('users.disabled' | translate) }}
+                  <span class="badge badge-label bg-danger" [ngClass]="userSettings?.portalServices === true ? 'bg-success' : 'bg-danger'">
+                    {{ userSettings?.portalServices === true ? ('users.enabled' | translate) : ('users.disabled' | translate) }}
                   </span>
                 </div>
                 <span>
-                  <input id="portalServices" class="check" type="checkbox" [checked]="userData?.portalServices === true" (click)="toggleService('portalServices')"/>
+                  <input id="portalServices" class="check" type="checkbox" [checked]="userSettings?.portalServices === true" (click)="toggleService('portalServices')"/>
                   <label for="portalServices" class="checktoggle checkbox-bg">checkbox</label>
                 </span>
               </div>
@@ -410,25 +410,25 @@
               <div class="status-toggle justify-content-between">
                 <div class="d-flex align-left">
                   <span style="margin-right: 10px;">{{ 'payment.fundraising' | translate }}: </span>
-                  <span class="badge badge-label bg-danger" [ngClass]="userData?.portalFundraising === true ? 'bg-success' : 'bg-danger'">
-                    {{ userData?.portalFundraising === true ? ('users.enabled' | translate) : ('users.disabled' | translate) }}
+                  <span class="badge badge-label bg-danger" [ngClass]="userSettings?.portalFundraising === true ? 'bg-success' : 'bg-danger'">
+                    {{ userSettings?.portalFundraising === true ? ('users.enabled' | translate) : ('users.disabled' | translate) }}
                   </span>
                 </div>
                 <span>
-                  <input id="portalFundraising" class="check" type="checkbox" [checked]="userData?.portalFundraising === true" (click)="toggleService('portalFundraising')"/>
+                  <input id="portalFundraising" class="check" type="checkbox" [checked]="userSettings?.portalFundraising === true" (click)="toggleService('portalFundraising')"/>
                   <label for="portalFundraising" class="checktoggle checkbox-bg">checkbox</label>
                 </span>
               </div>
               <br>
             </div>
-            <div class="card-body" *ngIf="!userData" style="text-align: center;">
+            <div class="card-body" *ngIf="loadingSettings" style="text-align: center;">
               <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
             </div>
             <div class="card-body">
             <a target="_blank" [href]="frontUrl + '/portal/' + userData?._id" style="margin: 10px"
-              class="btn btn-primary" *ngIf="userData && userData?.portal === true">{{ 'portal.viewPortal' | translate }} </a>
+              class="btn btn-primary" *ngIf="userSettings && userSettings?.portal === true">{{ 'portal.viewPortal' | translate }} </a>
               <a target="_blank" (click)="copy(frontUrl + '/portal/' + userData?._id)" style="margin: 10px"
-                class="btn btn-light" *ngIf="userData && userData?.portal === true">{{ 'portal.copy' | translate }}</a>
+                class="btn btn-light" *ngIf="userSettings && userSettings?.portal === true">{{ 'portal.copy' | translate }}</a>
             </div>
           </div>
           <app-dev [ableToShow]="ableToShow" [userData]="currentUser" *ngIf="userData && !loading"></app-dev>

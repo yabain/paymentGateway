@@ -840,7 +840,7 @@ export class DataService {
           base: 'payments',
         },
         {
-          menuValue: 'subscriptions',
+          menuValue: 'myPlans',
           route: '/subscription',
           hasSubRoute: false, // Show arrow after menu item title
           showSubRoute: true,

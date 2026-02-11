@@ -129,9 +129,7 @@ export class SystemService {
     } else {
       console.log('No system data');
       this.getSystemData().subscribe((systemData) => {
-        console.log('systemData: ', systemData);
         if (systemData) {
-          console.log('systemData 11: ', systemData);
           this.systemData.next(systemData);
         } else {
           this.systemData.next(false);

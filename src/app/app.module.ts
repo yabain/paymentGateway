@@ -29,6 +29,7 @@ import { CommonItemModule } from './feature-module/common/common-item.module';
 import { InvoiceComponent } from './invoice/invoice.component';
 import { DevService } from './services/dev/dev.service';
 import { ApiDocComponent } from './front/api-doc/api-doc.component';
+import { UserSettingsService } from './services/user/userSettings.service';
 // import { TransactionDetailsComponent } from './feature-module/common/transaction-details/transaction-details.component';
 // import { JsonViewerComponent } from './feature-module/common/json-viewer/json-viewer.component';
 
@@ -69,7 +70,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     CommonItemModule,
   ],
   providers: [ { provide: LOCALE_ID, useValue: "fr-FR" },
-    AuthService, UserService, CryptService, ShareLinkService, SystemService, DatePipe,
+    AuthService, UserService, CryptService, ShareLinkService, SystemService, DatePipe, UserSettingsService,
     Title, ToastService, DevService
   ],
   bootstrap: [AppComponent],

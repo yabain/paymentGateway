@@ -10,6 +10,7 @@ import { StorageService } from 'src/app/services/storage/storage.service';
 import { SystemService } from 'src/app/services/system/system.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { UserService } from 'src/app/services/user/user.service';
+import { UserSettingsService } from 'src/app/services/user/userSettings.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -44,6 +45,7 @@ export class LoginComponent implements OnInit {
     private toastService: ToastService,
     private language: LanguageService,
     private location: LocationService,
+    private userSettingsService: UserSettingsService
   ) {
     this.initForm();
     this.getLocations();
@@ -184,7 +186,7 @@ export class LoginComponent implements OnInit {
             this.language.setLocalUserLanguage(user.language);
             this.language.useLanguage(user.language);
             this.form.reset();
-            this.userService.getUserSetting()
+            this.userSettingsService.getUserSettings()
             .subscribe((res)=>{
               this.storage.getStorage(environment.memory_link).then((url) => {
                 if (url) {
@@ -192,7 +194,7 @@ export class LoginComponent implements OnInit {
                   this.storage.removeStorage(environment.memory_link);
                   // setTimeout(() => window.location.reload(), 1000);
                 } else {
-                  this.router.navigateByUrl('/tabs', { replaceUrl: true });
+                  this.router.navigateByUrl('/dashboard', { replaceUrl: true });
                   // setTimeout(() => window.location.reload(), 1000);
                 }
               });

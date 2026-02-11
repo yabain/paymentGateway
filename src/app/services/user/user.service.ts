@@ -235,7 +235,6 @@ export class UserService {
     }
   }
 
-
   returnNameMaxLength(name, length?: number) {
     if (!length) {
       length = 15;
@@ -271,16 +270,6 @@ export class UserService {
     }
   }
 
-  async changePortalStatus(userId): Promise<any> {
-    try {
-      const response = await this.apiService.update('user/update-portalStatus', userId, {}).toPromise();
-      return response;
-    } catch (error) {
-      console.error('Error to change Portal status:', error);
-      throw error;
-    }
-  }
-
   async changeAdminStatus(userId): Promise<any> {
     try {
       const response = await this.apiService.update('user/update-adminStatus', userId, {}).toPromise();
@@ -299,83 +288,6 @@ export class UserService {
       console.error('Error to change verified status:', error);
       throw error;
     }
-  }
-
-  getUserSetting(): Observable<any> {
-    return from(this.apiService.getWithoutId(`userSettings/get`))
-      .pipe(
-        map((resp) => {
-          this.setSettingsToStorage(resp);
-          return resp;
-        }),
-        catchError(error => {
-          return of({ error: true, message: error.message || 'An error occurred' });
-        })
-      );
-  }
-
-  setUserSetting(userSettings?): Observable<any> {
-    if (!userSettings) userSettings = this.getSettingsFromStorage();
-    console.log('userSettings: ', userSettings);
-    return from(this.apiService.update(`userSettings/update`, 'null', userSettings))
-      .pipe(
-        map((resp) => {
-          // this.setSettingsToStorage(resp);
-          return resp;
-        }),
-        catchError(error => {
-          return of({ error: true, message: error.message || 'An error occurred' });
-        })
-      );
-  }
-  
-  resetUserSetting(): Observable<any> {
-    const userSettings = {
-      layoutPosition: 1,
-      layoutColor: 1,
-      layoutTopColor: 1,
-      layoutSidebarColor: 1,
-      layoutWidth: 1,
-      layoutPositionScroll: 1,
-      layoutSidebarSize: 1,
-      layoutSidebarView: 2
-    };
-    return from(this.setUserSetting(userSettings))
-    .pipe(
-      map((resp) => {
-        // this.setSettingsToStorage(resp);
-        return resp;
-      }),
-      catchError(error => {
-        return of({ error: true, message: error.message || 'An error occurred' });
-      })
-    );
-  }
-
-  setSettingsToStorage(userSettings) {
-    this.storage.setStorage('layoutPosition', JSON.stringify(userSettings.layoutPosition));
-    this.storage.setStorage('layoutColor', JSON.stringify(userSettings.layoutColor));
-    this.storage.setStorage('layoutTopColor', JSON.stringify(userSettings.layoutTopColor));
-    this.storage.setStorage('layoutSidebarColor', JSON.stringify(userSettings.layoutSidebarColor));
-    this.storage.setStorage('layoutWidth', JSON.stringify(userSettings.layoutWidth));
-    this.storage.setStorage('layoutPositionScroll', JSON.stringify(userSettings.layoutPositionScroll));
-    this.storage.setStorage('layoutSidebarSize', JSON.stringify(userSettings.layoutSidebarSize));
-    this.storage.setStorage('layoutSidebarView', JSON.stringify(userSettings.layoutSidebarView));
-  }
-  
-
-  getSettingsFromStorage() {
-    const userSettings = {
-      layoutPosition: JSON.parse(localStorage.getItem('layoutPosition')),
-      layoutColor: JSON.parse(localStorage.getItem('layoutColor')),
-      layoutTopColor: JSON.parse(localStorage.getItem('layoutTopColor')),
-      layoutSidebarColor: JSON.parse(localStorage.getItem('layoutSidebarColor')),
-      layoutWidth: JSON.parse(localStorage.getItem('layoutWidth')),
-      layoutPositionScroll: JSON.parse(localStorage.getItem('layoutPositionScroll')),
-      layoutSidebarSize: JSON.parse(localStorage.getItem('layoutSidebarSize')),
-      layoutSidebarView: JSON.parse(localStorage.getItem('layoutSidebarView'))
-    };
-    return userSettings;
   }
 
   getStatistics(): Observable<boolean> {

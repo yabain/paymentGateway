@@ -13,7 +13,7 @@ export class LocationService {
     private storage: StorageService,
 
     private apiService: ApiService
-  ) {}
+  ) { }
 
   getCities(): Observable<any | undefined> {
     return from(this.storage.getStorage(environment.cities_data)).pipe(
@@ -22,17 +22,7 @@ export class LocationService {
           const parsedData = JSON.parse(citiesData);
           return of(parsedData);
         } else {
-          return this.apiService.get('city').pipe(
-            take(1),
-            map((data) => {
-              this.storage.setStorage(environment.cities_data, JSON.stringify(data));
-              return data ? data[0] : [];
-            }),
-            catchError((error) => {
-              console.error('Error fetching cities:', error);
-              return of([]);
-            }),
-          );
+          return this.refreshCities();
         }
       }),
     )
@@ -45,23 +35,13 @@ export class LocationService {
           const parsedData = JSON.parse(countriesData);
           return of(parsedData);
         } else {
-          return this.apiService.get('country/available-countries').pipe(
-            take(1),
-            map((data) => {
-              this.storage.setStorage(environment.countries_data, JSON.stringify(data));
-              return data ? data[0] : [];
-            }),
-            catchError((error) => {
-              console.error('Error fetching country:', error);
-              return of([]);
-            }),
-          );
+          return this.refreshCountries();
         }
       }),
     )
   }
-  
-  getCountryData(countryId): Promise<any>{
+
+  getCountryData(countryId): Promise<any> {
     return this.storage.getStorage(environment.countries_data)
       .then((resp: any) => {
         if (resp.value) {
@@ -76,9 +56,9 @@ export class LocationService {
         }
       });
   }
-  
-  getCityData(cityId): Promise<any>{
-   return this.storage.getStorage(environment.cities_data)
+
+  getCityData(cityId): Promise<any> {
+    return this.storage.getStorage(environment.cities_data)
       .then((resp: any) => {
         if (resp.value) {
           let cityData = JSON.parse(resp.value);
@@ -93,5 +73,33 @@ export class LocationService {
           return false;
         }
       });
+  }
+
+  refreshCountries(): Observable<any> {
+    return this.apiService.get('country/available-countries').pipe(
+      take(1),
+      map((data) => {
+        this.storage.setStorage(environment.countries_data, JSON.stringify(data));
+        return data ? data : [];
+      }),
+      catchError((error) => {
+        console.error('Error fetching country:', error);
+        return of([]);
+      }),
+    );
+  }
+
+  refreshCities(): Observable<any>{
+    return this.apiService.get('city').pipe(
+      take(1),
+      map((data) => {
+        this.storage.setStorage(environment.cities_data, JSON.stringify(data));
+        return data ? data : [];
+      }),
+      catchError((error) => {
+        console.error('Error fetching cities:', error);
+        return of([]);
+      }),
+    );
   }
 }

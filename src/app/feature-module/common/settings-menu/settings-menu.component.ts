@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { DataService, routes, SideBarService } from 'src/app/core/core.index';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { UserService } from 'src/app/services/user/user.service';
+import { UserSettingsService } from 'src/app/services/user/userSettings.service';
 
 @Component({
   selector: 'app-settings-menu',
@@ -35,6 +36,7 @@ export class SettingsMenuComponent {
     private el: ElementRef,
     private userService: UserService,
     private toastService: ToastService,
+    private userSettingsService: UserSettingsService
   ) {
     this.sideBar.layoutPosition.subscribe((res: string) => {
       this.layoutPosition = res;
@@ -142,7 +144,7 @@ export class SettingsMenuComponent {
   }
 
   saveSettings() {
-    this.userService.setUserSetting()
+    this.userSettingsService.setUserSetting()
       .subscribe((res) => {
         console.log(res);
         this.toastService.presentToast('success', 'Done !', '', 10000);
@@ -154,7 +156,7 @@ export class SettingsMenuComponent {
   }
 
   resetSettings() {
-    this.userService.resetUserSetting()
+    this.userSettingsService.resetUserSetting()
       .subscribe((res) => {
         console.log(res);
         this.toastService.presentToast('success', 'Done !', '', 10000);

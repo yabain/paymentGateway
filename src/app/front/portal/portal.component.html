@@ -21,47 +21,53 @@
             <!-- {{showName(userData)}} -->
             <!-- <span class="logo">{{showName(userData)}}</span> -->
             <nav>
-                <ul id="navigation" *ngIf="userData?.accountType === 'organisation' && userData?.isActive === true || userData?.isAdmin === true">
+                <ul id="navigation"
+                    *ngIf="userData?.accountType === 'organisation' && userData?.isActive === true || userData?.isAdmin === true">
                     <li><a [routerLink]="'/portal/' + userId">{{'portal.nav.home' | translate}}</a></li>
                     <li *ngIf="userData?.portalServices"><a>{{'portal.nav.service' | translate}}</a></li>
-                    <li *ngIf="userData?.portalSubscription"><a href="#portfolio">{{'portal.nav.plans' | translate}}</a></li>
-                    <li *ngIf="userData?.portalFundraising"><a href="#services">{{'portal.nav.fundraising' | translate}}</a></li>
-                    <li *ngIf="!currentUser"><a class="nav-cta" href="#">{{ 'auth.login' | translate }}</a></li>
-
+                    <li *ngIf="userData?.portalSubscription"><a href="#portfolio">{{'portal.nav.plans' | translate}}</a>
+                    </li>
+                    <li *ngIf="userData?.portalFundraising"><a href="#services">{{'portal.nav.fundraising' |
+                            translate}}</a></li>
                     <li class="nav-item dropdown language-show">
-                      <a href="javascript:void(0)" class="user-link nav-link" data-bs-toggle="dropdown">
-                        <span class="user-content">
-                          <span class="user-name" style="margin-right: 10px;">
-                            <img [src]="selectedLanguage[0]?.flagImage" alt="" style="width: 15px; height: 12px;">
-                            {{ selectedLanguage[0]?.name | translate }} <i class="fa-solid fa-chevron-down"></i>
-                          </span>
-                        </span>
-                      </a>
-                      <div class="dropdown-menu menu-drop-user">
-                        <div class="profilemenu">
-                          <div class="subscription-menu">
-                            <ul>
-                              <li>
-                                <a class="dropdown-item" (click)="useLanguage('en')">
-                                  <img [src]="en[0].flagImage" alt="" style="width: 15px;">
-                                  {{ en[0].name | translate }}
-                                </a>
-                              </li>
-                              <li>
-                                <a class="dropdown-item" (click)="useLanguage('fr')">
-                                  <img [src]="fr[0].flagImage" alt="" style="width: 15px;">
-                                  {{ fr[0].name | translate }}
-                                </a>
-                              </li>
-                            </ul>
-                          </div>
+                        <a href="javascript:void(0)" class="user-link nav-link" data-bs-toggle="dropdown">
+                            <span class="user-content">
+                                <span class="user-name" style="margin-right: 10px;">
+                                    <img [src]="selectedLanguage[0]?.flagImage" alt=""
+                                        style="width: 15px; height: 12px;">
+                                    {{ selectedLanguage[0]?.name | translate }} <i class="fa-solid fa-chevron-down"></i>
+                                </span>
+                            </span>
+                        </a>
+                        <div class="dropdown-menu menu-drop-user">
+                            <div class="profilemenu">
+                                <div class="subscription-menu">
+                                    <ul>
+                                        <li>
+                                            <a class="dropdown-item" (click)="useLanguage('en')">
+                                                <img [src]="en[0].flagImage" alt="" style="width: 15px;">
+                                                {{ en[0].name | translate }}
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" (click)="useLanguage('fr')">
+                                                <img [src]="fr[0].flagImage" alt="" style="width: 15px;">
+                                                {{ fr[0].name | translate }}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
-                      </div>
+                    </li>
+                    <li *ngIf="!currentUser">
+                        <a class="nav-cta" (click)="navigateTo('/auth/login')">{{ 'auth.login' | translate }}</a>
                     </li>
                 </ul>
             </nav>
         </div>
     </header>
+
     <section id="banner"
         [style.background]="userData?.cover ? 'url(' + userData?.cover + ') no-repeat center' : 'url(' + cover + ') no-repeat center'">
         <a name="home"></a>

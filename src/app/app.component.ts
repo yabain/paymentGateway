@@ -13,7 +13,9 @@ import { StorageService } from './services/storage/storage.service';
 import { MetaService } from './services/meta/meta.service';
 import { LanguageService } from './services/language/language.service';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
+import { UserService } from './services/user/user.service';
+import { LocationService } from './services/location/location.service';
 
 @Component({
   selector: 'app-root',
@@ -38,10 +40,12 @@ export class AppComponent implements OnInit, OnDestroy {
     private metaTag: MetaService,
     private language: LanguageService,
     private route: ActivatedRoute,
+    private userService: UserService,
+    private locationService: LocationService
   ) {
     this.language.initLanguage();
-
     this.metaTag.setDefaultMetatag();
+    this.cronSystem();
     this.route.paramMap.subscribe(async (params) => {
       this.getId();
       await this.loadStaticData();
@@ -90,11 +94,46 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     }, 8000)
   }
+
   /**
    * Cleans up data when the component is destroyed.
    */
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  cronSystem(){
+    this.refreshCurrentUser();
+    this.refreshSystemData();
+    this.refreshLocation();
+    setTimeout(() => {
+      this.cronSystem();
+    }, 5 * 60 * 1000)
+  }
+
+  async refreshCurrentUser(): Promise<void> {
+    let currentUser = await this.userService.getCurrentUser();
+    if (currentUser) {
+      currentUser = await this.userService.getUser(currentUser._id)
+        .pipe(take(1))
+        .toPromise();
+      if (currentUser) this.userService.setCurrentUser(currentUser);
+    }
+  }
+
+  async refreshSystemData(){
+    this.systemService.getSystemData().subscribe((resp: any) => {
+      // console.log('refreshSystemData resp: ', resp)
+    });
+  }
+
+  async refreshLocation(){
+    this.locationService.refreshCountries().subscribe((resp: any) => {
+      // console.log('refreshCountries resp: ', resp)
+    });
+    this.locationService.refreshCities().subscribe((resp: any) => {
+      // console.log('refreshCities resp: ', resp)
+    });
   }
 }

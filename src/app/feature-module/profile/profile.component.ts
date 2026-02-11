@@ -10,6 +10,8 @@ import { UserService } from 'src/app/services/user/user.service';
 import { LanguageService } from 'src/app/services/language/language.service';
 import { DateService } from 'src/app/services/pipe/date.service';
 import { environment } from 'src/environments/environment';
+import { take } from 'rxjs';
+import { UserSettingsService } from 'src/app/services/user/userSettings.service';
 
 @Component({
   selector: 'app-profile',
@@ -48,6 +50,8 @@ export class ProfileComponent implements OnInit {
   headTitlePortalEdition: boolean = false;
   headTextPortalEdition: boolean = false;
   ableToShow: boolean = false;
+  userSettings: any;
+  loadingSettings: boolean = true;
   // canEdit: boolean = false;
 
   constructor(
@@ -60,6 +64,7 @@ export class ProfileComponent implements OnInit {
     private location: LocationService,
     private language: LanguageService,
     private dateService: DateService,
+    private userSettingsService: UserSettingsService
   ) {
   }
 
@@ -188,35 +193,46 @@ export class ProfileComponent implements OnInit {
       this.form.disable({ emitEvent: false });
     }
     this.loading = true;
+    this.saveUserData(this.form.value);
+  }
 
-
-    this.userService.updateUserProfile(this.form.value)
-      .subscribe
-      ({
-        next: (userData) => {
-          if (!userData || userData.error) {
-            this.translate.get("profile.profileUpdatedError").subscribe((res: string) => {
-              this.toastService.presentToast('error', 'Error', res, 10000);
-            });
-            this.edition = true;
-            this.loading = false;
-          } else {
-            this.language.useLanguage(this.form.value.language);
-            this.userService.setCurrentUser(userData);
-            this.translate.get("profile.profileUpdated").subscribe((res: string) => {
-              this.toastService.presentToast('success', 'Done !', res, 10000);
-            })
-            this.getDatas();
-            this.edition = false;
-            this.loading = false;
-          }
-        },
-        error: (error) => {
+  saveUserData(data){
+    return this.userService.updateUserProfile(data)
+    .subscribe
+    ({
+      next: (userData) => {
+        if (!userData || userData.error) {
           this.translate.get("profile.profileUpdatedError").subscribe((res: string) => {
             this.toastService.presentToast('error', 'Error', res, 10000);
           });
+          this.edition = false;
+          this.descriptionEdition = false;
+          this.loading = false;
+          this.loading2 = false;
+        } else {
+          this.language.useLanguage(this.form.value.language);
+          this.userService.setCurrentUser(userData);
+          this.translate.get("profile.profileUpdated").subscribe((res: string) => {
+            this.toastService.presentToast('success', 'Done !', res, 10000);
+          })
+          this.idrateCurrentUserData(userData);
+          this.edition = false;
+          this.descriptionEdition = false;
+          this.loading = false;
+          this.loading2 = false; 
         }
-      });
+      },
+      error: (error) => {
+        this.translate.get("profile.profileUpdatedError").subscribe((res: string) => {
+          this.toastService.presentToast('error', 'Error', res, 10000);
+        });
+      }
+    });
+  }
+
+  saveDescription(){
+    this.loading2 = true;
+    this.saveUserData({description: this.description});
   }
 
   edit() {
@@ -261,9 +277,29 @@ export class ProfileComponent implements OnInit {
 
   getDatas() {
     this.getCurrentUser();
+    this.getUserSettings();
   }
 
-  saveData(val: string = 'description'){
+  getUserSettings(){
+    this.loadingSettings = true;
+    this.userSettingsService.getUserSettings()
+    .subscribe((res: any) => {
+      if(res) {
+        this.idrateSettingsData(res);
+      }
+      this.loadingSettings = false;
+    })
+  }
+
+  idrateSettingsData(data){
+    this.userSettings = data;
+    this.headTitlePortal = data.headTitlePortal;
+    this.headTextPortal = data.headTextPortal;
+    this.headTextPortalColor = data.headTextPortalColor;
+    this.headTitlePortalColor = data.headTitlePortalColor;
+  }
+
+  saveSettingsData(val: string = 'description'){
     this.loading2 = true;
     let data: any;
     if(val === "headTitlePortal") data = {
@@ -274,26 +310,20 @@ export class ProfileComponent implements OnInit {
       headTextPortal: this.headTextPortal,
       headTextPortalColor: this.headTextPortalColor
     }
-    else  data = {
-      description: this.description
-    }
-    console.log('valeur de data: ', data);
-    this.userService.updateUserProfile(data)
+    this.userSettingsService.updateSettingsData(data)
       .subscribe
       ({
-        next: (userData) => {
-          console.log('resp to update profile: ', userData);
-          if (!userData) {
+        next: (userSettings) => {
+          if (!userSettings) {
             this.translate.get("profile.profileUpdatedError").subscribe((res: string) => {
               this.toastService.presentToast('error', 'Error', res, 10000);
             });
           } else {
-            console.log('update local profile data: ', userData);
-            this.userService.setCurrentUser(userData);
+            this.userSettingsService.setSettingsToStorage(userSettings);
             this.translate.get("profile.profileUpdated").subscribe((res: string) => {
               this.toastService.presentToast('success', 'Done !', res, 10000);
             })
-            this.getDatas();
+            this.idrateSettingsData(userSettings);
             this.descriptionEdition = false;
             this.headTextPortalEdition = false;
             this.headTitlePortalEdition = false;
@@ -304,18 +334,34 @@ export class ProfileComponent implements OnInit {
           this.translate.get("profile.profileUpdatedError").subscribe((res: string) => {
             this.toastService.presentToast('error', 'Error', res, 10000);
           });
+          this.loading2 = false;
         }
       });
   }
 
-  changeUserPortalStatus(userId?: string){
+  changeUserPortalStatus(){
     this.loading3 = true;
-    const userid = userId ? userId : this.currentUser._id;
-    this.userService.changePortalStatus(userid).then((res: any) => {
-      if(res){
-        this.currentUser = this.userData = res;
-        this.toastService.presentToast('success', 'Done !', '', 3000);
-        this.userService.setCurrentUser(res);
+    const data = {
+      portal: !this.userSettings.portal
+    }
+    this.userSettingsService.updateSettingsData(data)
+    .subscribe
+    ({
+      next: (resp) => {
+        if (!resp) {
+          this.translate.get("profile.profileUpdatedError").subscribe((res: string) => {
+            this.toastService.presentToast('error', 'Error', res, 10000);
+          });
+        } else {
+          this.userSettings = resp;
+          this.toastService.presentToast('success', 'Done !', '', 3000);
+          this.loading3 = false;
+        }
+      },
+      error: (error) => {
+        this.translate.get("profile.profileUpdatedError").subscribe((res: string) => {
+          this.toastService.presentToast('error', 'Error', res, 10000);
+        });
         this.loading3 = false;
       }
     });
@@ -325,54 +371,58 @@ export class ProfileComponent implements OnInit {
     let val: any;
     if(option === 'portalSubscription'){
       val = {
-        portalSubscription: !this.userData.portalSubscription
+        portalSubscription: !this.userSettings.portalSubscription
       }
     }
     else if(option === 'portalServices'){
       val = {
-        portalServices: !this.userData.portalServices
+        portalServices: !this.userSettings.portalServices
       }
     }
     else{
       val = {
-        portalFundraising: !this.userData.portalFundraising
+        portalFundraising: !this.userSettings.portalFundraising
       }
     }
-    this.userService.updateUserItems(val)
+    this.userSettingsService.updateSettingsData(val)
     .subscribe((res: any) => {
-      if(!res || !res.email) return false;
-      this.currentUser = this.userData = res;
+      if(!res || !res.layoutPosition) return false;
+      this.userSettings = res
       this.toastService.presentToast('success', 'Done !', '', 3000);
-      this.userService.setCurrentUser(res);
+      this.userSettingsService.setSettingsToStorage(res);
       return res;
     })
   }
 
   async getCurrentUser() {
+    this.loading3 = true;
     this.currentUser = await this.userService.getCurrentUser();
-    this.userData = this.currentUser;
+    if(this.currentUser) {
+      this.currentUser = this.userData = await this.userService.getUser(this.currentUser._id)
+      .pipe(take(1)).toPromise();
+      if(this.currentUser) this.userService.setCurrentUser(this.currentUser);
+    };
     this.loading3 = false;
-    this.memoryImage = this.currentUser.pictureUrl;
     if (this.currentUser) {
-      this.userForm(this.currentUser);
       this.getCities();
-      this.description = this.currentUser.description;
-      this.headTitlePortal = this.currentUser.headTitlePortal;
-      this.headTextPortal = this.currentUser.headTextPortal;
-      this.headTextPortalColor = this.currentUser.headTextPortalColor;
-      this.headTitlePortalColor = this.currentUser.headTitlePortalColor;
+      this.idrateCurrentUserData(this.currentUser);
       // Start in view mode with controls disabled to avoid template [disabled]
       this.form.disable({ emitEvent: false });
-      this.ableToShow = this.verifyUserConditions(this.currentUser) ? true : false;
       this.loading = false;
     }
   }
 
+  idrateCurrentUserData(userData){
+    this.currentUser = userData;
+    this.userForm(this.currentUser);
+    this.description = userData.description;
+    this.memoryImage = userData.pictureUrl;
+    this.ableToShow = this.verifyUserConditions(this.currentUser) ? true : false;
+  }
   /**
    * Saves the selected profile picture.
    */
   savePicture() {
-    console.log("test 0000")
     if (!this.uploadPictureForm.valid) {
       this.toastService.presentToast('error', 'Error', 'Invalid Picture');
       return;
