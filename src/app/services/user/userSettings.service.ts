@@ -25,7 +25,7 @@ export class UserSettingsService {
 
   async getLocalUserSetting() {
     try {
-      let userSettings: any = await this.storage.getStorage(environment.user_settings || 'dk_user_settings');
+      let userSettings: any = await this.storage.getStorage('dk_user_settings');
       return userSettings ? JSON.parse(userSettings) : undefined;
     } catch (e) {
       console.error(e);
@@ -35,7 +35,7 @@ export class UserSettingsService {
 
   async setUserLocal(userSettings: any) {
     try {
-      await this.storage.setStorage(environment.user_settings || 'dk_user_settings', JSON.stringify(userSettings));
+      await this.storage.setStorage('dk_user_settings', JSON.stringify(userSettings));
     } catch (e) {
       console.error(e);
     }
