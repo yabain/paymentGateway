@@ -420,6 +420,58 @@
                 </span>
               </div>
               <br>
+              <div class="status-toggle justify-content-between">
+                <div class="d-flex align-left">
+                  <span style="margin-right: 10px;">{{ 'portal.description' | translate }}: </span>
+                  <span class="badge badge-label bg-danger" [ngClass]="userSettings?.portalDescription === true ? 'bg-success' : 'bg-danger'">
+                    {{ userSettings?.portalDescription === true ? ('users.enabled' | translate) : ('users.disabled' | translate) }}
+                  </span>
+                </div>
+                <span>
+                  <input id="portalDescription" class="check" type="checkbox" [checked]="userSettings?.portalDescription === true" (click)="toggleService('portalDescription')"/>
+                  <label for="portalDescription" class="checktoggle checkbox-bg">checkbox</label>
+                </span>
+              </div>
+              <br>
+              <div class="status-toggle justify-content-between">
+                <div class="d-flex align-left">
+                  <span style="margin-right: 10px;">{{ 'portal.supportInfo' | translate }}: </span>
+                  <span class="badge badge-label bg-danger" [ngClass]="userSettings?.portalSupportInfo === true ? 'bg-success' : 'bg-danger'">
+                    {{ userSettings?.portalSupportInfo === true ? ('users.enabled' | translate) : ('users.disabled' | translate) }}
+                  </span>
+                </div>
+                <span>
+                  <input id="portalSupportInfo" class="check" type="checkbox" [checked]="userSettings?.portalSupportInfo === true" (click)="toggleService('portalSupportInfo')"/>
+                  <label for="portalSupportInfo" class="checktoggle checkbox-bg">checkbox</label>
+                </span>
+              </div>
+              <br>
+              <div class="status-toggle justify-content-between">
+                <div class="d-flex align-left">
+                  <span style="margin-right: 10px;">{{ 'portal.contact' | translate }}: </span>
+                  <span class="badge badge-label bg-danger" [ngClass]="userSettings?.portalContact === true ? 'bg-success' : 'bg-danger'">
+                    {{ userSettings?.portalContact === true ? ('users.enabled' | translate) : ('users.disabled' | translate) }}
+                  </span>
+                </div>
+                <span>
+                  <input id="portalContact" class="check" type="checkbox" [checked]="userSettings?.portalContact === true" (click)="toggleService('portalContact')"/>
+                  <label for="portalContact" class="checktoggle checkbox-bg">checkbox</label>
+                </span>
+              </div>
+              <br>
+              <div class="status-toggle justify-content-between">
+                <div class="d-flex align-left">
+                  <span style="margin-right: 10px;">{{ 'portal.footer' | translate }}: </span>
+                  <span class="badge badge-label bg-danger" [ngClass]="userSettings?.portalFooter === true ? 'bg-success' : 'bg-danger'">
+                    {{ userSettings?.portalFooter === true ? ('users.enabled' | translate) : ('users.disabled' | translate) }}
+                  </span>
+                </div>
+                <span>
+                  <input id="portalFooter" class="check" type="checkbox" [checked]="userSettings?.portalFooter === true" (click)="toggleService('portalFooter')"/>
+                  <label for="portalFooter" class="checktoggle checkbox-bg">checkbox</label>
+                </span>
+              </div>
+              <br>
             </div>
             <div class="card-body" *ngIf="loadingSettings" style="text-align: center;">
               <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>

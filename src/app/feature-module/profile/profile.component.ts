@@ -367,31 +367,18 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  async toggleService(option: string){
-    let val: any;
-    if(option === 'portalSubscription'){
-      val = {
-        portalSubscription: !this.userSettings.portalSubscription
-      }
-    }
-    else if(option === 'portalServices'){
-      val = {
-        portalServices: !this.userSettings.portalServices
-      }
-    }
-    else{
-      val = {
-        portalFundraising: !this.userSettings.portalFundraising
-      }
-    }
-    this.userSettingsService.updateSettingsData(val)
-    .subscribe((res: any) => {
-      if(!res || !res.layoutPosition) return false;
-      this.userSettings = res
+  toggleService(option: string): void {
+    if (!this.userSettings) return;
+
+    const currentValue = !!this.userSettings[option];
+    const payload = { [option]: !currentValue };
+
+    this.userSettingsService.updateSettingsData(payload).subscribe((res: any) => {
+      if (!res) return;
+      this.userSettings = res;
       this.toastService.presentToast('success', 'Done !', '', 3000);
       this.userSettingsService.setSettingsToStorage(res);
-      return res;
-    })
+    });
   }
 
   async getCurrentUser() {

@@ -1,4 +1,4 @@
-<div class="row d-flex align-items-center justify-content-center" *ngIf="loading">
+<div class="row d-flex align-items-center justify-content-center" *ngIf="loading || loadingSettings">
     <div style="display: flex;
         justify-content: center;
         align-items: center;
@@ -13,7 +13,7 @@
     </div>
 </div>
 
-<div *ngIf="!loading">
+<div *ngIf="!loading && !loadingSettings">
     <header id="top">
         <div class="wrapper-2">
             <img class="logo" [src]="userData?.pictureUrl" [alt]="showName(userData)"
@@ -21,13 +21,12 @@
             <!-- {{showName(userData)}} -->
             <!-- <span class="logo">{{showName(userData)}}</span> -->
             <nav>
-                <ul id="navigation"
-                    *ngIf="userData?.accountType === 'organisation' && userData?.isActive === true || userData?.isAdmin === true">
+                <ul id="navigation">
                     <li><a [routerLink]="'/portal/' + userId">{{'portal.nav.home' | translate}}</a></li>
-                    <li *ngIf="userData?.portalServices"><a>{{'portal.nav.service' | translate}}</a></li>
-                    <li *ngIf="userData?.portalSubscription"><a href="#portfolio">{{'portal.nav.plans' | translate}}</a>
+                    <li *ngIf="userSettings?.portalServices"><a>{{'portal.nav.service' | translate}}</a></li>
+                    <li *ngIf="userSettings?.portalSubscription"><a href="#portfolio">{{'portal.nav.plans' | translate}}</a>
                     </li>
-                    <li *ngIf="userData?.portalFundraising"><a href="#services">{{'portal.nav.fundraising' |
+                    <li *ngIf="userSettings?.portalFundraising"><a href="#services">{{'portal.nav.fundraising' |
                             translate}}</a></li>
                     <li class="nav-item dropdown language-show">
                         <a href="javascript:void(0)" class="user-link nav-link" data-bs-toggle="dropdown">
@@ -72,14 +71,14 @@
         [style.background]="userData?.cover ? 'url(' + userData?.cover + ') no-repeat center' : 'url(' + cover + ') no-repeat center'">
         <a name="home"></a>
         <div class="wrapper">
-            <h2 [style.color]="userData?.headTitlePortalColor ? userData?.headTitlePortalColor : '#fff'">
-                {{userData?.headTitlePortal}}</h2>
-            <p class="subtitle" [style.color]="userData?.headTextPortalColor ? userData?.headTextPortalColor : '#fff'">
-                {{userData?.headTextPortal}}</p>
+            <h2 [style.color]="userSettings?.headTitlePortalColor ? userSettings?.headTitlePortalColor : '#fff'">
+                {{userSettings?.headTitlePortal}}</h2>
+            <p class="subtitle" [style.color]="userSettings?.headTextPortalColor ? userSettings?.headTextPortalColor : '#fff'">
+                {{userSettings?.headTextPortal}}</p>
         </div>
     </section>
 
-    <section class="text-section" *ngIf="!loading && userData?.description && userData?.description !== ''">
+    <section class="text-section" *ngIf="userSettings?.portalDescription && userSettings?.portalDescription !== ''">
         <div class="wrapper">
             <div class="image align-left">
                 <img src="assets/img/new/light.png" alt="light bulb" class="align-left">
@@ -93,7 +92,7 @@
         </div>
     </section>
 
-    <section class="features-section">
+    <section class="features-section" *ngIf="userSettings?.portalSupportInfo">
         <div class="wrapper-2">
             <ul class="feature-squares">
                 <li>
@@ -147,7 +146,7 @@
     <img [src]="userData?.pictureUrl" alt="" style="max-width: 80px; margin: 5px 20px;">
 </div><br><br><br><br> -->
 
-    <section class="contact" id="contact">
+    <section class="contact" id="contact" *ngIf="userSettings?.portalContact">
         <div class="contact-container">
             <div class="contact-header">
                 <h2 class="section-title">{{ 'portal.contactTitleSection' | translate }}</h2>
@@ -273,7 +272,7 @@
         </div>
     </section>
 
-    <footer>
+    <footer *ngIf="userSettings?.portalFooter">
         <div class="wrapper-2">
             <img class="logo" [src]="userData?.pictureUrl" alt="" style="max-width: 80px; margin: 5px 20px;">
 

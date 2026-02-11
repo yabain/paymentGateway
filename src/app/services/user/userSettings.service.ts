@@ -50,7 +50,18 @@ export class UserSettingsService {
     }
   }
 
-  getUserSettings(): Observable<any> {
+  getUserSettings(userId?: string): Observable<any> {
+    if(userId) return from(this.apiService.get(`userSettings/get-user`, userId))
+      .pipe(
+        map((resp) => {
+          this.setSettingsToStorage(resp);
+          return resp;
+        }),
+        catchError(error => {
+          return of({ error: true, message: error.message || 'An error occurred' });
+        })
+      );
+      
     return from(this.apiService.getWithoutId(`userSettings/get`))
       .pipe(
         map((resp) => {
@@ -61,6 +72,7 @@ export class UserSettingsService {
           return of({ error: true, message: error.message || 'An error occurred' });
         })
       );
+    
   }
 
   setUserSetting(userSettings?): Observable<any> {

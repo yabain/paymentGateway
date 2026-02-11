@@ -352,7 +352,8 @@
     "profileUpdatedError": "Erreur de mis à jour du profil",
     "invalidUrl": "Url invalid",
     "website": "Site web",
-    "imageTooLarge": "Taille de l'image trop grande (max 1mb)"
+    "imageTooLarge": "Taille de l'image trop grande (max 1mb)",
+    "viewDoc": "Consulter la documentation"
   },
   "payment": {
     "title": "Paiement",
@@ -888,6 +889,10 @@
     "messageOnDesabled": "Activez le portail pour configurer la page d'acceuil de votre organisation.",
     "headTitle": "Titre sur votre portail",
     "headText": "Description principale sur votre portail",
+    "footer": "Pied de page",
+    "description": "Description",
+    "contact": "Contact",
+    "supportInfo": "Info support",
     "attention": {
       "title": "Attention aux détails",
       "desc": "Chaque transaction est contrôlée avec précision : vérifications automatiques, détection de fraude et journalisation complète. Vous bénéficiez d’un paiement fiable, conforme et traçable à chaque étape."

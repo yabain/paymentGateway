@@ -4,6 +4,7 @@ import { catchError, of } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { LanguageService } from 'src/app/services/language/language.service';
 import { UserService } from 'src/app/services/user/user.service';
+import { UserSettingsService } from 'src/app/services/user/userSettings.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -14,6 +15,7 @@ import { environment } from 'src/environments/environment';
 export class PortalComponent {
   frontUrl: string = environment.frontUrl;
   loading: boolean = true;
+  loadingSettings: boolean = true;
   gettingUserData: boolean = true;
   userData: any;
   userId!: string;
@@ -22,6 +24,7 @@ export class PortalComponent {
   en: any = '';
   fr: any = '';
   selectedLanguage: any = '';
+  userSettings: any;
 
   constructor(
     private userService: UserService,
@@ -29,6 +32,7 @@ export class PortalComponent {
     private language: LanguageService,
     private route: ActivatedRoute,
     private router: Router,
+    private userSettingsService: UserSettingsService,
   ) {
     this.getLanguage();
     this.en = this.language.en;
@@ -43,7 +47,6 @@ export class PortalComponent {
   verifyUser() {
     const user = this.userService.getCurrentUserData()
     .then((user: any) => {
-      console.log('user', user);
       this.currentUser = user;
     })
     .catch((e) => {
@@ -100,12 +103,26 @@ export class PortalComponent {
           this.navigateTo('/');
           return;
         }
+        this.getUserSettings(userId);
         this.userData = user;
         this.useLanguage(user.language);
-        console.log('userData: ', this.userData)
         this.gettingUserData = false;
         this.loading = false;
       });
+  }
+
+  getUserSettings(userId){
+    this.loadingSettings = true;
+    this.userSettingsService.getUserSettings(userId).subscribe((res: any) => {
+      console.log('res settings: ', res)
+      if(!res || res.portal !== true){
+          this.userId = null;
+          this.navigateTo('/');
+          return;
+      }
+      this.userSettings = res;
+      this.loadingSettings = false
+    })
   }
   
   authAsAnonymous() {
