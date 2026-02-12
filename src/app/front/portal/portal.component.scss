@@ -320,7 +320,7 @@ header#top nav ul li a.nav-cta {
 .text-section .text.align-left {
 	float: left;
 	width: 50%;
-	padding: 0 10% 0 40px;
+	padding: 0 10px 0 10px;
 }
 
 .text-section .image.align-right {
@@ -387,7 +387,7 @@ ul.list-checkmarks li {
 /*Features Section*/
 
 .features-section {
-	background: #021d66;
+	// background: #021d66;
 	padding: 100px 0;
 	color: #fff;
 }
@@ -436,7 +436,7 @@ ul.list-checkmarks li {
 /*Footer*/
 
 footer {
-	background: #F57C11 !important;
+	// background: #F57C11 !important;
 	margin-top: 0px;
 	color: #fff;
 	text-align: center;
@@ -1405,7 +1405,7 @@ footer a.social.google {
   }
   
   .contact-form-wrapper {
-	  background: linear-gradient(135deg, #021d66, #042ea4);
+	//   background: linear-gradient(135deg, #021d66, #042ea4);
 	  padding: 50px;
 	  border-radius: 10px;
 	  position: relative;

@@ -120,6 +120,7 @@ export class PortalComponent {
           this.navigateTo('/');
           return;
       }
+      console.log('user settings:', res)
       this.userSettings = res;
       this.loadingSettings = false
     })

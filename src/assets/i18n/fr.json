@@ -340,7 +340,7 @@
     "settings": "Paramètres",
     "gender": "Genre",
     "male": "Homme",
-    "femal": "Femme",
+    "female": "Femme",
     "changeEmail": "Changer mon email",
     "changePassword": "Changer mon passe",
     "changeWhatsapp": "Changer mon whatsapp",
@@ -893,6 +893,9 @@
     "description": "Description",
     "contact": "Contact",
     "supportInfo": "Info support",
+    "color": "Couleur",
+    "primaryColor": "Coulor primaire",
+    "secondaryColor": "Couleur secondaire",
     "attention": {
       "title": "Attention aux détails",
       "desc": "Chaque transaction est contrôlée avec précision : vérifications automatiques, détection de fraude et journalisation complète. Vous bénéficiez d’un paiement fiable, conforme et traçable à chaque étape."

@@ -340,7 +340,7 @@
     "settings": "Settings",
     "gender": "Gender",
     "male": "Male",
-    "femal": "Female",
+    "female": "Female",
     "changeEmail": "Change my email",
     "changePassword": "Change my password",
     "changeWhatsapp": "Change my whatsapp number",
@@ -892,6 +892,9 @@
     "description": "Description",
     "contact": "Contact",
     "supportInfo": "Support info",
+    "color": "Color",
+    "primaryColor": "Primary color",
+    "secondaryColor": "Secondary color",
     "attention": {
         "title": "Attention to Detail",
         "desc": "Every transaction is thoroughly checked: automated verification, fraud detection, and full logging. You get secure, compliant, and traceable payments at every step."

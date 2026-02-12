@@ -1664,3 +1664,32 @@ input {
 textarea {
   border: 0.5px solid #828181 !important;
 }
+
+
+.success-dark {
+  color: #04850e;
+}
+.danger-dark {
+  color: #850404;
+}
+
+.bg-success-dark {
+  background: #04850e;
+}
+.bg-danger-dark {
+  background: #850404;
+}
+
+.badge-success {
+  background-color: #04850e;
+  color: #fff;
+  padding: 3px 5px;
+  border-radius: 3px;
+}
+
+.badge-danger {
+  background-color: #850404;
+  color: #fff;
+  padding: 3px 5px;
+  border-radius: 3px;
+}

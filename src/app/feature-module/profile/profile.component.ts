@@ -52,6 +52,9 @@ export class ProfileComponent implements OnInit {
   ableToShow: boolean = false;
   userSettings: any;
   loadingSettings: boolean = true;
+  portalPrimaryColor: string = '#021d66';
+  portalSecondaryColor: string = '#F57C11';
+  portalColorEdition: boolean;
   // canEdit: boolean = false;
 
   constructor(
@@ -112,6 +115,18 @@ export class ProfileComponent implements OnInit {
       key: this.key,
       speciality: this.name,
     };
+  }
+
+  showAdvancedOptions(userData: any): boolean {
+    if (!userData) return false;
+    const { accountType, isAdmin, isActive, isVerified } = userData;
+    if (isAdmin === true) return true;
+    else if (
+      accountType === 'organisation'
+      && isActive
+      && isVerified
+    ) return true;
+    else return false
   }
 
   formatDate(): string {
@@ -275,6 +290,16 @@ export class ProfileComponent implements OnInit {
     }
   }
 
+  editPortalColor() {
+    this.portalColorEdition = !this.portalColorEdition;
+    if (this.portalColorEdition) {
+      return;
+    } else {
+      this.portalPrimaryColor = this.currentUser.portalPrimaryColor || this.portalPrimaryColor;
+      this.portalSecondaryColor = this.currentUser.portalSecondaryColor || this.portalSecondaryColor;
+    }
+  }
+
   getDatas() {
     this.getCurrentUser();
     this.getUserSettings();
@@ -287,6 +312,7 @@ export class ProfileComponent implements OnInit {
       if(res) {
         this.idrateSettingsData(res);
       }
+      console.log('user settings:', res)
       this.loadingSettings = false;
     })
   }
@@ -297,6 +323,8 @@ export class ProfileComponent implements OnInit {
     this.headTextPortal = data.headTextPortal;
     this.headTextPortalColor = data.headTextPortalColor;
     this.headTitlePortalColor = data.headTitlePortalColor;
+    this.portalPrimaryColor = data.portalPrimaryColor;
+    this.portalSecondaryColor = data.portalSecondaryColor;
   }
 
   saveSettingsData(val: string = 'description'){
@@ -309,6 +337,10 @@ export class ProfileComponent implements OnInit {
     else if(val === "headTextPortal") data = {
       headTextPortal: this.headTextPortal,
       headTextPortalColor: this.headTextPortalColor
+    }
+    else if(val === "portalColor") data = {
+      portalPrimaryColor: this.portalPrimaryColor,
+      portalSecondaryColor: this.portalSecondaryColor
     }
     this.userSettingsService.updateSettingsData(data)
       .subscribe
@@ -324,9 +356,11 @@ export class ProfileComponent implements OnInit {
               this.toastService.presentToast('success', 'Done !', res, 10000);
             })
             this.idrateSettingsData(userSettings);
+            console.log('user settings:', userSettings)
             this.descriptionEdition = false;
             this.headTextPortalEdition = false;
             this.headTitlePortalEdition = false;
+            this.portalColorEdition = false;
             this.loading2 = false;
           }
         },

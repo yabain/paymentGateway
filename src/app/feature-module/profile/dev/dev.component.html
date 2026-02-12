@@ -2,18 +2,16 @@
   <div class="card-header d-flex justify-content-between">
     <h5 class="card-title">{{ "dev.title" | translate }}</h5>
     <div *ngIf="ableToShow && keyData && !updatingStatus">
-      <span *ngIf="keyData?.status != true"
-        style="background-color: #850404; color: #fff; padding: 3px 5px; border-radius: 3px;">
-        {{ "users.disabled" | translate }}
+      <span [ngClass]="keyData?.status === true ?
+        'badge-success' :  'badge-danger'">
+        {{ (keyData?.status === true ? 'users.enabled' : 'users.disabled') | translate }}
       </span>
-      <span *ngIf="keyData?.status === true"
-        style="background-color: #04c714; color: #fff; padding: 3px 5px; border-radius: 3px;">
-        {{ "users.enabled" | translate }}
+      <span (click)="toggleStatus()" class="btn btn-light">
+        <a class="btn-filters" href="javascript:void(0);" data-bs-toggle="tooltip"
+          data-bs-placement="bottom" matTooltip="Disable"><span><i class="feather icon-power"
+            [ngClass]="keyData?.status === true ?
+        'danger-dark' : 'success-dark'"></i></span></a>
       </span>
-      <button class="btn btn-block me-1" (click)="toggleStatus()" [ngClass]="keyData?.status === true ?
-        'btn-outline-danger':  'btn-outline-success'">
-        <i class="feather icon-power me-1"></i>
-      </button>
     </div>
     <span *ngIf="ableToShow && updatingStatus || !keyData && ableToShow" class="spinner-border spinner-border-sm me-2"
       role="status" aria-hidden="true"></span>
