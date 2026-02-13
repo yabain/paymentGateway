@@ -160,7 +160,7 @@ export class ServicesService {
     }
   }
 
-  async checkSbscriberStatus(planId: string, userId?): Promise<any> {
+  async checkSubscriberStatus(planId: string, userId?): Promise<any> {
     try {
       let response: any;
       if (userId) {

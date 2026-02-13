@@ -1,6 +1,6 @@
 <div class="main-title page-tilte" *ngIf="!goToProceed">
   <h2 style="color: black !important">
-    <img src="assets/img/ressorces/sendM.png" alt="" style="max-width: 40px; margin-right: 10px;">
+    <img src="assets/img/resources/sendM.png" alt="" style="max-width: 40px; margin-right: 10px;">
     {{ "dashboard.sendMoney" | translate }}</h2>
 </div>
 <div class="row">
@@ -173,7 +173,7 @@
                           <div class="method-card" (click)="selectMethod('OM')" *ngIf="selectedCountry?.code === '237'"
                             [ngClass]="selectedMethod === 'OM' ? 'method-card active' : 'method-card'">
                             <div class="method-icon">
-                              <img src="assets/img/ressorces/om.png" alt="" class="method-img">
+                              <img src="assets/img/resources/om.png" alt="" class="method-img">
                             </div>
                             <div class="method-info">
                               <h3>Orange Money</h3>
@@ -184,7 +184,7 @@
                           <div class="method-card" (click)="selectMethod('MTN')" *ngIf="selectedCountry?.code === '237'"
                             [ngClass]="selectedMethod === 'MTN' ? 'method-card active' : 'method-card'" disabled>
                             <div class="method-icon">
-                              <img src="assets/img/ressorces/mtn_money.webp" alt="" class="method-img">
+                              <img src="assets/img/resources/mtn_money.webp" alt="" class="method-img">
                             </div>
                             <div class="method-info">
                               <h3>MTN Mobile Money</h3>
@@ -194,7 +194,7 @@
 
                           <div class="method-card" style="opacity: 0.6;">
                             <div class="method-icon" style="color: #003087;">
-                              <img src="assets/img/ressorces/paypal.png" alt="" class="method-img">
+                              <img src="assets/img/resources/paypal.png" alt="" class="method-img">
                             </div>
                             <div class="method-info">
                               <h3>PayPal</h3>
@@ -206,7 +206,7 @@
 
                           <div class="method-card" style="opacity: 0.6;">
                             <div class="method-icon" style="color: #003087;">
-                              <img src="assets/img/ressorces/icon.jpg" alt="" class="method-img">
+                              <img src="assets/img/resources/icon.jpg" alt="" class="method-img">
                             </div>
                             <div class="method-info">
                               <h3>Digikuntz account</h3>
@@ -366,11 +366,11 @@
                         <h3 *ngIf="selectedMethod === 'BANK'"><i class="fas fa-university"></i> {{ methodName }}
                         </h3>
                         <h3 *ngIf="selectedMethod === 'OM'">
-                          <img src="assets/img/ressorces/om.png" alt="" style="width: 50px; margin-right: 10px;"> {{
+                          <img src="assets/img/resources/om.png" alt="" style="width: 50px; margin-right: 10px;"> {{
                           methodName }}
                         </h3>
                         <h3 *ngIf="selectedMethod === 'MTN'">
-                          <img src="assets/img/ressorces/mtn_money.webp" alt=""
+                          <img src="assets/img/resources/mtn_money.webp" alt=""
                             style="width: 50px; margin-right: 10px;"> {{ methodName }}
                         </h3>
 
@@ -416,7 +416,7 @@
                       </div>
 
                       <div class="security-notice">
-                        <img src="assets/img/ressorces/flutterwave.png" alt=""
+                        <img src="assets/img/resources/flutterwave.png" alt=""
                           style="max-width: 100px; border-radius: 5px; margin-right: 10px;">
                         <p>{{ "payment.secureMessage" | translate }}</p>
                       </div>
@@ -442,7 +442,7 @@
         <div class="row">
           <div class="col-md-6">
             <div class="wating-msg">
-              <img src="assets/img/ressorces/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;"
+              <img src="assets/img/resources/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;"
                 *ngIf="!modalClosed && !transactionSucceded && !transactionFailed">
               <!-- <div class="spinner-border" role="status" *ngIf="!modalClosed && !transactionSucceded && !transactionFailed"></div> -->
               <p style="margin-top: 50px;" *ngIf="!modalClosed && !transactionSucceded && !transactionFailed">
@@ -451,7 +451,7 @@
               </p>
 
 
-              <img src="../../../assets/img/ressorces/tfailed.gif" alt="" style="max-width: 100px;;"
+              <img src="../../../assets/img/resources/tfailed.gif" alt="" style="max-width: 100px;;"
                 *ngIf="!reOpen && transactionFailed">
               <br>
               <span style="color: red !important" *ngIf="!reOpen && transactionFailed">{{ "payment.transactionFailed" | translate }}</span>
@@ -463,7 +463,7 @@
                 <span *ngIf="reOpen && transactionFailed">{{ "payment.hereToRetry" | translate }}. {{ "payment.opening" | translate }}...</span>
               </p>
 
-              <img src="assets/img/ressorces/flutterwave.png" alt="" style="max-width: 100px;;"
+              <img src="assets/img/resources/flutterwave.png" alt="" style="max-width: 100px;;"
                 *ngIf="!transactionSucceded && !transactionFailed">
               <p style="margin-top: 50px;" *ngIf="showRetry && !transactionSucceded && !transactionFailed">
                 {{ "payment.processing-message4" | translate }}
@@ -473,7 +473,7 @@
                 <span *ngIf="reOpen && !transactionSucceded">{{ "payment.hereToRetry" | translate }}. {{ "payment.opening" | translate }}...</span>
               </p>
 
-              <img src="assets/img/ressorces/paymentDone.gif" alt="" style="max-width: 250px;;"
+              <img src="assets/img/resources/paymentDone.gif" alt="" style="max-width: 250px;;"
                 *ngIf="transactionSucceded && !transactionFailed">
               <p style="margin-top: 50px;" *ngIf="transactionSucceded && !transactionFailed">{{ 'payment.paymentSuccess'
                 | translate }}<br>

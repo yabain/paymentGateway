@@ -11,7 +11,7 @@ interface data {
 export class CandidateComponent implements OnInit {
   @Input() service: any;
   optionsData: any = [];
-  picture: string = 'assets/img/ressorces/generic.jpeg';
+  picture: string = 'assets/img/resources/generic.jpeg';
 
   constructor(
   ) {}

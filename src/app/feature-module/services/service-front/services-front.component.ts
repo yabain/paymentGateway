@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Candidate } from './candidate.model';
-import { CandidateService } from './candidate.service';
 import { finalize } from 'rxjs/operators';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -15,7 +13,6 @@ import { LanguageService } from 'src/app/services/language/language.service';
   styleUrls: ['./services-front.component.scss']
 })
 export class ServicesFrontComponent implements OnInit {
-  candidates: Candidate[] = [];
   votedId: string | null = null;
   processingVote = false;
   toastMessage = '';

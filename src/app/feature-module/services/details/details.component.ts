@@ -36,7 +36,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   // statistics!: any;
   title: string = '';
   subTitle: string = '';
-  imageUrl: string = 'assets/img/ressorces/package_img.png';
+  imageUrl: string = 'assets/img/resources/package_img.png';
   cycle: string = 'monthly'; // yearly | monthly | weekly | dayly
   description: string = '';
   isActive: boolean = true;
@@ -47,7 +47,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   options: any;
   form: FormGroup;
   watingCreation: boolean = false;
-  wattingStatus: boolean = false;
+  waitingStatus: boolean = false;
   isAdmin: boolean = false;
   optionsData: any = [];
   checkingSubscriptionStatus: boolean = true;
@@ -194,7 +194,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
       .subscribe((user) => {
         if (user) {
           this.currentUser = user;
-          this.checkSbscriberStatus(this.serviceData);
+          this.checkSubscriberStatus(this.serviceData);
           this.loadingData = false;
         }
 
@@ -242,7 +242,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     }, 2000);
   }
 
-  checkSbscriberStatus(plan) {
+  checkSubscriberStatus(plan) {
     this.checkingSubscriptionStatus = true;
     if (!this.currentUser) {
       this.isSubscriber = false;
@@ -252,7 +252,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     // console.log('currentUser: ', this.currentUser);
 
     this.servicesService
-      .checkSbscriberStatus(this.serviceData._id, this.currentUser._id || undefined)
+      .checkSubscriberStatus(this.serviceData._id, this.currentUser._id || undefined)
       .then((data: any) => {
         this.servicesStatus = data;
         if (data.existingSubscription) {
@@ -273,7 +273,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     this.userService.getCurrentUser().then((user: any) => {
       if (!user) return (this.watingCurrentUser = false);
       this.currentUser = user;
-      this.checkSbscriberStatus(this.serviceData);
+      this.checkSubscriberStatus(this.serviceData);
       if (
         this.currentUser.admin ||
         this.currentUser._id == this.serviceData.receiverId
@@ -708,9 +708,9 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   toggleActivation(planId) {
-    this.wattingStatus = false;
+    this.waitingStatus = false;
     this.servicesService.changeStatus(planId).then((resp: any) => {
-      this.wattingStatus = false;
+      this.waitingStatus = false;
       this.toastService.presentToast('success', 'Done !', '', 5000);
       this.refresh();
     });

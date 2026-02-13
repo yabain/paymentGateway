@@ -23,7 +23,7 @@ export class AddSubscriberComponent implements OnInit {
   countries: any = [];
   cities: any = [];
   allCities: any = [];
-  flagCountry: string = '../../../../assets/ressorces/flag.png';
+  flagCountry: string = '../../../../assets/resources/flag.png';
   contryCode: string = '--';
   planId: string;
   selectedCounry: any;
@@ -67,7 +67,7 @@ export class AddSubscriberComponent implements OnInit {
     let country = this.countries.filter((e) => e._id === coutryId);
     country = country[0];
     this.flagCountry =
-      country.flagUrl || '../../../../assets/ressorces/flag.png';
+      country.flagUrl || '../../../../assets/resources/flag.png';
     this.contryCode = '+' + country.code || '--';
   }
 

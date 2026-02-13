@@ -1,7 +1,7 @@
 <div class="page-header">
     <div class="content-page-header page-tilte">
         <h5 style="color: black !important">
-            <img src="assets/img/ressorces/whatsapp.png" alt="" style="width: 25px; margin-right: 10px;">
+            <img src="assets/img/resources/whatsapp.png" alt="" style="width: 25px; margin-right: 10px;">
             {{ 'sideMenu.whatsapp' | translate }}
         </h5>
         <div class="page-content">
@@ -60,10 +60,10 @@
                             [colorDark]="'#02A43BFF'" class="qr-class"></qrcode>
                         <div class="locked">
                             <img *ngIf="qrCode && clientStatus === 'connected' || qrCode && clientStatus === 'wating'"
-                                src="assets/imgs/ressorces/qr-locked.png" alt="" class="locked-qr">
+                                src="assets/imgs/resources/qr-locked.png" alt="" class="locked-qr">
                         </div>
                         <label *ngIf="!qrCode" class="locked">
-                            <img src="assets/imgs/ressorces/qr-locked.png" alt="" class="locked-qr">
+                            <img src="assets/imgs/resources/qr-locked.png" alt="" class="locked-qr">
                             {{ 'whatsapp.qrCodeError' | translate }} <br>
                             <button class="btn btn-block btn-outline-success" disabled
                                 *ngIf="clientStatus === 'connected'">{{ 'whatsapp.connected' |
@@ -71,7 +71,7 @@
                         </label>
                     </div>
                     <div *ngIf="waitingQr || inProcess" class="locked">
-                        <img src="assets/img/ressorces/qr-locked.png" alt="" class="locked-qr">
+                        <img src="assets/img/resources/qr-locked.png" alt="" class="locked-qr">
                         <span class="spinner-border spinner-border-sm me-2"></span>
                     </div>
                 </div>
@@ -87,7 +87,7 @@
                     </label>
                     <br>
                     <div *ngIf="showInstructions" class="instructions">
-                        <img src="assets/img/ressorces/qr_code_scanner.png" alt="" style="width: 35px;"><br>
+                        <img src="assets/img/resources/qr_code_scanner.png" alt="" style="width: 35px;"><br>
                         {{ 'whatsapp.description' | translate }}
                         <p>
                             {{ 'whatsapp.step1' | translate }} <br>
@@ -142,7 +142,7 @@
                 </form>
                 <div *ngIf="clientStatus === 'wating'">
                     <div class="row d-flex align-items-cente justify-content-center">
-                        <!-- <img src="assets/img/ressorces/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;"> -->
+                        <!-- <img src="assets/img/resources/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;"> -->
                         <div class="spinner-border text-primary" role="status" style="margin: 20px;">
                             <span class="visually-hidden">{{ "loading" | translate }}...</span>
                         </div>

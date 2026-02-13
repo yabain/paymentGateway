@@ -19,7 +19,7 @@ export class PortalComponent {
   gettingUserData: boolean = true;
   userData: any;
   userId!: string;
-  cover: string = "../../../assets/img/ressorces/cover.png";
+  cover: string = "../../../assets/img/resources/cover.png";
   currentUser: any;
   en: any = '';
   fr: any = '';

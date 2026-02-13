@@ -1,7 +1,7 @@
-<div class="auth-body" *ngIf="!wattingData">
+<div class="auth-body" *ngIf="!waitingData">
   <router-outlet></router-outlet>
 </div>
-<div *ngIf="wattingData" class="load-auth-body">
+<div *ngIf="waitingData" class="load-auth-body">
     <div class="d-flex justify-content-center" style="margin: 50px">
       <div class="spinner-border" role="status"></div>
     </div>

@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 export class AuthenticationComponent  implements OnInit {
 
   segmentValue = '1';
-  wattingData: boolean = true;
+  waitingData: boolean = true;
 
   constructor(
     private systemService: SystemService,
@@ -28,11 +28,11 @@ export class AuthenticationComponent  implements OnInit {
     this.systemService.getRacineToshare()
       .then(data => {
         if (data) {
-          this.wattingData = false;
+          this.waitingData = false;
         }
       }).catch ((error: any) => {
         console.log('error: ', error)
-        this.wattingData = false;
+        this.waitingData = false;
       });
   }
 

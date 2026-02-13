@@ -32,7 +32,7 @@ export class ProfileComponent implements OnInit {
   loading2: boolean = false;
   loading3: boolean = true;
   userId: any;
-  cover: string = "assets/img/ressorces/cover.png";
+  cover: string = "assets/img/resources/cover.png";
   currentUser: any;
   countries: any;
   uploadingPicture = false;

@@ -42,7 +42,7 @@ export class CustomerDetailsComponent implements OnInit, OnDestroy {
   gettingUserData: boolean = true;
   userData: any;
   userId!: string;
-  cover: string = "assets/img/ressorces/cover.png";
+  cover: string = "assets/img/resources/cover.png";
   currentUser: any;
 
   constructor(

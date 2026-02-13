@@ -53,6 +53,8 @@
                                     </div>
                                     <div [ngClass]="serviceData?.isActive === true ? 'badge-success':  'badge-error'"
                                         *ngIf="currentUser && isAuthor(serviceData) || currentUser && isAdmin">
+                                        {{ serviceData?.isActive === true ? ('users.enabled' | translate) : ('users.disabled' |
+                                        translate) }}
                                     </div>
                                 </div>
                                 <div class="col-md-8">
@@ -275,7 +277,7 @@
                                 <div class="col-md-12" style="display: flex;
                                         justify-content: center;
                                         align-items: center;">
-                                    <img src="assets/img/ressorces/nts.png" alt="" style="max-width: 150px;
+                                    <img src="assets/img/resources/nts.png" alt="" style="max-width: 150px;
                                             height: auto;">
                                 </div>
                                 <div class="col-md-12" style="display: flex;
@@ -402,7 +404,7 @@
                         </div>
 
                         <div class="security-notice" *ngIf="currentUser">
-                            <img src="assets/img/ressorces/flutterwave.png" alt=""
+                            <img src="assets/img/resources/flutterwave.png" alt=""
                                 style="max-width: 100px; border-radius: 5px; margin-right: 10px;">
                             <p>{{ "payment.secureMessage" | translate }}</p>
                         </div>
@@ -430,7 +432,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="wating-msg">
-                        <img src="assets/img/ressorces/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;"
+                        <img src="assets/img/resources/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;"
                             *ngIf="!modalClosed && !transactionSucceded && !transactionFailed">
                         <!-- <div class="spinner-border" role="status" *ngIf="!modalClosed && !transactionSucceded && !transactionFailed"></div> -->
                         <p style="margin-top: 50px;" *ngIf="!modalClosed && !transactionSucceded && !transactionFailed">
@@ -439,7 +441,7 @@
                         </p>
 
 
-                        <img src="../../../assets/img/ressorces/tfailed.gif" alt="" style="max-width: 100px;;"
+                        <img src="../../../assets/img/resources/tfailed.gif" alt="" style="max-width: 100px;;"
                             *ngIf="!reOpen && transactionFailed">
                         <br>
                         <span style="color: red !important" *ngIf="!reOpen && transactionFailed">{{
@@ -453,7 +455,7 @@
                                 "payment.opening" | translate }}...</span>
                         </p>
 
-                        <img src="assets/img/ressorces/flutterwave.png" alt="" style="max-width: 100px;;"
+                        <img src="assets/img/resources/flutterwave.png" alt="" style="max-width: 100px;;"
                             *ngIf="!transactionSucceded && !transactionFailed">
                         <p style="margin-top: 50px;" *ngIf="showRetry && !transactionSucceded && !transactionFailed">
                             {{ "payment.processing-message4" | translate }}
@@ -464,7 +466,7 @@
                                 "payment.opening" | translate }}...</span>
                         </p>
 
-                        <img src="assets/img/ressorces/paymentDone.gif" alt="" style="max-width: 250px;;"
+                        <img src="assets/img/resources/paymentDone.gif" alt="" style="max-width: 250px;;"
                             *ngIf="transactionSucceded && !transactionFailed">
                         <p style="margin-top: 50px;" *ngIf="transactionSucceded && !transactionFailed">{{
                             'payment.paymentSuccess'

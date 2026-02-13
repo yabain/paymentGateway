@@ -697,7 +697,7 @@
     "title": "Services",
     "servicesProducts": "Produits / Services",
     "allServices": "Tous les services",
-    "activeServices": "Services actifs",
+    "addServices": "Ajouter un service",
     "disabledServices": "Services désactivés",
     "addService": "Ajouter un service",
     "personal": "Personnel",
@@ -721,7 +721,13 @@
     "alreadyPayMsg": "Vous avez déjà éffectué un paiement",
     "loginToPay": "Connexion / Payer",
     "loginToVote": "Connexion / Voter",
-    "imageTooLarge": "Image trop grande (max 1mb)"
+    "imageTooLarge": "Image trop grande (max 1mb)",
+    "myServices": "Mes services",
+    "allSystemServices": "Tous les services",
+    "list": "List des services",
+    "totalServices": "Tous les services",
+    "activeServices": "Services actifs",
+    "inactiveServices": "Services inactifs"
   },
   "personalizer": {
     "title": "Personnalisateur",

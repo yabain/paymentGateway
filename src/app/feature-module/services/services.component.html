@@ -43,10 +43,10 @@
                                     class="feather icon-refresh-ccw"></i></span></a>
                     </li>
 
-                    <li *ngIf="currentUser && !idParam">
+                    <li *ngIf="user && !idParam">
                         <a class="btn btn-primary" href="javascript:void(0);" data-bs-toggle="modal"
                             data-bs-target="#add_service"><i class="fa fa-plus-circle me-2" aria-hidden="true"></i>{{
-                            'services.addService' | translate }}</a>
+                            'services.addServices' | translate }}</a>
                     </li>
                 </ul>
             </div>
@@ -55,47 +55,80 @@
 </div>
 <!-- /Page Header -->
 
-<div class="row d-flex align-items-center justify-content-center"
-    *ngIf="!watingServicesList && servicesList?.length >= 1">
-    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3" *ngFor="let service of servicesList" style="text-align: center !important;">
-        <!-- <div class="packages card">
-            <app-item [plan]="plan"
-                (click)="navigateTo('/subscription/details/' + plan._id)"></app-item>
-            <div class="d-flex justify-content-center package-edit">
-                <button type="button" (click)="selectPlan(plan)" type="button" class="btn btn-secondary mt-1 me-1"
-                    data-bs-toggle="modal" data-bs-target="#package_details">
-                    <i class="feather icon-menu"></i>
-                </button>
-                <button class="btn btn-rounded btn-primary me-1" *ngIf="!isAuthor(plan) && plan.isActive"
-                    (click)="checkSbscriberStatus(plan)" data-bs-toggle="modal" data-bs-target="#subscriptionModal">{{
-                    'subscriptions.subscribe' | translate }}</button>
+<div class="super-admin-list-head">
+    <div class="row">
+        <div class="col-xl-3 col-md-6 d-flex">
+            <div class="card w-100">
+                <div class="card-body card-head">
+                    <div class="grid-info-item total-plane">
+                        <div class="grid-info">
+                            <span>{{ 'services.totalServices' | translate }}</span>
+                            <h4 *ngIf="gettingStatistics">{{ "loading" | translate }}...</h4>
+                            <h4 *ngIf="!gettingStatistics">{{ statistics.totalService }}</h4>
+                        </div>
+                        <div class="grid-head-icon">
+                            <i class="feather icon-package"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6 d-flex">
+            <div class="card w-100">
+                <div class="card-body card-head">
+                    <div class="grid-info-item active-plane">
+                        <div class="grid-info">
+                            <span>{{ 'services.activeServices' | translate }}</span>
+                            <h4 *ngIf="gettingStatistics">{{ "loading" | translate }}...</h4>
+                            <h4 *ngIf="!gettingStatistics">{{ statistics.activeService }}</h4>
+                        </div>
+                        <div class="grid-head-icon">
+                            <i class="feather icon-list"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6 d-flex">
+            <div class="card w-100">
+                <div class="card-body card-head">
+                    <div class="grid-info-item inactive-plane">
+                        <div class="grid-info">
+                            <span>{{ 'services.inactiveServices' | translate }}</span>
+                            <h4 *ngIf="gettingStatistics">{{ "loading" | translate }}...</h4>
+                            <h4 *ngIf="!gettingStatistics">{{ statistics.inactiveService }}</h4>
+                        </div>
+                        <div class="grid-head-icon">
+                            <i class="feather icon-pause-circle"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="col-xl-3 col-md-6 d-flex">
+            <div class="card w-100">
+                <div class="card-body card-head">
+                    <div class="grid-info-item total-type">
+                        <div class="grid-info">
+                            <span>{{ '......' | translate }}</span>
+                            <h4>00</h4>
+                        </div>
+                        <div class="grid-head-icon">
+                            <i class="feather icon-pocket"></i>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div> -->
+    </div>
+</div>
 
-        <div class="card">
-            <!-- <app-candidate *ngIf="currentUser && currentUser.email !== 'dkuser123@email.com'" [service]="service" (click)="navigateTo('/services/details/' + service._id)"></app-candidate>
-            <app-candidate *ngIf="!currentUser || currentUser.email === 'dkuser123@email.com'" [service]="service"></app-candidate> -->
-
-            <app-item *ngIf="currentUser && currentUser.email !== 'dkuser123@email.com'" [service]="service" (click)="navigateTo('/services/details/' + service._id)"></app-item>
-            <app-item *ngIf="!currentUser || currentUser.email === 'dkuser123@email.com'" [service]="service"></app-item>
-            <!-- <div [ngClass]="service?.isActive === true ? 'badge-success':  'badge-error'"
-                *ngIf="currentUser && isAuthor(service) || currentUser && isAdmin">
-            </div> -->
-            <div *ngIf="!watingServicesListStat && !service.test"> {{returnQuantity(service._id)}} Items</div>
-            <div class="d-flex justify-content-center package-edit" style="padding: 5px;">
-                <button type="button" (click)="selectService(service)" type="button" class="btn btn-secondary mt-1 me-1"
-                    data-bs-toggle="modal" data-bs-target="#package_details">
-                    <i class="feather icon-menu"></i>
-                </button>
-                <button class="btn btn-rounded btn-primary me-1" *ngIf="service.isActive && currentUser"
-                    (click)="checkSbscriberStatus(service)" data-bs-toggle="modal"
-                    data-bs-target="#subscriptionModal">
-                    {{ 'services.pay' | translate }}
-                    </button>
-                <button class="btn btn-rounded btn-primary me-1" *ngIf="!currentUser"
-                    (click)="navigateTo('/auth/login')">
-                    {{ 'services.loginToPay' | translate }}</button>
-            </div>
+<div class="row d-flex align-items-center justify-content-center"
+    *ngIf="!waitingServicesList && servicesList?.length >= 1">
+    <div class="col-sm-12 col-md-6 col-lg-5 col-xl-3" *ngFor="let service of servicesList" style="text-align: center !important;">
+        <div>
+            <app-item *ngIf="user && user.email !== 'dkuser123@email.com'" [service]="service" [user]="user" [systemData]="systemData"></app-item>
+            <app-item *ngIf="!user || user.email === 'dkuser123@email.com'" [service]="service" [systemData]="systemData"></app-item>
         </div>
 
         <!-- <div class="card" *ngFor="let plan of servicesList">
@@ -124,23 +157,23 @@
 
 <!-- Nothing to show -->
 <div class="row d-flex align-items-center justify-content-center"
-    *ngIf="!watingServicesList && servicesList?.length < 1">
+    *ngIf="!waitingServicesList && servicesList?.length < 1">
     <div style="display: flex;
         justify-content: center;
         align-items: center;
         height: 300px;">
-        <img src="../../../../assets/img/ressorces/nts.png" alt="" style="max-width: 150px;
+        <img src="../../../../assets/img/resources/nts.png" alt="" style="max-width: 150px;
         height: auto;">
         <br>
         {{ "nts" | translate }}
         <br><br>
         <!-- <a class="btn btn-primary m-2" href="javascript:void(0);" data-bs-toggle="modal"
             data-bs-target="#add_service"><i class="fa fa-plus-circle me-2" aria-hidden="true"></i>{{
-            'subscriptions.add' | translate }}</a> -->
+            'services.add' | translate }}</a> -->
     </div>
 </div>
 
-<div class="row d-flex align-items-center justify-content-center" *ngIf="watingServicesList">
+<div class="row d-flex align-items-center justify-content-center" *ngIf="waitingServicesList">
     <div style="display: flex;
         justify-content: center;
         align-items: center;
@@ -207,7 +240,7 @@
                         </div>
                         <div class="col-sm-12 col-md-6">
                             <div class="input-block mb-3">
-                                <label>{{ "subscriptions.name" | translate }}</label>
+                                <label>{{ "services.name" | translate }}</label>
                                 <input type="text" class="form-control" 
                                     [class.is-invalid]="submitted && form.get('title')?.invalid"
                                     placeholder="" formControlName="title" (input)="updateTitle()">
@@ -215,13 +248,13 @@
                         </div>
                         <div class="col-sm-12 col-md-6">
                             <div class="input-block mb-3">
-                                <label>{{ "subscriptions.subTitle" | translate }}</label>
+                                <label>{{ "services.subTitle" | translate }}</label>
                                 <input type="text" class="form-control" 
                                     [class.is-invalid]="submitted && form.get('subTitle')?.invalid"
                                     placeholder="" formControlName="subTitle" (input)="updateTitle()">
                             </div>
                         </div>
-                        <h6>{{ "subscriptions.optionTitle" | translate }}</h6>
+                        <h6>{{ "services.optionTitle" | translate }}</h6>
                         <div class="col-sm-12 col-md-12" formArrayName="options">
                             <div class="option-space" *ngFor="let option of optionsList.controls; let i = index"
                                 [formGroupName]="i">
@@ -234,12 +267,12 @@
                                     </div>
                                     <div class="col-sm-12 col-md-4">
                                         <div class="d-flex align-items-center mb-3">
-                                            <h6 class="mb-0">{{ "subscriptions.checkIfAvailable" | translate }}</h6>
+                                            <h6 class="mb-0">{{ "services.checkIfAvailable" | translate }}</h6>
                                             <div class="status-toggle">
                                                 <input [id]="'isActive' + i" formControlName="isActive" class="check"
                                                     type="checkbox">
                                                 <label [for]="'isActive' + i" class="checktoggle checkbox-bg">{{
-                                                    "subscriptions.status" | translate }}</label>
+                                                    "services.status" | translate }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -256,13 +289,13 @@
                             <div class="input-block mb-3">
                                 <label></label>
                                 <a class="btn btn-primary" href="javascript:void(0);" (click)="addOptions()"><i
-                                        class="fa fa-plus me-2" aria-hidden="true"></i> {{ "subscriptions.addOption" |
+                                        class="fa fa-plus me-2" aria-hidden="true"></i> {{ "services.addOption" |
                                     translate }}</a>
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-12">
                             <div class="input-block mb-3">
-                                <label>{{ "subscriptions.description" | translate }}</label>
+                                <label>{{ "services.description" | translate }}</label>
                                 <textarea type="text" class="form-control" 
                                     [class.is-invalid]="submitted && form.get('description')?.invalid"
                                     placeholder="Enter Description" formControlName="description"></textarea>
@@ -271,15 +304,15 @@
                         <div class="col-sm-12 col-md-6">
                             <div class="input-block mb-3">
                                 <label class="d-flex justify-content-between">
-                                    <span>{{ "subscriptions.price" | translate }}</span>
+                                    <span>{{ "services.price" | translate }}</span>
                                     <span class="text-primary"><i class="fa-solid fa-circle-exclamation me-2"></i>
-                                        {{ currentUser?.countryId.currency }}</span>
+                                        {{ user?.countryId.currency }}</span>
                                 </label>
                                 <div class="input-group">
                                     <input class="form-control" style="text-align: right" type="text" id="price"
                                         [class.is-invalid]="submitted && form.get('price')?.invalid"
                                         placeholder="" formControlName="price" (input)="formatAmount($event)" />
-                                    <!-- <span class="input-group-text">{{ currentUser?.countryId.currency }}</span> -->
+                                    <!-- <span class="input-group-text">{{ user?.countryId.currency }}</span> -->
                                 </div>
                             </div>
                         </div>
@@ -290,7 +323,7 @@
                         *ngIf="!watingCreation" (close)="ngOnDestroy()">{{ "action.cancel" | translate }}</button>
                     <button type="submit" class="btn btn-primary paid-continue-btn" [disabled]="watingCreation"
                         *ngIf="!watingCreation">
-                        {{ "subscriptions.create" | translate }}</button>
+                        {{ "services.create" | translate }}</button>
                     <button class="btn btn-primary paid-continue-btn" [disabled]="watingCreation"
                         *ngIf="watingCreation">
                         <div class="spinner-border" role="status"></div>
@@ -311,8 +344,8 @@
                     <div class="">
                         <span><i class="feather icon-trash" style="color: red; width: 100px !important;"></i></span>
                     </div>
-                    <h3>{{ "subscriptions.deletePlan" | translate }} ?</h3>
-                    <p>{{ "subscriptions.wantDeletePlan" | translate }} <b>{{selectedService?.title}}</b></p>
+                    <h3>{{ "services.deletePlan" | translate }} ?</h3>
+                    <p>{{ "services.wantDeletePlan" | translate }} <b>{{selectedService?.title}}</b></p>
                 </div>
                 <div class="modal-btn delete-action">
                     <div class="modal-footer justify-content-center p-0">
@@ -348,7 +381,7 @@
                     <p>
                         {{ selectedService?.description}}
                     </p>
-                    <div style="text-align: left"> {{ "subscriptions.author" | translate }}: <b>{{
+                    <div style="text-align: left"> {{ "services.author" | translate }}: <b>{{
                             showName(selectedService?.author) }}</b></div><br>
                     <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
                         {{ "action.close" | translate }}
@@ -357,165 +390,5 @@
             </div>
         </div>
         <!-- /.modal-content -->
-    </div>
-</div>
-
-<div class="modal fade" id="subscriptionModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content" *ngIf="!goToProceed">
-            <div class="modal-header">
-                <h5 class="modal-title align-items-center justify-content-center" id="staticBackdropLabel">
-                    {{ selectedService?.title }}
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                    (close)="ngOnDestroy()"></button>
-            </div>
-            <div class="modal-body">
-                <span style="font-size: 1rem; margin-bottom: 20px;" *ngIf="!checkingSubscriptionStatus">{{
-                    selectedService?.subTitle }}</span>
-                <h2 *ngIf="selectedService?.price > 0">{{ selectedService?.price }} {{ selectedService?.currency }}</h2>
-                <h2 *ngIf="selectedService?.price === 0">{{ "item.free" | translate }}</h2>
-                <ul>
-                    <li *ngFor="let option of optionsData" style="margin-bottom: 5px;">
-                        <span *ngIf="option.isActive"><i class="fa-solid fa-circle-check"></i> {{ option.title
-                            }}</span>
-                        <span *ngIf="!option.isActive"><i class="feather icon-x-circle"></i><s> {{ option.title
-                                }}</s></span>
-                    </li>
-                </ul>
-                <br><label htmlFor="bankCode" *ngIf="!checkingSubscriptionStatus && !isSubscriber">{{
-                    "subscriptions.quantity" | translate }}</label>
-
-                <input [(ngModel)]="quantity" (input)="onQuantity()" type="number" class="form-control"
-                    id="member_search1" placeholder="Search Customer" [disabled]="proceed">
-                <br>
-                <div class="step3">
-                    <div *ngIf="checkingSubscriptionStatus">
-                        <div style="display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        height: 300px;">
-                            <div class="spinner-border" role="status"></div>
-                        </div>
-                    </div>
-
-                    <div *ngIf="!checkingSubscriptionStatus && isSubscriber" style="text-align: center;">
-                        <div class="fee-breakdown">
-                            {{ "services.alreadyPayMsg" | translate }}
-                        </div>
-                        <button type="button" class="btn btn-primary btn-lg me-1 mb-2" style="padding: 5px;"
-                            (click)="isSubscriber = false">{{ "services.payAgain" | translate }}</button>
-                    </div>
-                    <div *ngIf="!checkingSubscriptionStatus && !isSubscriber">
-                        <div class="fee-breakdown">
-                            <h4><i class="fas fa-receipt"></i> {{ "subscriptions.summary" | translate }}</h4>
-                            <div class="fee-item">
-                                <span>
-                                    {{ 'payment.amount' | translate }}:
-                                    {{ selectedService?.price }}
-                                    {{ selectedService?.currency }}</span>
-                            </div>
-                            <div class="fee-item">
-                                <span>{{ "subscriptions.quantity" | translate }}</span>
-                                <span> {{ quantity }}
-                                </span>
-                            </div>
-                            <div class="fee-item">
-                                <span>{{ "payment.taxes" | translate }} ≈ </span>
-                                <span>
-                                    {{ taxesAmount }}
-                                    {{ selectedService?.currency }}</span>
-                            </div>
-                            <div class="fee-total">
-                                <span>{{ "payment.total" | translate }}</span>
-                                <span>
-                                    {{ paymentWithTaxes }}
-                                    {{ selectedService?.currency }}</span>
-                            </div>
-                        </div>
-
-                        <div class="security-notice" *ngIf="currentUser">
-                            <img src="assets/img/ressorces/flutterwave.png" alt=""
-                                style="max-width: 100px; border-radius: 5px; margin-right: 10px;">
-                            <p>{{ "payment.secureMessage" | translate }}</p>
-                        </div>
-                        <div class="action-buttons">
-                            <button class="btn btn-cancel" data-bs-dismiss="modal" (close)="ngOnDestroy()"
-                                *ngIf="!checkingSubscriptionStatus && !proceed">
-                                {{ "action.close" | translate }}
-                            </button>
-                            <button class="btn2 btn-confirm"
-                                *ngIf="!checkingSubscriptionStatus && !isSubscriber && !proceed && quantity > 0"
-                                (click)="pay()" [disabled]="quantity < 1">
-                                <i class="fas fa-check"></i> {{ "payment.proceed" | translate }}
-                            </button>
-                        </div>
-                        <div class="row d-flex align-items-center justify-content-center" style="justify-content: center;
-                        align-items: center;" *ngIf="proceed">
-                            <div class="spinner-border" role="status"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal-content" *ngIf="goToProceed">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="wating-msg">
-                        <img src="assets/img/ressorces/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;"
-                            *ngIf="!modalClosed && !transactionSucceded && !transactionFailed">
-                        <!-- <div class="spinner-border" role="status" *ngIf="!modalClosed && !transactionSucceded && !transactionFailed"></div> -->
-                        <p style="margin-top: 50px;" *ngIf="!modalClosed && !transactionSucceded && !transactionFailed">
-                            {{ "payment.processing-message1" | translate }}<br>
-                            {{ "payment.processing-message2" | translate }}
-                        </p>
-
-
-                        <img src="../../../assets/img/ressorces/tfailed.gif" alt="" style="max-width: 100px;;"
-                            *ngIf="!reOpen && transactionFailed">
-                        <br>
-                        <span style="color: red !important" *ngIf="!reOpen && transactionFailed">{{
-                            "payment.transactionFailed" | translate }}</span>
-                        <p style="margin-top: 50px;" *ngIf="!reOpen && transactionFailed">
-                            Click
-                            <span class="retry" (click)="openPayin()" *ngIf="!reOpen && transactionFailed">{{
-                                "payment.hereToRetry" | translate
-                                }}.</span>
-                            <span *ngIf="reOpen && transactionFailed">{{ "payment.hereToRetry" | translate }}. {{
-                                "payment.opening" | translate }}...</span>
-                        </p>
-
-                        <img src="assets/img/ressorces/flutterwave.png" alt="" style="max-width: 100px;;"
-                            *ngIf="!transactionSucceded && !transactionFailed">
-                        <p style="margin-top: 50px;" *ngIf="showRetry && !transactionSucceded && !transactionFailed">
-                            {{ "payment.processing-message4" | translate }}
-                            <span class="retry" (click)="openPayin()" *ngIf="!reOpen && !transactionSucceded">{{
-                                "payment.hereToRetry" | translate
-                                }}.</span>
-                            <span *ngIf="reOpen && !transactionSucceded">{{ "payment.hereToRetry" | translate }}. {{
-                                "payment.opening" | translate }}...</span>
-                        </p>
-
-                        <img src="assets/img/ressorces/paymentDone.gif" alt="" style="max-width: 250px;;"
-                            *ngIf="transactionSucceded && !transactionFailed">
-                        <p style="margin-top: 50px;" *ngIf="transactionSucceded && !transactionFailed">{{
-                            'payment.paymentSuccess'
-                            | translate }}</p>
-
-                        <p style="margin-top: 50px;"
-                            *ngIf="!transactionSucceded && showRetry || !transactionSucceded && transactionSucceded">
-                            <br>
-                            {{ 'payment.ifPaymentConfirmed' | translate }}
-                        </p>
-
-                        <br>
-                        <button class="btn btn-primary" *ngIf="showRetry || transactionSucceded" (click)="ngOnDestroy()"
-                            data-bs-dismiss="modal"> {{ "action.close" | translate }} </button>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </div>

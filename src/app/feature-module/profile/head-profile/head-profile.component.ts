@@ -26,7 +26,7 @@ export class HeadProfileComponent implements OnInit {
   loading: boolean = false;
   loading2: boolean = false;
   userId: any;
-  cover: string = "assets/img/ressorces/cover.png";
+  cover: string = "assets/img/resources/cover.png";
   countries: any;
   uploadingPicture = false;
   uploadingCover = false;

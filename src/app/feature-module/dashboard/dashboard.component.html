@@ -10,7 +10,7 @@
     <div class="col-xl-5 d-flex">
       <div class="dash-user-card w-100 element-shadow-box-primary">
         <h4>
-          <img src="assets/img/ressorces/icon.png" alt="" style="max-width: 20px; margin-right: 10px;">
+          <img src="assets/img/resources/icon.png" alt="" style="max-width: 20px; margin-right: 10px;">
           {{ 'dashboard.welcome' | translate }} {{ userName }} !
         </h4>
         <p>{{ 'dashboard.subTitleWelcome' | translate }}</p>
@@ -36,7 +36,7 @@
           <div class="company-detail-card w-100 element-shadow-box-secondary">
             <div class="company-icon">
               <!-- <img src="assets/img/icons/dash-card-icon-01.svg" alt=""> -->
-              <img src="assets/img/ressorces/icon_instant.png" alt="">
+              <img src="assets/img/resources/icon_instant.png" alt="">
             </div>
             <div class="dash-comapny-info">
               <h6 style="font-size: medium; color: black !important;">{{ "dashboard.payment" | translate }}</h6>
@@ -48,7 +48,7 @@
         <div class="col-lg-4 col-sm-6 d-flex" [routerLink]="'/subscription/packages'">
           <div class="company-detail-card bg-info-light w-100 element-shadow-box-primary">
             <div class="company-icon">
-              <img src="assets/img/ressorces/icon_recursive.png" alt="">
+              <img src="assets/img/resources/icon_recursive.png" alt="">
             </div>
             <div class="dash-comapny-info">
               <h6 style="font-size: medium; color: black !important;">{{ "dashboard.subscriptions" | translate }}</h6>
@@ -60,7 +60,7 @@
         <div class="col-lg-4 col-sm-6 d-flex" [routerLink]="'/fundraisings'">
           <div class="company-detail-card w-100 element-shadow-box-secondary">
             <div class="company-icon">
-              <img src="assets/img/ressorces/icon_fundraising.png" alt="" style="width: 60px; height: 60px;">
+              <img src="assets/img/resources/icon_fundraising.png" alt="" style="width: 60px; height: 60px;">
             </div>
             <div class="dash-comapny-info">
               <h6 style="font-size: medium; color: black !important;">{{ "dashboard.fundraising" | translate }}</h6>
@@ -92,12 +92,12 @@
           </div>
           <div class="progress progress-sm mt-3">
             <div class="progress-bar bg-6" role="progressbar" aria-valuemax="100"
-              [style]="'width: ' + userStats?.pourcentage +'%'" aria-valuenow="75" aria-valuemin="0"></div>
+              [style]="'width: ' + userStats?.percentage +'%'" aria-valuenow="75" aria-valuemin="0"></div>
           </div>
           <p class="text-muted mt-3 mb-0">
             <img src="assets/img/new/loader.gif" width="15px" alt="" *ngIf="gettingUserStats">
             <span *ngIf="!gettingUserStats"
-              [ngClass]="userStats?.pourcentage > 0 ? 'text-success me-1' : 'text-danger me-1'">{{userStats.pourcentage}}%<i
+              [ngClass]="userStats?.percentage > 0 ? 'text-success me-1' : 'text-danger me-1'">{{userStats.percentage}}%<i
                 class="feather icon-chevrons-up"></i></span>
             {{ "dashboard.sinceLastWeek" | translate }}
           </p>
@@ -146,12 +146,12 @@
           </div>
           <div class="progress progress-sm mt-3">
             <div class="progress-bar bg-6" role="progressbar" aria-valuemax="100"
-              [style]="'width: ' + plansStats?.pourcentage +'%'" aria-valuenow="75" aria-valuemin="0"></div>
+              [style]="'width: ' + plansStats?.percentage +'%'" aria-valuenow="75" aria-valuemin="0"></div>
           </div>
           <p class="text-muted mt-3 mb-0">
             <img src="assets/img/new/loader.gif" width="15px" alt="" *ngIf="gettingPlansStats">
             <span *ngIf="!gettingUserStats"
-              [ngClass]="plansStats?.pourcentage > 0 ? 'text-success me-1' : 'text-danger me-1'">{{plansStats.pourcentage}}%<i
+              [ngClass]="plansStats?.percentage > 0 ? 'text-success me-1' : 'text-danger me-1'">{{plansStats.percentage}}%<i
                 class="feather icon-chevrons-up"></i></span>
             {{ "dashboard.sinceLastWeek" | translate }}
           </p>
@@ -249,7 +249,7 @@
         <div class="card-body p-0">
           <div class="table-responsive">
             <h2 class="nothing" style="text-align: center !important;" *ngIf="transactionList.length < 1">
-              <img src="assets/img/ressorces/nothing.webp" alt="" class="nothing-to-show-img"
+              <img src="assets/img/resources/nothing.webp" alt="" class="nothing-to-show-img"
                 style="max-width: 150px;" /><br />
               <p style="color: #3a3a3a">No transactions yet</p>
             </h2>

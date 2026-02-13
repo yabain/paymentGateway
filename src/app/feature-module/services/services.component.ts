@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -28,7 +28,7 @@ interface data {
   styleUrls: ['./services.component.scss'],
 })
 export class ServicesComponent implements OnInit, OnDestroy {
-  currentUser!: any;
+  @Input('user') user!: any;
   statistics!: any;
   title: string = '';
   subTitle: string = '';
@@ -43,18 +43,18 @@ export class ServicesComponent implements OnInit, OnDestroy {
   form: FormGroup;
   watingCreation: boolean = false;
   submitted: boolean = false;
-  watingServicesList: boolean = true;
+  waitingServicesList: boolean = true;
   servicesList: any;
   servicesListBackup: any;
   selectedService: any;
-  wattingStatus: boolean = false;
+  waitingStatus: boolean = false;
   isAdmin: boolean = false;
   isAdminRoute: boolean = false;
   activeSearch: boolean = false;
   optionsData: any = [];
   searchString: string = '';
-  checkingSubscriptionStatus: boolean = true;
-  isSubscriber: boolean = true;
+  checkingSubscriptionStatus: boolean = true; // -------
+  isSubscriber: boolean = true; // -----
   proceed: boolean = false;
   private destroy$ = new Subject<void>();
   private pollTimer: any;
@@ -73,7 +73,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
   public selectedValue2 = '';
   selectedList2: data[] = [{ value: 'Fixed' }, { value: 'Percentage' }];
   public toggleData = false;
-  quantity: number = 1;
+  quantity: number = 1; // ---
   estimation: number = 0;
   goToProceed: boolean = false;
   txRef: string;
@@ -84,8 +84,9 @@ export class ServicesComponent implements OnInit, OnDestroy {
   reOpen: boolean = false;
   transactionSucceded: boolean = false;
   transactionFailed: boolean = false;
-  watingServicesListStat: boolean = true;
-  servicesListStat: any
+  waitingServicesListStat: boolean = true;
+  servicesListStat: any;
+  systemData: any;
 
   openContent() {
     this.toggleData = !this.toggleData;
@@ -108,7 +109,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getId();
     this.scrollToTop();
-    this.getCurrentUser();
+    this.getUserData();
     this.serviceForm();
     this.getSystemData();
     this.transactionRef = this.paymentService.generateId();
@@ -124,69 +125,6 @@ export class ServicesComponent implements OnInit, OnDestroy {
     if (idParam && idParam !== 'null' && idParam !== 'undefined') {
       this.idParam = idParam;
     }
-  }
-
-  calculateTaxesAmount(): number {
-    this.estimation = this.quantity * this.selectedService.price;
-    if (this.isElection) {
-      if (this.quantity === 10) {
-        this.estimation = 900;
-      }
-      if (this.quantity === 20) {
-        this.estimation = 1800;
-      }
-      if (this.quantity === 100) {
-        this.estimation = 9000;
-      }
-    }
-    return this.aroundValue(this.estimation * (this.invoiceTaxes / 100));
-  }
-
-  aroundValue(val) {
-    return Math.ceil(val);
-  }
-
-  paymentWithTaxesCalculation() {
-    return this.aroundValue(this.estimation + this.calculateTaxesAmount());
-  }
-
-  onQuantity() {
-    this.quantity = this.arrondirParExces(this.quantity);
-    this.taxesAmount = this.calculateTaxesAmount();
-    this.paymentWithTaxes = this.paymentWithTaxesCalculation();
-  }
-
-  arrondirParExces(nombre) {
-    if (!Number.isFinite(nombre)) throw new Error("Invalide");
-    return Number.isInteger(nombre) ? nombre : Math.ceil(nombre);
-  }
-
-
-  isAuthor(service: any, user: any = this.currentUser) {
-    // console.log('service: ', service)
-    return user._id.toString() === service.author._id.toString() ? true : false;
-  }
-
-  selectService(service: any) {
-    this.selectedService = service;
-    this.quantity = 1;
-    this.optionsData = service ? service.options : [];
-    this.estimation = this.selectedService.price;
-    this.taxesAmount = this.calculateTaxesAmount();
-    this.paymentWithTaxes = this.paymentWithTaxesCalculation();
-    // console.log('options: ', service)
-  }
-
-  pay() {
-    if (!this.selectedService) return;
-    this.proceed = true;
-    console.log('proceed: ', this.proceed);
-    this.setTransactionData();
-    console.log('transactionData: ', this.transactionData);
-    setTimeout(() => {
-      this.goToProceed = true;
-      this.proceedPayToService();
-    }, 2000);
   }
 
   public searchData(value: string): void {
@@ -211,32 +149,21 @@ export class ServicesComponent implements OnInit, OnDestroy {
 
   getMyStat() {
     this.gettingStatistics = true;
-    if (this.isAdmin) {
-      this.servicesService.getServiceStatistics().subscribe((data: any) => {
-        this.statistics = data;
-        this.gettingStatistics = false;
-      });
-    } else {
-      this.servicesService.getMyServiceStatistics().subscribe((data: any) => {
-        this.statistics = data;
-        this.gettingStatistics = false;
-      });
-    }
-  }
+    const request$ = this.isAdmin
+      ? this.servicesService.getServiceStatistics()
+      : this.servicesService.getMyServiceStatistics();
 
-  checkSbscriberStatus(service) {
-    this.selectService(service);
-    this.checkingSubscriptionStatus = true;
-    this.servicesService
-      .checkSbscriberStatus(this.selectedService._id)
-      .then((data: any) => {
-        if (data.existingSubscription && data.status) {
-          this.isSubscriber = true;
-        } else {
-          this.isSubscriber = false;
-        }
-        this.checkingSubscriptionStatus = false;
-      });
+    request$.subscribe({
+      next: (data: any) => {
+        this.statistics = data;
+        this.gettingStatistics = false;
+      },
+      error: (error) => {
+        console.error('Error while loading services stats: ', error);
+        this.statistics = null;
+        this.gettingStatistics = false;
+      },
+    });
   }
 
   selectImg(imageUrl) {
@@ -248,42 +175,6 @@ export class ServicesComponent implements OnInit, OnDestroy {
     this.servicesList = this.servicesListBackup;
   }
 
-  getMyServicesList(userId: string = this.currentUser._id) {
-    this.watingServicesList = true;
-    if (this.isAdmin) {
-      this.servicesService.getAllServicesList(userId).subscribe((data: any) => {
-        this.watingServicesList = false;
-        this.servicesList = data;
-        this.servicesListBackup = data;
-        console.log('servicesListBackup geted: ', this.servicesListBackup);
-      });
-    } else {
-      this.servicesService
-        .getMyServicesList(userId)
-        .subscribe((data: any) => {
-          this.watingServicesList = false;
-          this.servicesList = data;
-          this.servicesListBackup = data;
-          this.getMyServicesListStat(userId);
-        });
-    }
-  }
-
-  getMyServicesListStat(userId: string = this.currentUser._id) {
-    this.watingServicesListStat = true;
-    this.servicesService
-      .getMyServicesListStat(userId)
-      .subscribe((data: any) => {
-        console.log('servicesListStat geted: ', data);
-        this.servicesListStat = data;
-        this.watingServicesListStat = false;
-      });
-  }
-
-  returnQuantity(serviceId: string) {
-    const resp = this.servicesListStat.find(item => item.serviceId === serviceId);
-    return resp ? resp.quantity : 0;
-  }
 
   refresh() {
     this.getMyStat();
@@ -291,56 +182,23 @@ export class ServicesComponent implements OnInit, OnDestroy {
     this.scrollToTop();
   }
 
-  getCurrentUser() {
-    this.userService.getCurrentUser().then((user: any) => {
-      if (!user) {
-        this.getMyServicesList(this.idParam);
-        return console.log('No user')
-      };
-      this.currentUser = user;
-      // this.idParam = user._id;
-      // console.log('current user: ', user)
-      if (this.isAdminRoute && user.isAdmin) this.isAdmin = true;
-      this.currency = user.countryId.currency;
+  getUserData() {
+    if (!this.user || this.user === 'undefined' || this.user === null || this.user === 'null') {
+      this.userService.getCurrentUser().then((user: any) => {
+        if (!user) {
+          return this.getMyServicesList(this.idParam);
+        };
+        this.user = user;
+        if (this.isAdminRoute && user.isAdmin) this.isAdmin = true;
+        this.currency = user.countryId.currency;
+        return this.refresh();
+      });
+    } else {
+      this.idParam = this.user._id;
+      if (this.isAdminRoute && this.user.isAdmin) this.isAdmin = true;
+      this.currency = this.user.countryId.currency;
       return this.refresh();
-    });
-  }
-
-  formatAmount(event: any) {
-    let value = event.target.value.replace(/\s/g, '');
-    value = value.replace(/\D/g, '');
-
-    value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-
-    this.price = value;
-    event.target.value = value;
-  }
-
-  getCleanAmount(): number {
-    const cleanValue = this.price.replace(/\s/g, '');
-    return parseFloat(cleanValue) || 0;
-  }
-
-  serviceForm() {
-    this.form = new FormGroup({
-      title: new FormControl(this.title, {
-        validators: [Validators.required, Validators.minLength(3)],
-      }),
-      imageUrl: new FormControl(this.imageUrl),
-      isActive: new FormControl(true),
-      currency: new FormControl(this.currentUser?.countryId.currency),
-      subTitle: new FormControl('', {
-        validators: [Validators.required, Validators.minLength(3)],
-      }),
-      description: new FormControl('', { validators: [Validators.required] }),
-      price: new FormControl(this.price, { validators: [Validators.required] }),
-      options: this.fb.array([]),
-    });
-    this.addOptions();
-  }
-
-  formValid() {
-    return this.form.valid && this.optionsList.valid;
+    }
   }
 
   addOptions() {
@@ -379,8 +237,102 @@ export class ServicesComponent implements OnInit, OnDestroy {
     this.subTitle = this.form.value.subTitle;
   }
 
+  navigateTo(route) {
+    if (!this.user && route === '/auth/login') {
+      this.storage.setStorage(environment.memory_link, this.url);
+    }
+    this.ngOnDestroy();
+    this.router.navigate([route]);
+  }
+
+  closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+      modal.classList.remove('show');
+      modal.setAttribute('style', 'display: none;');
+    }
+
+    document.body.classList.remove('modal-open');
+    document.body.removeAttribute('style');
+    document
+      .querySelectorAll('.modal-backdrop')
+      .forEach((backdrop) => backdrop.remove());
+  }
+
+  scrollToTop(): void {
+    setTimeout(() => {
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      });
+    }, 100);
+  }
+
+  toggleActivation(serviceId) {
+    this.waitingStatus = false;
+    this.servicesService.changeStatus(serviceId).then((resp: any) => {
+      this.waitingStatus = false;
+      this.toastService.presentToast('success', 'Done !', '', 5000);
+      this.refresh();
+    });
+  }
+
+  deleteService(serviceId) {
+    this.servicesService.deleteService(serviceId).then((resp: any) => {
+      this.toastService.presentToast('success', 'Done !', '', 5000);
+      this.closeModal('delete_modal');
+      this.refresh();
+    });
+  }
+
+
+  copyUrl() {
+    let id = this.user.email === 'dkuser123@email.com' ? this.idParam : this.user._id;
+    const url = environment.frontUrl + '/services-list-user/services-front/' + id;
+    navigator.clipboard.writeText(url).then(() => {
+      this.copied = true;
+
+      // Réinitialise le message après 2 secondes
+      this.toastService.presentToast('success', 'Copied !', '', 5000);
+      setTimeout(() => this.copied = false, 2000);
+    }).catch(err => {
+      console.error('Impossible de copier : ', err);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    clearInterval(this.pollTimer);
+    this.proceed = false;
+    this.goToProceed = false;
+    this.showRetry = false;
+    this.reOpen = false;
+    this.transactionSucceded = false;
+    this.transactionFailed = false;
+    this.modalClosed = false;
+    this.transactionData = null;
+    this.txRef = '';
+    this.redirect_url = '';
+    this.selectedService = null;
+    this.optionsData = [];
+    this.searchString = '';
+    this.checkingSubscriptionStatus = true;
+  }
+
+
+
+
+
+
+
+
+
+
+
   onSubmit() {
-    if (!this.currentUser) return;
+    if (!this.user) return;
 
     this.submitted = true;
 
@@ -398,7 +350,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
     const raw = this.form.getRawValue();
 
     raw.price = +String(raw.price ?? '').replace(/\s/g, '') || 0;
-    raw.currency = this.currentUser.countryId.currency || 'XAF';
+    raw.currency = this.user.countryId.currency || 'XAF';
 
     const formData = new FormData();
     Object.entries(raw).forEach(([key, value]) => {
@@ -450,40 +402,118 @@ export class ServicesComponent implements OnInit, OnDestroy {
       },
     );
   }
-
-  verifytransactionData(transactionData): boolean {
-    if (transactionData.payment < 100) {
-      return false;
-    }
-    return true;
+  getSystemData() {
+    this.systemService.getSystemData().subscribe((resp: any) => {
+      this.systemData = resp;
+      this.invoiceTaxes = resp ? resp.invoiceTaxes : 0;
+    });
   }
 
-  async proceedPayToService() {
-    if (!this.verifytransactionData(this.transactionData)) return;
-    this.proceed = true;
-    await this.fw.loadFlutterwaveScript();
-    this.paymentService
-      .proceedPayment(this.transactionData)
-      .subscribe((res: any) => {
-        if (!res) {
-          this.proceed = false;
-          this.toastService.presentToast('error', 'Error', res.message);
+  showName(userData) {
+    return this.userService.showName(userData);
+  }
+  setTransactionData() {
+    this.transactionData = {
+      transactionRef: this.transactionRef,
+      estimation: this.estimation,
+      invoiceTaxes: this.invoiceTaxes,
+      taxesAmount: this.calculateTaxesAmount(),
+      paymentWithTaxes: this.paymentWithTaxesCalculation(),
+
+      senderId: this.user._id,
+      senderName: this.showName(this.user),
+      senderEmail: this.user.email,
+      senderContact: this.user.phone,
+      senderCountry: this.user.countryId.name,
+      senderCurrency: this.selectedService.currency,
+
+      raisonForTransfer: this.paymentService.transactionType.SERVICE,
+      userId: this.user._id,
+
+      receiverName: this.showName(this.selectedService.author),
+      receiverEmail: this.selectedService.author.email,
+      receiverContact: this.selectedService.author.phone,
+      serviceId: this.selectedService._id,
+      receiverCurrency: this.selectedService.currency,
+      quantity: this.quantity,
+      receiverAmount: this.getCleanAmount(),
+
+      receiverId: this.selectedService.author._id,
+
+      status: this.paymentService.status.PAYINPENDING,
+      transactionType: this.paymentService.transactionType.SERVICE,
+    };
+  }
+
+  checkSubscriberStatus(service) {
+    this.selectService(service);
+    this.checkingSubscriptionStatus = true;
+    this.servicesService
+      .checkSubscriberStatus(this.selectedService._id)
+      .then((data: any) => {
+        if (data.existingSubscription && data.status) {
+          this.isSubscriber = true;
         } else {
-          this.txRef = res.txRef;
-          this.redirect_url = res.redirect_url;
-          this.handleRequest();
+          this.isSubscriber = false;
         }
+        this.checkingSubscriptionStatus = false;
       });
   }
 
-  openModal() {
-    this.showRetry = false;
+
+  selectService(service: any) {
+    this.selectedService = service;
+    this.quantity = 1;
+    this.optionsData = service ? service.options : [];
+    this.estimation = this.selectedService.price;
+    this.taxesAmount = this.calculateTaxesAmount();
+    this.paymentWithTaxes = this.paymentWithTaxesCalculation();
+  }
+
+  calculateTaxesAmount(): number {
+    this.estimation = this.quantity * this.selectedService.price;
+    if (this.isElection) {
+      if (this.quantity === 10) {
+        this.estimation = 900;
+      }
+      if (this.quantity === 20) {
+        this.estimation = 1800;
+      }
+      if (this.quantity === 100) {
+        this.estimation = 9000;
+      }
+    }
+    return this.aroundValue(this.estimation * (this.invoiceTaxes / 100));
+  }
+
+
+  pay() {
+    if (!this.selectedService) return;
+    this.proceed = true;
+    this.setTransactionData();
     setTimeout(() => {
-      this.showRetry = true;
-      this.reOpen = false;
-    }, 10000);
-    this.startPolling();
-    return window.open(this.redirect_url, '_blank', 'width=800,height=800');
+      this.goToProceed = true;
+      this.proceedPayToService();
+    }, 2000);
+  }
+
+  onQuantity() {
+    this.quantity = this.arrondirParExces(this.quantity);
+    this.taxesAmount = this.calculateTaxesAmount();
+    this.paymentWithTaxes = this.paymentWithTaxesCalculation();
+  }
+
+  returnQuantity(serviceId: string) {
+    const resp = this.servicesListStat.find(item => item.serviceId === serviceId);
+    return resp ? resp.quantity : 0;
+  }
+
+  aroundValue(val) {
+    return Math.ceil(val);
+  }
+
+  paymentWithTaxesCalculation() {
+    return this.aroundValue(this.estimation + this.calculateTaxesAmount());
   }
 
   startPolling() {
@@ -503,6 +533,16 @@ export class ServicesComponent implements OnInit, OnDestroy {
         console.warn('polling error', err);
       }
     }, 5 * 1000);
+  }
+
+  openModal() {
+    this.showRetry = false;
+    setTimeout(() => {
+      this.showRetry = true;
+      this.reOpen = false;
+    }, 10000);
+    this.startPolling();
+    return window.open(this.redirect_url, '_blank', 'width=800,height=800');
   }
 
   handleRequest() {
@@ -541,8 +581,6 @@ export class ServicesComponent implements OnInit, OnDestroy {
       resp?.data?.status ||
       resp?.status ||
       'pending';
-    console.log('resp: ', resp);
-    console.log('status: ', status);
     if (['successful', 'success'].includes(status.toLowerCase())) {
       this.transactionSucceded = true;
       this.transactionFailed = false;
@@ -572,6 +610,31 @@ export class ServicesComponent implements OnInit, OnDestroy {
     });
   }
 
+  verifytransactionData(transactionData): boolean {
+    if (transactionData.payment < 100) {
+      return false;
+    }
+    return true;
+  }
+
+  async proceedPayToService() {
+    if (!this.verifytransactionData(this.transactionData)) return;
+    this.proceed = true;
+    await this.fw.loadFlutterwaveScript();
+    this.paymentService
+      .proceedPayment(this.transactionData)
+      .subscribe((res: any) => {
+        if (!res) {
+          this.proceed = false;
+          this.toastService.presentToast('error', 'Error', res.message);
+        } else {
+          this.txRef = res.txRef;
+          this.redirect_url = res.redirect_url;
+          this.handleRequest();
+        }
+      });
+  }
+
   verifyAndClosePayin() {
     this.paymentService
       .verifyAndClosePayin(this.txRef)
@@ -593,130 +656,81 @@ export class ServicesComponent implements OnInit, OnDestroy {
       });
   }
 
-  navigateTo(route) {
-    if (!this.currentUser && route === '/auth/login') {
-      this.storage.setStorage(environment.memory_link, this.url);
-    }
-    this.ngOnDestroy();
-    this.router.navigate([route]);
-  }
-
-  getSystemData() {
-    this.systemService.getSystemData().subscribe((resp: any) => {
-      this.invoiceTaxes = resp ? resp.invoiceTaxes : 0;
-    });
-  }
-
-  showName(userData) {
-    return this.userService.showName(userData);
-  }
-
-  closeModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-      modal.classList.remove('show');
-      modal.setAttribute('style', 'display: none;');
-    }
-
-    document.body.classList.remove('modal-open');
-    document.body.removeAttribute('style');
-    document
-      .querySelectorAll('.modal-backdrop')
-      .forEach((backdrop) => backdrop.remove());
-  }
-
-  scrollToTop(): void {
-    setTimeout(() => {
-      window.scroll({
-        top: 0,
-        left: 0,
-        behavior: 'smooth',
+  getMyServicesList(userId: string = this.user._id) {
+    this.waitingServicesList = true;
+    if (this.isAdminRoute) {
+      this.servicesService.getAllServicesList(userId).subscribe((data: any) => {
+        this.waitingServicesList = false;
+        this.servicesList = data;
+        this.servicesListBackup = data;
       });
-    }, 100);
+    } else {
+      this.servicesService
+        .getMyServicesList(userId)
+        .subscribe((data: any) => {
+          this.waitingServicesList = false;
+          this.servicesList = data;
+          this.servicesListBackup = data;
+          this.getMyServicesListStat(userId);
+        });
+    }
   }
 
-  toggleActivation(serviceId) {
-    this.wattingStatus = false;
-    this.servicesService.changeStatus(serviceId).then((resp: any) => {
-      this.wattingStatus = false;
-      this.toastService.presentToast('success', 'Done !', '', 5000);
-      this.refresh();
+  getMyServicesListStat(userId: string = this.user._id) {
+    this.waitingServicesListStat = true;
+    this.servicesService
+      .getMyServicesListStat(userId)
+      .subscribe((data: any) => {
+        this.servicesListStat = data;
+        this.waitingServicesListStat = false;
+      });
+  }
+
+
+  formatAmount(event: any) {
+    let value = event.target.value.replace(/\s/g, '');
+    value = value.replace(/\D/g, '');
+
+    value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+
+    this.price = value;
+    event.target.value = value;
+  }
+
+  getCleanAmount(): number {
+    const cleanValue = this.price.replace(/\s/g, '');
+    return parseFloat(cleanValue) || 0;
+  }
+
+  serviceForm() {
+    this.form = new FormGroup({
+      title: new FormControl(this.title, {
+        validators: [Validators.required, Validators.minLength(3)],
+      }),
+      imageUrl: new FormControl(this.imageUrl),
+      isActive: new FormControl(true),
+      currency: new FormControl(this.user?.countryId.currency),
+      subTitle: new FormControl('', {
+        validators: [Validators.required, Validators.minLength(3)],
+      }),
+      description: new FormControl('', { validators: [Validators.required] }),
+      price: new FormControl(this.price, { validators: [Validators.required] }),
+      options: this.fb.array([]),
     });
+    this.addOptions();
   }
 
-  deleteService(serviceId) {
-    this.servicesService.deleteService(serviceId).then((resp: any) => {
-      this.toastService.presentToast('success', 'Done !', '', 5000);
-      this.closeModal('delete_modal');
-      this.refresh();
-    });
+  formValid() {
+    return this.form.valid && this.optionsList.valid;
   }
 
-  setTransactionData() {
-    this.transactionData = {
-      transactionRef: this.transactionRef,
-      estimation: this.estimation,
-      invoiceTaxes: this.invoiceTaxes,
-      taxesAmount: this.calculateTaxesAmount(),
-      paymentWithTaxes: this.paymentWithTaxesCalculation(),
-
-      senderId: this.currentUser._id,
-      senderName: this.showName(this.currentUser),
-      senderEmail: this.currentUser.email,
-      senderContact: this.currentUser.phone,
-      senderCountry: this.currentUser.countryId.name,
-      senderCurrency: this.selectedService.currency,
-
-      raisonForTransfer: this.paymentService.transactionType.SERVICE,
-      userId: this.currentUser._id,
-
-      receiverName: this.showName(this.selectedService.author),
-      receiverEmail: this.selectedService.author.email,
-      receiverContact: this.selectedService.author.phone,
-      serviceId: this.selectedService._id,
-      receiverCurrency: this.selectedService.currency,
-      quantity: this.quantity,
-      receiverAmount: this.getCleanAmount(),
-
-      receiverId: this.selectedService.author._id,
-
-      status: this.paymentService.status.PAYINPENDING,
-      transactionType: this.paymentService.transactionType.SERVICE,
-    };
+  arrondirParExces(nombre) {
+    if (!Number.isFinite(nombre)) throw new Error("Invalide");
+    return Number.isInteger(nombre) ? nombre : Math.ceil(nombre);
   }
 
 
-  copyUrl() {
-    let id = this.currentUser.email === 'dkuser123@email.com' ? this.idParam : this.currentUser._id;
-    const url = environment.frontUrl + '/services-list-user/services-front/' + id;
-    navigator.clipboard.writeText(url).then(() => {
-      this.copied = true;
-
-      // Réinitialise le message après 2 secondes
-      this.toastService.presentToast('success', 'Copied !', '', 5000);
-      setTimeout(() => this.copied = false, 2000);
-    }).catch(err => {
-      console.error('Impossible de copier : ', err);
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-    clearInterval(this.pollTimer);
-    this.proceed = false;
-    this.goToProceed = false;
-    this.showRetry = false;
-    this.reOpen = false;
-    this.transactionSucceded = false;
-    this.transactionFailed = false;
-    this.modalClosed = false;
-    this.transactionData = null;
-    this.txRef = '';
-    this.redirect_url = '';
-    this.selectedService = null;
-    this.optionsData = [];
-    this.searchString = '';
-    this.checkingSubscriptionStatus = true;
+  isAuthor(service: any, user: any = this.user) {
+    return user._id.toString() === service.author._id.toString() ? true : false;
   }
 }

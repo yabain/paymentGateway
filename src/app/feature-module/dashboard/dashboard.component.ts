@@ -61,7 +61,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   gettingUserStats: boolean = false;
   public userStats: any = {
     usersNumber: 0,
-    pourcentage: 0,
+    percentage: 0,
   };
   gettingExchangeRate: boolean = false;
   exchangeRate: any = [];

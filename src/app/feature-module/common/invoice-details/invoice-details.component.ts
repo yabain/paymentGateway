@@ -31,7 +31,7 @@ export class InvoiceDetailsComponent implements OnInit, OnDestroy {
   currentUser: any;
   status: string = 'transaction_initialized';
   planData: any
-  logoUrl: string = 'assets/img/ressorces/dk_logo.png';
+  logoUrl: string = 'assets/img/resources/dk_logo.png';
   qrCode: string;
   itemData: any;
 

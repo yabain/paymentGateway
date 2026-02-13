@@ -46,7 +46,7 @@ export class PackagesComponent implements OnInit, OnDestroy {
   plansList: any;
   plansListBackup: any;
   selectedPlan: any;
-  wattingStatus: boolean = false;
+  waitingStatus: boolean = false;
   isAdmin: boolean = false;
   isAdminRoute: boolean = false;
   activeSearch: boolean = false;
@@ -208,11 +208,11 @@ export class PackagesComponent implements OnInit, OnDestroy {
     }
   }
 
-  checkSbscriberStatus(plan) {
+  checkSubscriberStatus(plan) {
     this.selectPlan(plan);
     this.checkingSubscriptionStatus = true;
     this.subscriptionService
-      .checkSbscriberStatus(this.selectedPlan._id)
+      .checkSubscriberStatus(this.selectedPlan._id)
       .then((data: any) => {
         if (data.existingSubscription && data.status) {
           this.isSubscriber = true;
@@ -587,9 +587,9 @@ export class PackagesComponent implements OnInit, OnDestroy {
   }
 
   toggleActivation(planId) {
-    this.wattingStatus = false;
+    this.waitingStatus = false;
     this.subscriptionService.changeStatus(planId).then((resp: any) => {
-      this.wattingStatus = false;
+      this.waitingStatus = false;
       this.toastService.presentToast('success', 'Done !', '', 5000);
       this.refresh();
     });

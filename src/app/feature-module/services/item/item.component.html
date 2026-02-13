@@ -1,11 +1,229 @@
+<div class="card">
+    <div class="card-image" (click)="navigateTo('/services/details/' + service._id)">
+        <img [src]="service.imageUrl || picture" alt="Description de l'image">
+        <div class="overlay"></div>
+    </div>
 
-<div class="card-image">
-    <img [src]="service.imageUrl || picture" alt="Description de l'image">
+    <div class="card-content">
+        <div (click)="navigateTo('/services/details/' + service._id)">
+            <h2 style="color: #fff;">{{ service.title }}</h2>
+            <p class="subtitle">{{ service.subTitle }}</p>
+
+            <div class="details">
+                <span *ngIf="service.price > 0">{{ service.price }} {{ service.currency }}</span>
+                <span *ngIf="service.price === 0">{{ "item.free" | translate }}</span>
+                <p *ngIf="service.test">{{ service.test }} Items</p>
+                <!-- <span>from $120</span>
+            <span>JFK</span> -->
+            </div>
+        </div>
+
+        <!-- <button class="btn">Search Flight</button> -->
+        <!-- <span type="button" data-bs-toggle="modal"
+        [attr.data-bs-target]="'#package_details-' + service?._id">
+            <i class="feather icon-info"></i>
+        </span> -->
+        <button class="btn" *ngIf="user && service.isActive"
+            (click)="checkSubscriberStatus()" data-bs-toggle="modal"
+            [attr.data-bs-target]="'#subscriptionModal-' + service?._id">
+            {{ 'services.pay' | translate }}
+        </button>
+        <button class="btn" *ngIf="!user" (click)="navigateTo('/auth/login')">
+            {{ 'services.loginToPay' | translate }}</button>
+        <div [ngClass]="service?.isActive === true ? 'badge-success':  'badge-danger'" style="position: absolute;"
+            *ngIf="isAuthor(service)">
+        </div>
+    </div>
 </div>
-<div class="card-content">
-    <h3 class="card-title">{{ service.title }}</h3>
-    <p class="card-description">{{ service.subTitle }}</p>
-    <h5 *ngIf="service.price > 0">{{ service.price }} {{ service.currency }}</h5>
-    <h5 *ngIf="service.price === 0">{{ "item.free" | translate }}</h5>
-    <p *ngIf="service.test">{{ service.test }} Items</p>
+
+<div class="modal fade" [id]="'subscriptionModal-' + service?._id" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" [attr.aria-labelledby]="'staticBackdropLabel-' + service?._id" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" *ngIf="!goToProceed">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    (close)="ngOnDestroy()"></button>
+            </div>
+            <div class="modal-body">
+                <h2 class="modal-title align-items-center justify-content-center"
+                    [id]="'staticBackdropLabel-' + service?._id">
+                    {{ service?.title }}
+                </h2>
+                <span style="font-size: 1rem; margin-bottom: 20px;" *ngIf="!checkingSubscriptionStatus">{{
+                    service?.subTitle }}</span>
+                <h5 *ngIf="service?.price > 0">{{ service?.price }} {{ service?.currency }}</h5>
+                <h5 *ngIf="service?.price === 0">{{ "item.free" | translate }}</h5>
+                <ul>
+                    <li *ngFor="let option of optionsData" style="margin-bottom: 5px;">
+                        <span *ngIf="option.isActive"><i class="fa-solid fa-circle-check"></i> {{ option.title
+                            }}</span>
+                        <span *ngIf="!option.isActive"><i class="feather icon-x-circle"></i><s> {{ option.title
+                                }}</s></span>
+                    </li>
+                </ul>
+                <br><label htmlFor="bankCode" *ngIf="!checkingSubscriptionStatus && !isSubscriber">{{
+                    "subscriptions.quantity" | translate }}</label>
+
+                <input [(ngModel)]="quantity" (input)="onQuantity()" type="number" class="form-control"
+                    id="member_search1" placeholder="Search Customer" [disabled]="proceed"
+                    *ngIf="!checkingSubscriptionStatus">
+                <br>
+                <div class="step3">
+                    <div *ngIf="checkingSubscriptionStatus">
+                        <div style="display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 300px;">
+                            <div class="spinner-border" role="status"></div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="!checkingSubscriptionStatus && isSubscriber" style="text-align: center;">
+                        <div class="fee-breakdown">
+                            {{ "services.alreadyPayMsg" | translate }}
+                        </div>
+                        <button type="button" class="btn btn-primary btn-lg me-1 mb-2" style="padding: 5px;"
+                            (click)="isSubscriber = false">{{ "services.payAgain" | translate }}</button>
+                    </div>
+                    <div *ngIf="!checkingSubscriptionStatus && !isSubscriber">
+                        <div class="fee-breakdown">
+                            <h4><i class="fas fa-receipt"></i> {{ "subscriptions.summary" | translate }}</h4>
+                            <div class="fee-item">
+                                <span>
+                                    {{ 'payment.amount' | translate }}:
+                                    {{ service?.price }}
+                                    {{ service?.currency }}</span>
+                            </div>
+                            <div class="fee-item">
+                                <span>{{ "subscriptions.quantity" | translate }}</span>
+                                <span> {{ quantity }}
+                                </span>
+                            </div>
+                            <div class="fee-item">
+                                <span>{{ "payment.taxes" | translate }} ≈ </span>
+                                <span>
+                                    {{ taxesAmount }}
+                                    {{ service?.currency }}</span>
+                            </div>
+                            <div class="fee-total">
+                                <span>{{ "payment.total" | translate }}</span>
+                                <span>
+                                    {{ paymentWithTaxes }}
+                                    {{ service?.currency }}</span>
+                            </div>
+                        </div>
+
+                        <div class="security-notice" *ngIf="user">
+                            <img src="assets/img/resources/flutterwave.png" alt=""
+                                style="max-width: 100px; border-radius: 5px; margin-right: 10px;">
+                            <p>{{ "payment.secureMessage" | translate }}</p>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn btn-cancel" data-bs-dismiss="modal" (close)="ngOnDestroy()"
+                                *ngIf="!checkingSubscriptionStatus && !proceed">
+                                {{ "action.close" | translate }}
+                            </button>
+                            <button class="btn2 btn-confirm"
+                                *ngIf="!checkingSubscriptionStatus && !isSubscriber && !proceed && quantity > 0"
+                                (click)="pay()" [disabled]="quantity < 1">
+                                <i class="fas fa-check"></i> {{ "payment.proceed" | translate }}
+                            </button>
+                        </div>
+                        <div class="row d-flex align-items-center justify-content-center" style="justify-content: center;
+                        align-items: center;" *ngIf="proceed">
+                            <div class="spinner-border" role="status"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-content" *ngIf="goToProceed">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="wating-msg">
+                        <img src="assets/img/resources/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;"
+                            *ngIf="!modalClosed && !transactionSucceeded && !transactionFailed">
+                        <!-- <div class="spinner-border" role="status" *ngIf="!modalClosed && !transactionSucceeded && !transactionFailed"></div> -->
+                        <p style="margin-top: 50px;" *ngIf="!modalClosed && !transactionSucceeded && !transactionFailed">
+                            {{ "payment.processing-message1" | translate }}<br>
+                            {{ "payment.processing-message2" | translate }}
+                        </p>
+
+
+                        <img src="../../../assets/img/resources/tfailed.gif" alt="" style="max-width: 100px;;"
+                            *ngIf="!reOpen && transactionFailed">
+                        <br>
+                        <span style="color: red !important" *ngIf="!reOpen && transactionFailed">{{
+                            "payment.transactionFailed" | translate }}</span>
+                        <p style="margin-top: 50px;" *ngIf="!reOpen && transactionFailed">
+                            Click
+                            <span class="retry" (click)="openPayin()" *ngIf="!reOpen && transactionFailed">{{
+                                "payment.hereToRetry" | translate
+                                }}.</span>
+                            <span *ngIf="reOpen && transactionFailed">{{ "payment.hereToRetry" | translate }}. {{
+                                "payment.opening" | translate }}...</span>
+                        </p>
+
+                        <img src="assets/img/resources/flutterwave.png" alt="" style="max-width: 100px;;"
+                            *ngIf="!transactionSucceeded && !transactionFailed">
+                        <p style="margin-top: 50px;" *ngIf="showRetry && !transactionSucceeded && !transactionFailed">
+                            {{ "payment.processing-message4" | translate }}
+                            <span class="retry" (click)="openPayin()" *ngIf="!reOpen && !transactionSucceeded">{{
+                                "payment.hereToRetry" | translate
+                                }}.</span>
+                            <span *ngIf="reOpen && !transactionSucceeded">{{ "payment.hereToRetry" | translate }}. {{
+                                "payment.opening" | translate }}...</span>
+                        </p>
+
+                        <img src="assets/img/resources/paymentDone.gif" alt="" style="max-width: 250px;;"
+                            *ngIf="transactionSucceeded && !transactionFailed">
+                        <p style="margin-top: 50px;" *ngIf="transactionSucceeded && !transactionFailed">{{
+                            'payment.paymentSuccess'
+                            | translate }}</p>
+
+                        <p style="margin-top: 50px;"
+                            *ngIf="!transactionSucceeded && showRetry || !transactionSucceeded && transactionSucceeded">
+                            <br>
+                            {{ 'payment.ifPaymentConfirmed' | translate }}
+                        </p>
+
+                        <br>
+                        <button class="btn btn-primary" *ngIf="showRetry || transactionSucceeded" (click)="ngOnDestroy()"
+                            data-bs-dismiss="modal"> {{ "action.close" | translate }} </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal custom-modal fade modal-delete" [id]="'package_details-' + service?._id" role="dialog">
+    <div class="modal-dialog modal-sm modal-right">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="text-left" *ngIf="service">
+                    <app-candidate [service]="service"></app-candidate>
+                    <br>
+                    <ul>
+                        <li *ngFor="let option of optionsData" style="margin-bottom: 5px;">
+                            <span *ngIf="option.isActive"><i class="fa-solid fa-circle-check"></i> {{ option.title
+                                }}</span>
+                            <span *ngIf="!option.isActive"><i class="feather icon-x-circle"></i><s> {{ option.title
+                                    }}</s></span>
+                        </li>
+                    </ul>
+                    <p>
+                        {{ service?.description}}
+                    </p>
+                    <div style="text-align: left"> {{ "subscriptions.author" | translate }}: <b>{{
+                            showName(service?.author) }}</b></div><br>
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
+                        {{ "action.close" | translate }}
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
 </div>

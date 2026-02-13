@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
   phone: number;
   gettingLocations: boolean = true;
 
-  flagCountry: string = 'assets/ressorces/flag.png';
+  flagCountry: string = 'assets/resources/flag.png';
 
   constructor(
     private authService: AuthService,
@@ -84,7 +84,7 @@ export class LoginComponent implements OnInit {
     let country = this.countries.filter((e) => e._id === coutryId);
     country = country[0];
     this.flagCountry =
-      country.flagUrl || '../../../../assets/ressorces/flag.png';
+      country.flagUrl || '../../../../assets/resources/flag.png';
     this.contryCode = '+' + country.code || '--';
   }
 
