@@ -15,6 +15,7 @@ import {
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { FacturationService } from 'src/app/core/services/facturation/facturation.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-facturation',
@@ -32,6 +33,7 @@ export class FacturationComponent implements OnInit {
   public totalData = 0;
   showFilter = false;
   dataSource!: MatTableDataSource<companies>;
+  frontUrl: string = environment.frontUrl;
   // pagination variables end
 
   form = new FormGroup({
@@ -105,7 +107,7 @@ export class FacturationComponent implements OnInit {
   }
 
   copyToClipboard(text: string): void {
-    let url = 'https://payment.payments.digikuntz.com/payment/make-payment/' + text;
+    let url = this.frontUrl + '/payment/make-payment/' + text;
     navigator.clipboard.writeText(url)
       .then(() => {
         this.toastr.info('Le lien de paiement de la facture a été copié', 'Copié');

@@ -6,6 +6,7 @@ import { take } from 'rxjs';
 import { FacturationService } from 'src/app/core/services/facturation/facturation.service';
 import { PaymentService } from 'src/app/core/services/payment/payment.service';
 import { PrintService } from 'src/app/core/services/print/print.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-make-payment',
@@ -28,6 +29,8 @@ export class MakePaymentComponent {
   email: string = '';
   paying: boolean = false;
   private isProcessingSuccess = false; // Flag to break multiples exécutions
+  frontDomain: string = environment.frontDomain;
+  appName: string = environment.appName;
 
   constructor(
     private router: Router,

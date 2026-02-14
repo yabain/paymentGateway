@@ -7,6 +7,7 @@ import { DevService } from 'src/app/services/dev/dev.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { UserService } from 'src/app/services/user/user.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-dev',
@@ -20,6 +21,7 @@ export class DevComponent implements OnInit {
   updatingStatus: boolean = false;
   keyData: any;
   showKey: boolean = false;
+  frontUrl: string = environment.frontUrl;
 
   constructor(
     private Router: Router,

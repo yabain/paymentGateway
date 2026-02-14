@@ -1,4 +1,5 @@
 export const environment = {
+  appName: 'digiKUNTZ Payments',
   production: true,
   plateforme: 'web', // web if it is for web build and mobile if it is for iOs/Android build
   appVersion: '1.2.0', // Need specification version if it is for build
@@ -13,10 +14,11 @@ export const environment = {
   GOOGLE_MAPS_API_KEY: 'AIzaSyDK2TEGhQV8FJoZq5E520KOV94tzI1Jrg0',
 
   backendUrl: 'https://app.digikuntz.com', // Backend For Production
-  frontUrl: 'https://payments.digikuntz.com', // Front for Production
+  frontUrl: 'https://payments.digikuntz.com', 
+  frontDomain: 'payments.digikuntz.com',
 
-  ENCRYPTION_KEY: '1KSLDKHFSHLKHLKQB8CIZY8Z9D70CC68Z612GHG923G2904240HKH42086763071535021', // Key for encrypt data
-  
+  ENCRYPTION_KEY: '1KSLDKHFSHLKHLKQB8CIZY8Z9D70CC68Z612GHG923G2904240HKH42086763071535021', // Key for encrypt d$
+
   introKey: 'intro-slides',
 
   // Variables to use to set datas in local storage

@@ -23,7 +23,7 @@
         [attr.data-bs-target]="'#package_details-' + service?._id">
             <i class="feather icon-info"></i>
         </span> -->
-        <button class="btn" *ngIf="user && service.isActive"
+        <button class="btn" *ngIf="user && service.isActive && !isAuthor(service)"
             (click)="checkSubscriberStatus()" data-bs-toggle="modal"
             [attr.data-bs-target]="'#subscriptionModal-' + service?._id">
             {{ 'services.pay' | translate }}

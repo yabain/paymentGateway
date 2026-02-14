@@ -18,6 +18,7 @@ import { DateService } from 'src/app/services/pipe/date.service';
 import { SubscriptionService } from 'src/app/services/subscription/subscription.service';
 import { NumberToWordsService } from 'src/app/services/number-to-words/number-to-words.service';
 import * as QRCode from 'qrcode';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-invoice-details',
@@ -34,6 +35,9 @@ export class InvoiceDetailsComponent implements OnInit, OnDestroy {
   logoUrl: string = 'assets/img/resources/dk_logo.png';
   qrCode: string;
   itemData: any;
+  appName: string = environment.appName;
+  frontUrl: string = environment.frontUrl;
+  frontDomain: string = environment.frontDomain;
 
   @ViewChild('closeModal') closeModal: ElementRef;
 
@@ -68,7 +72,7 @@ export class InvoiceDetailsComponent implements OnInit, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['transactionData'] && this.transactionData) {
-      this.qrCode = 'https://payments.digikuntz.com/invoice/' + this.transactionData._id;
+      this.qrCode = this.frontUrl + '/invoice/' + this.transactionData._id;
       if (this.transactionData.transactionType === 'subscription') {
         this.getPlanDataById(this.transactionData.planId);
         this.getItemOfSubscription(this.transactionData._id);
