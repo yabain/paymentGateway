@@ -333,6 +333,7 @@ export class SendMoneyComponent implements OnInit {
   //   return this.aroundValue(this.newPayment + this.taxesValueCalculation());
   // }
 
+  
   toggleDescription() {
     this.showDescription = !this.showDescription;
   }
