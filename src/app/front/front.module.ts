@@ -16,7 +16,7 @@ import { CalendarComponent } from './calendar/calendar.component';
 import { PortalComponent } from './portal/portal.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, '../assets/i18n/', '.json');
+  return new TranslateHttpLoader(http, '../assets/i18n/', '.json?v=' + new Date().getTime());
 }
 
 @NgModule({

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from 'src/app/services/language/language.service';
@@ -10,7 +10,7 @@ import { environment } from 'src/environments/environment';
   templateUrl: './api-doc.component.html',
   styleUrls: ['./api-doc.component.scss'],
 })
-export class ApiDocComponent {
+export class ApiDocComponent implements OnInit {
   selectedSection = 'intro'
   frontUrl: string = environment.frontUrl;
   // en = [{ name: 'lang.en', value: 'en', flagImage: 'assets/icons/uk-flag.svg' }];
@@ -31,6 +31,10 @@ export class ApiDocComponent {
     this.en = this.language.en;
     this.fr = this.language.fr;
   }
+
+  ngOnInit(): void {
+    this.scrollToTop();
+  }
   
   selectSection(section: string){
     this.selectedSection = section;
@@ -39,6 +43,17 @@ export class ApiDocComponent {
   async getLanguage() {
     this.selectedLanguage = await this.language.getDefaultLanguage();
     this.selectedLanguage = this.selectedLanguage === 'en' ? this.en : this.fr;
+  }
+
+
+  scrollToTop(): void {
+    setTimeout(() => {
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      });
+    }, 100);
   }
 
   useLanguage(lang) {
