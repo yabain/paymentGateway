@@ -47,7 +47,7 @@
     "loginForDonation": "Se connecter pour un don",
     "logout": "Se déconnecter",
     "register": "S'enregistrer",
-    "registerFree": "Je créé mon compte gratuitement",
+    "registerFree": "S'enregistrer gratuitement",
     "username": "Nom d'utilisateur",
     "user": "Utilisateur",
     "email": "E-mail",
@@ -238,11 +238,12 @@
     "customize": "Personnaliser",
     "rejectAll": "Tout refuser",
     "copyright": "© 2024 digiKUNTZ Payments. Tous droits réservés.",
+    "allRightsReserved": "Tous droits réservés",
     "version": "Version",
     "termsAndConditions": "Conditions générales",
     "introduction": "introduction",
     "dataCollection": "Collecte de données",
-    "authConnexion": "Informations de connexion (nom d'utilisateur et mot de passe)",
+    "authConnection": "Informations de connexion (nom d'utilisateur et mot de passe)",
     "dataUsage": "Nous collectons les données suivantes lors de votre inscription et utilisation de digiKUNTZ Payments :",
     "dataUsageTitle": "Utilisation des données",
     "dataUsageSubtitle": "Les données collectées sont utilisées pour :",
@@ -834,11 +835,12 @@
   },
   "dev": {
     "title": "Espace Dev",
-    "apiKey": "API Key",
-    "generateKey": "Generate a new key",
-    "key": "Key",
-    "showKey": "Show key",
-    "hiddeKey": "Hidde key",
+    "apiKey": "Clé API",
+    "apiDoc": "Doc API",
+    "generateKey": "Re-générer la clé",
+    "key": "Clé",
+    "showKey": "Afficher la clé",
+    "hideKey": "Cacher la clé",
     "keyWarning": "En activant cette fonctionnalité, vous autorisez des applications tiers à initier des transaction depuis votre compte au moyen de vos clés API.",
     "msgToGetKey": "Pour activer votre clé d'intégration pour vos application propre, vous devez vous assurer d'avoir ces exigentce",
     "step1": "Avoir un compte de type Organisation",
@@ -973,6 +975,34 @@
     },
     "copy": "Copier le lien",
     "viewPortal": "Voir le portail"
+  },
+  "welcome": {
+    "title": "Bienvenue",
+    "paragraph": "Découvrez digiKUNTZ Payments, la solution de paiement numérique complète pour les professionnels et les particuliers. Sécurisé, fiable et facile à utiliser, digiKUNTZ Payments vous permet de gérer vos transactions en toute simplicité.",
+    "transfer": {
+      "title": "Transfert d'argent",
+      "subtitle": "Envoyez de l'argent à l'étranger en quelques clics.",
+      "description": "Rapide et sécurisé. Envoyez de l'argent à l'étranger en quelques clics seulement, avec votre portefeuille mobile ou votre carte bancaire.",
+      "action": "Commencer maintenant"
+    },
+    "fundraising": {
+      "title": "Collecte de fonds",
+      "subtitle": "Créez et gérez vos campagnes de collecte facilement.",
+      "description": "Lancez des campagnes de collecte de fonds en quelques minutes. Partagez votre lien, recevez des contributions sécurisées et suivez les performances en temps réel.",
+      "action": "Créer une campagne"
+    },
+    "services": {
+      "title": "Services / Produits",
+      "subtitle": "Présentez et vendez vos services ou produits en ligne.",
+      "description": "Ajoutez vos services ou produits, définissez vos prix et commencez à recevoir des paiements en toute sécurité via carte bancaire ou portefeuille mobile.",
+      "action": "Ajouter un service"
+    },
+    "subscriptionPlan": {
+      "title": "Plans d'abonnement",
+      "subtitle": "Créez et gérez vos propres plans d'abonnement.",
+      "description": "Configurez des plans d'abonnement personnalisés avec une facturation automatique. Gérez les paiements récurrents et suivez vos abonnés depuis votre tableau de bord.",
+      "action": "Créer un plan"
+    }
   },
   "rawData": "Données brutes",
   "tool": "Outil",

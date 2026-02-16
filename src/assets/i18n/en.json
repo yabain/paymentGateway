@@ -42,12 +42,12 @@
     "change": "Change"
   },
   "auth": {
-    "login": "Log in",
-    "loginToJoin": "Login to join",
-    "loginForDonation": "Login make donation",
+    "login": "Sign-in",
+    "loginToJoin": "Sign-In to join",
+    "loginForDonation": "Sign-In make donation",
     "logout": "Log out",
-    "register": "Sign Up",
-    "registerFree": "Sign up for free",
+    "register": "Sign-Up",
+    "registerFree": "Sign-up for free",
     "username": "Username",
     "user": "User",
     "email": "Email",
@@ -238,11 +238,12 @@
     "customize": "Customize",
     "rejectAll": "Reject All",
     "copyright": "© 2024 digiKUNTZ Payments. All rights reserved.",
+    "allRightsReserved": "All rights reserved",
     "version": "Version",
     "termsAndConditions": "Terms and Conditions",
     "introduction": "Introduction",
     "dataCollection": "Data collection",
-    "authConnexion": "Login information (username and password)",
+    "authConnection": "Login information (username and password)",
     "dataUsage": "We collect the following data when you register and use digiKUNTZ Payments:",
     "dataUsageTitle": "Data usage",
     "dataUsageSubtitle": "The collected data is used for:",
@@ -834,10 +835,11 @@
   "dev": {
     "title": "Dev tools",
     "apiKey": "API Key",
+    "apiDoc": "API Doc",
     "generateKey": "Generate a new key",
     "key": "Key",
     "showKey": "Show key",
-    "hiddeKey": "Hidde key",
+    "hideKey": "Hide key",
     "keyWarning": "By enabling this feature, you authorize third-party applications to initiate transactions from your account using your API keys.",
     "msgToGetKey": "To enable your integration keys for your own application, you must ensure you meet these requirements",
     "step1": "Have an Organization account",
@@ -902,76 +904,104 @@
     "primaryColor": "Primary color",
     "secondaryColor": "Secondary color",
     "attention": {
-        "title": "Attention to Detail",
-        "desc": "Every transaction is thoroughly checked: automated verification, fraud detection, and full logging. You get secure, compliant, and traceable payments at every step."
+      "title": "Attention to Detail",
+      "desc": "Every transaction is thoroughly checked: automated verification, fraud detection, and full logging. You get secure, compliant, and traceable payments at every step."
+    },
+    "saveTime": {
+      "title": "Save Time",
+      "desc": "Pay in a few clicks with fast integration (API, plugins, payment links). Automate subscription billing, reminders, and reconciliation to stay focused on your business."
+    },
+    "control": {
+      "title": "Complete Control",
+      "desc": "Manage everything from a clear dashboard: payments, refunds, disputes, and accounting exports. Set roles, limits, and alerts to stay in control of your cash flow."
+    },
+    "support": {
+      "title": "24/7 Support",
+      "desc": "A team is available anytime to help you, with responsive support and practical guides. If an incident occurs, we stay with you until it’s resolved."
+    },
+    "contactTitleSection": "Get In Touch",
+    "contactSubtitleSection": "We'd love to hear from you",
+    "firstName": {
+      "label": "First Name",
+      "placeholder": "Samuel"
+    },
+    "lastName": {
+      "label": "Last Name",
+      "placeholder": "TAMO"
+    },
+    "email": {
+      "label": "Email",
+      "placeholder": "john@example.com"
+    },
+    "subject": {
+      "label": "Subject",
+      "placeholder": "How can we help?"
+    },
+    "message": {
+      "label": "Message",
+      "placeholder": "Tell us more about your inquiry..."
+    },
+    "submit": "Send Message",
+    "info": {
+      "title": "Contact Information",
+      "subtitle": "We'd love to hear from you",
+      "location": {
+        "title": "Location"
       },
-      "saveTime": {
-        "title": "Save Time",
-        "desc": "Pay in a few clicks with fast integration (API, plugins, payment links). Automate subscription billing, reminders, and reconciliation to stay focused on your business."
-      },
-      "control": {
-        "title": "Complete Control",
-        "desc": "Manage everything from a clear dashboard: payments, refunds, disputes, and accounting exports. Set roles, limits, and alerts to stay in control of your cash flow."
-      },
-      "support": {
-        "title": "24/7 Support",
-        "desc": "A team is available anytime to help you, with responsive support and practical guides. If an incident occurs, we stay with you until it’s resolved."
-      },
-      "contactTitleSection": "Get In Touch",
-      "contactSubtitleSection": "We'd love to hear from you",
-      "firstName": {
-        "label": "First Name",
-        "placeholder": "Samuel"
-      },
-      "lastName": {
-        "label": "Last Name",
-        "placeholder": "TAMO"
+      "call": {
+        "title": "Call Us",
+        "prefix": "Main:"
       },
       "email": {
-        "label": "Email",
-        "placeholder": "john@example.com"
-      },
-      "subject": {
-        "label": "Subject",
-        "placeholder": "How can we help?"
-      },
-      "message": {
-        "label": "Message",
-        "placeholder": "Tell us more about your inquiry..."
-      },
-      "submit": "Send Message",
-      "info": {
-        "title": "Contact Information",
-        "subtitle": "We'd love to hear from you",
-        "location": {
-          "title": "Location"
-        },
-        "call": {
-          "title": "Call Us",
-          "prefix": "Main:"
-        },
-        "email": {
-          "title": "Email Us",
-          "prefix": "General:"
-        }
-      },
-      "social": {
-        "website": "Website",
-        "linkedin": "LinkedIn",
-        "facebook": "Facebook",
-        "instagram": "Instagram",
-        "twitter": "X (Twitter)",
-        "whatsapp": "WhatsApp"
-      },
-      "nav": {
-        "title": "Menu portail",
-        "home": "Home",
-        "service": "Services / Products",
-        "fundraising": "Fundraising",
-        "plans": "Plans"
-      },
+        "title": "Email Us",
+        "prefix": "General:"
+      }
+    },
+    "social": {
+      "website": "Website",
+      "linkedin": "LinkedIn",
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "twitter": "X (Twitter)",
+      "whatsapp": "WhatsApp"
+    },
+    "nav": {
+      "title": "Menu portail",
+      "home": "Home",
+      "service": "Services / Products",
+      "fundraising": "Fundraising",
+      "plans": "Plans"
+    },
     "copy": "Copy the link",
     "viewPortal": "View portal"
+  },
+  "welcome": {
+    "title": "Welcome",
+    "paragraph": "Découvrez digiKUNTZ Payments, la solution de paiement numérique complète pour les professionnels et les particuliers. Sécurisé, fiable et facile à utiliser, digiKUNTZ Payments vous permet de gérer vos transactions en toute simplicité.",
+    "transfer": {
+      "title": "Money Transfer",
+      "subtitle": "Send money abroad in just a few clicks.",
+      "description": "Fast and secure. Send money abroad in just a few clicks using your mobile wallet or bank card.",
+      "action": "Get Started Now"
+    },
+    "fundraising": {
+      "title": "Fundraising",
+      "subtitle": "Create and manage your fundraising campaigns easily.",
+      "description": "Launch fundraising campaigns in minutes. Share your link, receive secure contributions, and track performance in real time.",
+      "action": "Create a Campaign"
+    },
+    "services": {
+      "title": "Services / Products",
+      "subtitle": "Showcase and sell your services or products online.",
+      "description": "Add your services or products, set your prices, and start receiving secure payments via bank card or mobile wallet.",
+      "action": "Add a Service"
+    },
+    "subscriptionPlan": {
+      "title": "Subscription Plans",
+      "subtitle": "Create and manage your own subscription plans.",
+      "description": "Set up customized subscription plans with automatic billing. Manage recurring payments and track your subscribers from your dashboard.",
+      "action": "Create a Plan"
+    }
   },
   "rawData": "Raw data",
   "tool": "Tool",

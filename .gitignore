@@ -49,3 +49,8 @@ src/environments/*.ts
 /src/environments
 package-lock.json
 src/environments/environment.ts
+package-lock.json
+src/environments/environment.ts
+.vscode/settings.json
+package-lock.json
+package-lock.json

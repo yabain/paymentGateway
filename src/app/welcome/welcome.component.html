@@ -1,1 +1,234 @@
-<iframe src="../../assets/welcome/index.html" style="height:100vh !important; width:100vw;"></iframe>
+<div class="page">
+
+  <!-- HEADER -->
+  <header class="topbar">
+    <a class="brand" routerLink="/">
+      <img [src]="logo[0].link" [alt]="logo[0].alt">
+    </a>
+
+    <nav class="menu">
+      <a *ngFor="let n of nav" class="menu__link" [routerLink]="n.route">{{ n.label | translate }}</a>
+    </nav>
+
+    <div class="actions">
+      <a class="actions__link hide-md" (click)="toggleChangeLanguage()" style="min-width: 110px;">
+        <!-- <span class="mini-ic" aria-hidden="true"></span> -->
+        <img [src]="selectedLang.flag" alt="" style="width: 15px; height: 12px;">
+        <span> {{ 'lang.' + selectedLang.code | translate }}</span>
+      </a>
+      <a class="actions__link btn btn" routerLink="/login" style="min-width: 115px;">
+        <!-- <span class="mini-ic" aria-hidden="true"></span> -->
+        <span>{{ 'auth.login' | translate }}</span>
+      </a>
+      <a class="hide-md btn btn-primary" routerLink="/login" style="min-width: 130px;">
+        <!-- <span class="mini-ic" aria-hidden="true"></span> -->
+        <span>{{ 'auth.register' | translate }}</span>
+      </a>
+      <!-- <a class="iconBtn" routerLink="/cart" aria-label="Cart">▢</a>
+      <a class="iconBtn" routerLink="/account" aria-label="Account">◉ </a> -->
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero__bg" [style.background]="'url(' + industries[selected].heroBg + ')'">
+      <div class="hero__layer hero__layer--current"
+           [style.backgroundImage]="'url(' + industries[selected].heroBg + ')'"></div>
+
+      <div *ngIf="prevBg"
+           class="hero__layer hero__layer--prev"
+           [class.is-fading]="bgFading"
+           [style.backgroundImage]="'url(' + prevBg + ')'"></div>
+
+      <div class="hero__tint"></div>
+    </div>
+
+    <div class="hero__inner">
+      <h1 class="hero__title" [attr.data-k]="heroKey">{{ industries[selected].heroTitle | translate }}</h1>
+
+      <!-- <div class="hero__productWrap" aria-hidden="true">
+        <img
+          class="hero__product small-md"
+          [attr.data-k]="heroKey"
+          [ngSrc]="industries[selected].heroProduct"
+          width="900"
+          height="900"
+          priority
+          alt=""
+        />
+      </div> -->
+    </div>
+
+    <!-- 3 CARDS -->
+    <div class="cards">
+      <button
+        *ngFor="let ind of industries; let i = index"
+        type="button"
+        class="card"
+        [class.is-active]="activeCard === i"
+        [class.is-dimmed]="activeCard !== -1 && activeCard !== i"
+        (pointerenter)="toggleCard(i); onCardEnter($any($event.currentTarget))"
+        (pointerleave)="onCardLeave()"
+        (pointermove)="onCardMove($event)"
+      >
+        <div class="card__title" [class.card_title-active]="activeCard === i">{{ ind.title | translate }}</div>
+
+        <div class="card__body">
+          <p class="card__text">{{ ind.blurb | translate }}</p>
+          <div class="card__rule"></div>
+          <a class="card__cta" [routerLink]="ind.route" (click)="$event.stopPropagation()">
+            Tell me more <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </button>
+    </div>
+  </section>
+
+  <!-- STAGE PRODUCT (grand visuel) -->
+  <section class="stage" #reveal>
+    <div class="stage__imgWrap">
+      <img [ngSrc]="'assets/welcome/stage-product.webp'" width="1600" height="800" alt="" />
+    </div>
+  </section>
+
+  <!-- MISSION / VISION -->
+  <section class="split" #reveal>
+    <div class="split__row">
+      <div class="split__left"><span class="dot"></span> Our Mission</div>
+      <div class="split__right">
+        We provide world-class, compliant packaging from trusted global partners to food service,
+        food processing, and agricultural businesses across the globe.
+      </div>
+    </div>
+
+    <div class="split__row">
+      <div class="split__left"><span class="dot"></span> Our Vision</div>
+      <div class="split__right">
+        To be the trusted, industry-leading packaging supplier, known for ethical practices, reliable supply
+        and dedication to sustainable innovation.
+      </div>
+    </div>
+  </section>
+
+  <!-- NEW PRODUCTS -->
+  <section class="new" #reveal>
+    <div class="new__head">
+      <h2 class="new__title">New Products</h2>
+      <a class="btn btn--ghost" routerLink="/shop">Shop now</a>
+    </div>
+
+    <div class="grid">
+      <a class="tile" *ngFor="let p of products; trackBy: trackByIndex" [routerLink]="p.route">
+        <span class="tile__tag" *ngIf="p.tag">{{ p.tag }}</span>
+
+        <div class="tile__imgWrap">
+          <img [ngSrc]="p.img" width="900" height="700" alt="" />
+        </div>
+
+        <div class="tile__name">{{ p.name }}</div>
+        <div class="tile__price">{{ p.from }}</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- CUSTOM SOLUTIONS + MARQUEE -->
+  <section class="custom" #reveal>
+    <div class="custom__inner">
+      <div class="custom__kicker">Custom Solutions</div>
+      <h2 class="custom__title">
+        Brands that thrive invest in
+        custom-designed packaging. Let us
+        help bring your vision to life.
+      </h2>
+
+      <img class="custom__img"
+           [ngSrc]="'assets/welcome/custom-outline.webp'"
+           width="1100"
+           height="650"
+           alt="" />
+    </div>
+
+    <div class="marquee" aria-label="Get in touch">
+      <div class="marquee__track">
+        <div class="marquee__item" *ngFor="let _ of marqueeItems; trackBy: trackByIndex">
+          Not sure what's possible? Get in touch to find out. <span aria-hidden="true">↗</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CERTIFICATIONS (manquait chez toi) -->
+  <section class="certs" #reveal>
+    <div class="certs__grid">
+      <div class="certs__col">
+        <div class="cert" *ngFor="let c of certLeft">
+          <span class="dot"></span>
+          <span class="cert__name">{{ c }}</span>
+        </div>
+      </div>
+
+      <div class="certs__col">
+        <div class="cert" *ngFor="let c of certRight">
+          <span class="dot"></span>
+          <span class="cert__name">{{ c }}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq" #reveal>
+    <div class="faq__left">
+      <h3 class="faq__title">Frequently asked<br />questions</h3>
+      <a class="btn" routerLink="/faq">View all</a>
+    </div>
+
+    <div class="faq__right">
+      <button class="q"
+              *ngFor="let f of faqs; let i = index"
+              type="button"
+              (click)="toggleFaq(i)">
+        <div class="q__top">
+          <span>{{ f.q }}</span>
+          <span class="q__plus">{{ openFaq === i ? '–' : '+' }}</span>
+        </div>
+        <div class="q__ans" *ngIf="openFaq === i">{{ f.a }}</div>
+      </button>
+    </div>
+  </section>
+
+  <!-- FOOTER COMPLET (comme ta frame) -->
+  <footer class="foot" #reveal>
+    <div class="foot__top">
+      <div class="foot__big">Innovated for Industry Leaders.</div>
+      <button class="toTop" type="button" (click)="scrollTop()" aria-label="Back to top">↑</button>
+    </div>
+
+    <div class="foot__mid">
+      <div>
+        <img [src]="logo[1].link" [alt]="logo[0].alt" style="max-width: 50px; width: vw"> {{ appName }} </div>
+      <a class="footCard" *ngFor="let ind of industries; let i = index"
+         [routerLink]="ind.route"
+         (mouseenter)="selectIndustry(i)">
+        {{ ind.title }}
+      </a>
+    </div>
+
+    <div class="foot__bar">
+      <div class="foot__copy">© {{ year }} {{ appName }}. {{ 'terms.allRightsReserved' | translate }}</div>
+
+      <div class="foot__social" aria-label="Social">
+        <a *ngFor="let s of socials" [href]="s.link" >{{ s.label}}</a>
+      </div>
+
+      <div class="foot__links">
+        <a routerLink="/contact">Contact Us</a>
+        <a routerLink="/privacy">Privacy Policy</a>
+        <a routerLink="/terms">Terms & Conditions</a>
+      </div>
+    </div>
+
+    <a class="wa" href="#" aria-label="WhatsApp"><i class="feather icon-message-circle"></i></a>
+  </footer>
+
+</div>

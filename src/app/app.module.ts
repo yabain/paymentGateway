@@ -10,7 +10,7 @@ import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { environment } from '../environments/environment';
 import { WelcomeComponent } from './welcome/welcome.component';
-import { DatePipe } from '@angular/common';
+import { DatePipe, NgOptimizedImage } from '@angular/common';
 import { RouteReuseStrategy } from '@angular/router';
 import { CryptService } from './services/crypt/crypt.service';
 import { ShareLinkService } from './services/share-link/share.link.service';
@@ -68,6 +68,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     DataTablesModule,
     FrontModule,
     CommonItemModule,
+    NgOptimizedImage
   ],
   providers: [ { provide: LOCALE_ID, useValue: "fr-FR" },
     AuthService, UserService, CryptService, ShareLinkService, SystemService, DatePipe, UserSettingsService,
