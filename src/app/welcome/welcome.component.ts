@@ -85,16 +85,16 @@ export class WelcomeComponent implements AfterViewInit {
       heroBg: '../../assets/img/resources/transfer_bg.webp',
       heroProduct: '../../assets/img/resources/transfer.png',
       blurb: 'welcome.transfer.description',
-      route: '/industries/transfer',
+      route: '/transfer',
     },
     {
       key: 'subscriptionPlan',
       title: 'welcome.subscriptionPlan.title',
       heroTitle: 'welcome.subscriptionPlan.subtitle',
-      heroBg: '../../assets/img/resources/bg.webp',
+      heroBg: '../../assets/img/resources/subscriptionPlan_bg.webp',
       heroProduct: 'assets/welcome/hero-tray.webp',
       blurb: 'welcome.subscriptionPlan.description',
-      route: '/industries/plans',
+      route: '/plans',
     },
     {
       key: 'fundraising',
@@ -103,7 +103,16 @@ export class WelcomeComponent implements AfterViewInit {
       heroBg: '../../assets/img/resources/fundraising_bg.webp',
       heroProduct: 'assets/welcome/hero-produce.webp',
       blurb: 'welcome.fundraising.description',
-      route: '/industries/fundraising',
+      route: '/fundraising',
+    },
+    {
+      key: 'services',
+      title: 'welcome.services.title',
+      heroTitle: 'welcome.services.subtitle',
+      heroBg: '../../assets/img/resources/service_bg.webp',
+      heroProduct: 'assets/welcome/hero-produce.webp',
+      blurb: 'welcome.services.description',
+      route: '/services',
     },
   ];
 

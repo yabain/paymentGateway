@@ -993,7 +993,7 @@
     },
     "services": {
       "title": "Services / Produits",
-      "subtitle": "Présentez et vendez vos services ou produits en ligne.",
+      "subtitle": "Présentez et vendez vos produits ou services en ligne.",
       "description": "Ajoutez vos services ou produits, définissez vos prix et commencez à recevoir des paiements en toute sécurité via carte bancaire ou portefeuille mobile.",
       "action": "Ajouter un service"
     },
@@ -1002,6 +1002,14 @@
       "subtitle": "Créez et gérez vos propres plans d'abonnement.",
       "description": "Configurez des plans d'abonnement personnalisés avec une facturation automatique. Gérez les paiements récurrents et suivez vos abonnés depuis votre tableau de bord.",
       "action": "Créer un plan"
+    },
+    "ourMission": {
+      "title": "Notre mission",
+      "description": "Faciliter l’accès aux paiements numériques en Afrique en offrant une plateforme simple, sécurisée et fiable pour transférer de l’argent, vendre des services, gérer des abonnements et lancer des collectes de fonds."
+    },
+    "ourVision": {
+      "title": "Notre vision",
+      "description": "Construire un écosystème financier africain connecté, inclusif et performant, où chaque particulier, entreprise et développeur peut encaisser, payer et innover sans barrière."
     }
   },
   "rawData": "Données brutes",

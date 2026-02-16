@@ -1001,6 +1001,14 @@
       "subtitle": "Create and manage your own subscription plans.",
       "description": "Set up customized subscription plans with automatic billing. Manage recurring payments and track your subscribers from your dashboard.",
       "action": "Create a Plan"
+    },
+    "ourMission": {
+      "title": "Our mission",
+      "description": "Facilitating access to digital payments in Africa by offering a simple, secure and reliable platform to transfer money, sell services, manage subscriptions and launch fundraising campaigns."
+    },
+    "ourVision": {
+      "title": "Our vision",
+      "description": "To build a connected, inclusive and efficient African financial ecosystem, where every individual, business and developer can collect, pay and innovate without barriers."
     }
   },
   "rawData": "Raw data",
