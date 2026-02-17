@@ -591,11 +591,12 @@
     "payout": "cash withdrawal",
     "profile": "Profile",
     "organisation": "Organisation",
-    "mySubscriptionList": "Mes abonnements",
+    "mySubscriptionList": "My subscriptions",
     "transactionList": "Transaction List",
     "myTransactions": "My transactions",
     "services": "Services",
-    "servicesProducts": "Products / Services"
+    "servicesProducts": "Products / Services",
+    "settings": "Settings"
   },
   "flutterwave": {
     "otherCurrencyBalances": "Othes currency balance available",

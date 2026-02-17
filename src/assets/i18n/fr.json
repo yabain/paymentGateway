@@ -595,7 +595,8 @@
     "transactionList": "Transactions",
     "myTransactions": "Mes transactions",
     "services": "Services",
-    "servicesProducts": "Produits / Services"
+    "servicesProducts": "Produits / Services",
+    "settings": "Paramètres"
   },
   "flutterwave": {
     "otherCurrencyBalances": "Solde d'autres devises disponible",

@@ -97,6 +97,13 @@ const routes: Routes = [
             (m) => m.TransactionsModule,
           ),
       },
+      {
+        path: 'organisation-settings',
+        loadChildren: () =>
+          import('./settings/settings.module').then(
+            (m) => m.SettingsModule
+          ),
+      },
 
 
 

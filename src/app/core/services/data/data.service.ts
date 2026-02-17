@@ -863,6 +863,14 @@ export class DataService {
           icon: 'command',
           base: 'fundraising',
         },
+        {
+          menuValue: 'settings',
+          route: '/organisation-settings',
+          hasSubRoute: false, // Show arrow after menu item title
+          showSubRoute: true,
+          icon: 'settings',
+          base: 'fundraising',
+        },
       ],
     },
   ];
