@@ -54,3 +54,4 @@ src/environments/environment.ts
 .vscode/settings.json
 package-lock.json
 package-lock.json
+/dist

@@ -5,6 +5,7 @@ import {
   DestroyRef,
   ElementRef,
   Inject,
+  OnInit,
   PLATFORM_ID,
   QueryList,
   ViewChildren,
@@ -39,36 +40,52 @@ type Product = {
   styleUrl: './welcome.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WelcomeComponent implements AfterViewInit {
+export class WelcomeComponent implements OnInit, AfterViewInit {
   private destroyRef = inject(DestroyRef);
   private isBrowser: boolean;
   appName: string = environment.appName;
+  en: any;
+  fr: any;
+  selectedLanguage: any = '';
+  changingLang: boolean = false;
 
   constructor(
     @Inject(PLATFORM_ID) platformId: Object,
     private languageService: LanguageService) {
+    this.getLanguage();
+    this.en = this.languageService.en[0];
+    this.fr = this.languageService.fr[0];
     this.isBrowser = isPlatformBrowser(platformId);
   }
 
+  ngOnInit(): void {
+    this.scrollToTop();
+  }
+
+  async getLanguage() {
+    this.selectedLanguage = await this.languageService.getDefaultLanguage();
+    console.log('lang 0 ', this.selectedLanguage);
+    this.selectedLanguage = this.selectedLanguage === 'en' ? 'en' : 'fr';
+  
+    console.log('lang ', this.en);
+  }
+
   year = new Date().getFullYear();
-
-
-  lang = [
-    { name: 'En', flag: 'assets/icons/uk-flag.svg', code: 'en' },
-    { name: 'Fr', flag: 'assets/icons/fr-flag.svg', code: 'fr' },
-  ];
-  selectedLang = this.lang[0];
 
   logo = [
     { name: 'logo', link: 'assets/img/resources/dk_logo.png', alt: this.appName },
     { name: 'icon', link: 'assets/img/resources/icon.jpg', alt: this.appName },
   ];
+
+  logoPartners = [
+    { name: 'GIC', link: 'assets/img/resources/logo_gic_0.png', alt: 'Gic Promote Ltd', width: 100 },
+    { name: 'Yaba-In', link: 'assets/img/resources/logo_yaba-in.png', alt: 'Yaba-In', width: 300 },
+    { name: 'Yabi', link: 'assets/img/resources/logo_yabi.png', alt: 'Yabi', width: 200 },
+  ];
   nav = [
     { label: 'Home', route: '/welcome' },
-    { label: 'Services', route: '/solutions' },
-    { label: 'Company', route: '/company' },
-    { label: 'Resources', route: '/resources' },
     { label: 'Contact Us', route: '/contact' },
+    // { label: 'terms.title', route: '/terms' },
     { label: 'dev.apiDoc', route: '/api-doc' },
   ];
   socials = [
@@ -161,29 +178,29 @@ export class WelcomeComponent implements AfterViewInit {
   marqueeItems = Array.from({ length: 18 }, (_, i) => i);
   trackByIndex = (i: number) => i;
 
-  // Certifications (comme sur ta frame)
+  // Trust pillars for the platform
   certLeft = [
-    'GRS',
-    'DIN CERTCO',
-    'TÜV OK Compost Industrial',
-    'ISO 14001',
-    'ISO 45001',
+    'welcome.certs.items.0',
+    'welcome.certs.items.1',
+    'welcome.certs.items.2',
+    'welcome.certs.items.3',
+    'welcome.certs.items.4',
   ];
   certRight = [
-    'BPI',
-    'TÜV OK Compost Home',
-    'ISO 9001',
-    'ISO 22000',
-    'FSSC 22000',
+    'welcome.certs.items.5',
+    'welcome.certs.items.6',
+    'welcome.certs.items.7',
+    'welcome.certs.items.8',
+    'welcome.certs.items.9',
   ];
 
-  // FAQ (comme la page)
+  // FAQ (keys from i18n files)
   faqs = [
-    { q: 'What types of packaging do you offer?', a: 'Food service, processing and agriculture formats + selected custom options.' },
-    { q: 'Do you deliver nationwide?', a: 'Yes. Timelines depend on region and stock availability.' },
-    { q: 'Do you deliver globally?', a: 'Global supply is possible through partner logistics depending on product and volume.' },
-    { q: 'How do I place an order?', a: 'Shop online or contact sales for bulk/custom quotes.' },
-    { q: 'Do you offer tailored packaging solutions?', a: 'Yes. We can propose alternatives by use-case, compliance and budget.' },
+    { q: 'welcome.faq.items.0.q', a: 'welcome.faq.items.0.a' },
+    { q: 'welcome.faq.items.1.q', a: 'welcome.faq.items.1.a' },
+    { q: 'welcome.faq.items.2.q', a: 'welcome.faq.items.2.a' },
+    { q: 'welcome.faq.items.3.q', a: 'welcome.faq.items.3.a' },
+    { q: 'welcome.faq.items.4.q', a: 'welcome.faq.items.4.a' },
   ];
   openFaq: number | null = null;
 
@@ -222,10 +239,17 @@ export class WelcomeComponent implements AfterViewInit {
     });
   }
 
-  useLanguage(lang: any) {
-    const code = typeof lang === 'string' ? lang : lang?.code;
-    console.log('lang ', code);
-    this.languageService.useLanguage(code);
+  // useLanguage(lang: any) {
+  //   const code = typeof lang === 'string' ? lang : lang?.code;
+  //   console.log('lang ', code);
+  //   this.languageService.useLanguage(code);
+  // }
+
+  useLanguage(lang) {
+    this.changingLang = true;
+    this.languageService.useLanguage(lang);
+    this.getLanguage();
+    this.changingLang = false;
   }
 
   selectIndustry(i: number) {
@@ -243,6 +267,16 @@ export class WelcomeComponent implements AfterViewInit {
     }, 520);
   }
 
+  scrollToTop(): void {
+    setTimeout(() => {
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      });
+    }, 100);
+  }
+
   toggleCard(i: number) {
     this.activeCard = this.activeCard === i ? -1 : i;
     this.selectIndustry(i);
@@ -250,8 +284,8 @@ export class WelcomeComponent implements AfterViewInit {
   }
 
   toggleChangeLanguage() {
-    this.selectedLang = this.selectedLang.code === 'en' ? this.lang[1] : this.lang[0];
-    this.useLanguage(this.selectedLang.code);
+    this.selectedLanguage = this.selectedLanguage === 'en' ? 'fr' : 'en';
+    this.useLanguage(this.selectedLanguage);
   }
 
   onCardEnter(el: HTMLElement) {
@@ -282,10 +316,5 @@ export class WelcomeComponent implements AfterViewInit {
 
   toggleFaq(i: number) {
     this.openFaq = this.openFaq === i ? null : i;
-  }
-
-  scrollTop() {
-    if (!this.isBrowser) return;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }

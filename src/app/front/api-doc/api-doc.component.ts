@@ -35,8 +35,8 @@ export class ApiDocComponent implements OnInit {
   ngOnInit(): void {
     this.scrollToTop();
   }
-  
-  selectSection(section: string){
+
+  selectSection(section: string) {
     this.selectedSection = section;
   }
 
@@ -44,7 +44,6 @@ export class ApiDocComponent implements OnInit {
     this.selectedLanguage = await this.language.getDefaultLanguage();
     this.selectedLanguage = this.selectedLanguage === 'en' ? this.en : this.fr;
   }
-
 
   scrollToTop(): void {
     setTimeout(() => {
@@ -58,16 +57,12 @@ export class ApiDocComponent implements OnInit {
 
   useLanguage(lang) {
     this.changingLang = true;
-
-        this.language.useLanguage(lang);
-        // this.translate.get('lang.langChanged').subscribe((res: string) => {
-        //   this.toastService.presentToast('success', 'Done!', res, 2000);
-        // });
-        this.getLanguage();
-        this.changingLang = false;
+    this.language.useLanguage(lang);
+    this.getLanguage();
+    this.changingLang = false;
   }
 
-  navigateTo(url){
+  navigateTo(url) {
     this.router.navigate([url]);
   }
 }

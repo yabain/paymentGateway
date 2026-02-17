@@ -13,14 +13,15 @@
     <div class="actions">
       <a class="actions__link hide-md" (click)="toggleChangeLanguage()" style="min-width: 110px;">
         <!-- <span class="mini-ic" aria-hidden="true"></span> -->
-        <img [src]="selectedLang.flag" alt="" style="width: 15px; height: 12px;">
-        <span> {{ 'lang.' + selectedLang.code | translate }}</span>
+        <img [src]="selectedLanguage === 'en' ? fr?.flagImage : en?.flagImage" alt=""
+          style="width: 15px; height: 12px;">
+        <span> {{ (selectedLanguage === 'en' ? fr?.name : en?.name) | translate }}</span>
       </a>
       <a class="actions__link btn btn" routerLink="/login" style="min-width: 115px;">
         <!-- <span class="mini-ic" aria-hidden="true"></span> -->
         <span>{{ 'auth.login' | translate }}</span>
       </a>
-      <a class="hide-md btn btn-primary" routerLink="/login" style="min-width: 130px;">
+      <a class="hide-md btn btn-primary" routerLink="/register" style="min-width: 130px;">
         <!-- <span class="mini-ic" aria-hidden="true"></span> -->
         <span>{{ 'auth.register' | translate }}</span>
       </a>
@@ -69,7 +70,7 @@
           <p class="card__text">{{ ind.blurb | translate }}</p>
           <div class="card__rule"></div>
           <a class="card__cta" [routerLink]="ind.route" (click)="$event.stopPropagation()">
-            Tell me more <span aria-hidden="true">→</span>
+            {{ 'action.readMore' | translate }} <span aria-hidden="true">→</span>
           </a>
         </div>
       </button>
@@ -77,14 +78,14 @@
   </section>
 
   <!-- STAGE PRODUCT (grand visuel) -->
-  <section class="stage" #reveal>
+  <!-- <section class="stage" #reveal>
     <div class="stage__imgWrap">
       <img [ngSrc]="'assets/img/resources/transfer.png'" width="150" height="150" alt="" />
     </div>
-    <!-- <p>Ici la description de la plateforme.</p> -->
-  </section>
+  </section> -->
 
   <!-- MISSION / VISION -->
+  <br><br>
   <section class="split" #reveal>
     <div class="split__row">
       <div class="split__left"><span class="dot"></span>{{ 'welcome.ourMission.title' | translate }}</div>
@@ -100,7 +101,7 @@
       </div>
     </div>
   </section>
-
+  <br>
   <!-- NEW PRODUCTS -->
   <!-- <section class="new" #reveal>
     <div class="new__head">
@@ -123,84 +124,94 @@
   </section> -->
 
   <!-- CUSTOM SOLUTIONS + MARQUEE -->
-  <!-- <section class="custom" #reveal>
+  <section class="custom" #reveal>
     <div class="custom__inner">
-      <div class="custom__kicker">Custom Solutions</div>
-      <h2 class="custom__title">
-        Brands that thrive invest in
-        custom-designed packaging. Let us
-        help bring your vision to life.
-      </h2>
-
-      <img class="custom__img" [ngSrc]="'assets/welcome/custom-outline.webp'" width="1100" height="650" alt="" />
+      <div class="custom__kicker">{{ 'welcome.customPortal.kicker' | translate }}</div>
+      <h2 class="custom__title">{{ 'welcome.customPortal.title' | translate }}</h2>
+      <p class="custom__desc">{{ 'welcome.customPortal.description' | translate }}</p>
+      <a class="btn custom__cta" routerLink="/auth/register">{{ 'welcome.customPortal.action' | translate }}</a>
+      <img class="custom__img" [ngSrc]="'assets/img/resources/transfer_bg.webp'" width="1100" height="650" alt="" />
     </div>
 
     <div class="marquee" aria-label="Get in touch">
       <div class="marquee__track">
         <div class="marquee__item" *ngFor="let _ of marqueeItems; trackBy: trackByIndex">
-          Not sure what's possible? Get in touch to find out. <span aria-hidden="true">↗</span>
+          {{ 'welcome.customPortal.marquee' | translate }} <span aria-hidden="true">↗</span>
         </div>
       </div>
     </div>
-  </section> -->
+  </section>
 
   <!-- CERTIFICATIONS (manquait chez toi) -->
-  <!-- <section class="certs" #reveal>
+  <section class="certs" #reveal>
+    <div class="certs__head">
+      <h3 class="certs__title">{{ 'welcome.certs.title' | translate }}</h3>
+      <p class="certs__subtitle">{{ 'welcome.certs.subtitle' | translate }}</p>
+    </div>
     <div class="certs__grid">
       <div class="certs__col">
         <div class="cert" *ngFor="let c of certLeft">
           <span class="dot"></span>
-          <span class="cert__name">{{ c }}</span>
+          <span class="cert__name">{{ c | translate }}</span>
         </div>
       </div>
 
       <div class="certs__col">
         <div class="cert" *ngFor="let c of certRight">
           <span class="dot"></span>
-          <span class="cert__name">{{ c }}</span>
+          <span class="cert__name">{{ c | translate }}</span>
         </div>
       </div>
     </div>
-  </section> -->
+  </section>
 
   <!-- FAQ -->
-  <!-- <section class="faq" #reveal>
+  <section class="faq" #reveal>
     <div class="faq-wrapper">
       <div class="faq__left">
-        <h3 class="faq__title">Frequently asked<br />questions</h3>
-        <a class="btn" routerLink="/faq">View all</a>
+        <h3 class="faq__title">{{ 'welcome.faq.title' | translate }}</h3>
+        <!-- <a class="btn" routerLink="/faq">{{ 'welcome.faq.viewAll' | translate }}</a> -->
       </div>
 
       <div class="faq__right">
         <button class="q" *ngFor="let f of faqs; let i = index" type="button" (click)="toggleFaq(i)">
           <div class="q__top">
-            <span>{{ f.q }}</span>
+            <span>{{ f.q | translate }}</span>
             <span class="q__plus">{{ openFaq === i ? '–' : '+' }}</span>
           </div>
-          <div class="q__ans" *ngIf="openFaq === i">{{ f.a }}</div>
+          <div class="q__ans" *ngIf="openFaq === i">{{ f.a | translate }}</div>
         </button>
       </div>
     </div>
-  </section> -->
+  </section>
 
-  <!-- <div class="marquee" aria-label="Get in touch">
-    <div class="marquee__track">
-      <div class="marquee__item" *ngFor="let _ of marqueeItems; trackBy: trackByIndex" style="color: black;">
-        Not sure what's possible? Get in touch to find out. <span aria-hidden="true">↗</span>
+  <section class="partners" #reveal style="margin-top: 50px;">
+    <div class="certs__head">
+      <h3 class="certs__title">{{ 'welcome.partners.title' | translate }}</h3>
+      <p class="certs__subtitle">{{ 'welcome.partners.subtitle' | translate }}</p>
+    </div>
+    <div class="marquee" aria-label="Get in touch">
+      <div class="marquee__track-reverse">
+        <div class="marquee__item" *ngFor="let _ of marqueeItems; trackBy: trackByIndex" style="color: black;">
+          <span *ngFor="let l of logoPartners; let i = index">
+            <img [src]="l.link" [alt]="l.alt" [width]="l.width">
+            <span aria-hidden="true" style="margin: 20px; text-align: center;"></span>
+          </span>
+        </div>
       </div>
     </div>
-  </div> -->
+  </section>
 
   <!-- FOOTER COMPLET (comme ta frame) -->
   <footer class="foot" #reveal>
     <div class="foot__top">
       <div class="foot__big">{{ appName }}.</div>
-      <button class="toTop" type="button" (click)="scrollTop()" aria-label="Back to top">↑</button>
+      <button class="toTop" type="button" (click)="scrollToTop()" aria-label="Back to top">↑</button>
     </div>
 
     <div class="foot__mid">
       <div>
-        <img [src]="logo[1].link" [alt]="logo[0].alt" style="max-width: 100px;"> 
+        <img [src]="logo[1].link" [alt]="logo[0].alt" style="max-width: 100px;">
       </div>
       <a class="footCard" *ngFor="let ind of industries; let i = index" [routerLink]="ind.route"
         (mouseenter)="selectIndustry(i)">

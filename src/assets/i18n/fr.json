@@ -39,7 +39,8 @@
     "share": "Partager",
     "copy": "Copier",
     "report": "Signaler",
-    "change": "Changer"
+    "change": "Changer",
+    "readMore": "En savoir plus"
   },
   "auth": {
     "login": "Se connecter",
@@ -1010,6 +1011,59 @@
     "ourVision": {
       "title": "Notre vision",
       "description": "Construire un écosystème financier africain connecté, inclusif et performant, où chaque particulier, entreprise et développeur peut encaisser, payer et innover sans barrière."
+    },
+    "customPortal": {
+      "kicker": "Portail Organisation",
+      "title": "Offrez a votre business un portail 100% personnalisable.",
+      "description": "Avec un compte Organisation, vous disposez de votre propre portail pour presenter vos produits, services, collectes de fonds et plans d'abonnement, avec votre identite visuelle et vos contenus.",
+      "action": "Creer un compte gratuitement",
+      "marquee": "Mettez en avant votre business avec un portail sur mesure"
+    },
+    "certs": {
+      "title": "Pourquoi choisir digiKUNTZ Payments ?",
+      "subtitle": "Une plateforme de paiement pensee pour les usages africains, du particulier a l'organisation.",
+      "items": [
+        "Paiements securises par carte bancaire et portefeuilles mobiles",
+        "Transferts d'argent rapides avec suivi des statuts",
+        "Vente en ligne de produits et services",
+        "Gestion simple des abonnements recurrents",
+        "Collectes de fonds avec suivi en temps reel",
+        "Portail personnalise pour les comptes Organisation",
+        "API de paiement pour vos applications et sites",
+        "Tableau de bord centralise pour vos flux financiers",
+        "Historique detaille et tracabilite des transactions",
+        "Experience fiable, evolutive et orientee Afrique"
+      ]
+    },
+    "faq": {
+      "title": "Questions frequentes",
+      "viewAll": "Voir tout",
+      "items": [
+        {
+          "q": "Comment envoyer de l'argent avec digiKUNTZ Payments ?",
+          "a": "Connectez-vous, choisissez l'option de transfert, saisissez le beneficiaire et le montant, puis confirmez le paiement depuis votre carte bancaire ou portefeuille mobile."
+        },
+        {
+          "q": "Puis-je vendre mes services ou produits sur la plateforme ?",
+          "a": "Oui. Vous pouvez creer vos offres, definir vos prix et encaisser vos paiements en ligne de maniere securisee."
+        },
+        {
+          "q": "Comment fonctionnent les plans d'abonnement ?",
+          "a": "Vous configurez un plan avec periodicite et montant. La plateforme suit les abonnements actifs et centralise l'historique des paiements."
+        },
+        {
+          "q": "La collecte de fonds est-elle disponible pour les organisations ?",
+          "a": "Oui. Les organisations peuvent lancer des campagnes, partager leurs liens de collecte et suivre les contributions en temps reel."
+        },
+        {
+          "q": "Mes paiements et mes donnees sont-ils securises ?",
+          "a": "Oui. Les transactions sont protegees avec des mecanismes de securite et de tracabilite pour garantir la fiabilite des operations."
+        }
+      ]
+    },
+    "partners": {
+      "title": "Ils nous font confiance",
+      "subtitle": "Rejoignez des milliers d'utilisateurs satisfaits"
     }
   },
   "rawData": "Données brutes",

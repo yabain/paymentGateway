@@ -39,7 +39,8 @@
     "share": "Share",
     "copy": "Copy",
     "report": "Report",
-    "change": "Change"
+    "change": "Change",
+    "readMore": "Tell me more"
   },
   "auth": {
     "login": "Sign-in",
@@ -1009,6 +1010,59 @@
     "ourVision": {
       "title": "Our vision",
       "description": "To build a connected, inclusive and efficient African financial ecosystem, where every individual, business and developer can collect, pay and innovate without barriers."
+    },
+    "customPortal": {
+      "kicker": "Organization Portal",
+      "title": "Give your business a fully customizable portal.",
+      "description": "With an Organization account, you get your own portal to showcase products, services, fundraising campaigns, and subscription plans with your branding and content.",
+      "action": "Create your account for free",
+      "marquee": "Showcase your business with a tailored portal"
+    },
+    "certs": {
+      "title": "Why choose digiKUNTZ Payments?",
+      "subtitle": "A payment platform designed for African usage, from individuals to organizations.",
+      "items": [
+        "Secure payments via bank card and mobile wallets",
+        "Fast money transfers with status tracking",
+        "Online sales for products and services",
+        "Simple management of recurring subscriptions",
+        "Fundraising campaigns with real-time monitoring",
+        "Custom portal for Organization accounts",
+        "Payment API for your apps and websites",
+        "Centralized dashboard for all financial flows",
+        "Detailed history and full transaction traceability",
+        "Reliable, scalable, Africa-focused experience"
+      ]
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "viewAll": "View all",
+      "items": [
+        {
+          "q": "How can I send money with digiKUNTZ Payments?",
+          "a": "Log in, choose the transfer option, enter recipient details and amount, then confirm payment using your bank card or mobile wallet."
+        },
+        {
+          "q": "Can I sell my services or products on the platform?",
+          "a": "Yes. You can create offers, set prices, and receive secure online payments."
+        },
+        {
+          "q": "How do subscription plans work?",
+          "a": "You configure a plan with billing cycle and amount. The platform tracks active subscriptions and centralizes payment history."
+        },
+        {
+          "q": "Is fundraising available for organizations?",
+          "a": "Yes. Organizations can launch campaigns, share fundraising links, and monitor contributions in real time."
+        },
+        {
+          "q": "Are my payments and data secure?",
+          "a": "Yes. Transactions are protected with security and traceability mechanisms to ensure reliable operations."
+        }
+      ]
+    },
+    "partners": {
+      "title": "They trust us",
+      "subtitle": "Join thousands of satisfied users"
     }
   },
   "rawData": "Raw data",
