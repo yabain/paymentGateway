@@ -115,12 +115,12 @@ export class SettingsComponent implements OnInit {
 
   showAdvancedOptions(userData: any): boolean {
     if (!userData) return false;
-    const { accountType, isAdmin, isActive, isVerified } = userData;
+    const { accountType, isAdmin, isActive, verified } = userData;
     if (isAdmin === true) return true;
     else if (
       accountType === 'organisation'
-      && isActive !== false
-      && isVerified === true
+      && isActive === true
+      && verified === true
     ) return true;
     else return false
   }

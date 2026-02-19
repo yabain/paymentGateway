@@ -85,7 +85,7 @@
     </button></a>
   </div><br>
 
-  <div class="card-body" *ngIf="ableToShow && keyData">
+  <div class="card-body" *ngIf="ableToShow && keyData?.status === true">
     <button class="btn btn-block me-1 btn-outline-danger" data-bs-toggle="modal" data-bs-target="#resetKey_modal">
       {{ 'dev.resetKey' | translate }}
     </button>

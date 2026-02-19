@@ -42,24 +42,9 @@ export class ProfileComponent implements OnInit {
   selectedImage: any;
   allCities: any = [];
   description: string;
-  headTitlePortal: string;
-  headTitlePortalColor: string;
-  headTextPortal: string;
-  headTextPortalColor: string
   descriptionEdition: boolean = false;
-  headTitlePortalEdition: boolean = false;
-  headTextPortalEdition: boolean = false;
-  ableToShow: boolean = false;
-  userSettings: any;
-  loadingSettings: boolean = true;
-  portalPrimaryColor: string = '#021d66';
-  portalSecondaryColor: string = '#F57C11';
-  portalColorEdition: boolean;
-  // canEdit: boolean = false;
 
   constructor(
-    private Router: Router,
-    private storage: StorageService,
     private toastr: ToastrService,
     private userService: UserService,
     private toastService: ToastService,
@@ -67,13 +52,12 @@ export class ProfileComponent implements OnInit {
     private location: LocationService,
     private language: LanguageService,
     private dateService: DateService,
-    private userSettingsService: UserSettingsService
   ) {
   }
 
   ngOnInit(): void {
     this.scrollToTop();
-    this.getDatas();
+    this.getData();
     this.profilePictureForm();
   }
 
@@ -145,6 +129,8 @@ export class ProfileComponent implements OnInit {
       cityId: new FormControl(userdata?.cityId?._id || '', [Validators.required]),
       language: new FormControl(userdata?.language || '', [Validators.required]),
       address: new FormControl(userdata?.address || '', [Validators.required]),
+      niu: new FormControl(userdata?.niu || ''),
+      rccm: new FormControl(userdata?.rccm || ''),
   
       // 🌐 Liens non obligatoires, mais doivent être valides s’ils sont saisis
       facebook: new FormControl(userdata?.facebook || '', [Validators.pattern(urlPattern)]),
@@ -220,7 +206,7 @@ export class ProfileComponent implements OnInit {
           this.translate.get("profile.profileUpdatedError").subscribe((res: string) => {
             this.toastService.presentToast('error', 'Error', res, 10000);
           });
-          this.edition = false;
+          this.edit(false);
           this.descriptionEdition = false;
           this.loading = false;
           this.loading2 = false;
@@ -231,7 +217,7 @@ export class ProfileComponent implements OnInit {
             this.toastService.presentToast('success', 'Done !', res, 10000);
           })
           this.idrateCurrentUserData(userData);
-          this.edition = false;
+          this.edit(false);
           this.descriptionEdition = false;
           this.loading = false;
           this.loading2 = false; 
@@ -250,7 +236,11 @@ export class ProfileComponent implements OnInit {
     this.saveUserData({description: this.description});
   }
 
-  edit() {
+  edit(value?: boolean) {
+    if(value) {
+      this.form.enable({ emitEvent: false });
+      this.edition = value;
+    }
     this.edition = !this.edition;
     if (!this.form) return;
     if (this.edition) {
@@ -270,150 +260,11 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  editHeadTitlePortalPage() {
-    this.headTitlePortalEdition = !this.headTitlePortalEdition;
-    if (this.headTitlePortalEdition) {
-      return;
-    } else {
-      this.headTitlePortal = this.currentUser.headTitlePortal || '';
-      this.headTitlePortalColor = this.currentUser.headTitlePortalColor || '';
-    }
-  }
 
-  editHeadTextPortalPage() {
-    this.headTextPortalEdition = !this.headTextPortalEdition;
-    if (this.headTextPortalEdition) {
-      return;
-    } else {
-      this.headTextPortal = this.currentUser.headTextPortal || '';
-      this.headTextPortalColor = this.currentUser.headTextPortalColor || '';
-    }
-  }
-
-  editPortalColor() {
-    this.portalColorEdition = !this.portalColorEdition;
-    if (this.portalColorEdition) {
-      return;
-    } else {
-      this.portalPrimaryColor = this.currentUser.portalPrimaryColor || this.portalPrimaryColor;
-      this.portalSecondaryColor = this.currentUser.portalSecondaryColor || this.portalSecondaryColor;
-    }
-  }
-
-  getDatas() {
+  getData() {
     this.getCurrentUser();
-    this.getUserSettings();
   }
 
-  getUserSettings(){
-    this.loadingSettings = true;
-    this.userSettingsService.getUserSettings()
-    .subscribe((res: any) => {
-      if(res) {
-        this.idrateSettingsData(res);
-      }
-      console.log('user settings:', res)
-      this.loadingSettings = false;
-    })
-  }
-
-  idrateSettingsData(data){
-    this.userSettings = data;
-    this.headTitlePortal = data.headTitlePortal;
-    this.headTextPortal = data.headTextPortal;
-    this.headTextPortalColor = data.headTextPortalColor;
-    this.headTitlePortalColor = data.headTitlePortalColor;
-    this.portalPrimaryColor = data.portalPrimaryColor;
-    this.portalSecondaryColor = data.portalSecondaryColor;
-  }
-
-  saveSettingsData(val: string = 'description'){
-    this.loading2 = true;
-    let data: any;
-    if(val === "headTitlePortal") data = {
-      headTitlePortal: this.headTitlePortal,
-      headTitlePortalColor: this.headTitlePortalColor
-    }
-    else if(val === "headTextPortal") data = {
-      headTextPortal: this.headTextPortal,
-      headTextPortalColor: this.headTextPortalColor
-    }
-    else if(val === "portalColor") data = {
-      portalPrimaryColor: this.portalPrimaryColor,
-      portalSecondaryColor: this.portalSecondaryColor
-    }
-    this.userSettingsService.updateSettingsData(data)
-      .subscribe
-      ({
-        next: (userSettings) => {
-          if (!userSettings) {
-            this.translate.get("profile.profileUpdatedError").subscribe((res: string) => {
-              this.toastService.presentToast('error', 'Error', res, 10000);
-            });
-          } else {
-            this.userSettingsService.setSettingsToStorage(userSettings);
-            this.translate.get("profile.profileUpdated").subscribe((res: string) => {
-              this.toastService.presentToast('success', 'Done !', res, 10000);
-            })
-            this.idrateSettingsData(userSettings);
-            console.log('user settings:', userSettings)
-            this.descriptionEdition = false;
-            this.headTextPortalEdition = false;
-            this.headTitlePortalEdition = false;
-            this.portalColorEdition = false;
-            this.loading2 = false;
-          }
-        },
-        error: (error) => {
-          this.translate.get("profile.profileUpdatedError").subscribe((res: string) => {
-            this.toastService.presentToast('error', 'Error', res, 10000);
-          });
-          this.loading2 = false;
-        }
-      });
-  }
-
-  changeUserPortalStatus(){
-    this.loading3 = true;
-    const data = {
-      portal: !this.userSettings.portal
-    }
-    this.userSettingsService.updateSettingsData(data)
-    .subscribe
-    ({
-      next: (resp) => {
-        if (!resp) {
-          this.translate.get("profile.profileUpdatedError").subscribe((res: string) => {
-            this.toastService.presentToast('error', 'Error', res, 10000);
-          });
-        } else {
-          this.userSettings = resp;
-          this.toastService.presentToast('success', 'Done !', '', 3000);
-          this.loading3 = false;
-        }
-      },
-      error: (error) => {
-        this.translate.get("profile.profileUpdatedError").subscribe((res: string) => {
-          this.toastService.presentToast('error', 'Error', res, 10000);
-        });
-        this.loading3 = false;
-      }
-    });
-  }
-
-  toggleService(option: string): void {
-    if (!this.userSettings) return;
-
-    const currentValue = !!this.userSettings[option];
-    const payload = { [option]: !currentValue };
-
-    this.userSettingsService.updateSettingsData(payload).subscribe((res: any) => {
-      if (!res) return;
-      this.userSettings = res;
-      this.toastService.presentToast('success', 'Done !', '', 3000);
-      this.userSettingsService.setSettingsToStorage(res);
-    });
-  }
 
   async getCurrentUser() {
     this.loading3 = true;
@@ -438,7 +289,6 @@ export class ProfileComponent implements OnInit {
     this.userForm(this.currentUser);
     this.description = userData.description;
     this.memoryImage = userData.pictureUrl;
-    this.ableToShow = this.verifyUserConditions(this.currentUser) ? true : false;
   }
   /**
    * Saves the selected profile picture.
@@ -548,9 +398,8 @@ export class ProfileComponent implements OnInit {
   }
 
   verifyUserConditions(user): boolean {
-    if (user.accountType !== 'organisation' && user.isAdmin !== true) return false;
-    if (user.isActive !== true) return false;
-    if (user.verified !== true) return false;
+    if (user.isAdmin === true) return true;
+    if (user.isActive !== true || user.verified !== true) return false;
     return true;
   }
 

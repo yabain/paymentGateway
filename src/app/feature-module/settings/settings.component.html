@@ -36,8 +36,7 @@
                   </span>
                   <span (click)="changeUserPortalStatus()" class="btn btn-light">
                     <a class="btn-filters" href="javascript:void(0);" data-bs-toggle="tooltip"
-                      data-bs-placement="bottom" matTooltip="Disable"><span><i class="feather icon-power"
-                        [ngClass]="userSettings?.portal === true ?
+                      data-bs-placement="bottom" matTooltip="Disable"><span><i class="feather icon-power" [ngClass]="userSettings?.portal === true ?
                     'danger-dark' : 'success-dark'"></i></span></a>
                   </span>
                 </div>
@@ -292,11 +291,25 @@
             </div>
           </div>
           <div class="card" *ngIf="!showAdvancedOptions(userData)">
-            To enable your portal, you need to verify your account.
+            <div class="card-header stify-content-between">
+              <h5 class="card-title">{{ "portal.title" | translate }}</h5>
+            </div>
+            <div class="card-body">
+              To enable your portal, you need to verify your account.
+            </div>
           </div>
         </div>
-        <div class="col-lg-6" *ngIf="showAdvancedOptions(userData)">
-          <app-dev [ableToShow]="ableToShow" [userData]="currentUser" *ngIf="userData && !loading"></app-dev>
+        <div class="col-lg-6">
+          <div class="card" *ngIf="!showAdvancedOptions(userData)">
+            <div class="card-header d-flex justify-content-between">
+              <h5 class="card-title">{{ "dev.title" | translate }}</h5>
+            </div>
+            <div class="card-body">
+              To enable your Dev Tools, you need to verify your account.
+            </div>
+          </div>
+          <app-dev [ableToShow]="ableToShow" [userData]="currentUser"
+            *ngIf="userData && !loading && showAdvancedOptions(userData)"></app-dev>
           <!-- <div class="card">
             <div class="card-header">
               <h5 class="card-title">{{ "profile.activity" | translate }}</h5>
