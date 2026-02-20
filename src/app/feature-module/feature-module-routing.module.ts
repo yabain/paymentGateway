@@ -174,6 +174,11 @@ const routes: Routes = [
           import('./setting/setting.module').then((m) => m.SettingModule),
       },
       {
+        path: 'system-settings',
+        loadChildren: () =>
+          import('./system-settings/system-settings.module').then((m) => m.SystemSettingsModule),
+      },
+      {
         path: 'blog',
         loadChildren: () =>
           import('./blog/blog.module').then((m) => m.BlogModule),

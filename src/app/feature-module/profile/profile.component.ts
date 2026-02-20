@@ -45,7 +45,6 @@ export class ProfileComponent implements OnInit {
   descriptionEdition: boolean = false;
 
   constructor(
-    private toastr: ToastrService,
     private userService: UserService,
     private toastService: ToastService,
     private translate: TranslateService,
@@ -87,7 +86,7 @@ export class ProfileComponent implements OnInit {
   copy(data: string) {
     navigator.clipboard.writeText(data).then(() => {
       // Réinitialise le message après 2 secondes
-      this.toastr.success('Copied !');
+      this.toastService.presentToast('success', 'Copied !', '', 5 * 1000);
     }).catch(err => {
       console.error('Impossible de copier : ', err);
     });

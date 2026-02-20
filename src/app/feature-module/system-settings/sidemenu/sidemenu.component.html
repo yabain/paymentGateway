@@ -1,0 +1,85 @@
+<div class="card">
+  <div class="card-body">
+    <div class="page-header">
+      <div class="content-page-header">
+        <h5>{{ 'sideMenu.systemSettings' | translate }}</h5>
+      </div>
+    </div>
+    <!-- Settings Menu -->
+    <div class="widget settings-menu mb-0">
+      <ul>
+        <!-- <li class="nav-item">
+          <a
+            [routerLink]="routes.profileSystemSettings"
+            class="nav-link"
+            [class.active]="url === routes.profileSystemSettings"
+          >
+            <i class="feather icon-user"></i> <span>Account Settings</span>
+          </a>
+        </li> -->
+        <li class="nav-item">
+          <a
+            [routerLink]="routes.companySettings"
+            class="nav-link"
+            [class.active]="url === routes.companySettings"
+          >
+            <i class="feather icon-crosshair"></i> <span>Company Settings</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            [routerLink]="routes.invoiceSettings"
+            class="nav-link"
+            [class.active]="url === routes.invoiceSettings"
+          >
+            <i class="feather icon-file"></i> <span>{{ 'payment.invoiceSettings' | translate }}</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            [routerLink]="routes.paymentSettings"
+            class="nav-link"
+            [class.active]="url === routes.paymentSettings"
+          >
+            <i class="feather icon-credit-card"></i>
+            <span>{{ 'payment.paymentMethods' | translate }}</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            [routerLink]="routes.emailSettings"
+            class="nav-link"
+            [class.active]="url === routes.emailSettings"
+          >
+            <i class="feather icon-mail"></i> <span>{{ 'sideMenu.emailSettings' | translate }}</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a [routerLink]="routes.emailTemplate" [class.active]="url === routes.emailTemplate">
+            <i class="feather icon-message-circle"></i> <span>{{ 'sideMenu.whatsappSettings' | translate }}</span>
+          </a>
+        </li>
+        <!-- <li class="nav-item">
+          <a
+            [routerLink]="routes.preferences"
+            class="nav-link"
+            [class.active]="url === routes.preferences"
+          >
+            <i class="feather icon-settings"></i>
+            <span>Preference Settings</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            [routerLink]="routes.twoFactor"
+            class="nav-link"
+            [class.active]="url === routes.twoFactor"
+          >
+            <i class="feather icon-aperture"></i> <span>Two Factor</span>
+          </a>
+        </li> -->
+      </ul>
+    </div>
+    <!-- /Settings Menu -->
+  </div>
+</div>

@@ -282,24 +282,27 @@ export class routes {
     return this.application + '/email';
   }
   public static get settings(): string {
-    return this.baseUrl + '/settings';
+    return this.baseUrl + '/system-settings';
+  }
+  public static get systemSettings(): string {
+    return this.baseUrl + '/system-settings';
   }
   public static get taxTypes(): string {
     return this.settings + '/tax-types';
   }
-  public static get companysettings(): string {
+  public static get companySettings(): string {
     return this.settings + '/company-settings';
   }
-  public static get paymentsettings(): string {
+  public static get paymentSettings(): string {
     return this.settings + '/payment-settings';
   }
-  public static get bankaccount(): string {
+  public static get bankAccount(): string {
     return this.settings + '/bank-account';
   }
-  public static get taxrats(): string {
+  public static get taxRats(): string {
     return this.settings + '/tax-rats';
   }
-  public static get emailsettings(): string {
+  public static get emailSettings(): string {
     return this.settings + '/email-settings';
   }
   public static get deleteAccount(): string {
@@ -315,7 +318,10 @@ export class routes {
     return this.settings + '/preferences';
   }
   public static get profileSettings(): string {
-    return this.settings + '/profile';
+    return this.systemSettings + '/profile';
+  }
+  public static get profileSystemSettings(): string {
+    return this.systemSettings + '/profile';
   }
   public static get changePassword(): string {
     return this.settings + '/change-password';

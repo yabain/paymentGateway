@@ -17,7 +17,7 @@
       role="status" aria-hidden="true"></span>
   </div>
   <div class="card-body card-body-height" *ngIf="ableToShow && keyData?.status === true">
-    <p>API Key management</p>
+    <p>{{ 'dev.keyManagement' | translate }}</p>
     <div *ngIf="showKey" (click)="toggleShowKey()">
       {{ "dev.showKey" | translate }} <i class="feather icon-eye-off" style="margin-left: 10px;"></i>
     </div>
@@ -25,19 +25,19 @@
       {{ "dev.hideKey" | translate }} <i class="feather icon-eye" style="margin-left: 10px;"></i>
     </div>
     <br><br>
-    <small class="text-dark">User Id
+    <small class="text-dark">{{ 'dev.userId' | translate }}
       <i class="feather icon-copy me-2" style="margin-left: 10px;" (click)="copy(keyData?.userId)"></i></small>
     <input *ngIf="showKey" type="text" class="form-control" [value]="keyData?.userId || ''" disabled>
     <input *ngIf="!showKey" type="text" class="form-control" value="**************" disabled>
     <br>
-    <small class="text-dark">Secret Key
+    <small class="text-dark">{{ 'dev.secretKey' | translate }}
       <i class="feather icon-copy me-2" style="margin-left: 10px;" (click)="copy(keyData?.secretKey)"></i>
     </small>
     <input *ngIf="showKey" type="text" class="form-control" [value]="keyData?.secretKey" disabled>
     <input *ngIf="!showKey" type="text" class="form-control" value="**************" disabled>
 
     <br>
-    <small class="text-dark">Public Key
+    <small class="text-dark">{{ 'dev.publicKey' | translate }}
       <i class="feather icon-copy me-2" style="margin-left: 10px;" (click)="copy(keyData?.publicKey)"></i>
     </small>
     <input *ngIf="showKey" type="text" class="form-control" [value]="keyData?.publicKey" disabled>
@@ -66,7 +66,7 @@
   </div>
 
   <div class="card-body" *ngIf="!ableToShow || ableToShow && keyData?.status !== true" tyle="text-align: left;">
-    <p>API Key management</p>
+    <p>{{ 'dev.keyManagement' | translate }}</p>
     {{ "dev.msgToGetKey" | translate }}: <br>
     <ul>
       <li>1. {{ "dev.step1" | translate }}</li>

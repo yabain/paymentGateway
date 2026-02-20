@@ -315,7 +315,7 @@
     "certifAccount": "Certify my account",
     "certifAccountMsg": "To certify your account, you must",
     "copyCode": "Copy the following code",
-    "certifAccountMsg2": "Send the code and your identity documents or documents certifying your legal existence if you are an organization/company to the address contact@yaba-in.com.",
+    "certifAccountMsg2": "Send the code and your identity documents or documents certifying your legal existence if you are an organisation/company to the address contact@yaba-in.com.",
     "certifAccountMsg3": "After verifying your information, you will be able to create ticketed events and fundraisers.",
     "startVerification": "Start verification",
     "verifyMyAccount": "Certify my identity",
@@ -490,6 +490,8 @@
     "balance": "Balance",
     "service": "Service",
     "invoice": "Invoice",
+    "invoiceSettings": "Invoice settings",
+    "paymentMethods": "Payment methods",
     "inWords": "In words",
     "scanToViewInvoice": "Scan to View invoice",
     "invoiceRef": "References",
@@ -596,7 +598,9 @@
     "myTransactions": "My transactions",
     "services": "Services",
     "servicesProducts": "Products / Services",
-    "settings": "Settings"
+    "settings": "Settings",
+    "emailSettings": "Email settings",
+    "whatsappSettings": "Whatsapp settings"
   },
   "flutterwave": {
     "otherCurrencyBalances": "Othes currency balance available",
@@ -840,11 +844,15 @@
     "apiDoc": "API Doc",
     "generateKey": "Generate a new key",
     "key": "Key",
+    "keyManagement": "API key management",
+    "userId": "User Id",
+    "secretKey": "Secret key",
+    "publicKey": "Public key",
     "showKey": "Show key",
     "hideKey": "Hide key",
     "keyWarning": "By enabling this feature, you authorize third-party applications to initiate transactions from your account using your API keys.",
     "msgToGetKey": "To enable your integration keys for your own application, you must ensure you meet these requirements",
-    "step1": "Have an Organization account",
+    "step1": "Have an Organisation account",
     "step2": "Have passed the verification step",
     "step3": "Have enabled API access to your account",
     "resetKey": "Reset API Key",
@@ -867,12 +875,12 @@
     "introP6": "Whether you are building a one-time payment application, a subscription system, or a high-volume transaction platform, the digiKUNTZ Payments API adapts to your needs and provides a reliable foundation for building scalable and high-performance payment experiences.",
     "getKeySteps": "API Key Acquisition Steps",
     "accountCreation": "Account Creation",
-    "accountCreationParagraph": "Only Organization-type accounts are eligible to obtain payment APIs. This account type provides access to advanced features required for integrating and operating payment services via API.",
+    "accountCreationParagraph": "Only Organisation-type accounts are eligible to obtain payment APIs. This account type provides access to advanced features required for integrating and operating payment services via API.",
     "idVerification": "Identity Verification (KYC)",
     "idVerificationParagraph": "You must complete the identity verification process from your Profile area. Alternatively, the required documents may be submitted by email to contact@yaba-in.com.",
     "idVerificationDocsTitle": "The following documents are mandatory",
     "idDoc1": "Your digiKUNTZ Payments account ID visible on the Profile page",
-    "idDoc2": "Your organization logo",
+    "idDoc2": "Your organisation logo",
     "idDoc3": "A commitment letter certifying that the API will not be used for illegal purposes",
     "idDoc4": "A tax clearance certificate issued within the last three months",
     "idDoc5": "Your business registration certificate",
@@ -1013,22 +1021,22 @@
       "description": "To build a connected, inclusive and efficient African financial ecosystem, where every individual, business and developer can collect, pay and innovate without barriers."
     },
     "customPortal": {
-      "kicker": "Organization Portal",
+      "kicker": "Organisation Portal",
       "title": "Give your business a fully customizable portal.",
-      "description": "With an Organization account, you get your own portal to showcase products, services, fundraising campaigns, and subscription plans with your branding and content.",
+      "description": "With an Organisation account, you get your own portal to showcase products, services, fundraising campaigns, and subscription plans with your branding and content.",
       "action": "Create your account for free",
       "marquee": "Showcase your business with a tailored portal"
     },
     "certs": {
       "title": "Why choose digiKUNTZ Payments?",
-      "subtitle": "A payment platform designed for African usage, from individuals to organizations.",
+      "subtitle": "A payment platform designed for African usage, from individuals to organisations.",
       "items": [
         "Secure payments via bank card and mobile wallets",
         "Fast money transfers with status tracking",
         "Online sales for products and services",
         "Simple management of recurring subscriptions",
         "Fundraising campaigns with real-time monitoring",
-        "Custom portal for Organization accounts",
+        "Custom portal for Organisation accounts",
         "Payment API for your apps and websites",
         "Centralized dashboard for all financial flows",
         "Detailed history and full transaction traceability",
@@ -1052,8 +1060,8 @@
           "a": "You configure a plan with billing cycle and amount. The platform tracks active subscriptions and centralizes payment history."
         },
         {
-          "q": "Is fundraising available for organizations?",
-          "a": "Yes. Organizations can launch campaigns, share fundraising links, and monitor contributions in real time."
+          "q": "Is fundraising available for organisations?",
+          "a": "Yes. Organisations can launch campaigns, share fundraising links, and monitor contributions in real time."
         },
         {
           "q": "Are my payments and data secure?",

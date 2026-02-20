@@ -490,6 +490,8 @@
     "balance": "Solde",
     "service": "Service",
     "invoice": "Facture",
+    "invoiceSettings": "Paramètres de facturation",
+    "paymentMethods": "Méthodes de paiement",
     "inWords": "en lettre",
     "scanToViewInvoice": "Voir la facture",
     "invoiceRef": "Réferences",
@@ -596,7 +598,9 @@
     "myTransactions": "Mes transactions",
     "services": "Services",
     "servicesProducts": "Produits / Services",
-    "settings": "Paramètres"
+    "settings": "Paramètres",
+    "emailSettings": "Parametres Email",
+    "whatsappSettings": "Paramètres Whatsapp"
   },
   "flutterwave": {
     "otherCurrencyBalances": "Solde d'autres devises disponible",
@@ -841,6 +845,10 @@
     "apiDoc": "Doc API",
     "generateKey": "Re-générer la clé",
     "key": "Clé",
+    "keyManagement": "Gestion de clé",
+    "userId": "Identifiant utilisateur",
+    "secretKey": "Clé secrète",
+    "publicKey": "Clé public",
     "showKey": "Afficher la clé",
     "hideKey": "Cacher la clé",
     "keyWarning": "En activant cette fonctionnalité, vous autorisez des applications tiers à initier des transaction depuis votre compte au moyen de vos clés API.",

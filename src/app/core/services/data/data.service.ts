@@ -937,11 +937,11 @@ export class DataService {
         },
         {
           menuValue: 'systemSettings',
-          route: routes.profileSettings,
+          route: routes.companySettings,
           hasSubRoute: false,
           showSubRoute: false,
           icon: 'settings',
-          base: 'settings',
+          base: 'system-settings',
           subMenus: [],
         },
       ],
