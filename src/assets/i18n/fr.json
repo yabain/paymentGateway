@@ -600,7 +600,9 @@
     "servicesProducts": "Produits / Services",
     "settings": "Paramètres",
     "emailSettings": "Parametres Email",
-    "whatsappSettings": "Paramètres Whatsapp"
+    "whatsappSettings": "Paramètres Whatsapp",
+    "generalSettings": "Paramètres généraux",
+    "companySettings": "Paramètres de l'entreprise"
   },
   "flutterwave": {
     "otherCurrencyBalances": "Solde d'autres devises disponible",

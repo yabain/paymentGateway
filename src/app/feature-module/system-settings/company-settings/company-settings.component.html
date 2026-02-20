@@ -1,10 +1,32 @@
 <div class="row">
   <div class="card company-settings-new">
+    <div class="card-header">
+      <h3 class="card-title d-flex justify-content-between">
+        {{ 'sideMenu.companySettings' | translate }}
+        <div>
+          <a class="btn btn-sm btn-white" (click)="edit()" *ngIf="!edition && !saving">
+            <i class="feather icon-edit"></i>
+            {{ "action.edit" | translate }}</a>
+          <a class="btn btn-sm btn-secondary me-5" (click)="edit()" *ngIf="edition && !saving">{{ "action.cancel" | translate
+            }}</a>
+          <a class="btn btn-sm btn-success" (click)="submit()" *ngIf="edition && !saving">{{ "action.save" | translate
+            }}</a>
+          <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" *ngIf="saving"></span>
+        </div>
+      </h3>
+    </div>
     <div class="card-body w-100">
-      <div class="content-page-header">
-        <h5>Company Settings</h5>
-      </div>
-      <div class="row">
+      <form class="row" [formGroup]="form">
+        <div class="col-lg-6 col-12">
+          <div class="input-block mb-3">
+            <label for="Company">App Name</label>
+            <input type="text" formControlName="appName" class="form-control"
+              [class.is-invalid]="form.get('appName')?.invalid && form.get('appName')?.touched">
+            <div class="invalid-feedback" *ngIf="form.get('appName')?.invalid && form.get('appName')?.touched">
+              {{ "auth.requiredField" | translate }}
+            </div>
+          </div>
+        </div>
         <div class="col-lg-6 col-12">
           <div class="input-block mb-3">
             <label for="Company">Company Name</label>
@@ -133,7 +155,7 @@
             <a href="javascript:void(0);" class="btn btn-primary">Save Changes</a>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   </div>
 

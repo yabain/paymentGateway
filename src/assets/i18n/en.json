@@ -600,7 +600,9 @@
     "servicesProducts": "Products / Services",
     "settings": "Settings",
     "emailSettings": "Email settings",
-    "whatsappSettings": "Whatsapp settings"
+    "whatsappSettings": "Whatsapp settings",
+    "generalSettings": "General settings",
+    "companySettings": "Company settings"
   },
   "flutterwave": {
     "otherCurrencyBalances": "Othes currency balance available",

@@ -28,7 +28,7 @@ export class ProfileComponent implements OnInit {
   key: any
   edition: boolean = false;
   form: FormGroup;
-  loading: boolean = false;
+  saving: boolean = false;
   loading2: boolean = false;
   loading3: boolean = true;
   userId: any;
@@ -192,7 +192,7 @@ export class ProfileComponent implements OnInit {
     if (wasDisabled) {
       this.form.disable({ emitEvent: false });
     }
-    this.loading = true;
+    this.saving= true;
     this.saveUserData(this.form.value);
   }
 
@@ -207,7 +207,7 @@ export class ProfileComponent implements OnInit {
           });
           this.edit(false);
           this.descriptionEdition = false;
-          this.loading = false;
+          this.saving= false;
           this.loading2 = false;
         } else {
           this.language.useLanguage(this.form.value.language);
@@ -218,7 +218,7 @@ export class ProfileComponent implements OnInit {
           this.idrateCurrentUserData(userData);
           this.edit(false);
           this.descriptionEdition = false;
-          this.loading = false;
+          this.saving= false;
           this.loading2 = false; 
         }
       },
@@ -279,7 +279,7 @@ export class ProfileComponent implements OnInit {
       this.idrateCurrentUserData(this.currentUser);
       // Start in view mode with controls disabled to avoid template [disabled]
       this.form.disable({ emitEvent: false });
-      this.loading = false;
+      this.saving= false;
     }
   }
 

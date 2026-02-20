@@ -45,16 +45,18 @@
                 <div class="card-header">
                   <h5 class="card-title d-flex justify-content-between">
                     <span>{{ "sideMenu.profile" | translate }}</span>
-                    <a class="btn btn-sm btn-white" (click)="edit()" *ngIf="!edition && !loading">
+                    <div>
+                    <a class="btn btn-sm btn-white" (click)="edit()" *ngIf="!edition && !saving">
                       <i class="feather icon-edit"></i>
                       {{ "action.edit" | translate }}</a>
-                    <a class="btn btn-sm btn-secondary" (click)="edit()" *ngIf="edition && !loading">{{ "action.cancel"
+                    <a class="btn btn-sm btn-secondary me-5" (click)="edit()" *ngIf="edition && !saving">{{ "action.cancel"
                       |
                       translate }}</a>
-                    <a class="btn btn-sm btn-success" (click)="submit()" *ngIf="edition && !loading">{{ "action.save" |
+                    <a class="btn btn-sm btn-success" (click)="submit()" *ngIf="edition && !saving">{{ "action.save" |
                       translate }}</a>
                     <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"
-                      *ngIf="loading"></span>
+                      *ngIf="saving"></span>
+                      </div>
                   </h5>
                   <div *ngIf="currentUser && currentUser?.verified && edition">
                     <br>

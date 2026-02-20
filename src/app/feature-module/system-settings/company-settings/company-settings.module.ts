@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { CompanySettingsRoutingModule } from './company-settings-routing.module';
 import { CompanySettingsComponent } from './company-settings.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @NgModule({
@@ -13,7 +14,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
   imports: [
     CommonModule,
     CompanySettingsRoutingModule,
-    SharedModule
+    SharedModule,
+    TranslateModule,
   ]
 })
 export class CompanySettingsModule { }

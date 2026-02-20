@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { routes } from 'src/app/core/core.index';
 import { LanguageService } from 'src/app/services/language/language.service';
+import { SystemService } from 'src/app/services/system/system.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { UserService } from 'src/app/services/user/user.service';
 
@@ -19,17 +20,22 @@ export class CompanySettingsComponent implements OnInit {
   uploadLogoForm: FormGroup;
   logoUrl: string = "assets/img/resources/cover.png";
   systemData: any;
+  loading: boolean = true;
+  saving: boolean = false;
 
   constructor(
     private userService: UserService,
     private toastService: ToastService,
     private translate: TranslateService,
     private language: LanguageService,
+    private systemService: SystemService,
   ) {
   }
 
   ngOnInit(): void {
     this.scrollToTop();
+    this.systemForm({});
+    this.form.disable({ emitEvent: false });
     this.getData();
     this.appLogoForm();
   }
@@ -45,8 +51,26 @@ export class CompanySettingsComponent implements OnInit {
   }
 
   getData() {
-    // this.getSystemData();
+    this.getSystemData();
   }
+
+  getSystemData() {
+    this.loading = true;
+    this.systemService.getSystemData().subscribe({
+      next: (res: any) => {
+        console.log('res', res);
+        this.systemData = res;
+        this.logoUrl = this.systemData?.appLogoUrl || "assets/img/resources/cover.png";
+        this.systemForm(this.systemData);
+        this.loading = false;
+      },
+      error: (err) => {
+        console.log(err);
+        this.loading = false;
+      }
+    })
+  }
+
 
   onSelect(event: { addedFiles: File[] }) {
     this.files.push(...event.addedFiles);
@@ -104,5 +128,36 @@ export class CompanySettingsComponent implements OnInit {
     twitter: new FormControl(systemData?.twitter || '', [Validators.pattern(urlPattern)]),
 
     });
+  }
+
+  submit() {
+    // Enable the form temporarily to check validity if it's disabled
+    const wasDisabled = this.form.disabled;
+    if (wasDisabled) {
+      this.form.enable({ emitEvent: false });
+    }
+    
+    // Mark all fields as touched to show validation errors
+    this.form.markAllAsTouched();
+    
+    if (!this.form.valid) {
+      // Log validation errors for debugging
+      Object.keys(this.form.controls).forEach(key => {
+        const control = this.form.get(key);
+        if (control && control.invalid) {
+          console.error(`Field ${key}:`, control.errors);
+        }
+      });
+      
+      this.toastService.presentToast('error', 'Error', 'Invalid Form');
+      return;
+    }
+    
+    // Re-disable if it was disabled before
+    if (wasDisabled) {
+      this.form.disable({ emitEvent: false });
+    }
+    this.saving = true;
+    // this.saveUserData(this.form.value);
   }
 }
