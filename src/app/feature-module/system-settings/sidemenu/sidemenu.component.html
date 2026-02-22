@@ -2,7 +2,7 @@
   <div class="card-body">
     <div class="page-header">
       <div class="content-page-header">
-        <h5>{{ 'sideMenu.systemSettings' | translate }}</h5>
+        <h5>{{ 'systemSettings.title' | translate }}</h5>
       </div>
     </div>
     <!-- Settings Menu -->
@@ -23,7 +23,7 @@
             class="nav-link"
             [class.active]="url === routes.companySettings"
           >
-            <i class="feather icon-crosshair"></i> <span>{{ 'sideMenu.companySettings' | translate }}</span>
+            <i class="feather icon-settings"></i> <span>{{ 'systemSettings.companySettings' | translate }}</span>
           </a>
         </li>
         <li class="nav-item">
@@ -51,12 +51,12 @@
             class="nav-link"
             [class.active]="url === routes.emailSettings"
           >
-            <i class="feather icon-mail"></i> <span>{{ 'sideMenu.emailSettings' | translate }}</span>
+            <i class="feather icon-mail"></i> <span>{{ 'systemSettings.emailSettings' | translate }}</span>
           </a>
         </li>
         <li class="nav-item">
-          <a [routerLink]="routes.emailTemplate" [class.active]="url === routes.emailTemplate">
-            <i class="feather icon-message-circle"></i> <span>{{ 'sideMenu.whatsappSettings' | translate }}</span>
+          <a [routerLink]="routes.whatsappSettings" [class.active]="url === routes.whatsappSettings">
+            <i class="feather icon-message-circle"></i> <span>{{ 'systemSettings.whatsappSettings' | translate }}</span>
           </a>
         </li>
         <!-- <li class="nav-item">

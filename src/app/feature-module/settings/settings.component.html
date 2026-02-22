@@ -295,7 +295,7 @@
               <h5 class="card-title">{{ "portal.title" | translate }}</h5>
             </div>
             <div class="card-body">
-              To enable your portal, you need to verify your account.
+              {{ 'portal.msgToEnable' | translate }}
             </div>
           </div>
         </div>
@@ -305,7 +305,7 @@
               <h5 class="card-title">{{ "dev.title" | translate }}</h5>
             </div>
             <div class="card-body">
-              To enable your Dev Tools, you need to verify your account.
+              {{ 'dev.msgToEnable' | translate }}
             </div>
           </div>
           <app-dev [ableToShow]="ableToShow" [userData]="currentUser"

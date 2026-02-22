@@ -1,40 +1,26 @@
-<div class = "card">
+<div class="page-header">
+  <div class="content-page-header page-tilte d-flex justify-content-between">
+    <h5>
+      <img src="assets/img/resources/card.png" alt="" style="width: 30px; margin-right: 10px;">
+      Payment Settings</h5>
+  </div>
+</div>
+
+<div class="card">
   <div class="card-body w-100">
     <div class="row">
-      <div class="content-page-header">
-        <h5>Payment Settings</h5>
-      </div>
       <div class="form-group-item">
         <div class="row">
           <div class="col-12">
             <div class="payment-toggle">
-              <h5 class="form-title">Strip</h5>
+              <div class="method-icon">
+                <img src="assets/img/resources/om.png" alt="" class="method-img" style="width: 100px;">
+              </div>
+              <h5 class="form-title">Orange Money</h5>
               <div class="status-toggle">
                 <input id="rating_1" class="check" type="checkbox" checked="" />
-                <label for="rating_1" class="checktoggle checkbox-bg"
-                  >checkbox</label
-                >
+                <label for="rating_1" class="checktoggle checkbox-bg">checkbox</label>
               </div>
-            </div>
-          </div>
-          <div class="col-lg-6 col-12">
-            <div class="form-group">
-              <label for="Key">Stripe Key</label>
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Enter Stripe Key"
-              />
-            </div>
-          </div>
-          <div class="col-lg-6 col-12">
-            <div class="form-group">
-              <label for="Secret">Stripe Secret</label>
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Enter Stripe Secret"
-              />
             </div>
           </div>
         </div>
@@ -43,47 +29,14 @@
         <div class="row">
           <div class="col-12">
             <div class="payment-toggle">
-              <h5 class="form-title">Paypal</h5>
+              <div class="method-icon">
+                <img src="assets/img/resources/mtn_money.webp" alt="" class="method-img" style="width: 100px;">
+              </div>
+              <h5 class="form-title">MTN Mobile Money</h5>
               <div class="status-toggle">
                 <input id="rating_2" class="check" type="checkbox" checked="" />
-                <label for="rating_2" class="checktoggle checkbox-bg"
-                  >checkbox</label
-                >
+                <label for="rating_2" class="checktoggle checkbox-bg">checkbox</label>
               </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-12">
-            <div class="form-group">
-              <label for="Client ">Paypal Client Id</label>
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Enter Paypal Client Id"
-              />
-            </div>
-          </div>
-          <div class="col-lg-4 col-12">
-            <div class="form-group">
-              <label for="Secret"l>Paypal Secret</label>
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Enter Paypal Secret"
-              />
-            </div>
-          </div>
-          <div class="col-lg-4 col-12">
-            <div class="form-group">
-              <label for="Mode">Paypal Mode</label>
-              <mat-select
-              [(ngModel)]="paymentmode"
-              [ngModelOptions]="{ standalone: true }"
-              class="select custom-mat-select"
-            >
-                <mat-option value="payment1">Select Paypal Mode</mat-option>
-                <mat-option value="debit card">Debit Card</mat-option>
-                <mat-option value="creditcard">Credit Card</mat-option>
-              </mat-select>
             </div>
           </div>
         </div>
@@ -92,50 +45,51 @@
         <div class="row">
           <div class="col-12">
             <div class="payment-toggle">
-              <h5 class="form-title">Razorpay</h5>
+              <div class="method-icon" style="color: #003087;">
+                <img src="assets/img/resources/card.png" alt="" class="method-img" style="width: 100px;">
+              </div>
+              <h5 class="form-title">Card</h5>
               <div class="status-toggle">
                 <input id="rating_3" class="check" type="checkbox" checked="" />
-                <label for="rating_3" class="checktoggle checkbox-bg"
-                  >checkbox</label
-                >
+                <label for="rating_3" class="checktoggle checkbox-bg">checkbox</label>
               </div>
-            </div>
-          </div>
-          <div class="col-lg-6 col-12">
-            <div class="form-group mb-0">
-              <label for="key">Razorpay Key Id</label>
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Enter Razorpay Key Id"
-              />
-            </div>
-          </div>
-          <div class="col-lg-6 col-12">
-            <div class="form-group mb-0">
-              <label for="Secret">Razorpay Secret</label>
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Enter Razorpay Secret"
-              />
             </div>
           </div>
         </div>
       </div>
-      <div class="col-lg-12">
-        <div class="btn-path">
-          <a
-            href="javascript:void(0);"
-            class="btn btn-cancel bg-primary-light me-3"
-            >Cancel</a
-          >
-          <a href="javascript:void(0);" class="btn btn-primary">Save Changes</a>
+      <div class="form-group-item border-0 p-0">
+        <div class="row">
+          <div class="col-12">
+            <div class="payment-toggle">
+              <div class="method-icon" style="color: #003087;">
+                <img src="assets/img/resources/paypal.png" alt="" class="method-img" style="width: 100px;">
+              </div>
+              <h5 class="form-title">Paypal</h5>
+              <div class="status-toggle">
+                <input id="rating_4" class="check" type="checkbox" checked="" />
+                <label for="rating_4" class="checktoggle checkbox-bg">checkbox</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group-item border-0 p-0">
+        <div class="row">
+          <div class="col-12">
+            <div class="payment-toggle">
+              <div class="method-icon" style="color: #003087;">
+                <img src="assets/img/resources/bank.png" alt="" class="method-img" style="width: 100px;">
+              </div>
+              <h5 class="form-title">Bank transfer</h5>
+              <div class="status-toggle">
+                <input id="rating_5" class="check" type="checkbox" checked="" />
+                <label for="rating_5" class="checktoggle checkbox-bg">checkbox</label>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-   
+
 </div>
-
-

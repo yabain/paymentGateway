@@ -16,6 +16,7 @@ import { Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { UserService } from './services/user/user.service';
 import { LocationService } from './services/location/location.service';
+import { AuthService } from './services/auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -41,7 +42,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private language: LanguageService,
     private route: ActivatedRoute,
     private userService: UserService,
-    private locationService: LocationService
+    private locationService: LocationService,
+    private authService: AuthService
   ) {
     this.language.initLanguage();
     this.metaTag.setDefaultMetatag();
@@ -114,11 +116,14 @@ export class AppComponent implements OnInit, OnDestroy {
 
   async refreshCurrentUser(): Promise<void> {
     let currentUser = await this.userService.getCurrentUser();
-    if (currentUser) {
-      currentUser = await this.userService.getUser(currentUser._id)
+    if (currentUser && currentUser.isActive === true) {
+      let user = await this.userService.getUser(currentUser._id)
         .pipe(take(1))
         .toPromise();
-      if (currentUser) this.userService.setCurrentUser(currentUser);
+      if (user && currentUser.isActive === true) this.userService.setCurrentUser(user);
+      else {
+        // this.authService.logout()
+      }
     }
   }
 

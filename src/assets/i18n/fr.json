@@ -497,7 +497,9 @@
     "invoiceRef": "Réferences",
     "terms1": "digiKUNTZ Payments n'est pas responsable des transactions entre utilisateurs",
     "terms2": "Avant toute transaction, Assurez-vous que l'utilisateur est authentifié",
-    "apiCall": "API Call"
+    "apiCall": "API Call",
+    "invoiceTaxes": "Frais des transactions",
+    "transferTaxes": "Frais de transfert"
   },
   "whatsapp": {
     "title": "WhatsApp",
@@ -598,11 +600,7 @@
     "myTransactions": "Mes transactions",
     "services": "Services",
     "servicesProducts": "Produits / Services",
-    "settings": "Paramètres",
-    "emailSettings": "Parametres Email",
-    "whatsappSettings": "Paramètres Whatsapp",
-    "generalSettings": "Paramètres généraux",
-    "companySettings": "Paramètres de l'entreprise"
+    "settings": "Paramètres"
   },
   "flutterwave": {
     "otherCurrencyBalances": "Solde d'autres devises disponible",
@@ -860,6 +858,7 @@
     "step3": "Avoir activé activé l'accès à votre compte via API",
     "resetKey": "Réinitialisation de clé",
     "reset": "Réinitialisation",
+    "msgToEnable": "Pour activer les outils Dev, vous devez faire vérifier votre compte",
     "confirmReset": "Confirmation de Réinitialisation",
     "confirmResetKey": "Êtes-vous certain de vouloir réinitialiser votre clé d'intégration",
     "resetKeyWarning": "En effectuant cette réinitialisation, les précédentes clés ne seront plus valide. Si vous les aviez intégré dans des applications tiers, cela ne fonctionnera plus jusqu'à ce que vous les mettez à jour avec les nouvelle."
@@ -916,6 +915,7 @@
     "color": "Couleur",
     "primaryColor": "Coulor primaire",
     "secondaryColor": "Couleur secondaire",
+    "msgToEnable": "Pour activer votre portail, veuillez faire vérifier votre compte",
     "attention": {
       "title": "Attention aux détails",
       "desc": "Chaque transaction est contrôlée avec précision : vérifications automatiques, détection de fraude et journalisation complète. Vous bénéficiez d’un paiement fiable, conforme et traçable à chaque étape."
@@ -1076,6 +1076,23 @@
       "title": "Ils nous font confiance",
       "subtitle": "Rejoignez des milliers d'utilisateurs satisfaits"
     }
+  },
+  "systemSettings": {
+    "title": "Paramètres Système",
+    "appName": "Nom de l'application",
+    "companyName": "Nom de l'entreprise",
+    "addressLine1": "Adresse 1",
+    "addressLine2": "Adresse 2",
+    "companyEmail": "Email de contact",
+    "companyPhone1": "Tél 1",
+    "companyPhone2": "Tél 2",
+    "companyWhatsapp": "Whatsapp de contact",
+    "appLogo": "Logo de l'application",
+    "appIcon": "Icon de l'application",
+    "emailSettings": "Parametres Email",
+    "whatsappSettings": "Paramètres Whatsapp",
+    "generalSettings": "Paramètres généraux",
+    "companySettings": "Paramètres de l'entreprise"
   },
   "rawData": "Données brutes",
   "tool": "Outil",

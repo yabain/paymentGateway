@@ -1,102 +1,64 @@
+<div class="page-header">
+  <div class="content-page-header page-tilte d-flex justify-content-between">
+    <h3 class="card-title">
+      <img src="assets/img/resources/invoice.png" alt="" style="width: 30px; margin-right: 10px;">
+      {{ 'payment.invoiceSettings' | translate }}
+    </h3>
+    <div class="page-content">
+      <a class="btn btn-sm btn-white" (click)="edit(true)" *ngIf="!edition && !saving && !loading">
+        <i class="feather icon-edit"></i>
+        {{ "action.edit" | translate }}</a>
+      <a class="btn btn-sm btn-secondary me-5" (click)="edit(false)" *ngIf="edition && !saving  && !loading">{{
+        "action.cancel" |
+        translate
+        }}</a>
+      <a class="btn btn-sm btn-success" (click)="submit()" *ngIf="edition && !saving  && !loading">{{ "action.save" |
+        translate
+        }}</a>
+      <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" *ngIf="saving"></span>
+    </div>
+  </div>
+</div>
+
 <div class="row">
-  <div class="col-xl-12 col-md-8">
+  <div class="col-md-12">
     <div class="card">
       <div class="card-body w-100">
-        <div class="content-page-header">
-          <h5>Invoice Settings</h5>
-        </div>
-        <div class="row">
+        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" *ngIf="loading"></span>
+        <form class="row" [formGroup]="form" *ngIf="!loading">
           <div class="col-lg-6 col-12">
             <div class="input-block mb-3">
-              <label for="Invoice">Invoice Prefix</label>
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Enter Invoice Prefix"
-                />
-              </div>
-            </div>
-            <div class="col-lg-6 col-12">
-              <div class="input-block mb-3">
-                <label for="Signature">Digital Signature Name</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Enter Digital Signature Name"
-                  />
-                </div>
-              </div>
-              <div class="col-xl-6 col-lg-12 col-md-6 col-12">
-                <div class="input-block mb-3 mb-0 pb-0">
-                  <label for="Logo">Invoice Logo</label>
-                  <ngx-dropzone (change)="onSelect($event)" class="service-upload">
-                    <ngx-dropzone-label class="drop-browse align-center">
-                      <span
-                        ><img src="assets/img/icons/img-drop.svg" alt="upload"
-                      /></span>
-                      <div class="drag-drop">
-                        <h6 class="drop-browse align-center">
-                          <span class="text-info me-1">Click to Replace </span> or Drag
-                          and Drop
-                        </h6>
-                      </div>
-
-                      <span class="text-muted">SVG, PNG, JPG</span>
-                    </ngx-dropzone-label>
-                    @for (f of files; track f) {
-                      <ngx-dropzone-image-preview
-                        ngProjectAs="ngx-dropzone-preview"
-                        [file]="f"
-                        [removable]="true"
-                        (removed)="onRemove(f)"
-                        >
-                      </ngx-dropzone-image-preview>
-                    }
-                  </ngx-dropzone>
-                </div>
-              </div>
-              <div class="col-xl-6 col-lg-12 col-md-6 col-12">
-                <div class="input-block mb-3 mb-0 pb-0">
-                  <label for="Signature">Digital Signature Image</label>
-                  <ngx-dropzone (change)="onSelect($event)" class="service-upload">
-                    <ngx-dropzone-label class="drop-browse align-center">
-                      <span
-                        ><img src="assets/img/icons/img-drop.svg" alt="upload"
-                      /></span>
-                      <div class="d-flex">
-                        <h6 class="drop-browse align-center">
-                          <span class="text-info me-1">Click to Replace </span> or Drag
-                          and Drop
-                        </h6>
-
-                      </div>
-
-                      <span class="text-muted">SVG, PNG, JPG</span>
-                    </ngx-dropzone-label>
-                    @for (f of files; track f) {
-                      <ngx-dropzone-image-preview
-                        ngProjectAs="ngx-dropzone-preview"
-                        [file]="f"
-                        [removable]="true"
-                        (removed)="onRemove(f)"
-                        >
-                      </ngx-dropzone-image-preview>
-                    }
-                  </ngx-dropzone>
-                </div>
-              </div>
-              <div class="col-lg-12">
-                <div class="btn-path text-end">
-                  <a
-                    href="javascript:void(0);"
-                    class="btn btn-cancel bg-primary-light me-3"
-                    >Cancel</a
-                    >
-                    <a href="javascript:void(0);" class="btn btn-primary">Save Changes</a>
-                  </div>
-                </div>
+              <label>{{ 'payment.invoiceTaxes' | translate }}</label>
+              <input type="number" formControlName="invoiceTaxes" class="form-control"
+                [class.is-invalid]="form.get('invoiceTaxes')?.invalid && form.get('invoiceTaxes')?.touched">
+              <div class="invalid-feedback"
+                *ngIf="form.get('invoiceTaxes')?.invalid && form.get('invoiceTaxes')?.touched">
+                {{ "auth.requiredField" | translate }}
               </div>
             </div>
           </div>
-        </div>
+          <div class="col-lg-6 col-12">
+            <div class="input-block mb-3">
+              <label>{{ 'payment.transferTaxes' | translate }}</label>
+              <input type="number" formControlName="transferTaxes" class="form-control"
+                [class.is-invalid]="form.get('transferTaxes')?.invalid && form.get('transferTaxes')?.touched">
+              <div class="invalid-feedback"
+                *ngIf="form.get('transferTaxes')?.invalid && form.get('transferTaxes')?.touched">
+                {{ "auth.requiredField" | translate }}
+              </div>
+            </div>
+          </div>
+
+
+
+          <!-- <div class="col-lg-6 col-12">
+          <div class="input-block mb-3">
+            <label for="State">State</label>
+            <input type="text" class="form-control" placeholder="Enter State">
+          </div>
+        </div> -->
+        </form>
       </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,150 @@
+<div class="page-header">
+  <div class="content-page-header page-tilte">
+      <h5 style="color: black !important">
+          <img src="assets/img/resources/whatsapp.png" alt="" style="width: 25px; margin-right: 10px;">
+          {{ 'sideMenu.whatsapp' | translate }}
+      </h5>
+      <div class="page-content">
+          <div class="list-btn">
+              <ul class="filter-list">
+                  <li *ngIf="clientStatus === 'waiting'">
+                      {{ 'whatsapp.waitingStatus' | translate }}
+                      <span class="spinner-border spinner-border-sm me-2"></span>
+                  </li>
+                  <!-- <li *ngIf="clientStatus !== 'waiting'">
+                      <span *ngIf="clientStatus === 'connected'">🟢 {{ 'whatsapp.connected' | translate }}</span>
+                      <span *ngIf="clientStatus === 'disconnected'">🔴 {{ 'whatsapp.disconnected' | translate
+                          }}</span>
+                  </li> -->
+                  <li *ngIf="clientStatus !== 'waiting'"
+                      [class]="clientStatus === 'connected' ? 'connected' : 'disconnected'">
+                      {{ 'whatsapp.' + (clientStatus === 'connected' ? 'connected' : 'disconnected') | translate }}
+                  </li>
+                  <li *ngIf="clientStatus !== 'waiting'">
+                      <a class="btn-filters btn-hover" (click)="disconnect()" href="javascript:void(0);"
+                          data-bs-toggle="tooltip" data-bs-placement="bottom" matTooltip="Disconnect"><span><i
+                                  class="feather icon-power" style="color: #df0404"></i></span></a>
+                  </li>
+                  <li *ngIf="clientStatus !== 'waiting'">
+                      <a class="btn-filters btn-hover" (click)="initialise()" href="javascript:void(0);"
+                          data-bs-toggle="tooltip" data-bs-placement="bottom" matTooltip="Initialise"><span><i
+                                  class="feather icon-power" style="color: #037e26"></i></span></a>
+                  </li>
+                  <li *ngIf="clientStatus !== 'waiting'">
+                      <a class="btn-filters btn-hover" href="javascript:void(0);" data-bs-toggle="tooltip"
+                          data-bs-placement="bottom" matTooltip="Refresh" (click)="refreshQr()"><span><i
+                                  class="feather icon-refresh-ccw"></i></span></a>
+                  </li>
+              </ul>
+          </div>
+      </div>
+  </div>
+</div>
+<!-- /Page Header -->
+
+<div class="row">
+  <div class="col-md-6">
+      <div class="card">
+          <div class="card-header">
+              <h4>Whatsapp sync</h4>
+              Scann to connect output accoount
+          </div>
+          <div class="card-body">
+              <div class="qr-countainer padding">
+                  <div *ngIf="!waitingQr && !inProcess">
+                      <qrcode *ngIf="qrCode && clientStatus === 'disconnected'" [qrdata]="qrCode" [width]="175"
+                          [colorDark]="'#02A43BFF'" class="qr-class"></qrcode>
+                      <div class="locked">
+                          <img *ngIf="qrCode && clientStatus === 'connected' || qrCode && clientStatus === 'waiting'"
+                              src="assets/imgs/resources/qr-locked.png" alt="" class="locked-qr">
+                      </div>
+                      <label *ngIf="!qrCode" class="locked">
+                          <img src="assets/imgs/resources/qr-locked.png" alt="" class="locked-qr">
+                          {{ 'whatsapp.qrCodeError' | translate }} <br>
+                          <button class="btn btn-block btn-outline-success" disabled
+                              *ngIf="clientStatus === 'connected'">{{ 'whatsapp.connected' |
+                              translate }}</button>
+                      </label>
+                  </div>
+                  <div *ngIf="waitingQr || inProcess" class="locked">
+                      <img src="assets/img/resources/qr-locked.png" alt="" class="locked-qr">
+                      <span class="spinner-border spinner-border-sm me-2"></span>
+                  </div>
+              </div>
+
+              <hr><br>
+              <div class="padding-status">
+                  <p>
+                      {{ 'whatsapp.howToConnect' | translate }} ?</p>
+                  <label (click)="toggleInstructions()" style="color: #021d66;">
+                      {{ 'whatsapp.showInstructions' | translate }}
+                      <i class="feather icon-chevron-up" *ngIf="showInstructions"></i>
+                      <i class="feather icon-chevron-down" *ngIf="!showInstructions"></i>
+                  </label>
+                  <br>
+                  <div *ngIf="showInstructions" class="instructions">
+                      <img src="assets/img/resources/qr_code_scanner.png" alt="" style="width: 35px;"><br>
+                      {{ 'whatsapp.description' | translate }}
+                      <p>
+                          {{ 'whatsapp.step1' | translate }} <br>
+                          {{ 'whatsapp.step2' | translate }} <br>
+                          {{ 'whatsapp.step3' | translate }} <br>
+                          {{ 'whatsapp.step4' | translate }} <br>
+                          {{ 'whatsapp.step5' | translate }} <br><br>
+                          {{ 'whatsapp.stepFinal' | translate }}
+                      </p>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="col-md-6">
+      <div class="card">
+          <div class="card-header">
+              <h5 class="card-title">Send a test message</h5>
+          </div>
+          <div class="card-body">
+              <form action="#" *ngIf="clientStatus !=='waiting'">
+                  <div class="row">
+                      <div class="col-md-12">
+                          <div class="input-block mb-3">
+                              <label htmlFor="label">{{ 'whatsapp.countryCode' | translate }}</label>
+                              <input id="label" type="text" class="form-control" type="text"
+                                  [(ngModel)]="testCountryCode" name="countryCode" placeholder="ex: 237" />
+                          </div>
+                          <div class="input-block mb-3">
+                              <label htmlFor="label">Contact</label>
+                              <input id="label" type="text" class="form-control" [(ngModel)]="testPhone"
+                                  name="testPhone" placeholder="ex: 691224472" />
+                          </div>
+                          <div class="input-block mb-3">
+                              <label htmlFor="label">Your Message</label>
+                              <textarea rows="3" cols="3" class="form-control" [(ngModel)]="testMessage"
+                                  name="testMessage" placeholder="ex: Test"></textarea>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="text-end" *ngIf="clientStatus !=='waiting'">
+                      <button type="submit" class="btn btn-primary" *ngIf="!sendingTest"
+                          (click)="sendTestMessage()">{{
+                          'action.send'
+                          | translate}}</button>
+                      <button type="submit" class="btn btn-outline-secondary" *ngIf="sendingTest" disabled>
+                          <div class="spinner-border text-primary" role="status">
+                              <span class="visually-hidden">{{ "loading" | translate }}...</span>
+                          </div>
+                      </button>
+                  </div>
+              </form>
+              <div *ngIf="clientStatus === 'waiting'">
+                  <div class="row d-flex align-items-cente justify-content-center">
+                      <!-- <img src="assets/img/resources/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;"> -->
+                      <div class="spinner-border text-primary" role="status" style="margin: 20px;">
+                          <span class="visually-hidden">{{ "loading" | translate }}...</span>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>

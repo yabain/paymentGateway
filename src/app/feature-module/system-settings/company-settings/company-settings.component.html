@@ -1,162 +1,237 @@
-<div class="row">
-  <div class="card company-settings-new">
-    <div class="card-header">
-      <h3 class="card-title d-flex justify-content-between">
-        {{ 'sideMenu.companySettings' | translate }}
-        <div>
-          <a class="btn btn-sm btn-white" (click)="edit()" *ngIf="!edition && !saving">
-            <i class="feather icon-edit"></i>
-            {{ "action.edit" | translate }}</a>
-          <a class="btn btn-sm btn-secondary me-5" (click)="edit()" *ngIf="edition && !saving">{{ "action.cancel" | translate
-            }}</a>
-          <a class="btn btn-sm btn-success" (click)="submit()" *ngIf="edition && !saving">{{ "action.save" | translate
-            }}</a>
-          <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" *ngIf="saving"></span>
-        </div>
-      </h3>
+<div class="page-header">
+  <div class="content-page-header page-tilte">
+    <h3 class="card-title">
+      <i class="feather icon-settings"></i> {{ 'systemSettings.companySettings' | translate }}
+    </h3>
+    <div>
+      <a class="btn btn-sm btn-white" (click)="edit(true)" *ngIf="!edition && !saving && !loading">
+        <i class="feather icon-edit"></i>
+        {{ "action.edit" | translate }}</a>
+      <a class="btn btn-sm btn-secondary me-5" (click)="edit(false)" *ngIf="edition && !saving  && !loading">{{
+        "action.cancel" |
+        translate
+        }}</a>
+      <a class="btn btn-sm btn-success" (click)="submit()" *ngIf="edition && !saving  && !loading">{{ "action.save" |
+        translate
+        }}</a>
+      <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" *ngIf="saving"></span>
     </div>
-    <div class="card-body w-100">
-      <form class="row" [formGroup]="form">
-        <div class="col-lg-6 col-12">
-          <div class="input-block mb-3">
-            <label for="Company">App Name</label>
-            <input type="text" formControlName="appName" class="form-control"
-              [class.is-invalid]="form.get('appName')?.invalid && form.get('appName')?.touched">
-            <div class="invalid-feedback" *ngIf="form.get('appName')?.invalid && form.get('appName')?.touched">
-              {{ "auth.requiredField" | translate }}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card company-settings-new">
+        <div class="card-body w-100">
+          <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" *ngIf="loading"></span>
+          <form class="row" [formGroup]="form" *ngIf="!loading">
+            <div class="col-lg-6 col-12">
+              <div class="input-block mb-3">
+                <label>{{ 'systemSettings.appName' | translate }}</label>
+                <input type="text" formControlName="appName" class="form-control"
+                  [class.is-invalid]="form.get('appName')?.invalid && form.get('appName')?.touched">
+                <div class="invalid-feedback" *ngIf="form.get('appName')?.invalid && form.get('appName')?.touched">
+                  {{ "auth.requiredField" | translate }}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        <div class="col-lg-6 col-12">
-          <div class="input-block mb-3">
-            <label for="Company">Company Name</label>
-            <input type="text" class="form-control" placeholder="Enter Company Name" />
-          </div>
-        </div>
-        <div class="col-lg-6 col-12">
-          <div class="input-block mb-3">
-            <label for="Addres">Company Address</label>
-            <input type="text" class="form-control" placeholder="Enter Company Address" />
-          </div>
-        </div>
-        <div class="col-lg-6 col-12">
-          <div class="input-block mb-3">
-            <label for="Phone">Phone Number</label>
-            <input type="text" class="form-control" placeholder="Enter Phone Number">
-          </div>
-        </div>
-        <div class="col-lg-6 col-12">
-          <div class="input-block mb-3">
-            <label for="Company">Company Email</label>
-            <input type="text" class="form-control" placeholder="Enter Company Email">
-          </div>
-        </div>
-        <div class="col-lg-6 col-12">
-          <div class="input-block mb-3">
-            <label for="Line1">Address Line 1</label>
-            <input type="text" class="form-control" placeholder="Enter Address Line 1">
-          </div>
-        </div>
-        <div class="col-lg-6 col-12">
-          <div class="input-block mb-3">
-            <label for="Line2">Address Line 2</label>
-            <input type="text" class="form-control" placeholder="Enter Address Line 2">
-          </div>
-        </div>
-        <div class="col-lg-6 col-12">
-          <div class="input-block mb-3">
-            <label for="Country">Country</label>
-            <input type="text" class="form-control" placeholder="Enter Country">
-          </div>
-        </div>
-        <div class="col-lg-6 col-12">
+            <div class="col-lg-6 col-12">
+              <div class="input-block mb-3">
+                <label>{{ 'systemSettings.companyName' | translate }}</label>
+                <input type="text" formControlName="companyName" class="form-control"
+                  [class.is-invalid]="form.get('companyName')?.invalid && form.get('companyName')?.touched">
+                <div class="invalid-feedback"
+                  *ngIf="form.get('companyName')?.invalid && form.get('companyName')?.touched">
+                  {{ "auth.requiredField" | translate }}
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-12">
+              <div class="input-block mb-3">
+                <label>{{ 'systemSettings.addressLine1' | translate }}</label>
+                <input type="text" formControlName="addressLine1" class="form-control"
+                  [class.is-invalid]="form.get('addressLine1')?.invalid && form.get('addressLine1')?.touched">
+                <div class="invalid-feedback"
+                  *ngIf="form.get('addressLine1')?.invalid && form.get('addressLine1')?.touched">
+                  {{ "auth.requiredField" | translate }}
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-12">
+              <div class="input-block mb-3">
+                <label>{{ 'systemSettings.addressLine2' | translate }}</label>
+                <input type="text" formControlName="addressLine2" class="form-control"
+                  [class.is-invalid]="form.get('addressLine2')?.invalid && form.get('addressLine2')?.touched">
+                <div class="invalid-feedback"
+                  *ngIf="form.get('addressLine2')?.invalid && form.get('addressLine2')?.touched">
+                  {{ "auth.requiredField" | translate }}
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-12">
+              <div class="input-block mb-3">
+                <label>{{ 'systemSettings.companyPhone1' | translate }}</label>
+                <input type="text" formControlName="companyPhone1" class="form-control"
+                  [class.is-invalid]="form.get('companyPhone1')?.invalid && form.get('companyPhone1')?.touched">
+                <div class="invalid-feedback"
+                  *ngIf="form.get('companyPhone1')?.invalid && form.get('companyPhone1')?.touched">
+                  {{ "auth.requiredField" | translate }}
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-12">
+              <div class="input-block mb-3">
+                <label>{{ 'systemSettings.companyPhone2' | translate }}</label>
+                <input type="text" formControlName="companyPhone2" class="form-control"
+                  [class.is-invalid]="form.get('companyPhone2')?.invalid && form.get('companyPhone2')?.touched">
+                <div class="invalid-feedback"
+                  *ngIf="form.get('companyPhone2')?.invalid && form.get('companyPhone2')?.touched">
+                  {{ "auth.requiredField" | translate }}
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-12">
+              <div class="input-block mb-3">
+                <label>NIU</label>
+                <input type="text" formControlName="niu" class="form-control"
+                  [class.is-invalid]="form.get('niu')?.invalid && form.get('niu')?.touched">
+                <div class="invalid-feedback" *ngIf="form.get('niu')?.invalid && form.get('niu')?.touched">
+                  {{ "auth.requiredField" | translate }}
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-12">
+              <div class="input-block mb-3">
+                <label>RCCM</label>
+                <input type="text" formControlName="rccm" class="form-control"
+                  [class.is-invalid]="form.get('rccm')?.invalid && form.get('rccm')?.touched">
+                <div class="invalid-feedback" *ngIf="form.get('rccm')?.invalid && form.get('rccm')?.touched">
+                  {{ "auth.requiredField" | translate }}
+                </div>
+              </div>
+            </div>
+
+
+
+            <div class="col-lg-6 col-12">
+              <div class="input-block mb-3">
+                <label>RacineLink</label>
+                <input type="text" formControlName="racineLink" class="form-control"
+                  [class.is-invalid]="form.get('racineLink')?.invalid && form.get('racineLink')?.touched">
+                <div class="invalid-feedback"
+                  *ngIf="form.get('racineLink')?.invalid && form.get('racineLink')?.touched">
+                  {{ "auth.requiredField" | translate }}
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-12">
+              <div class="input-block mb-3">
+                <label>Web site</label>
+                <input type="text" formControlName="website" class="form-control"
+                  [class.is-invalid]="form.get('website')?.invalid && form.get('website')?.touched">
+                <div class="invalid-feedback" *ngIf="form.get('website')?.invalid && form.get('website')?.touched">
+                  {{ "auth.requiredField" | translate }}
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-12">
+              <div class="input-block mb-3">
+                <label>Facebook</label>
+                <input type="text" formControlName="facebook" class="form-control"
+                  [class.is-invalid]="form.get('facebook')?.invalid && form.get('facebook')?.touched">
+                <div class="invalid-feedback" *ngIf="form.get('facebook')?.invalid && form.get('facebook')?.touched">
+                  {{ "auth.requiredField" | translate }}
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-12">
+              <div class="input-block mb-3">
+                <label>linkedIn</label>
+                <input type="text" formControlName="linkedIn" class="form-control"
+                  [class.is-invalid]="form.get('linkedIn')?.invalid && form.get('linkedIn')?.touched">
+                <div class="invalid-feedback" *ngIf="form.get('linkedIn')?.invalid && form.get('linkedIn')?.touched">
+                  {{ "auth.requiredField" | translate }}
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-12">
+              <div class="input-block mb-3">
+                <label>Instagram</label>
+                <input type="text" formControlName="instagram" class="form-control"
+                  [class.is-invalid]="form.get('instagram')?.invalid && form.get('instagram')?.touched">
+                <div class="invalid-feedback" *ngIf="form.get('instagram')?.invalid && form.get('instagram')?.touched">
+                  {{ "auth.requiredField" | translate }}
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-12">
+              <div class="input-block mb-3">
+                <label>Twitter</label>
+                <input type="text" formControlName="twitter" class="form-control"
+                  [class.is-invalid]="form.get('twitter')?.invalid && form.get('twitter')?.touched">
+                <div class="invalid-feedback" *ngIf="form.get('twitter')?.invalid && form.get('twitter')?.touched">
+                  {{ "auth.requiredField" | translate }}
+                </div>
+              </div>
+            </div>
+            <!-- <div class="col-lg-6 col-12">
           <div class="input-block mb-3">
             <label for="State">State</label>
             <input type="text" class="form-control" placeholder="Enter State">
           </div>
+        </div> -->
+          </form>
         </div>
-        <div class="col-lg-6 col-12">
-          <div class="input-block mb-3">
-            <label for="City">City</label>
-            <input type="text" class="form-control" placeholder="Enter City">
-          </div>
+      </div>
+      <div class="card company-settings-new">
+        <div class="card-header">
+          <h3>Logo</h3>
         </div>
-        <div class="col-lg-6 col-12">
-          <div class="input-block mb-3">
-            <label for="Pincode">Pincode</label>
-            <input type="text" class="form-control" placeholder="Enter Pincode">
-          </div>
-        </div>
-        <br><br><br>
-        <!-- <div class="col-lg-12 col-12">
-              <div class="input-block mb-3">
-                <label for="Site">Site Logo</label>
-                <div class="input-block service-upload logo-upload mb-0">
+        <div class="card-body">
+          <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" *ngIf="loading"></span>
+          <div class="col-xl-6 col-lg-12 col-md-6 col-12" *ngIf="!loading">
+            <div class="input-block mb-3 mb-0 pb-0">
+              <label for="Favicon">Favicon</label>
+              <ngx-dropzone (change)="onSelect($event)" class="service-upload">
+                <ngx-dropzone-label class="drop-browse align-center">
+                  <span><img src="assets/img/icons/img-drop.svg" alt="upload" /></span>
                   <div class="drag-drop">
                     <h6 class="drop-browse align-center">
-                      <span class="text-info me-1">Click To Replace</span> or Drag and Drop
+                      <span class="text-info me-1">Click to Replace </span> or Drag
+                      and Drop
                     </h6>
-                    <p class="text-muted">SVG, PNG, JPG (Max 800*400px)</p>
-                    <input type="file" multiple="">
                   </div>
-                  <span class="sites-logo"><img src="assets/img/settings-logo1.png" alt="upload"></span>
+
+                  <span class="text-muted">SVG, PNG, JPG</span>
+                </ngx-dropzone-label>
+                @for (f of files; track f) {
+                <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" [file]="f" [removable]="true"
+                  (removed)="onRemove(f)">
+                </ngx-dropzone-image-preview>
+                }
+              </ngx-dropzone>
+            </div>
+          </div>
+          <div class="col-lg-12 col-12" *ngIf="!loading">
+            <div class="input-block mb-3">
+              <label for="Site">Site Logo</label>
+              <div class="input-block service-upload logo-upload mb-0">
+                <div class="drag-drop">
+                  <h6 class="drop-browse align-center">
+                    <span class="text-info me-1">Click To Replace</span> or Drag and Drop
+                  </h6>
+                  <p class="text-muted">SVG, PNG, JPG (Max 800*400px)</p>
+                  <input type="file" multiple="">
                 </div>
+                <span class="sites-logo">
+                  <img src="assets/img/resources/dk_logo.png" alt="upload">
+                </span>
               </div>
-            </div> -->
-        <div class="col-xl-6 col-lg-12 col-md-6 col-12">
-          <div class="input-block mb-3 mb-0 pb-0">
-            <label for="Favicon">Favicon</label>
-            <ngx-dropzone (change)="onSelect($event)" class="service-upload">
-              <ngx-dropzone-label class="drop-browse align-center">
-                <span><img src="assets/img/icons/img-drop.svg" alt="upload" /></span>
-                <div class="drag-drop">
-                  <h6 class="drop-browse align-center">
-                    <span class="text-info me-1">Click to Replace </span> or Drag
-                    and Drop
-                  </h6>
-                </div>
-
-                <span class="text-muted">SVG, PNG, JPG</span>
-              </ngx-dropzone-label>
-              @for (f of files; track f) {
-              <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" [file]="f" [removable]="true"
-                (removed)="onRemove(f)">
-              </ngx-dropzone-image-preview>
-              }
-            </ngx-dropzone>
+            </div>
           </div>
         </div>
-        <div class="col-xl-6 col-lg-12 col-md-6 col-12">
-          <div class="input-block mb-3 mb-0 pb-0">
-            <label for="Company">Company icon</label>
-            <ngx-dropzone (change)="onSelect($event)" class="service-upload">
-              <ngx-dropzone-label class="drop-browse align-center">
-                <span><img src="assets/img/icons/img-drop.svg" alt="upload" /></span>
-                <div class="drag-drop">
-                  <h6 class="drop-browse align-center">
-                    <span class="text-info me-1">Click to Replace </span> or Drag
-                    and Drop
-                  </h6>
-                </div>
-
-                <span class="text-muted">SVG, PNG, JPG</span>
-              </ngx-dropzone-label>
-              @for (f of files; track f) {
-              <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" [file]="f" [removable]="true"
-                (removed)="onRemove(f)">
-              </ngx-dropzone-image-preview>
-              }
-            </ngx-dropzone>
-          </div>
-        </div>
-        <div class="col-lg-12">
-          <div class="btn-path text-end">
-            <a href="javascript:void(0);" class="btn btn-cancel bg-primary-light me-3">Cancel</a>
-            <a href="javascript:void(0);" class="btn btn-primary">Save Changes</a>
-          </div>
-        </div>
-      </form>
+      </div>
     </div>
   </div>
-
 </div>

@@ -147,4 +147,13 @@ export class SystemService {
       return systemData;
     else return {};
   }
+
+  updateSystemData(systemData: any): Observable<any> {
+    try {
+      return this.apiService.updateWithoutId(`system/update-data`, systemData);
+    } catch (e) {
+      console.error("Error setting user data:", e);
+      throw e;
+    }
+  }
 }

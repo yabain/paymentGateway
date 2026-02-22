@@ -497,7 +497,9 @@
     "invoiceRef": "References",
     "terms1": "digiKUNTZ Payments is not responsible for transactions between users",
     "terms2": "Before any transaction, ensure the user is authenticated",
-    "apiCall": "API Call"
+    "apiCall": "API Call",
+    "invoiceTaxes": "Invoice fee",
+    "transferTaxes": "Transfer fee"
   },
   "whatsapp": {
     "title": "WhatsApp center",
@@ -598,11 +600,7 @@
     "myTransactions": "My transactions",
     "services": "Services",
     "servicesProducts": "Products / Services",
-    "settings": "Settings",
-    "emailSettings": "Email settings",
-    "whatsappSettings": "Whatsapp settings",
-    "generalSettings": "General settings",
-    "companySettings": "Company settings"
+    "settings": "Settings"
   },
   "flutterwave": {
     "otherCurrencyBalances": "Othes currency balance available",
@@ -859,6 +857,7 @@
     "step3": "Have enabled API access to your account",
     "resetKey": "Reset API Key",
     "reset": "Reset",
+    "msgToEnable": "To enable your Dev Tools, you need to verify your account.",
     "confirmReset": "Confirm reset",
     "confirmResetKey": "Are you sure you want to reset your integration key",
     "resetKeyWarning": "Performing this reset will invalidate any previous keys. If you had them integrated into third-party applications, they will no longer work until you update them with the new ones."
@@ -915,6 +914,7 @@
     "color": "Color",
     "primaryColor": "Primary color",
     "secondaryColor": "Secondary color",
+    "msgToEnable": "To enable your portal, you need to verify your account.",
     "attention": {
       "title": "Attention to Detail",
       "desc": "Every transaction is thoroughly checked: automated verification, fraud detection, and full logging. You get secure, compliant, and traceable payments at every step."
@@ -1075,6 +1075,23 @@
       "title": "They trust us",
       "subtitle": "Join thousands of satisfied users"
     }
+  },
+  "systemSettings": {
+    "title": "System settings",
+    "appName": "App name",
+    "companyName": "Company name",
+    "addressLine1": "Address line 1",
+    "addressLine2": "Address line 2",
+    "companyEmail": "Email contact",
+    "companyPhone1": "Phone 1",
+    "companyPhone2": "Phone 2",
+    "companyWhatsapp": "Whatsapp contact",
+    "appLogo": "App Logo",
+    "appIcon": "App Icon",
+    "emailSettings": "Email settings",
+    "whatsappSettings": "Whatsapp settings",
+    "generalSettings": "General settings",
+    "companySettings": "Company settings"
   },
   "rawData": "Raw data",
   "tool": "Tool",

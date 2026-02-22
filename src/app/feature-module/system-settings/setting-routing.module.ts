@@ -1,12 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SystemSettingsComponent } from './system-settings.component';
+import { WhatsappSettingsComponent } from './whatsapp-settings/whatsapp-settings.component';
 
 const routes: Routes = [
   {
     path: '',
     component: SystemSettingsComponent,
     children: [
+      {
+        path: 'whatsapp-settings',
+        component: WhatsappSettingsComponent
+      },
       {
         path: 'tax-types',
         loadChildren: () =>
@@ -17,13 +22,6 @@ const routes: Routes = [
         loadChildren: () =>
           import('./delete-account/delete-account.module').then(
             (m) => m.DeleteAccountModule,
-          ),
-      },
-      {
-        path: 'expense-category',
-        loadChildren: () =>
-          import('./expense-category/expese-category.module').then(
-            (m) => m.ExpenseCategoryModule,
           ),
       },
       {
@@ -44,13 +42,6 @@ const routes: Routes = [
         path: 'profile',
         loadChildren: () =>
           import('./settings/settings.module').then((m) => m.SettingsModule),
-      },
-      {
-        path: 'change-password',
-        loadChildren: () =>
-          import('./change-password/change-password.module').then(
-            (m) => m.ChangePasswordModule,
-          ),
       },
       {
         path: 'company-settings',
@@ -111,20 +102,6 @@ const routes: Routes = [
         loadChildren: () =>
           import('./two-factor/two-factor.module').then(
             (m) => m.TwoFactorModule,
-          ),
-      },
-      {
-        path: 'custom-field',
-        loadChildren: () =>
-          import('./custom-field/custom-field.module').then(
-            (m) => m.CustomFieldModule,
-          ),
-      },
-      {
-        path: 'email-template',
-        loadChildren: () =>
-          import('./email-template/email-template.module').then(
-            (m) => m.EmailTemplateModule,
           ),
       },
       {

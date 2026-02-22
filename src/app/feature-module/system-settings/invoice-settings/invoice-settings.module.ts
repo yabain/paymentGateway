@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { InvoiceSettingsRoutingModule } from './invoice-settings-routing.module';
 import { InvoiceSettingsComponent } from './invoice-settings.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @NgModule({
@@ -13,7 +14,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
   imports: [
     CommonModule,
     InvoiceSettingsRoutingModule,
-    SharedModule
+    SharedModule,
+    TranslateModule,
   ]
 })
 export class InvoiceSettingsModule { }

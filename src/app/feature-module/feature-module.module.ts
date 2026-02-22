@@ -44,7 +44,7 @@ import { FrontModule } from '../front/front.module';
   ],
   imports: [
     CommonModule,
-    FeatureModuleRoutingModule, 
+    FeatureModuleRoutingModule,
     TranslateModule,
     SharedModule,
     FormsModule,
