@@ -6,6 +6,7 @@ import { FeatureModuleComponent } from './feature-module.component';
 import { SendMoneyComponent } from './send-money/send-money.component';
 import { WithdrawalComponent } from './withdrawal/withdrawal.component';
 import { AdminGuard } from '../core/guards/adminer/admin.guard';
+import { MySubscriptionComponent } from './subscription/my-subscription-list/my-subscription.component';
 
 const routes: Routes = [
   {
@@ -34,6 +35,10 @@ const routes: Routes = [
       {
         path: 'withdrawal',
         component: WithdrawalComponent,
+      },
+      {
+        path: 'my-subscriptions',
+        component: MySubscriptionComponent,
       },
       {
         path: 'subscription',
@@ -79,14 +84,6 @@ const routes: Routes = [
         loadChildren: () =>
           import('./payments/payout/payout.module').then(
             (m) => m.PayoutModule,
-          ),
-      },
-      {
-        path: 'admin-massaging',
-        canActivate: [AdminGuard],
-        loadChildren: () =>
-          import('./messaging/messaging.module').then(
-            (m) => m.MessagingModule,
           ),
       },
       {

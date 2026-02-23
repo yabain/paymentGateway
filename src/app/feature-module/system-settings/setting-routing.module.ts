@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SystemSettingsComponent } from './system-settings.component';
 import { WhatsappSettingsComponent } from './whatsapp-settings/whatsapp-settings.component';
+import { EmailSettingsComponent } from './email-settings/email-settings.component';
+import { InvoiceSettingsComponent } from './invoice-settings/invoice-settings.component';
+import { PaymentSettingsComponent } from './payment-settings/payment-settings.component';
 
 const routes: Routes = [
   {
@@ -11,6 +14,18 @@ const routes: Routes = [
       {
         path: 'whatsapp-settings',
         component: WhatsappSettingsComponent
+      },
+      {
+        path: 'email-settings',
+        component: EmailSettingsComponent
+      },
+      {
+        path: 'invoice-settings',
+        component: InvoiceSettingsComponent
+      },
+      {
+        path: 'payment-settings',
+        component: PaymentSettingsComponent
       },
       {
         path: 'tax-types',
@@ -51,20 +66,6 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'invoice-settings',
-        loadChildren: () =>
-          import('./invoice-settings/invoice-settings.module').then(
-            (m) => m.InvoiceSettingsModule,
-          ),
-      },
-      {
-        path: 'payment-settings',
-        loadChildren: () =>
-          import('./payment-settings/payment-settings.module').then(
-            (m) => m.PaymentSettingsModule,
-          ),
-      },
-      {
         path: 'bank-account',
         loadChildren: () =>
           import('./bank-account/bank-account.module').then(
@@ -75,13 +76,6 @@ const routes: Routes = [
         path: 'tax-rats',
         loadChildren: () =>
           import('./tax-rats/tax-rats.module').then((m) => m.TaxRatsModule),
-      },
-      {
-        path: 'email-settings',
-        loadChildren: () =>
-          import('./email-settings/email-settings.module').then(
-            (m) => m.EmailSettingsModule,
-          ),
       },
       {
         path: 'template-invoice',

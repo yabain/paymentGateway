@@ -757,7 +757,7 @@ export class DataService {
         },
         {
           menuValue: 'mySubscriptionList',
-          route: '/dashboard',
+          route: '/my-subscriptions',
           hasSubRoute: false, // Show arrow after menu item title
           showSubRoute: true,
           icon: 'repeat',
@@ -908,15 +908,15 @@ export class DataService {
           base: 'flutterwave-wallets',
           subMenus: [],
         },
-        {
-          menuValue: 'messageCenter',
-          route: '/admin-massaging',
-          hasSubRoute: false,
-          showSubRoute: false,
-          icon: 'message-circle',
-          base: 'admin-massaging',
-          subMenus: [],
-        },
+        // {
+        //   menuValue: 'messageCenter',
+        //   route: '/admin-massaging',
+        //   hasSubRoute: false,
+        //   showSubRoute: false,
+        //   icon: 'message-circle',
+        //   base: 'admin-massaging',
+        //   subMenus: [],
+        // },
         // {
         //   menuValue: 'payin',
         //   route: '/admin-payin',

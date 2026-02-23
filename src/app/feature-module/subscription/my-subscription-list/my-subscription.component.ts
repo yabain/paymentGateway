@@ -12,11 +12,11 @@ import { PaginationService, tablePageSize } from 'src/app/shared/sharedIndex';
 import { Location } from '@angular/common';
 
 @Component({
-  selector: 'app-subscription-details',
-  templateUrl: './subscription-details.component.html',
-  styleUrls: ['./subscription-details.component.scss'],
+  selector: 'app-my-subscription',
+  templateUrl: './my-subscription.component.html',
+  styleUrls: ['./my-subscription.component.scss'],
 })
-export class SubscriptionDetailsComponent {
+export class MySubscriptionComponent {
   public routes = routes;
   public tableData: Array<any> = [];
   // pagination variables

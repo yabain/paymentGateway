@@ -56,10 +56,10 @@
                           [colorDark]="'#02A43BFF'" class="qr-class"></qrcode>
                       <div class="locked">
                           <img *ngIf="qrCode && clientStatus === 'connected' || qrCode && clientStatus === 'waiting'"
-                              src="assets/imgs/resources/qr-locked.png" alt="" class="locked-qr">
+                              src="assets/img/resources/qr-locked.png" alt="" class="locked-qr">
                       </div>
                       <label *ngIf="!qrCode" class="locked">
-                          <img src="assets/imgs/resources/qr-locked.png" alt="" class="locked-qr">
+                          <img src="assets/img/resources/qr-locked.png" alt="" class="locked-qr">
                           {{ 'whatsapp.qrCodeError' | translate }} <br>
                           <button class="btn btn-block btn-outline-success" disabled
                               *ngIf="clientStatus === 'connected'">{{ 'whatsapp.connected' |

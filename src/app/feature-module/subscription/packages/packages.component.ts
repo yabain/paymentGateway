@@ -351,6 +351,12 @@ export class PackagesComponent implements OnInit, OnDestroy {
       return;
     }
 
+    const price = +String(this.form.value.price ?? '').replace(/\s/g, '') || 0;
+    if (price < 100) {
+      this.toastService.presentToast('error', 'Error', 'Invalid Price (price < 100)', 5000);
+      return;
+    }
+
     const raw = this.form.getRawValue();
 
     raw.price = +String(raw.price ?? '').replace(/\s/g, '') || 0;
@@ -400,6 +406,7 @@ export class PackagesComponent implements OnInit, OnDestroy {
           this.toastService.presentToast('success', 'Done !', '', 5000);
         } else {
           console.error(planData);
+          this.refresh()
           this.toastService.presentToast('error', 'Error', planData, 8000);
         }
       },

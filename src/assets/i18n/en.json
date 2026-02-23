@@ -830,7 +830,7 @@
     "alreadySubscriberMsg": "You already have an active subscription to this fundraiser.",
     "summary": "Summary",
     "quantity": "Quantity",
-    "alreadySubscriber": "Already subscribed",
+    "alreadySubscriber": "Already done",
     "expiredSubscription": "Subscription expired",
     "subscriptionExpireIn": "Your subscription expires in:",
     "subscriptionToday": "Subscribe today",

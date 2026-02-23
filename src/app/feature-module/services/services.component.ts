@@ -323,14 +323,6 @@ export class ServicesComponent implements OnInit, OnDestroy {
 
 
 
-
-
-
-
-
-
-
-
   onSubmit() {
     if (!this.user) return;
 
@@ -388,7 +380,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
         if (serviceData._id) {
           this.form.reset();
           this.optionsList.reset();
-          this.closeModal('add_newpackage');
+          this.closeModal('add_service');
           this.refresh();
           this.toastService.presentToast('success', 'Done !', '', 5000);
         } else {
@@ -733,4 +725,5 @@ export class ServicesComponent implements OnInit, OnDestroy {
   isAuthor(service: any, user: any = this.user) {
     return user._id.toString() === service.author._id.toString() ? true : false;
   }
+  
 }

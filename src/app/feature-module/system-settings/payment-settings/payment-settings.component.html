@@ -2,7 +2,7 @@
   <div class="content-page-header page-tilte d-flex justify-content-between">
     <h5>
       <img src="assets/img/resources/card.png" alt="" style="width: 30px; margin-right: 10px;">
-      Payment Settings</h5>
+      {{ 'payment.paymentMethods' | translate }}</h5>
   </div>
 </div>
 
@@ -50,7 +50,7 @@
               </div>
               <h5 class="form-title">Card</h5>
               <div class="status-toggle">
-                <input id="rating_3" class="check" type="checkbox" checked="" />
+                <input id="rating_3" class="check" type="checkbox" [checked]="false" />
                 <label for="rating_3" class="checktoggle checkbox-bg">checkbox</label>
               </div>
             </div>
@@ -66,7 +66,7 @@
               </div>
               <h5 class="form-title">Paypal</h5>
               <div class="status-toggle">
-                <input id="rating_4" class="check" type="checkbox" checked="" />
+                <input id="rating_4" class="check" type="checkbox" [checked]="false" />
                 <label for="rating_4" class="checktoggle checkbox-bg">checkbox</label>
               </div>
             </div>
@@ -82,7 +82,7 @@
               </div>
               <h5 class="form-title">Bank transfer</h5>
               <div class="status-toggle">
-                <input id="rating_5" class="check" type="checkbox" checked="" />
+                <input id="rating_5" class="check" type="checkbox" [checked]="false" />
                 <label for="rating_5" class="checktoggle checkbox-bg">checkbox</label>
               </div>
             </div>

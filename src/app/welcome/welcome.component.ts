@@ -12,9 +12,10 @@ import {
   inject,
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser, NgOptimizedImage } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { LanguageService } from '../services/language/language.service';
+import { StorageService } from '../services/storage/storage.service';
 
 type Industry = {
   key: 'transfer' | 'fundraising' | 'services' | 'subscriptionPlan';
@@ -51,7 +52,10 @@ export class WelcomeComponent implements OnInit, AfterViewInit {
 
   constructor(
     @Inject(PLATFORM_ID) platformId: Object,
-    private languageService: LanguageService) {
+    private languageService: LanguageService,
+    private storage: StorageService,
+    private router: Router,
+  ) {
     this.getLanguage();
     this.en = this.languageService.en[0];
     this.fr = this.languageService.fr[0];
@@ -59,7 +63,22 @@ export class WelcomeComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.getIfIsConnected().then((response) => {
+      if (response === true) {
+        this.router.navigateByUrl('/tabs', { replaceUrl: true });
+      }
+    });
     this.scrollToTop();
+  }
+
+
+  /**
+   * Checks if a user is already connected by checking local storage
+   * @returns A promise that resolves to true if the user is authenticated
+   */
+  async getIfIsConnected(): Promise<boolean> {
+    const isAuth = await this.storage.getStorage(environment.user_data);
+    return isAuth ? true : false;
   }
 
   async getLanguage() {
@@ -317,4 +336,6 @@ export class WelcomeComponent implements OnInit, AfterViewInit {
   toggleFaq(i: number) {
     this.openFaq = this.openFaq === i ? null : i;
   }
+
+  
 }

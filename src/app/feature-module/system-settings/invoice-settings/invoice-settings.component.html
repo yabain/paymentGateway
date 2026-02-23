@@ -28,7 +28,7 @@
         <form class="row" [formGroup]="form" *ngIf="!loading">
           <div class="col-lg-6 col-12">
             <div class="input-block mb-3">
-              <label>{{ 'payment.invoiceTaxes' | translate }}</label>
+              <label>{{ 'payment.invoiceTaxes' | translate }} (%)</label>
               <input type="number" formControlName="invoiceTaxes" class="form-control"
                 [class.is-invalid]="form.get('invoiceTaxes')?.invalid && form.get('invoiceTaxes')?.touched">
               <div class="invalid-feedback"
@@ -39,7 +39,7 @@
           </div>
           <div class="col-lg-6 col-12">
             <div class="input-block mb-3">
-              <label>{{ 'payment.transferTaxes' | translate }}</label>
+              <label>{{ 'payment.transferTaxes' | translate }} (%)</label>
               <input type="number" formControlName="transferTaxes" class="form-control"
                 [class.is-invalid]="form.get('transferTaxes')?.invalid && form.get('transferTaxes')?.touched">
               <div class="invalid-feedback"

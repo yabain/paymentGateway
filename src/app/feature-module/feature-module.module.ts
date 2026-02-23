@@ -22,6 +22,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WithdrawalComponent } from './withdrawal/withdrawal.component';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { FrontModule } from '../front/front.module';
+import { MySubscriptionComponent } from './subscription/my-subscription-list/my-subscription.component';
 
 
 @NgModule({
@@ -41,6 +42,7 @@ import { FrontModule } from '../front/front.module';
     SideMenuFourComponent,
     SendMoneyComponent,
     WithdrawalComponent,
+    MySubscriptionComponent
   ],
   imports: [
     CommonModule,

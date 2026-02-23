@@ -188,7 +188,7 @@
         <div class="modal-content">
             <div class="modal-header border-0">
                 <div class="form-header modal-header-title text-start mb-0">
-                    <h4 class="mb-0">{{ 'services.add' | translate }}</h4>
+                    <h4 class="mb-0">{{ 'subscriptions.add' | translate }}</h4>
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                 </button>
@@ -240,7 +240,7 @@
                         </div>
                         <div class="col-sm-12 col-md-6">
                             <div class="input-block mb-3">
-                                <label>{{ "services.name" | translate }}</label>
+                                <label>{{ "subscriptions.name" | translate }}</label>
                                 <input type="text" class="form-control" 
                                     [class.is-invalid]="submitted && form.get('title')?.invalid"
                                     placeholder="" formControlName="title" (input)="updateTitle()">
@@ -248,13 +248,13 @@
                         </div>
                         <div class="col-sm-12 col-md-6">
                             <div class="input-block mb-3">
-                                <label>{{ "services.subTitle" | translate }}</label>
+                                <label>{{ "subscriptions.subTitle" | translate }}</label>
                                 <input type="text" class="form-control" 
                                     [class.is-invalid]="submitted && form.get('subTitle')?.invalid"
                                     placeholder="" formControlName="subTitle" (input)="updateTitle()">
                             </div>
                         </div>
-                        <h6>{{ "services.optionTitle" | translate }}</h6>
+                        <h6>{{ "subscriptions.optionTitle" | translate }}</h6>
                         <div class="col-sm-12 col-md-12" formArrayName="options">
                             <div class="option-space" *ngFor="let option of optionsList.controls; let i = index"
                                 [formGroupName]="i">
@@ -267,12 +267,12 @@
                                     </div>
                                     <div class="col-sm-12 col-md-4">
                                         <div class="d-flex align-items-center mb-3">
-                                            <h6 class="mb-0">{{ "services.checkIfAvailable" | translate }}</h6>
+                                            <h6 class="mb-0">{{ "subscriptions.checkIfAvailable" | translate }}</h6>
                                             <div class="status-toggle">
                                                 <input [id]="'isActive' + i" formControlName="isActive" class="check"
                                                     type="checkbox">
                                                 <label [for]="'isActive' + i" class="checktoggle checkbox-bg">{{
-                                                    "services.status" | translate }}</label>
+                                                    "subscriptions.status" | translate }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -289,13 +289,13 @@
                             <div class="input-block mb-3">
                                 <label></label>
                                 <a class="btn btn-primary" href="javascript:void(0);" (click)="addOptions()"><i
-                                        class="fa fa-plus me-2" aria-hidden="true"></i> {{ "services.addOption" |
+                                        class="fa fa-plus me-2" aria-hidden="true"></i> {{ "subscriptions.addOption" |
                                     translate }}</a>
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-12">
                             <div class="input-block mb-3">
-                                <label>{{ "services.description" | translate }}</label>
+                                <label>{{ "subscriptions.description" | translate }}</label>
                                 <textarea type="text" class="form-control" 
                                     [class.is-invalid]="submitted && form.get('description')?.invalid"
                                     placeholder="Enter Description" formControlName="description"></textarea>
@@ -304,7 +304,7 @@
                         <div class="col-sm-12 col-md-6">
                             <div class="input-block mb-3">
                                 <label class="d-flex justify-content-between">
-                                    <span>{{ "services.price" | translate }}</span>
+                                    <span>{{ "subscriptions.price" | translate }}</span>
                                     <span class="text-primary"><i class="fa-solid fa-circle-exclamation me-2"></i>
                                         {{ user?.countryId.currency }}</span>
                                 </label>
@@ -323,7 +323,7 @@
                         *ngIf="!watingCreation" (close)="ngOnDestroy()">{{ "action.cancel" | translate }}</button>
                     <button type="submit" class="btn btn-primary paid-continue-btn" [disabled]="watingCreation"
                         *ngIf="!watingCreation">
-                        {{ "services.create" | translate }}</button>
+                        {{ "subscriptions.create" | translate }}</button>
                     <button class="btn btn-primary paid-continue-btn" [disabled]="watingCreation"
                         *ngIf="watingCreation">
                         <div class="spinner-border" role="status"></div>

@@ -105,6 +105,7 @@ export class AddSubscriberComponent implements OnInit {
             this.form.reset();
             this.initForm()
             this.waittingSubscription = false;
+            this.refresh();
           } else {
             this.toastService.presentToast(
               'error',
@@ -134,6 +135,10 @@ export class AddSubscriberComponent implements OnInit {
     })
   }
 
+  refresh(): void {
+    window.location.reload();
+  }
+  
   async initForm(): Promise<void> {
     let lang = (await this.language.getDefaultLanguage()) || 'en';
     this.form = new FormGroup({
