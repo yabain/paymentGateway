@@ -1,50 +1,32 @@
-import { Component } from '@angular/core';
-import { Sort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { routes, DataService } from 'src/app/core/core.index';
-import {
-  subscription,
-  pageSelection,
-  apiResultFormat,
-} from 'src/app/core/models/models';
-import { PaginationService, tablePageSize } from 'src/app/shared/sharedIndex';
-import { Location } from '@angular/common';
+import { SubscriptionService } from 'src/app/services/subscription/subscription.service';
+import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
   selector: 'app-my-subscription',
   templateUrl: './my-subscription.component.html',
   styleUrls: ['./my-subscription.component.scss'],
 })
-export class MySubscriptionComponent {
-  public routes = routes;
-  public tableData: Array<any> = [];
-  // pagination variables
-  public pageSize = 10;
-  public serialNumberArray: Array<number> = [];
-  public totalData = 0;
-  showFilter = false;
-  dataSource!: MatTableDataSource<any>;
+export class MySubscriptionComponent implements OnInit {
   public searchDataValue = '';
+  subscriptionList: any;
+  currentUser: any;
+  loading: boolean = true;
 
-  isAdmin: boolean = false;
-  isAdminRoute: boolean = false;
-  // pagination variables end
 
   constructor(
-    private data: DataService,
-    private pagination: PaginationService,
     private router: Router,
-    private location: Location,
+    private subscriptionService: SubscriptionService,
+    private userService: UserService,
   ) {
-    this.getId();
     this.scrollToTop();
-    this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
-      if (this.router.url == this.routes.subscription) {
-        this.getTableData({ skip: res.skip, limit: res.limit });
-        this.pageSize = res.pageSize;
-      }
-    });
+  }
+
+
+  ngOnInit(): void {
+    this.scrollToTop();
+    this.getCurrentUser();
   }
 
   scrollToTop(): void {
@@ -57,59 +39,41 @@ export class MySubscriptionComponent {
     }, 100);
   }
 
-  private getTableData(pageOption: pageSelection): void {
-    this.data.getSubscription().subscribe((apiRes: apiResultFormat) => {
-      this.tableData = [];
-      this.serialNumberArray = [];
-      this.totalData = apiRes.totalData;
-      apiRes.data.map((res: subscription, index: number) => {
-        const serialNumber = index + 1;
-        if (index >= pageOption.skip && serialNumber <= pageOption.limit) {
-          res.id = serialNumber;
-          this.tableData.push(res);
-          this.serialNumberArray.push(serialNumber);
-        }
-      });
-      this.dataSource = new MatTableDataSource<subscription>(this.tableData);
-      this.pagination.calculatePageSize.next({
-        totalData: this.totalData,
-        pageSize: this.pageSize,
-        tableData: this.tableData,
-        tableData2: [],
-        serialNumberArray: this.serialNumberArray,
-      });
-    });
-  }
 
-  getId() {
-    const url = this.location.path();
-    this.isAdminRoute = url.includes('admin-subscription');
-  }
-
-  public sortData(sort: Sort) {
-    const data = this.tableData.slice();
-
-    if (!sort.active || sort.direction === '') {
-      this.tableData = data;
-    } else {
-      this.tableData = data.sort((a, b) => {
-        const aValue = (a as never)[sort.active];
-        const bValue = (b as never)[sort.active];
-        return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
-      });
+  async getCurrentUser() {
+    this.currentUser = await this.userService.getCurrentUserData();
+    // this.userData = await this.storage.getStorage(environment.user_data);
+    if (this.currentUser) {
+      console.log('current user: ', this.currentUser);
+      this.getMySubscriptions(this.currentUser._id);
     }
   }
-  isCollapsed1 = false;
 
-  users = [
-    { name: 'Sumo Soft Limited', checked: false },
-    { name: 'Repair Group Co', checked: false },
-  ];
-  toggleCollapse1() {
-    this.isCollapsed1 = !this.isCollapsed1;
+  navigateTo(route: string) {
+    this.router.navigate([route]);
+    // this.router.navigateByUrl('/' + route , { replaceUrl: true });
   }
-  public toggleData = false;
-  openContent() {
-    this.toggleData = !this.toggleData;
+
+  getMySubscriptions(userId) {
+    this.loading = false;
+    this.subscriptionService.getSubscriptionListBySubscriber(userId)
+    .subscribe({
+        next: (response) => {
+          console.log('response', response);
+          const hasError =
+            !!response?.error ||
+            (!!response?.statusCode && Number(response.statusCode) >= 400) ||
+            response?.statusCode === 404;
+          if (!hasError) {
+            this.subscriptionList = response.data;
+            console.log('subscription list: ', this.subscriptionList);
+            this.loading = true;
+          }
+        },
+        error: (error) => {
+          console.log('error', error);
+          this.loading = true;
+        },
+      });
   }
 }

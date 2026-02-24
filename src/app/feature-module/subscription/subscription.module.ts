@@ -13,6 +13,8 @@ import { FrontModule } from 'src/app/front/front.module';
 import { DetailsComponent } from './packages/details/details.component';
 import { SubscriptionDetailsComponent } from './subscription-details/subscription-details.component';
 import { ProfileModule } from '../profile/profile.module';
+import { MySubscriptionComponent } from './my-subscription-list/my-subscription.component';
+import { SubscriptionItemComponent } from './my-subscription-list/subscription-item/subscription-item.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,9 @@ import { ProfileModule } from '../profile/profile.module';
     PackagesComponent,
     ItemComponent,
     DetailsComponent,
-    SubscriptionDetailsComponent
+    SubscriptionDetailsComponent,
+    MySubscriptionComponent,
+    SubscriptionItemComponent
   ],
   imports: [
     CommonModule,

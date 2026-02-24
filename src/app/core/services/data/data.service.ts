@@ -757,7 +757,7 @@ export class DataService {
         },
         {
           menuValue: 'mySubscriptionList',
-          route: '/my-subscriptions',
+          route: '/subscription/my-subscriptions',
           hasSubRoute: false, // Show arrow after menu item title
           showSubRoute: true,
           icon: 'repeat',

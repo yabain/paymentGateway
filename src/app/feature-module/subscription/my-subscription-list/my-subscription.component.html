@@ -1,7 +1,6 @@
 <div class="page-header">
   <div class="content-page-header page-tilte">
-    <h5 *ngIf="!isAdminRoute">{{ 'subscriptions.myList' | translate }}</h5>
-    <h5 *ngIf="isAdminRoute">{{ 'subscriptions.allSystemList' | translate }}</h5>
+    <h5>{{ 'subscriptions.myList' | translate }}</h5>
     <div class="page-content">
       <div class="list-btn">
         <ul class="filter-list">
@@ -74,30 +73,18 @@
         </div>
       </div>
     </div>
-    <!-- <div class="col-xl-3 col-md-6 d-flex">
-      <div class="card w-100">
-        <div class="card-body">
-          <div class="grid-info-item subscription-list total-transaction">
-            <div class="grid-head-icon">
-              <i class="feather icon-shield"></i>
-            </div>
-            <div class="grid-info">
-              <span>Total Transaction</span>
-              <h4>$6,565,60</h4>
-            </div>
-          </div>
+  </div>
+
+  <div class="row d-flex align-items-center justify-content-center" *ngIf="!loading && subscriptionList?.length >= 1">
+    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3" *ngFor="let plan of subscriptionList">
+        <div class="packages card">
+            <app-item [plan]="plan" [currentUser]="currentUser"
+                (click)="navigateTo('/subscription/details/' + plan._id)"></app-item>
         </div>
-      </div>
-    </div> -->
-  </div>
-
-  <div class="row">
-    <div class="col-sm-12">
-
     </div>
-  </div>
 </div>
-<div class="row d-flex align-items-center justify-content-center">
+
+<div class="row d-flex align-items-center justify-content-center" *ngIf="loading && subscriptionList?.length == 0">
   <div class="col-md-12" style="display: flex;
                                 justify-content: center;
                                 align-items: center;">

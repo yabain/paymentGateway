@@ -64,6 +64,18 @@ export class SubscriptionService {
     }
   }
 
+  getSubscriptionListBySubscriber(userId): Observable<any | undefined> {
+    return this.apiService.getById('subscription/subscriptions-list', userId).pipe(
+      map((data) => {
+        return data;
+      }),
+      catchError((error) => {
+        console.error('Error fetching plan statistics:', error);
+        return of([]);
+      }),
+    );
+  }
+
   async deletePlan(planId): Promise<any> {
     try {
       const response = await this.apiService
