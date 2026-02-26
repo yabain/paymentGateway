@@ -250,7 +250,6 @@ export class AddSubscriberComponent implements OnInit {
     this.location.getCountries()
     .subscribe((countries) => {
       if(countries.length > 0) {
-        // console.log('countries: ', countries);
         this.countries = countries.sort((a, b) => a.name.localeCompare(b.name));
         this.countries = this.countries.filter((e) => e.status != false);
         this.location.getCities().subscribe((cities) => {
