@@ -9,7 +9,7 @@ interface data {
   styleUrls: ['./subscription-item.component.scss'],
 })
 export class SubscriptionItemComponent implements OnInit {
-  @Input() plan: any;
+  @Input() subscription: any;
   @Input() currentUser: any;
   optionsData: any = [];
 
@@ -18,6 +18,6 @@ export class SubscriptionItemComponent implements OnInit {
 
   ngOnInit(): void {
     // console.log('plan: ', this.plan);
-    this.optionsData = this.plan ? this.plan.options : [];
+    // this.optionsData = this.plan ? this.plan.options : [];
   }
 }

@@ -1,0 +1,98 @@
+<h3>{{ 'subscriptions.subscriberList' | translate }} ({{ subscribers.length }})</h3>
+<br>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card-table">
+            <div class="card-body">
+                <div class="table-scroll">
+                    <table matSort class="table table-center table-hover datatable" *ngIf="subscribers?.length > 0">
+                        <thead class="thead-light">
+                            <tr>
+                                <th mat-sort-header="name">{{ "auth.username" | translate }}</th>
+                                <th mat-sort-header="phone">{{ "sideMenu.whatsapp" | translate }}</th>
+                                <th mat-sort-header="dateStart">{{ "item.start" | translate }}</th>
+                                <th mat-sort-header="dateEnd">{{ "item.end" | translate }}</th>
+                                <th mat-sort-header="status">{{ "mail.status" | translate }}</th>
+                                <th mat-sort-header="action">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (subscription of subscribers; track subscription; let i = $index) {
+                            <tr>
+                                <td (click)="openSubscription(subscription._id, subscription.userId._id)">
+                                    <h2 class="table-avatar">
+                                        <a class="avatar avatar-md me-2"><img class="avatar-img rounded-circle"
+                                                [src]="subscription?.userId.pictureUrl" alt="User Image" /></a>
+                                        <a>{{
+                                            showName(subscription?.userId)
+                                            }}
+                                            <span>{{ subscription?.userId.email }}</span>
+                                        </a>
+                                    </h2>
+                                </td>
+                                <td (click)="openSubscription(subscription._id, subscription.userId._id)"> {{
+                                    subscription?.userId.whatsapp || subscription?.userId.phone }}
+                                </td>
+                                <td (click)="openSubscription(subscription._id, subscription.userId._id)">{{
+                                    getDate(subscription?.startDate) }}</td>
+                                <td (click)="openSubscription(subscription._id, subscription.userId._id)">{{
+                                    getDate(subscription?.endDate) }}</td>
+                                <td>
+                                    <span [ngClass]="{
+                            'bg-success-light': subscription?.status != false,
+                            'bg-danger-light': subscription?.status === false
+                          }" class="badge badge-pill bg-success-light">{{ (subscription?.status === false ?
+                                        'users.disabled' :
+                                        'users.enabled') | translate }}</span><br
+                                        *ngIf="subscription.userId.isAdmin === true">
+                                </td>
+                                <td class="d-flex align-items-right">
+                                    <div class="icons-items">
+                                        <ul class="icons-list">
+                                            <!-- <li data-bs-toggle="modal" data-bs-target="#enable_modal"
+                                                    *ngIf="customer.isActive === false" (click)="selectUser(customer)">
+                                                    <i class="feather icon-power" data-bs-toggle="tooltip"
+                                                        title="Enable user" style="color: green"></i>
+                                                </li> -->
+                                            <li (click)="changeSubscriptionActiveStatus(subscription?._id)"
+                                                *ngIf="subscription?.status != true">
+                                                <a class="btn-filters btn-hover" href="javascript:void(0);"
+                                                    data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                    matTooltip="Enable"><span><i class="feather icon-power"
+                                                            style="color: #04c714"></i></span></a>
+                                            </li>
+                                            <li (click)="changeSubscriptionActiveStatus(subscription?._id)"
+                                                *ngIf="subscription?.status === true">
+                                                <a class="btn-filters btn-hover" href="javascript:void(0);"
+                                                    data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                    matTooltip="Disable"><span><i class="feather icon-power"
+                                                            style="color: #df0404"></i></span></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <!-- <div class="d-flex justify-content-center" style="margin: 50px">
+                        <div class="spinner-border" role="status"></div>
+                    </div> -->
+                    <div *ngIf="subscribers?.length < 1" class="row d-flex align-items-center justify-content-center">
+                        <div class="col-md-12" style="display: flex;
+                                        justify-content: center;
+                                        align-items: center;">
+                            <img src="assets/img/resources/nts.png" alt="" style="max-width: 150px;
+                                            height: auto;">
+                        </div>
+                        <div class="col-md-12" style="display: flex;
+                                        justify-content: center;
+                                        align-items: center;">
+                            {{ "nts" | translate }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

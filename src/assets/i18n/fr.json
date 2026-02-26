@@ -389,6 +389,7 @@
     "paymentRejected": "Paiement rejeté.",
     "facturationAccount": "Compte de facturation",
     "facturationDetails": "Détails de facturation",
+    "facturationDate": "Date de facturation",
     "amount": "Montant",
     "withdrawalAmount": "Montant du retrait",
     "confirmTransaction": "Veuillez confirmer la transaction sur votre mobile",
@@ -698,7 +699,8 @@
     "subscriptionToday": "Abonnez-vous dès aujourd'hui",
     "renewSubscription": "Renouvellez votre abonnement",
     "subscriberList": "Liste des abonnés",
-    "subscriptionStartDate": "Date de début de l'abonnement"
+    "subscriptionStartDate": "Date de début de l'abonnement",
+    "addSubscriber": "Ajouter un abonné"
   },
   "services": {
     "title": "Services",
@@ -1094,6 +1096,7 @@
     "generalSettings": "Paramètres généraux",
     "companySettings": "Paramètres de l'entreprise"
   },
+  "calendar": "Calendrier",
   "rawData": "Données brutes",
   "tool": "Outil",
   "meetUrl": "Lien de la Visio",

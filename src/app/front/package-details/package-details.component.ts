@@ -93,7 +93,9 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
   minutes: number = 0;
   seconds: number = 0;
   gettingSubscribers: boolean = true;
-  subscribers: any[] = [];
+  subscribers: any[];
+  raw: any;
+  items: any;
 
   openContent() {
     this.toggleData = !this.toggleData;
@@ -154,7 +156,7 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
       .getSubscribersList(this.planData._id)
       .subscribe((data: any) => {
         this.subscribers = data;
-        console.log('subscribers', this.subscribers);
+        // console.log('subscribers', this.subscribers);
         this.gettingSubscribers = false;
       });
   }
@@ -173,8 +175,8 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
     if (idParam && idParam !== 'null' && idParam !== 'undefined') {
      [this.idParam, this.userId] = idParam.split('AAA');
     }
-    console.log('idParam', this.idParam);
-    console.log('userId', this.userId);
+    // console.log('idParam', this.idParam);
+    // console.log('userId', this.userId);
     this.getPlanDataById(this.idParam);
   }
   
@@ -228,7 +230,7 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
     }, 2000);
   }
 
-  checkSubscriberStatus(plan) {
+  checkSubscriberStatus(planData) {
     this.checkingSubscriptionStatus = true;
     if (!this.currentUser) {
       this.isSubscriber = false;
@@ -236,9 +238,9 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
     }
 
     this.subscriptionService
-      .checkSubscriberStatus(this.planData._id, this.currentUser._id || undefined)
+      .checkSubscriberStatus(planData._id, this.currentUser._id || undefined)
       .then((data: any) => {
-        console.log('data', data);
+        // console.log('data', data);
         this.subscriptionStatus = data;
         if (data.existingSubscription) {
           this.isSubscriber = data?.status ? data.status : false;
@@ -250,7 +252,42 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
           this.isSubscriber = false;
         }
         this.checkingSubscriptionStatus = false;
+        if(this.currentUser && !this.isAuthor(planData) && this.subscriptionStatus?.existingSubscription){
+          this.getSubscriptionItems(this.subscriptionStatus.data._id, this.currentUser._id)
+        }
       });
+  }
+
+  getSubscriptionItems(subscriptionId, subscriberId) {
+    this.subscriptionService.getSubscriptionItems(subscriptionId, subscriberId)
+      .subscribe((data: any) => {
+        this.raw = data;
+        this.items = data.map(item => ({
+          title: item.plansId.title || '...', 
+          dateStart: item.dateStart,
+          dateEnd: item.dateEnd,
+          color: '#058507'
+        }));
+      });
+  }
+
+  showSubscriberList(): boolean{
+    if (
+      this.currentUser
+      && this.isAuthor(this.planData)
+      // || this.currentUser
+      // && this.isAdmin
+    ) return true;
+    return false;
+  }
+
+  showInvoiceList(): boolean{
+    if(
+      this.currentUser
+      && !this.isAuthor(this.planData)
+      && this.subscriptionStatus?.existingSubscription
+    ) return true;
+    return false;
   }
 
   getCurrentUser() {
@@ -452,7 +489,7 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
     );
   }
 
-  verifytransactionData(transactionData): boolean {
+  verifyTransactionData(transactionData): boolean {
     if (transactionData.payment < 100) {
       return false;
     }
@@ -460,7 +497,7 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
   }
 
   async proceedSubscribe() {
-    if (!this.verifytransactionData(this.transactionData)) return;
+    if (!this.verifyTransactionData(this.transactionData)) return;
     this.proceed = true;
     await this.fw.loadFlutterwaveScript();
     this.paymentService

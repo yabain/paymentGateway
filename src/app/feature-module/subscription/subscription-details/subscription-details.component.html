@@ -1,80 +1,45 @@
-
 <div class="d-flex justify-content-center" *ngIf="gettingUserData" style="margin: 50px">
     <div class="spinner-border" role="status"></div>
-  </div>
+</div>
 <app-head-profile [userData]="userData" *ngIf="!gettingUserData"></app-head-profile>
 <br>
 <div class="d-flex justify-content-center" *ngIf="loadingData" style="margin: 50px">
     <div class="spinner-border" role="status"></div>
 </div>
 <br>
-<div class="card-body">
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="card-table">
-                <div class="card-body">
-                    <div class="table-scroll">
-                        <table matSort class="table table-center table-hover datatable"
-                            *ngIf="!loadingData && raw?.length > 0">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th mat-sort-header="name">{{ "subscriptions.title" | translate }}</th>
-                                    <th mat-sort-header="dateStart">{{ "item.start" | translate }}</th>
-                                    <th mat-sort-header="dateEnd">{{ "item.end" | translate }}</th>
-                                    <th mat-sort-header="status">Transaction</th>
-                                    <th mat-sort-header="action">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody *ngIf="!loadingData">
-                                @for (subscription of raw; track subscription; let i = $index) {
-                                <tr>
-                                    <td>
-                                        <img style="max-width: 30px; margin-right: 10px;"
-                                            src="assets/img/resources/package.png" alt="User Image" />
-                                        {{ subscription?.plansId?.title || "---"}}
-                                    </td>
-                                    <td>{{ getDate(subscription?.dateStart) }}</td>
-                                    <td>{{ getDate(subscription?.dateEnd) }}</td>
-                                    <td>
-                                        <a *ngIf="subscription?.transactionId" [href]="frontUrl + '/invoice/' + subscription.transactionId" target="_blank">
-                                            {{ subscription.transactionId}}
-                                        <i class="feather icon-external-link" data-bs-toggle="tooltip"
-                                            title="Disable user" style="color: #021d66; margin-left: 10px;"></i>
-                                        </a>
-                                    </td>
-                                    <td class="d-flex align-items-right">
-                                        <button type="button" class="btn btn-block btn-outline-primary" *ngIf="subscription?.transactionId">
-                                            {{ "update.download" | translate }}
-                                            <i class="feather icon-download-cloud" data-bs-toggle="tooltip"
-                                                title="Disable user" style="margin-left: 10px;"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                }
-                            </tbody>
-                        </table>
-                        <div *ngIf="!loadingData && raw?.length < 1"
-                            class="row d-flex align-items-center justify-content-center">
-                            <div class="col-md-12" style="display: flex;
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-scroll">
+                    <app-invoice-list *ngIf="!loadingData && raw?.length > 0" [invoiceList]="raw"></app-invoice-list>
+
+                    <div *ngIf="!loadingData && raw?.length < 1"
+                        class="row d-flex align-items-center justify-content-center">
+                        <div class="col-md-12" style="display: flex;
                                     justify-content: center;
                                     align-items: center;">
-                                <img src="assets/img/resources/nts.png" alt="" style="max-width: 150px;
+                            <img src="assets/img/resources/nts.png" alt="" style="max-width: 150px;
                                         height: auto;">
-                            </div>
-                            <div class="col-md-12" style="display: flex;
+                        </div>
+                        <div class="col-md-12" style="display: flex;
                                     justify-content: center;
                                     align-items: center;">
-                                {{ "nts" | translate }}
-                            </div>
+                            {{ "nts" | translate }}
                         </div>
                     </div>
                 </div>
-                <app-custom-pagination></app-custom-pagination>
-
             </div>
         </div>
     </div>
 </div>
 <br><br>
-<h1>Calendar</h1>
-<app-calendar [events]="items" *ngIf="!loadingData && raw.length > 0"></app-calendar>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-body">
+                <app-calendar [events]="items" *ngIf="!loadingData && raw.length > 0"></app-calendar>
+            </div>
+        </div>
+    </div>
+</div>

@@ -53,7 +53,11 @@ export class InvoiceDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.showInvoice = this.transactionData.transactionType === "subscription" ? false : true;
+    if (!this.transactionData) {
+      this.showInvoice = true;
+      return;
+    }
+    this.showInvoice = this.transactionData?.transactionType === 'subscription' ? false : true;
     console.log('InvoiceDetailsComponent', this.transactionData);
   }
 
@@ -61,7 +65,7 @@ export class InvoiceDetailsComponent implements OnInit, OnDestroy {
     this.subscriptionService.getItemSubscriptionByTransactionId(transactionId)
     .subscribe((data: any) => {
       console.log('getItemOfSubscription', data);
-      this.itemData = data;
+      this.itemData = data || null;
       this.showInvoice = true;
     })
   }
@@ -75,7 +79,16 @@ export class InvoiceDetailsComponent implements OnInit, OnDestroy {
       this.qrCode = this.frontUrl + '/invoice/' + this.transactionData._id;
       if (this.transactionData.transactionType === 'subscription') {
         this.getPlanDataById(this.transactionData.planId);
-        this.getItemOfSubscription(this.transactionData._id);
+        const isSuccessStatus =
+          this.transactionData?.status === 'transaction_payin_success' ||
+          this.transactionData?.status === 'transaction_payout_success';
+
+        if (isSuccessStatus) {
+          this.getItemOfSubscription(this.transactionData._id);
+        } else {
+          this.itemData = null;
+          this.showInvoice = true;
+        }
       }
     }
   }

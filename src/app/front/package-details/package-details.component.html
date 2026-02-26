@@ -19,7 +19,7 @@
                                     <div class="event-image">
                                         <img [src]="imageUrl" alt="">
                                     </div>
-                                    <div class="badge-warning"
+                                    <div class="badge-success"
                                         *ngIf="subscriptionStatus?.existingSubscription && subscriptionStatus?.status">
                                         <i class="feather icon-check-circle"></i> {{ 'subscriptions.alreadySubscriber' |
                                         translate }}
@@ -126,8 +126,11 @@
                                                     <i class="feather icon-trash-2"></i>
                                                 </button>
                                             </div>
-                                            <h6 class="col-md-12" *ngIf="currentUser">
+                                            <h6 class="col-md-12" *ngIf="currentUser && !isAuthor(planData) && planData.isActive">
                                                 {{ 'subscriptions.as' | translate }} <b>{{ showName(currentUser)}}</b>
+                                            </h6>
+                                            <h6 class="col-md-12" *ngIf="!planData?.isActive" style="color: #bf1e1e">
+                                                {{ 'subscriptions.plan' | translate }} <b>{{ 'services.disabled' | translate }}</b>
                                             </h6>
                                         </div>
                                     </div>
@@ -204,125 +207,72 @@
 
 
 <!-- Subscriber List -->
-<div class="card" *ngIf="currentUser && isAuthor(planData) || currentUser && isAdmin">
-    <div class="card-header">
-        <div class="row">
-            <div class="col-md-8">
-                <h3>{{ 'subscriptions.subscriberList' | translate }} ({{ subscribers.length }})</h3>
-            </div>
-            <div class="col-md-4" style="text-align: right;">
-                <button class="btn btn-rounded btn-outline-secondary me-1" (click)="refresh()"><i
-                        class="feather icon-refresh-ccw"></i></button>
-                <button class="btn btn-rounded btn-outline-primary me-1" data-bs-toggle="modal"
-                    data-bs-target="#add_subscriber_modal">+ {{ 'action.add' | translate }} </button>
+<div *ngIf="showSubscriberList()">
+    <div class="card" *ngIf="!subscribers">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-8">
+                    <h3>{{ 'subscriptions.subscriberList' | translate }}</h3>
+                </div>
+                <div class="d-flex justify-content-center" style="margin: 50px">
+                    <div class="spinner-border" role="status"></div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card-table">
-                    <div class="card-body">
-                        <div class="table-scroll">
-                            <table matSort class="table table-center table-hover datatable"
-                                *ngIf="!gettingSubscribers && subscribers?.length > 0">
-                                <thead class="thead-light">
-                                    <tr>
-                                        <th mat-sort-header="name">{{ "auth.username" | translate }}</th>
-                                        <th mat-sort-header="phone">{{ "sideMenu.whatsapp" | translate }}</th>
-                                        <th mat-sort-header="dateStart">{{ "item.start" | translate }}</th>
-                                        <th mat-sort-header="dateEnd">{{ "item.end" | translate }}</th>
-                                        <th mat-sort-header="status">{{ "mail.status" | translate }}</th>
-                                        <th mat-sort-header="action">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody *ngIf="!gettingSubscribers">
-                                    @for (subscription of subscribers; track subscription; let i = $index) {
-                                    <tr>
-                                        <td (click)="openSubscription(subscription._id, subscription.userId._id)">
-                                            <h2 class="table-avatar">
-                                                <a class="avatar avatar-md me-2"><img class="avatar-img rounded-circle"
-                                                        [src]="subscription?.userId.pictureUrl" alt="User Image" /></a>
-                                                <a>{{
-                                                    showName(subscription?.userId)
-                                                    }}
-                                                    <span>{{ subscription?.userId.email }}</span>
-                                                </a>
-                                            </h2>
-                                        </td>
-                                        <td (click)="openSubscription(subscription._id, subscription.userId._id)"> {{
-                                            subscription?.userId.whatsapp || subscription?.userId.phone }}
-                                        </td>
-                                        <td (click)="openSubscription(subscription._id, subscription.userId._id)">{{
-                                            getDate(subscription?.startDate) }}</td>
-                                        <td (click)="openSubscription(subscription._id, subscription.userId._id)">{{
-                                            getDate(subscription?.endDate) }}</td>
-                                        <td>
-                                            <span [ngClass]="{
-                            'bg-success-light': subscription?.status != false,
-                            'bg-danger-light': subscription?.status === false
-                          }" class="badge badge-pill bg-success-light">{{ (subscription?.status === false ?
-                                                'users.disabled' :
-                                                'users.enabled') | translate }}</span><br
-                                                *ngIf="subscription.userId.isAdmin === true">
-                                        </td>
-                                        <td class="d-flex align-items-right">
-                                            <div class="icons-items">
-                                                <ul class="icons-list">
-                                                    <!-- <li data-bs-toggle="modal" data-bs-target="#enable_modal"
-                                                    *ngIf="customer.isActive === false" (click)="selectUser(customer)">
-                                                    <i class="feather icon-power" data-bs-toggle="tooltip"
-                                                        title="Enable user" style="color: green"></i>
-                                                </li> -->
-                                                    <li (click)="changeSubscriptionActiveStatus(subscription?._id)"
-                                                        *ngIf="subscription?.status != true">
-                                                        <a class="btn-filters btn-hover" href="javascript:void(0);"
-                                                            data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                            matTooltip="Enable"><span><i class="feather icon-power"
-                                                                    style="color: #04c714"></i></span></a>
-                                                    </li>
-                                                    <li (click)="changeSubscriptionActiveStatus(subscription?._id)"
-                                                        *ngIf="subscription?.status === true">
-                                                        <a class="btn-filters btn-hover" href="javascript:void(0);"
-                                                            data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                            matTooltip="Disable"><span><i class="feather icon-power"
-                                                                    style="color: #df0404"></i></span></a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    }
-                                </tbody>
-                            </table>
-                            <div class="d-flex justify-content-center" *ngIf="gettingSubscribers" style="margin: 50px">
-                                <div class="spinner-border" role="status"></div>
-                            </div>
-                            <div *ngIf="!gettingSubscribers && subscribers?.length < 1"
-                                class="row d-flex align-items-center justify-content-center">
-                                <div class="col-md-12" style="display: flex;
-                                        justify-content: center;
-                                        align-items: center;">
-                                    <img src="assets/img/resources/nts.png" alt="" style="max-width: 150px;
-                                            height: auto;">
-                                </div>
-                                <div class="col-md-12" style="display: flex;
-                                        justify-content: center;
-                                        align-items: center;">
-                                    {{ "nts" | translate }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <app-custom-pagination></app-custom-pagination>
-
-                </div>
-            </div>
+    <div class="card" *ngIf="subscribers">
+        <div class="card-body">
+            <app-subscriber-list [subscribers]="subscribers"></app-subscriber-list>
         </div>
     </div>
 </div>
 <!-- /Subscriber List -->
 
+<!-- invoice List -->
+<div *ngIf="showInvoiceList()">
+    <div class="card" *ngIf="!raw">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-8">
+                    <h3>{{ 'payment.invoice' | translate }}</h3>
+                </div>
+                <div class="d-flex justify-content-center" style="margin: 50px">
+                    <div class="spinner-border" role="status"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card" *ngIf="raw">
+        <div class="card-body">
+            <app-invoice-list [invoiceList]="raw"></app-invoice-list>
+        </div>
+    </div>
+</div>
+<!-- /invoice List -->
+
+
+
+<!-- calendar view -->
+<div *ngIf="showInvoiceList()">
+    <div class="card" *ngIf="!items">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-8">
+                    <h3>{{ 'payment.invoice' | translate }}</h3>
+                </div>
+                <div class="d-flex justify-content-center" style="margin: 50px">
+                    <div class="spinner-border" role="status"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card" *ngIf="raw">
+        <div class="card-body">
+            <app-calendar [events]="items"></app-calendar>
+        </div>
+    </div>
+</div>
+<!-- / calendar view  -->
 
 <!-- Delete Items Modal -->
 <div class="modal custom-modal fade modal-delete" id="delete_modal" role="dialog">
@@ -364,7 +314,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                     (close)="ngOnDestroy()"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="text-align: center !important;">
                 <span style="font-size: 1rem; margin-bottom: 20px;" *ngIf="!checkingSubscriptionStatus">{{
                     planData?.subTitle }}</span>
                 <h2 *ngIf="planData?.price > 0">{{ planData?.price }} {{ planData?.currency }}</h2>
@@ -591,7 +541,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title align-items-center justify-content-center" id="staticBackdropLabel">
-                    Ajouter un abonné
+                    {{ 'subscriptions.addSubscriber' | translate }}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>

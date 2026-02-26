@@ -6,14 +6,16 @@
     <div class="package-header d-flex justify-content-between">
         <div class="d-flex justify-content-between w-100">
             <div class="">
-                <h6>{{ 'subscriptions.' + plan.cycle | translate }}</h6>
-                <h4>{{ plan.title }}</h4>
+                <h4>{{ subscription.planId.title }}</h4>
+                <h6>{{ 'subscriptions.' + subscription.cycle | translate }}</h6>
             </div>
         </div>
     </div>
-    <span class="package-enabled" *ngIf="plan.isActive">{{ 'subscriptions.actived' | translate }}</span>
-    <span class="package-disabled" *ngIf="!plan.isActive">{{ 'subscriptions.inactive' | translate }}</span>
-    <p>{{ plan.subTitle }} </p>
-    <h2 *ngIf="plan.price > 0">{{ plan.price }} {{ plan.currency }}</h2>
-    <h2 *ngIf="plan.price === 0">{{ "item.free" | translate }}</h2>
+    <span class="package-enabled" *ngIf="subscription.status">{{ 'subscriptions.actived' | translate }}</span>
+    <span class="package-disabled" *ngIf="!subscription.status">{{ 'subscriptions.inactive' | translate }}</span>
+    <p>{{ subscription.planId.subTitle }} </p>
+    <span style="font-weight: 700; font-size: 1.7rem;" *ngIf="subscription.planId.price > 0">{{ subscription.planId.price }}</span>
+    {{ subscription.planId.currency }} - 
+    <span style="font-weight: 400; font-size: 1.2rem; color: #2d2d2d">{{ 'subscriptions.' + subscription.cycle | translate }}</span>
+    <h2 *ngIf="subscription.planId.price === 0">{{ "item.free" | translate }}</h2>
 </div>

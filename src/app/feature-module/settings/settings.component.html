@@ -23,8 +23,8 @@
   <div class="row justify-content-lg-center">
     <div class="col-lg-12">
       <div class="row">
-        <hr *ngIf="userData?.accountType === 'organisation' || userData?.isAdmin">
-        <div class="col-lg-6" *ngIf="userData?.accountType === 'organisation' || userData?.isAdmin">
+        <!-- <hr *ngIf="userData?.accountType === 'organisation' || userData?.isAdmin"> -->
+        <div class="col-lg-6">
           <div class="card row" *ngIf="showAdvancedOptions(userData)">
             <div class="card-body card-body-height" *ngIf="!loadingSettings">
               <div class="d-flex justify-content-between">

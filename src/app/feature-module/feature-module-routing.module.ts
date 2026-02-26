@@ -6,7 +6,6 @@ import { FeatureModuleComponent } from './feature-module.component';
 import { SendMoneyComponent } from './send-money/send-money.component';
 import { WithdrawalComponent } from './withdrawal/withdrawal.component';
 import { AdminGuard } from '../core/guards/adminer/admin.guard';
-import { MySubscriptionComponent } from './subscription/my-subscription-list/my-subscription.component';
 
 const routes: Routes = [
   {
@@ -35,10 +34,6 @@ const routes: Routes = [
       {
         path: 'withdrawal',
         component: WithdrawalComponent,
-      },
-      {
-        path: 'my-subscriptions',
-        component: MySubscriptionComponent,
       },
       {
         path: 'subscription',

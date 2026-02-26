@@ -37,7 +37,7 @@
             @for (menu of mainTittle?.menu; track menu) {
               @if (menu?.hasSubRoute === false) {
                 <li
-                  [class.active]="base === menu.base"
+                  [class.active]="isMenuActive(menu.base)"
                   >
                   <a [routerLink]="menu?.route"
                     ><i class="feather" [class]="'icon-' + menu.icon"></i>
@@ -48,7 +48,7 @@
                 @if (menu.hasSubRoute === true) {
                   <li class="submenu">
                     <a
-                      [class.active]="base === menu.base"
+                      [class.active]="isMenuActive(menu.base)"
                       (click)="expandSubMenus(menu)"
                       href="javascript:void(0)"
                   [ngClass]="{ subdrop: menu.showSubRoute ===

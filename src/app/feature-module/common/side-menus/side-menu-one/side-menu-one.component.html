@@ -38,7 +38,7 @@
           </li>
           @for (menu of mainTittle?.menu; track menu) {
           @if (menu?.hasSubRoute === false) {
-          <li [class.active]="base === menu.base">
+          <li [class.active]="isMenuActive(menu.base)">
             <a [routerLink]="menu.route"><i class="feather" [class]="'icon-' + menu.icon"></i>
               <span>
                 {{ 'sideMenu.' + menu?.menuValue | translate }}</span> @if (menu.changeLogVersion === true) {
@@ -48,7 +48,7 @@
           }
           @if (menu.hasSubRoute === true) {
           <li class="submenu">
-            <a [class.active]="base === menu.base" href="javascript:void(0)" (click)="expandSubMenus(menu)"
+            <a [class.active]="isMenuActive(menu.base)" href="javascript:void(0)" (click)="expandSubMenus(menu)"
               [ngClass]="{ 'subdrop': menu.showSubRoute === true , 'd-none': menu.view === false }"><i class="feather"
                 [class]="'icon-' + menu.icon"></i>
               <span> {{ menu.menuValue }}</span>

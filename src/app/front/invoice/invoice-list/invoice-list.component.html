@@ -1,0 +1,48 @@
+<h1>{{ 'payment.invoice' | translate }}s</h1>
+<br>
+<div class="table-scroll">
+    <table matSort class="table table-center table-hover datatable">
+        <thead class="thead-light">
+            <tr>
+                <th mat-sort-header="name">{{ "subscriptions.title" | translate }}</th>
+                <th mat-sort-header="facturationDate">{{ "payment.facturationDate" | translate }}</th>
+                <th mat-sort-header="dateStart">{{ "item.start" | translate }}</th>
+                <th mat-sort-header="dateEnd">{{ "item.end" | translate }}</th>
+                <th mat-sort-header="status">Transaction</th>
+                <th mat-sort-header="action">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (subscription of invoiceList; track subscription; let i = $index) {
+            <tr>
+                <td>
+                    <img style="max-width: 30px; margin-right: 10px;" src="assets/img/resources/package.png"
+                        alt="User Image" />
+                    {{ subscription?.plansId?.title || "---"}}
+                </td>
+                <td>{{ getDate(subscription?.createdAt) }}</td>
+                <td>{{ getDate(subscription?.dateStart) }}</td>
+                <td>{{ getDate(subscription?.dateEnd) }}</td>
+                <td>
+                    <a *ngIf="subscription?.transactionId" [href]="frontUrl + '/invoice/' + subscription.transactionId"
+                        target="_blank">
+                        {{ subscription.transactionId}}
+                        <i class="feather icon-external-link" data-bs-toggle="tooltip" title="Disable user"
+                            style="color: #021d66; margin-left: 10px;"></i>
+                    </a>
+                </td>
+                <td class="d-flex align-items-right">
+                    <a [href]="frontUrl + '/invoice/' + subscription.transactionId" target="_blank">
+                        <button type="button" class="btn btn-block btn-outline-primary"
+                            *ngIf="subscription?.transactionId">
+                            {{ "update.download" | translate }}
+                            <i class="feather icon-download-cloud" data-bs-toggle="tooltip" title="Disable user"
+                                style="margin-left: 10px;"></i>
+                        </button>
+                    </a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>

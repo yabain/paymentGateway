@@ -64,6 +64,19 @@ export class SideMenuFiveComponent {
     this.last = splitVal[3];
   }
 
+  public isMenuActive(menuBase?: string): boolean {
+    const currentPath = this.normalizePath(this.currentRoute);
+    const basePath = this.normalizePath(menuBase);
+
+    if (!basePath) return false;
+    return currentPath === basePath || currentPath.startsWith(`${basePath}/`);
+  }
+
+  private normalizePath(path?: string): string {
+    if (!path) return '';
+    return path.split('?')[0].split('#')[0].replace(/^\/+|\/+$/g, '');
+  }
+
 
 
   public expandSubMenus(menu: SideBarMenu): void {

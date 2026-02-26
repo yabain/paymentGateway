@@ -13,6 +13,8 @@ export class MySubscriptionComponent implements OnInit {
   subscriptionList: any;
   currentUser: any;
   loading: boolean = true;
+  statistics: any;
+  gettingStatistics: boolean = true;
 
 
   constructor(
@@ -23,10 +25,10 @@ export class MySubscriptionComponent implements OnInit {
     this.scrollToTop();
   }
 
-
   ngOnInit(): void {
     this.scrollToTop();
     this.getCurrentUser();
+    this.getMyStatistics();
   }
 
   scrollToTop(): void {
@@ -39,40 +41,55 @@ export class MySubscriptionComponent implements OnInit {
     }, 100);
   }
 
-
   async getCurrentUser() {
     this.currentUser = await this.userService.getCurrentUserData();
-    // this.userData = await this.storage.getStorage(environment.user_data);
     if (this.currentUser) {
-      console.log('current user: ', this.currentUser);
       this.getMySubscriptions(this.currentUser._id);
     }
   }
 
   navigateTo(route: string) {
     this.router.navigate([route]);
-    // this.router.navigateByUrl('/' + route , { replaceUrl: true });
   }
 
   getMySubscriptions(userId) {
-    this.loading = false;
+    this.loading = true;
     this.subscriptionService.getSubscriptionListBySubscriber(userId)
     .subscribe({
         next: (response) => {
-          console.log('response', response);
           const hasError =
             !!response?.error ||
             (!!response?.statusCode && Number(response.statusCode) >= 400) ||
             response?.statusCode === 404;
           if (!hasError) {
-            this.subscriptionList = response.data;
-            console.log('subscription list: ', this.subscriptionList);
-            this.loading = true;
+            this.subscriptionList = response;
+            this.loading = false;
           }
         },
         error: (error) => {
-          console.log('error', error);
-          this.loading = true;
+          console.error('error', error);
+          this.loading = false;
+        },
+      });
+  }
+
+  getMyStatistics() {
+    this.gettingStatistics = true;
+    this.subscriptionService.getMySubscriptionStatistics()
+    .subscribe({
+        next: (response) => {
+          const hasError =
+            !!response?.error ||
+            (!!response?.statusCode && Number(response.statusCode) >= 400) ||
+            response?.statusCode === 404;
+          if (!hasError) {
+            this.statistics = response;
+            this.gettingStatistics = false;
+          }
+        },
+        error: (error) => {
+          console.error('error', error);
+          this.gettingStatistics = false;
         },
       });
   }

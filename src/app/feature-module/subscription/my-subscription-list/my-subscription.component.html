@@ -35,7 +35,8 @@
             </div>
             <div class="grid-info">
               <span>{{ "subscriptions.totalSubscriptions" | translate }}</span>
-              <h4>0</h4>
+              <span class="spinner-border" role="status" *ngIf="gettingStatistics"></span>
+              <h4 *ngIf="!gettingStatistics">{{ statistics.totalSubscription}}</h4>
             </div>
 
           </div>
@@ -51,9 +52,9 @@
             </div>
             <div class="grid-info">
               <span>{{ "subscriptions.activeSubscriptions" | translate }}</span>
-              <h4>0</h4>
+              <span class="spinner-border" role="status" *ngIf="gettingStatistics"></span>
+              <h4 *ngIf="!gettingStatistics">{{ statistics.activeSubscription}}</h4>
             </div>
-
           </div>
         </div>
       </div>
@@ -67,21 +68,39 @@
             </div>
             <div class="grid-info">
               <span>{{ "subscriptions.inactiveSubscriptions" | translate }}</span>
-              <h4>0</h4>
+              <span class="spinner-border" role="status" *ngIf="gettingStatistics"></span>
+              <h4 *ngIf="!gettingStatistics">{{ statistics.inactiveSubscription}}</h4>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
-  <div class="row d-flex align-items-center justify-content-center" *ngIf="!loading && subscriptionList?.length >= 1">
-    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3" *ngFor="let plan of subscriptionList">
-        <div class="packages card">
-            <app-item [plan]="plan" [currentUser]="currentUser"
-                (click)="navigateTo('/subscription/details/' + plan._id)"></app-item>
+
+
+<div class="super-admin-list-head" *ngIf="loading">
+  <div class="row">
+    <div class="col-xl-12 col-md-12 d-flex">
+      <div class="card w-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-center" style="margin: 50px">
+            <span class="spinner-border" role="status"></span>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
+</div>
+
+<div class="row d-flex align-items-center justify-content-center" *ngIf="!loading && subscriptionList?.length > 0">
+  <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3" *ngFor="let subscription of subscriptionList">
+    <div class="packages card">
+      <app-subscription-item [subscription]="subscription" [currentUser]="currentUser"
+        (click)="navigateTo('/subscription/details/' + subscription.planId._id)"></app-subscription-item>
+    </div>
+  </div>
 </div>
 
 <div class="row d-flex align-items-center justify-content-center" *ngIf="loading && subscriptionList?.length == 0">

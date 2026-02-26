@@ -389,6 +389,7 @@
     "paymentRejected": "Payment rejected.",
     "facturationAccount": "Facturation account",
     "facturationDetails": "Facturation details",
+    "facturationDate": "Facturation date",
     "amount": "Amount",
     "withdrawalAmount": "Withdrawal amount",
     "confirmTransaction": "Please confirm the transaction on your mobile",
@@ -698,7 +699,8 @@
     "subscriptionToday": "Subscribe today",
     "renewSubscription": "Renew your subscription",
     "subscriberList": "Subscribers list",
-    "subscriptionStartDate": "Subscription start date"
+    "subscriptionStartDate": "Subscription start date",
+    "addSubscriber": "Add subscriber"
   },
   "services": {
     "title": "Services",
@@ -1093,6 +1095,7 @@
     "generalSettings": "General settings",
     "companySettings": "Company settings"
   },
+  "calendar": "Calendar",
   "rawData": "Raw data",
   "tool": "Tool",
   "meetUrl": "Visio URL",

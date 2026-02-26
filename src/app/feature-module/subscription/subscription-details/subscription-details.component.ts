@@ -37,11 +37,6 @@ export class SubscriptionDetailsComponent {
     this.scrollToTop();
   }
 
-
-  public getDate(date: string) {
-    return date.split('T')[0];
-  }
-
   getId() {
     this.url = this.location.path();
     const idParam = this.route.snapshot.paramMap.get('id');

@@ -116,6 +116,9 @@
                                                 *ngIf="currentUser && !isAuthor(serviceData) && serviceData?.isActive">
                                                 {{ 'subscriptions.as' | translate }} <b>{{ showName(currentUser)}}</b>
                                             </h6>
+                                            <h6 class="col-md-12" *ngIf="!serviceData?.isActive" style="color: #bf1e1e">
+                                                {{ 'services.title' | translate }} <b>{{ 'services.disabled' | translate }}</b>
+                                            </h6>
                                         </div>
                                     </div>
                                 </div>

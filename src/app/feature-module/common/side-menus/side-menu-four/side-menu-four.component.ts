@@ -66,7 +66,7 @@ export class SideMenuFourComponent implements OnDestroy {
             this.side_bar_data.push(...(menu.subMenus || []));
           }
 
-          if (this.base === menu.base) {
+          if (this.isMenuActive(menu.base)) {
             this.side_bar_data[mainMenuIndex].showAsTab = true;
           }
         });
@@ -90,6 +90,19 @@ export class SideMenuFourComponent implements OnDestroy {
     this.base = splitVal[1];
     this.page = splitVal[2];
     this.last = splitVal[3];
+  }
+
+  public isMenuActive(menuBase?: string): boolean {
+    const currentPath = this.normalizePath(this.currentRoute);
+    const basePath = this.normalizePath(menuBase);
+
+    if (!basePath) return false;
+    return currentPath === basePath || currentPath.startsWith(`${basePath}/`);
+  }
+
+  private normalizePath(path?: string): string {
+    if (!path) return '';
+    return path.split('?')[0].split('#')[0].replace(/^\/+|\/+$/g, '');
   }
   public showTabs(mainTitle: MainTitle): void {
     console.log(mainTitle,"main title")

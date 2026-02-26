@@ -14,6 +14,8 @@ import { AddSubscriberComponent } from './add-subscriber/add-subscriber.componen
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarComponent } from './calendar/calendar.component';
 import { PortalComponent } from './portal/portal.component';
+import { InvoiceListComponent } from './invoice/invoice-list/invoice-list.component';
+import { SubscriberListComponent } from './subscriber-list/subscriber-list.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, '../assets/i18n/', '.json?v=' + new Date().getTime());
@@ -26,7 +28,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     FooterComponent,
     AddSubscriberComponent,
     CalendarComponent,
-    PortalComponent
+    PortalComponent,
+    InvoiceListComponent,
+    PackageDetailsComponent,
+    SubscriberListComponent
   ],
   providers: [],
   imports: [
@@ -43,6 +48,9 @@ export function HttpLoaderFactory(http: HttpClient) {
       PageComponent,
       FooterComponent,
       CalendarComponent,
+      InvoiceListComponent,
+      PackageDetailsComponent,
+      SubscriberListComponent,
       FullCalendarModule],
 })
 export class FrontModule {}

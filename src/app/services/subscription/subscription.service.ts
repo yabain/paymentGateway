@@ -40,6 +40,18 @@ export class SubscriptionService {
     );
   }
 
+  getMySubscriptionStatistics(): Observable<any | undefined> {
+    return this.apiService.getWithToken('subscription/get-my-statistics').pipe(
+      map((data) => {
+        return data;
+      }),
+      catchError((error) => {
+        console.error('Error fetching plan statistics:', error);
+        return of([]);
+      }),
+    );
+  }
+
   async changeStatus(planId): Promise<any> {
     try {
       const response = await this.apiService

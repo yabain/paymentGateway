@@ -761,7 +761,7 @@ export class DataService {
           hasSubRoute: false, // Show arrow after menu item title
           showSubRoute: true,
           icon: 'repeat',
-          base: 'subscription',
+          base: 'subscription/my-subscriptions',
         },
         {
           menuValue: 'myTransactions',
@@ -841,11 +841,11 @@ export class DataService {
         },
         {
           menuValue: 'myPlans',
-          route: '/subscription',
+          route: '/subscription/packages',
           hasSubRoute: false, // Show arrow after menu item title
           showSubRoute: true,
           icon: 'repeat',
-          base: 'subscription',
+          base: 'subscription/packages',
         },
         {
           menuValue: 'services',
@@ -869,7 +869,7 @@ export class DataService {
           hasSubRoute: false, // Show arrow after menu item title
           showSubRoute: true,
           icon: 'settings',
-          base: 'fundraising',
+          base: 'organisation-settings',
         },
       ],
     },

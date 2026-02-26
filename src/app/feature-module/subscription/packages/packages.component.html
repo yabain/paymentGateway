@@ -448,7 +448,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                     (close)="ngOnDestroy()"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="text-align: center !important;">
                 <span style="font-size: 1rem; margin-bottom: 20px;" *ngIf="!checkingSubscriptionStatus">{{
                     selectedPlan?.subTitle }}</span>
                 <h2 *ngIf="selectedPlan?.price > 0">{{ selectedPlan?.price }} {{ selectedPlan?.currency }}</h2>

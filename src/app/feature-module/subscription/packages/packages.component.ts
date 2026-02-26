@@ -155,9 +155,9 @@ export class PackagesComponent implements OnInit, OnDestroy {
   subscribe() {
     if (!this.selectedPlan) return;
     this.proceed = true;
-    console.log('proceed: ', this.proceed);
+    // console.log('proceed: ', this.proceed);
     this.setTransactionData();
-    console.log('transactionData: ', this.transactionData);
+    // console.log('transactionData: ', this.transactionData);
     setTimeout(() => {
       this.goToProceed = true;
       this.proceedSubscribe();
@@ -239,7 +239,7 @@ export class PackagesComponent implements OnInit, OnDestroy {
         this.watingPlansList = false;
         this.plansList = data;
         this.plansListBackup = data;
-        console.log('plansListBackup geted: ', this.plansListBackup);
+        // console.log('plansListBackup geted: ', this.plansListBackup);
       });
     } else {
       this.subscriptionService
@@ -352,8 +352,8 @@ export class PackagesComponent implements OnInit, OnDestroy {
     }
 
     const price = +String(this.form.value.price ?? '').replace(/\s/g, '') || 0;
-    if (price < 100) {
-      this.toastService.presentToast('error', 'Error', 'Invalid Price (price < 100)', 5000);
+    if (price < 500) {
+      this.toastService.presentToast('error', 'Error', 'Invalid Price (price < 500)', 5000);
       return;
     }
 
@@ -507,8 +507,8 @@ export class PackagesComponent implements OnInit, OnDestroy {
       resp?.data?.status ||
       resp?.status ||
       'pending';
-    console.log('resp: ', resp);
-    console.log('status: ', status);
+    // console.log('resp: ', resp);
+    // console.log('status: ', status);
     if (['successful', 'success'].includes(status.toLowerCase())) {
       this.transactionSucceded = true;
       this.transactionFailed = false;
