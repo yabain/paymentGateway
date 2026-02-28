@@ -98,6 +98,8 @@ export class WelcomeComponent implements OnInit, AfterViewInit {
 
   logoPartners = [
     { name: 'GIC', link: 'assets/img/resources/logo_gic_0.png', alt: 'Gic Promote Ltd', width: 100 },
+    { name: 'M-Pesa', link: 'assets/img/resources/mpesa_logo.png', alt: 'M-Pesa', width: 300 },
+    { name: 'Flutterwave', link: 'assets/img/resources/fw_logo.png', alt: 'Flutterwave', width: 300 },
     { name: 'Yaba-In', link: 'assets/img/resources/logo_yaba-in.png', alt: 'Yaba-In', width: 300 },
     { name: 'Yabi', link: 'assets/img/resources/logo_yabi.png', alt: 'Yabi', width: 200 },
   ];

@@ -776,7 +776,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   copyUrl() {
-    const url = environment.frontUrl + '/service-details/' + this.idParam;
+    const url = environment.frontUrl + '/services/details/' + this.idParam;
     navigator.clipboard.writeText(url).then(() => {
       this.copied = true;
 

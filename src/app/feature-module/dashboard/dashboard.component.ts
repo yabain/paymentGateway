@@ -71,7 +71,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   gettingLocations: boolean = true;
   networkError: boolean = false;
   transactionList: any = [];
-  waittingBalance: boolean = true;
+  waitingBalance: boolean = true;
   balance: number = 0;
   plansStats: any = 0;
   gettingPlansStats: boolean = true;
@@ -102,11 +102,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   getBalance() {
-    this.waittingBalance = true;
+    this.waitingBalance = true;
     this.balanceService.getBalance()
       .subscribe((data: any) => {
         this.balance = data ? data.balance : 0;
-        this.waittingBalance = false
+        this.waitingBalance = false
       })
   }
 
@@ -236,6 +236,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return data.value;
   }
 
+  formatWithSpaces(value: number): string {
+    return Math.trunc(value)
+      .toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  }
+  
   /**
    * Retrieves and sets available countries and cities for the form.
    */
