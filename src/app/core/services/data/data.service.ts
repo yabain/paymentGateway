@@ -900,6 +900,14 @@ export class DataService {
           base: 'admin-subscription',
         },
         {
+          menuValue: 'fundraising',
+          route: '/admin-fundraising',
+          hasSubRoute: false,
+          showSubRoute: true,
+          icon: 'command',
+          base: 'admin-fundraising',
+        },
+        {
           menuValue: 'flutterwaveWallets',
           route: '/flutterwave-wallets',
           hasSubRoute: false,

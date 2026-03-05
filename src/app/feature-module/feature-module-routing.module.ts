@@ -49,6 +49,20 @@ const routes: Routes = [
             (m) => m.ServicesModule,
           ),
       },
+      {
+        path: 'fundraising',
+        loadChildren: () =>
+          import('./fundraising/fundraising.module').then(
+            (m) => m.FundraisingModule,
+          ),
+      },
+      {
+        path: 'fundraisings',
+        loadChildren: () =>
+          import('./fundraising/fundraising.module').then(
+            (m) => m.FundraisingModule,
+          ),
+      },
 
       // --- Admin route ----
       {
@@ -63,6 +77,14 @@ const routes: Routes = [
         loadChildren: () =>
           import('./subscription/subscription.module').then(
             (m) => m.SubscriptionModule,
+          ),
+      },
+      {
+        path: 'admin-fundraising',
+        canActivate: [AdminGuard],
+        loadChildren: () =>
+          import('./fundraising/fundraising.module').then(
+            (m) => m.FundraisingModule,
           ),
       },
       {

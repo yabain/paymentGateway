@@ -1,0 +1,165 @@
+<div class="page-header">
+  <div class="content-page-header d-flex justify-content-between align-items-center">
+    <h5>{{ 'fundraising.title' | translate }}</h5>
+    <button class="btn btn-primary" type="button" (click)="openCreateForm()">
+      Create Campaign
+    </button>
+  </div>
+</div>
+
+<div class="row" *ngIf="isAdminRoute">
+    <div class="col-xl-3 col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <div class="dash-title">{{ 'fundraising.allFundraising' | translate }}</div>
+          <h4>{{ totalItems }}</h4>
+        </div>
+      </div>
+  </div>
+  <div class="col-xl-3 col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <div class="dash-title">{{ 'fundraising.totalFundraisingRaised' | translate }}</div>
+        <h4>{{ totalDonationsData?.totalDonations || 0 }}</h4>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card" *ngIf="showCreateForm">
+  <div class="card-body">
+    <form [formGroup]="form" (ngSubmit)="createCampaign()" class="row">
+      <div class="col-md-6 mb-2">
+        <label class="form-label">Title</label>
+        <input class="form-control" formControlName="title" />
+      </div>
+      <div class="col-md-6 mb-2">
+        <label class="form-label">Sub Title</label>
+        <input class="form-control" formControlName="subTitle" />
+      </div>
+
+      <div class="col-md-3 mb-2">
+        <label class="form-label">Currency</label>
+        <input class="form-control" formControlName="currency" />
+      </div>
+
+      <div class="col-md-3 mb-2">
+        <label class="form-label">Targe Amount</label>
+        <input class="form-control" formControlName="targetAmount" type="number" min="1" />
+      </div>
+
+      <!-- <div class="col-md-6 mb-2">
+        <label class="form-label">status</label>
+        <input class="form-control" formControlName="startDate" type="checkbox" checked/>
+      </div> -->
+
+      <div class="col-md-6 mb-2">
+        <label class="form-label">End Date</label>
+        <input class="form-control" formControlName="endDate" type="date" />
+      </div>
+
+      <div class="col-md-12 mb-2">
+        <label class="form-label">Description</label>
+        <textarea rows="4" class="form-control" formControlName="description"></textarea>
+      </div>
+
+      <div class="col-md-4 mb-2">
+        <label class="form-label">Visibility</label>
+        <select class="form-select" formControlName="visibility">
+          <option value="public">Public</option>
+          <option value="private">Private</option>
+        </select>
+      </div>
+
+      <div class="col-12 mt-2">
+        <button class="btn btn-primary" [disabled]="creating" type="submit">
+          <span *ngIf="!creating">Save</span>
+          <span *ngIf="creating" class="spinner-border spinner-border-sm" role="status"></span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <input
+          class="form-control"
+          [(ngModel)]="selectedUserId"
+          [ngModelOptions]="{ standalone: true }"
+          placeholder="User ID"
+        />
+      </div>
+      <div class="col-md-8 d-flex gap-2 flex-wrap">
+        <button type="button" class="btn btn-outline-primary btn-sm" (click)="openUserList('list')">
+          User List
+        </button>
+        <button type="button" class="btn btn-outline-primary btn-sm" (click)="openUserList('active')">
+          User Active
+        </button>
+        <button type="button" class="btn btn-outline-primary btn-sm" (click)="openUserList('active-public')">
+          User Active Public
+        </button>
+        <button type="button" class="btn btn-outline-secondary btn-sm" (click)="viewUserDonationStats()">
+          User Donation Stats
+        </button>
+      </div>
+    </div>
+
+    <div class="alert alert-info" *ngIf="selectedUserDonationStats">
+      <pre class="mb-0">{{ selectedUserDonationStats | json }}</pre>
+    </div>
+
+    <div class="table-responsive" *ngIf="!loading">
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Goal</th>
+            <th>Raised</th>
+            <th>Visibility</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let campaign of campaigns; trackBy: trackById">
+            <td>
+              <div>{{ campaign?.title || '--' }}</div>
+              <small class="text-muted">{{ campaign?._id }}</small>
+            </td>
+            <td>{{ campaign?.targetAmount || campaign?.targetAmount || 0 }} {{ campaign?.currency || '' }}</td>
+            <td>{{ campaign?.raisedAmount || campaign?.amountRaised || 0 }} {{ campaign?.currency || '' }}</td>
+            <td>{{ campaign?.visibility || '--' }}</td>
+            <td>
+              <span class="badge" [ngClass]="(campaign?.isActive ?? campaign?.status) ? 'bg-success' : 'bg-secondary'">
+                {{ (campaign?.isActive ?? campaign?.status) ? ('badge.active' | translate) : ('badge.inactive' | translate) }}
+              </span>
+            </td>
+            <td class="d-flex gap-1 flex-wrap">
+              <button class="btn btn-sm btn-primary" (click)="goToDetails(campaign)">Details</button>
+              <button class="btn btn-sm btn-outline-dark" [disabled]="waitingAction" (click)="changeStatus(campaign)">Status</button>
+              <button class="btn btn-sm btn-outline-dark" [disabled]="waitingAction" (click)="changeVisibility(campaign)">Visibility</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center" *ngIf="!loading">
+      <button type="button" class="btn btn-outline-secondary btn-sm" [disabled]="!hasPrevPage" (click)="previousPage()">
+        Prev
+      </button>
+      <span>Page {{ page }}</span>
+      <button type="button" class="btn btn-outline-secondary btn-sm" [disabled]="!hasNextPage" (click)="nextPage()">
+        Next
+      </button>
+    </div>
+
+    <div class="d-flex justify-content-center py-4" *ngIf="loading">
+      <div class="spinner-border" role="status"></div>
+    </div>
+  </div>
+</div>

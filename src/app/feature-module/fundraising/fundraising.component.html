@@ -1,0 +1,29 @@
+<div class="subscription-plane-head">
+  <ul *ngIf="!isAdminRoute">
+    <li>
+      <a [routerLink]="'/fundraising/my/list'" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        {{ 'fundraising.myFundraising' | translate }}
+      </a>
+    </li>
+    <li>
+      <a [routerLink]="'/fundraising/my/active'" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        {{ 'fundraising.activeFundraising' | translate }}
+      </a>
+    </li>
+  </ul>
+
+  <ul *ngIf="isAdminRoute">
+    <li>
+      <a [routerLink]="'/admin-fundraising/list'" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        {{ 'fundraising.allFundraising' | translate }}
+      </a>
+    </li>
+    <li>
+      <a [routerLink]="'/admin-fundraising/my/list'" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        {{ 'fundraising.myFundraising' | translate }}
+      </a>
+    </li>
+  </ul>
+</div>
+
+<router-outlet></router-outlet>
