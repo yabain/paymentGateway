@@ -11,84 +11,42 @@
     <div class="row">
         <div class="col-md-12">
             <div class="row">
-                <div class="col-md-12">
-                    <div class="card  page-tilte">
+                <div class="col-md-8">
+                    <div class="card page-tilte">
                         <div class="main-title">
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="event-image">
                                         <img [src]="imageUrl" alt="">
                                     </div>
-                                    <div class="badge-success"
-                                        *ngIf="subscriptionStatus?.existingSubscription && subscriptionStatus?.status">
-                                        <i class="feather icon-check-circle"></i> {{ 'subscriptions.alreadySubscriber' |
-                                        translate }}
-                                    </div>
-                                    <div [ngClass]="planData?.isActive === true ? 'badge-success':  'badge-error'"
-                                        *ngIf="currentUser && isAuthor(planData) || currentUser && isAdmin">
-                                    </div>
-                                    <div class="badge-error"
-                                        *ngIf="subscriptionStatus?.existingSubscription && !subscriptionStatus?.status">
-                                        <i class="feather icon-triangle"></i> {{ 'subscriptions.expiredSubscription' |
+                                    <div
+                                        [class]="subscriptionStatus?.status === true ? 'status-badge-success' : 'status-badge-danger'">
+                                        <span
+                                            [class]="subscriptionStatus?.status === true ? 'status-dot-success' : 'status-dot-danger'"></span>
+                                        {{ (subscriptionStatus?.status === true ? 'subscriptions.alreadySubscriber' :
+                                        'subscriptions.expiredSubscription') |
                                         translate }}
                                     </div>
                                 </div>
                                 <div class="col-md-8">
                                     <div class="event-details">
-                                        <h6
-                                            *ngIf="subscriptionStatus?.existingSubscription && !subscriptionStatus?.status">
-                                            {{ 'subscriptions.renewSubscription' | translate }} <br>
-                                        </h6>
-                                        <h6 *ngIf="subscriptionStatus?.existingSubscription === false">
-                                            {{ 'subscriptions.subscriptionToday' | translate }} <br>
-                                        </h6>
-                                        <h6
-                                            *ngIf="subscriptionStatus?.existingSubscription && subscriptionStatus?.status">
-                                            {{ 'subscriptions.subscriptionExpireIn' | translate }} <br>
-                                        </h6>
-                                        <div class="event-countdown" *ngIf="subscriptionStatus?.existingSubscription">
-                                            <div class="countdown-container">
-                                                <div class="countdown-item">
-                                                    <span class="countdown-value" id="days">{{ days }}</span>
-                                                    <span class="countdown-label">{{ 'subscriptions.day' | translate
-                                                        }}s</span>
-                                                </div>
-                                                <span class="countdown-separator">:</span>
-                                                <div class="countdown-item">
-                                                    <span class="countdown-value" id="hrs">{{ hours }}</span>
-                                                    <span class="countdown-label">HRS</span>
-                                                </div>
-                                                <span class="countdown-separator">:</span>
-                                                <div class="countdown-item">
-                                                    <span class="countdown-value" id="mins">{{ minutes }}</span>
-                                                    <span class="countdown-label">MINS</span>
-                                                </div>
-                                                <span class="countdown-separator">:</span>
-                                                <div class="countdown-item">
-                                                    <span class="countdown-value" id="secs">{{ seconds }}</span>
-                                                    <span class="countdown-label">SECS</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <h6
-                                            *ngIf="subscriptionStatus?.existingSubscription && subscriptionStatus?.status">
-                                            {{ 'item.start' | translate }}: {{ getDate(subscriptionStatus?.startDate) }}
-                                            || {{ 'item.end' | translate }}: {{ getDate(subscriptionStatus?.endDate)
-                                            }}<br>
-                                        </h6>
                                         <h1>{{ planData?.title }}</h1>
                                         <h6 class="event-time" style="margin-bottom: 10px;">{{ planData?.subTitle }}
                                         </h6>
-                                        <h4 style="margin-bottom: 10px;">{{ planData?.price }} {{ planData?.currency}} /
-                                            <span *ngIf="planData?.cycle === 'dayly'">{{ 'subscriptions.day' |
-                                                translate }}</span>
-                                            <span *ngIf="planData?.cycle === 'weekly'">{{ 'subscriptions.week' |
-                                                translate }}</span>
-                                            <span *ngIf="planData?.cycle === 'monthly'">{{ 'subscriptions.month' |
-                                                translate }}</span>
-                                            <span *ngIf="planData?.cycle === 'yearly'">{{ 'subscriptions.year' |
-                                                translate }}</span>
-                                        </h4>
+
+                                        <div class="price-line">
+                                            <div class="price">{{ planData?.price }} {{ planData?.currency}}</div>
+                                            <div class="price-note"> /
+                                                <span *ngIf="planData?.cycle === 'dayly'">{{ 'subscriptions.day' |
+                                                    translate }}</span>
+                                                <span *ngIf="planData?.cycle === 'weekly'">{{ 'subscriptions.week' |
+                                                    translate }}</span>
+                                                <span *ngIf="planData?.cycle === 'monthly'">{{ 'subscriptions.month' |
+                                                    translate }}</span>
+                                                <span *ngIf="planData?.cycle === 'yearly'">{{ 'subscriptions.year' |
+                                                    translate }}</span>
+                                            </div>
+                                        </div>
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <button class="btn btn-rounded btn-primary me-1" data-bs-toggle="modal"
@@ -126,11 +84,13 @@
                                                     <i class="feather icon-trash-2"></i>
                                                 </button>
                                             </div>
-                                            <h6 class="col-md-12" *ngIf="currentUser && !isAuthor(planData) && planData.isActive">
+                                            <h6 class="col-md-12"
+                                                *ngIf="currentUser && !isAuthor(planData) && planData.isActive">
                                                 {{ 'subscriptions.as' | translate }} <b>{{ showName(currentUser)}}</b>
                                             </h6>
                                             <h6 class="col-md-12" *ngIf="!planData?.isActive" style="color: #bf1e1e">
-                                                {{ 'subscriptions.plan' | translate }} <b>{{ 'services.disabled' | translate }}</b>
+                                                {{ 'subscriptions.plan' | translate }} <b>{{ 'services.disabled' |
+                                                    translate }}</b>
                                             </h6>
                                         </div>
                                     </div>
@@ -139,61 +99,104 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-md-4">
+                    <div class="card page-tilte">
+                        <div class="countdown-card">
+                            <div class="section-title">
+                                <span *ngIf="subscriptionStatus?.existingSubscription && !subscriptionStatus?.status">
+                                    {{ 'subscriptions.renewSubscription' | translate }} <br>
+                                </span>
+                                <span *ngIf="subscriptionStatus?.existingSubscription === false">
+                                    {{ 'subscriptions.subscriptionToday' | translate }} <br>
+                                </span>
+                                <span *ngIf="subscriptionStatus?.existingSubscription && subscriptionStatus?.status">
+                                    {{ 'subscriptions.subscriptionExpireIn' | translate }} <br>
+                                </span>
+                            </div>
+
+                            <div class="countdown-grid">
+                                <div class="event-countdown" *ngIf="subscriptionStatus?.existingSubscription">
+                                    <div class="countdown-container">
+                                        <div class="countdown-item">
+                                            <span class="countdown-value" id="days">{{ days }}</span>
+                                            <span class="countdown-label">{{ 'subscriptions.day' | translate
+                                                }}s</span>
+                                        </div>
+                                        <span class="countdown-separator">:</span>
+                                        <div class="countdown-item">
+                                            <span class="countdown-value" id="hrs">{{ hours }}</span>
+                                            <span class="countdown-label">HRS</span>
+                                        </div>
+                                        <span class="countdown-separator">:</span>
+                                        <div class="countdown-item">
+                                            <span class="countdown-value" id="mins">{{ minutes }}</span>
+                                            <span class="countdown-label">MINS</span>
+                                        </div>
+                                        <span class="countdown-separator">:</span>
+                                        <div class="countdown-item">
+                                            <span class="countdown-value" id="secs">{{ seconds }}</span>
+                                            <span class="countdown-label">SECS</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="timeline">
+                                <span class="point"></span>
+                                <span class="bar"></span>
+                                <span class="point" style="background:#cfc7ff;"></span>
+                            </div>
+
+                            <div class="timeline-dates">
+                                <span *ngIf="subscriptionStatus?.existingSubscription && subscriptionStatus?.status">
+                                    {{ 'item.start' | translate }}: {{ getDate(subscriptionStatus?.startDate) }}
+                                </span>
+
+                                <span *ngIf="subscriptionStatus?.existingSubscription && subscriptionStatus?.status">
+                                    {{ 'item.end' | translate }}: {{ getDate(subscriptionStatus?.endDate) }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="row">
-                <div class="col-md-7">
+                <div class="col-md-8">
                     <div class="card">
                         <div class="card-body">
                             <h3>{{ planData?.title }} </h3>
                             <h6 style="margin-bottom: 10px; color: #00000050;">{{ planData?.subTitle }} </h6>
                             <a *ngFor="let option of optionsData">
                                 <button *ngIf="option?.isActive" class="btn btn-block btn-outline-dark"
-                                    style="margin-right: 10px; color: #4e4c4c;"><i class="fa-solid fa-circle-check"></i>
+                                    style="margin-right: 10px; color: #4e4c4c;">✔
                                     {{ option.title
                                     }}</button>
-                                <button *ngIf="!option?.isActive" class="btn btn-block btn-outline-dark"><i
-                                        class="fa-solid fa-circle-check"></i> {{ option.title
+                                <button *ngIf="!option?.isActive" class="btn btn-block btn-outline-dark">
+                                    x {{ option.title
                                     }}</button>
                             </a>
                             <br><br>
-                            <!-- <ul>
-                                <li *ngFor="let option of optionsData" style="margin-bottom: 5px;">
-                                    <span *ngIf="option.isActive"><i class="fa-solid fa-circle-check"></i> {{ option.title
-                                        }}</span>
-                                    <span *ngIf="!option.isActive"><i class="feather icon-x-circle"></i><s> {{ option.title
-                                            }}</s></span>
-                                </li>
-                            </ul> -->
-
                             {{ planData?.description }}
+                            <br><br>
+                            <app-qr-code [data]="getUrl()" [size]="160" *ngIf="planData"></app-qr-code>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-5" style="text-align: left !important;">
+                <div class="col-md-4" style="text-align: left !important;">
                     <div class="card customer-details-group">
                         <div class="card-body">
-                            <div class="row align-items-center">
-                                <div class="col-xl-12 col-lg-12 col-md-12 col-12">
-                                    <div class="customer-details">
-                                        <div class="d-flex align-items-center">
-                                            <span class="customer-widget-img d-inline-flex">
-                                                <img class="rounded-circle"
-                                                    [src]="planData ? planData?.author.pictureUrl : 'assets/img/new/user.png'"
-                                                    alt="image">
-                                                <!-- <span class="animate-circle"></span> -->
-                                            </span>
-                                            <div class="customer-details-cont">
-                                                <h6>{{showName(planData?.author)}}
-                                                </h6>
-                                                <p style="font-size: 0.5rem;">
-                                                    <b>ID: </b>{{planData?.author._id}}
-                                                </p>
-                                            </div>
-                                        </div><br>
-                                        <p>
-                                            <b>Email: </b>{{planData?.author.email}} <br>
-                                            <b>Phone: </b>{{planData?.author.phone}}
-                                        </p>
+                            <h2>{{ 'subscriptions.author' | translate }}</h2>
+                            <div class="owner-card">
+                                <div>
+                                    <img class="avatar"
+                                        [src]="planData ? planData?.author.pictureUrl : 'assets/img/new/user.png'" alt="image">
+                                </div>
+                                <div class="owner-info">
+                                    <h3>{{showName(planData?.author)}}</h3>
+                                    <div class="owner-id"><b>ID: </b>{{planData?.author._id}}</div>
+                                    <div class="owner-contact">
+                                        <div><b>Email: </b>{{planData?.author.email}}</div>
+                                        <div><b>Phone: </b>{{planData?.author.phone}}</div>
                                     </div>
                                 </div>
                             </div>
@@ -321,7 +324,7 @@
                 <h2 *ngIf="planData?.price === 0">{{ 'item.free' | translate }}</h2>
                 <ul>
                     <li *ngFor="let option of optionsData" style="margin-bottom: 5px;">
-                        <span *ngIf="option.isActive"><i class="fa-solid fa-circle-check"></i> {{ option.title
+                        <span *ngIf="option.isActive">✔ {{ option.title
                             }}</span>
                         <span *ngIf="!option.isActive"><i class="feather icon-x-circle"></i><s> {{ option.title
                                 }}</s></span>

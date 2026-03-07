@@ -736,9 +736,10 @@
     "list": "List des services",
     "totalServices": "Tous les services",
     "activeServices": "Services actifs",
-    "inactiveServices": "Services inactifs"
+    "inactiveServices": "Services inactifs",
+    "paymentList": "Liste des paiements"
   },
-  "personalizer": {
+  "personaliser": {
     "title": "Personnalisateur",
     "subTitle": "Personnalisez la mise en page de votre aperçu",
     "layout": "Mise en page",

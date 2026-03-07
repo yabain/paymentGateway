@@ -113,7 +113,7 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
     private systemService: SystemService,
     private fw: FlutterwaveService,
     private storage: StorageService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((datas: any) => {
@@ -166,29 +166,29 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
   }
 
   getId() {
-    
+
     this.url = this.location.path();
     this.isDashboardRoute = this.url.includes('subscription');
 
     const idParam = this.route.snapshot.paramMap.get('id');
 
     if (idParam && idParam !== 'null' && idParam !== 'undefined') {
-     [this.idParam, this.userId] = idParam.split('AAA');
+      [this.idParam, this.userId] = idParam.split('AAA');
     }
     // console.log('idParam', this.idParam);
     // console.log('userId', this.userId);
     this.getPlanDataById(this.idParam);
   }
-  
+
   getUserData(userId) {
-     this.userService.getUser(userId)
-         .subscribe((user)=> {
-            if (user) {
-               this.currentUser = user;
-               this.checkSubscriberStatus(this.planData);
-               this.loadingData = false;
-            }
-          
+    this.userService.getUser(userId)
+      .subscribe((user) => {
+        if (user) {
+          this.currentUser = user;
+          this.checkSubscriberStatus(this.planData);
+          this.loadingData = false;
+        }
+
       })
   }
 
@@ -208,7 +208,7 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
       this.paymentWithTaxes = this.paymentWithTaxesCalculation();
 
       if (this.userId) {
-          this.getUserData(this.userId);
+        this.getUserData(this.userId);
       } else {
         this.getCurrentUser();
         this.loadingData = false;
@@ -252,7 +252,7 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
           this.isSubscriber = false;
         }
         this.checkingSubscriptionStatus = false;
-        if(this.currentUser && !this.isAuthor(planData) && this.subscriptionStatus?.existingSubscription){
+        if (this.currentUser && !this.isAuthor(planData) && this.subscriptionStatus?.existingSubscription) {
           this.getSubscriptionItems(this.subscriptionStatus.data._id, this.currentUser._id)
         }
       });
@@ -263,7 +263,7 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
       .subscribe((data: any) => {
         this.raw = data;
         this.items = data.map(item => ({
-          title: item.plansId.title || '...', 
+          title: item.plansId.title || '...',
           dateStart: item.dateStart,
           dateEnd: item.dateEnd,
           color: '#058507'
@@ -271,7 +271,7 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
       });
   }
 
-  showSubscriberList(): boolean{
+  showSubscriberList(): boolean {
     if (
       this.currentUser
       && this.isAuthor(this.planData)
@@ -281,8 +281,8 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
     return false;
   }
 
-  showInvoiceList(): boolean{
-    if(
+  showInvoiceList(): boolean {
+    if (
       this.currentUser
       && !this.isAuthor(this.planData)
       && this.subscriptionStatus?.existingSubscription
@@ -564,7 +564,7 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
           try {
             this.modalClosed = true;
             // this.verifyAndClosePayin();
-          } catch {}
+          } catch { }
           // TODO: display a "payment canceled" message or refresh the status
         }
       }, 600);
@@ -725,7 +725,7 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
   }
 
   copyUrl() {
-    const url = environment.frontUrl + '/package-details/' + this.idParam;
+    const url = this.getUrl();
     navigator.clipboard.writeText(url).then(() => {
       this.copied = true;
 
@@ -737,10 +737,14 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  createSubscriptionItem(){
+  getUrl(): string {
+    return environment.frontUrl + '/package-details/' + this.idParam;
   }
 
-  openSubscription(subscription, subscriberId){
+  createSubscriptionItem() {
+  }
+
+  openSubscription(subscription, subscriberId) {
     console.log('openSubscription', subscription, subscriberId);
     return this.navigateTo('/subscription/subscription-details/' + subscription + '&&' + subscriberId);
   }

@@ -736,10 +736,11 @@
     "list": "Services List",
     "totalServices": "All services",
     "activeServices": "Active services",
-    "inactiveServices": "Inactive services"
+    "inactiveServices": "Inactive services",
+    "paymentList": "Payment list"
   },
-  "personalizer": {
-    "title": "Customizer",
+  "personaliser": {
+    "title": "Customiser",
     "subTitle": "Customize your preview layout",
     "layout": "Layout",
     "chooseLayout": "Choose your layout",

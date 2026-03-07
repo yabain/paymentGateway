@@ -16,6 +16,9 @@ import { CalendarComponent } from './calendar/calendar.component';
 import { PortalComponent } from './portal/portal.component';
 import { InvoiceListComponent } from './invoice/invoice-list/invoice-list.component';
 import { SubscriberListComponent } from './subscriber-list/subscriber-list.component';
+import { QRCodeModule } from 'angularx-qrcode';
+import { QrCodeComponent } from './qr-code/qr-code.component';
+import { ProceedPaymentComponent } from './proceed-payment/proceed-payment.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, '../assets/i18n/', '.json?v=' + new Date().getTime());
@@ -31,7 +34,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     PortalComponent,
     InvoiceListComponent,
     PackageDetailsComponent,
-    SubscriberListComponent
+    SubscriberListComponent,
+    QrCodeComponent,
+    ProceedPaymentComponent
   ],
   providers: [],
   imports: [
@@ -41,7 +46,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
-    FullCalendarModule
+    FullCalendarModule,
+    QRCodeModule
   ],
     exports: [
       PackageDetailsComponent,
@@ -51,6 +57,9 @@ export function HttpLoaderFactory(http: HttpClient) {
       InvoiceListComponent,
       PackageDetailsComponent,
       SubscriberListComponent,
-      FullCalendarModule],
+      FullCalendarModule,
+      QrCodeComponent,
+      ProceedPaymentComponent
+    ],
 })
 export class FrontModule {}
