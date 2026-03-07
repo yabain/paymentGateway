@@ -34,7 +34,6 @@ export class InvoiceSettingsComponent {
 
   ngOnInit(): void {
     this.scrollToTop();
-    this.systemForm({});
     this.getSystemData();
     this.appLogoForm();
   }
@@ -94,8 +93,8 @@ export class InvoiceSettingsComponent {
 
   systemForm(systemData) {
     this.form = new FormGroup({
-      invoiceTaxes: new FormControl(systemData?.invoiceTaxes || 5, [Validators.required]),
-      transferTaxes: new FormControl(systemData?.transferTaxes || 5, [Validators.required]),
+      invoiceTaxes: new FormControl(systemData?.invoiceTaxes, [Validators.required]),
+      transferTaxes: new FormControl(systemData?.transferTaxes, [Validators.required]),
     });
   }
 

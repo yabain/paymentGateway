@@ -11,7 +11,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="row">
-                <div class="col-md-8">
+                <div [class]="currentUser ? 'col-md-8' : 'col-md-12'">
                     <div class="card page-tilte">
                         <div class="main-title">
                             <div class="row">
@@ -19,7 +19,7 @@
                                     <div class="event-image">
                                         <img [src]="imageUrl" alt="">
                                     </div>
-                                    <div
+                                    <div *ngIf="!checkingSubscriptionStatus"
                                         [class]="subscriptionStatus?.status === true ? 'status-badge-success' : 'status-badge-danger'">
                                         <span
                                             [class]="subscriptionStatus?.status === true ? 'status-dot-success' : 'status-dot-danger'"></span>
@@ -99,7 +99,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4" *ngIf="currentUser">
                     <div class="card page-tilte">
                         <div class="countdown-card">
                             <div class="section-title">
@@ -141,7 +141,7 @@
                                 </div>
                             </div>
 
-                            <div class="timeline">
+                            <div class="timeline" *ngIf="subscriptionStatus?.existingSubscription">
                                 <span class="point"></span>
                                 <span class="bar"></span>
                                 <span class="point" style="background:#cfc7ff;"></span>
@@ -318,220 +318,20 @@
                     (close)="ngOnDestroy()"></button>
             </div>
             <div class="modal-body" style="text-align: center !important;">
-                <span style="font-size: 1rem; margin-bottom: 20px;" *ngIf="!checkingSubscriptionStatus">{{
-                    planData?.subTitle }}</span>
-                <h2 *ngIf="planData?.price > 0">{{ planData?.price }} {{ planData?.currency }}</h2>
-                <h2 *ngIf="planData?.price === 0">{{ 'item.free' | translate }}</h2>
-                <ul>
-                    <li *ngFor="let option of optionsData" style="margin-bottom: 5px;">
-                        <span *ngIf="option.isActive">✔ {{ option.title
-                            }}</span>
-                        <span *ngIf="!option.isActive"><i class="feather icon-x-circle"></i><s> {{ option.title
-                                }}</s></span>
-                    </li>
-                </ul>
-                <br>
-                <label htmlFor="bankCode" *ngIf="!checkingSubscriptionStatus && !isSubscriber">{{
-                    'subscriptions.quantity' | translate }}</label>
-                <select id="label" class="form-select" (change)="onQuantity($event)" id="quantity"
-                    *ngIf="!checkingSubscriptionStatus && !isSubscriber" [disabled]="proceed">
-                    <option [value]="1">
-                        1
-                        <span *ngIf="planData?.cycle === 'dayly'">{{ 'subscriptions.day' |
-                            translate }}</span>
-                        <span *ngIf="planData?.cycle === 'weekly'">{{ 'subscriptions.week' |
-                            translate }}</span>
-                        <span *ngIf="planData?.cycle === 'monthly'">{{ 'subscriptions.month' |
-                            translate }}</span>
-                        <span *ngIf="planData?.cycle === 'yearly'">{{ 'subscriptions.year' |
-                            translate }}</span>
-                    </option>
-                    <option [value]="2">
-                        2
-                        <span *ngIf="planData?.cycle === 'dayly'">{{ 'subscriptions.day' |
-                            translate }}</span>
-                        <span *ngIf="planData?.cycle === 'weekly'">{{ 'subscriptions.week' |
-                            translate }}</span>
-                        <span *ngIf="planData?.cycle === 'monthly'">{{ 'subscriptions.month' |
-                            translate }}</span>
-                        <span *ngIf="planData?.cycle === 'yearly'">{{ 'subscriptions.year' |
-                            translate }}</span>
-                    </option>
-                    <option [value]="3">
-                        3
-                        <span *ngIf="planData?.cycle === 'dayly'">{{ 'subscriptions.day' |
-                            translate }}</span>
-                        <span *ngIf="planData?.cycle === 'weekly'">{{ 'subscriptions.week' |
-                            translate }}</span>
-                        <span *ngIf="planData?.cycle === 'monthly'">{{ 'subscriptions.month' |
-                            translate }}</span>
-                        <span *ngIf="planData?.cycle === 'yearly'">{{ 'subscriptions.year' |
-                            translate }}</span>
-                    </option>
-                    <option [value]="6">
-                        6
-                        <span *ngIf="planData?.cycle === 'dayly'">{{ 'subscriptions.day' |
-                            translate }}</span>
-                        <span *ngIf="planData?.cycle === 'weekly'">{{ 'subscriptions.week' |
-                            translate }}</span>
-                        <span *ngIf="planData?.cycle === 'monthly'">{{ 'subscriptions.month' |
-                            translate }}</span>
-                        <span *ngIf="planData?.cycle === 'yearly'">{{ 'subscriptions.year' |
-                            translate }}</span>
-                    </option>
-                    <option [value]="12">
-                        12
-                        <span *ngIf="planData?.cycle === 'dayly'">{{ 'subscriptions.day' |
-                            translate }}</span>
-                        <span *ngIf="planData?.cycle === 'weekly'">{{ 'subscriptions.week' |
-                            translate }}</span>
-                        <span *ngIf="planData?.cycle === 'monthly'">{{ 'subscriptions.month' |
-                            translate }}</span>
-                        <span *ngIf="planData?.cycle === 'yearly'">{{ 'subscriptions.year' |
-                            translate }}</span>
-                    </option>
-                </select>
-                <br>
-                <div class="step3">
-                    <div *ngIf="checkingSubscriptionStatus">
-                        <div style="display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        height: 300px;">
-                            <div class="spinner-border" role="status"></div>
-                        </div>
-                    </div>
-
-                    <div *ngIf="!checkingSubscriptionStatus && isSubscriber" style="text-align: center;">
-                        <div class="fee-breakdown">
-                            {{ 'subscriptions.alreadySubscriberMsg' | translate }}
-                        </div>
-                        <button type="button" class="btn btn-primary btn-lg me-1 mb-2" style="padding: 5px;"
-                            (click)="isSubscriber = false">Recharge</button>
-                    </div>
-                    <div *ngIf="!checkingSubscriptionStatus && !isSubscriber">
-                        <div class="fee-breakdown">
-                            <h4><i class="fas fa-receipt"></i> {{ 'subscriptions.summary' | translate }}</h4>
-                            <div class="fee-item">
-                                <span *ngIf="planData?.cycle === 'dayly'">{{ 'subscriptions.daylyPrice' | translate
-                                    }}</span>
-                                <span *ngIf="planData?.cycle === 'weekly'">{{ 'subscriptions.weeklyPrice' |
-                                    translate }}</span>
-                                <span *ngIf="planData?.cycle === 'monthly'">{{ 'subscriptions.monthlyPrice' |
-                                    translate }}</span>
-                                <span *ngIf="planData?.cycle === 'yearly'">{{ 'subscriptions.yearlyPrice' |
-                                    translate }}</span>
-                                <span>
-                                    {{ planData?.price }}
-                                    {{ planData?.currency }}</span>
-                            </div>
-                            <div class="fee-item">
-                                <span>{{ 'subscriptions.quantity' | translate }}</span>
-                                <span> {{ quantity }}
-                                    <!-- {{estimation}} -->
-                                    <span *ngIf="planData?.cycle === 'dayly'">{{ 'subscriptions.day' |
-                                        translate }}</span>
-                                    <span *ngIf="planData?.cycle === 'weekly'">{{ 'subscriptions.week' |
-                                        translate }}</span>
-                                    <span *ngIf="planData?.cycle === 'monthly'">{{ 'subscriptions.month' |
-                                        translate }}</span>
-                                    <span *ngIf="planData?.cycle === 'yearly'">{{ 'subscriptions.year' |
-                                        translate }}</span>
-                                </span>
-                            </div>
-                            <div class="fee-item">
-                                <span>{{ 'payment.taxes' | translate }} ≈ </span>
-                                <span>
-                                    {{ taxesAmount }}
-                                    {{ planData?.currency }}</span>
-                            </div>
-                            <div class="fee-total">
-                                <span>{{ 'payment.total' | translate }}</span>
-                                <span>
-                                    {{ paymentWithTaxes }}
-                                    {{ planData?.currency }}</span>
-                            </div>
-                        </div>
-
-                        <div class="security-notice" *ngIf="currentUser">
-                            <img src="assets/img/resources/flutterwave.png" alt=""
-                                style="max-width: 100px; border-radius: 5px; margin-right: 10px;">
-                            <p>{{ 'payment.secureMessage' | translate }}</p>
-                        </div>
-                        <div class="action-buttons">
-                            <button class="btn btn-cancel" data-bs-dismiss="modal" (close)="ngOnDestroy()"
-                                *ngIf="!checkingSubscriptionStatus && !proceed">
-                                {{ 'action.close' | translate }}
-                            </button>
-                            <button class="btn2 btn-confirm"
-                                *ngIf="!checkingSubscriptionStatus && !isSubscriber && !proceed" (click)="subscribe()">
-                                <i class="fas fa-check"></i> {{ 'payment.proceed' | translate }}
-                            </button>
-                        </div>
-                        <div class="row d-flex align-items-center justify-content-center" style="justify-content: center;
-                        align-items: center;" *ngIf="proceed">
-                            <div class="spinner-border" role="status"></div>
-                        </div>
+                <div *ngIf="checkingSubscriptionStatus">
+                    <div style="display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 300px;">
+                        <div class="spinner-border" role="status"></div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="modal-content" *ngIf="goToProceed">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="wating-msg">
-                        <img src="assets/img/resources/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;"
-                            *ngIf="!modalClosed && !transactionSucceded && !transactionFailed">
-                        <!-- <div class="spinner-border" role="status" *ngIf="!modalClosed && !transactionSucceded && !transactionFailed"></div> -->
-                        <p style="margin-top: 50px;" *ngIf="!modalClosed && !transactionSucceded && !transactionFailed">
-                            {{ 'payment.processing-message1' | translate }}<br>
-                            {{ 'payment.processing-message2' | translate }}
-                        </p>
-
-
-                        <img src="../../../assets/img/resources/tfailed.gif" alt="" style="max-width: 100px;;"
-                            *ngIf="!reOpen && transactionFailed">
-                        <br>
-                        <span style="color: red !important" *ngIf="!reOpen && transactionFailed">{{
-                            'payment.transactionFailed' | translate }}</span>
-                        <p style="margin-top: 50px;" *ngIf="!reOpen && transactionFailed">
-                            Click
-                            <span class="retry" (click)="openPayin()" *ngIf="!reOpen && transactionFailed">{{
-                                'payment.hereToRetry' | translate
-                                }}.</span>
-                            <span *ngIf="reOpen && transactionFailed">{{ 'payment.hereToRetry' | translate }}. {{
-                                'payment.opening' | translate }}...</span>
-                        </p>
-
-                        <img src="assets/img/resources/flutterwave.png" alt="" style="max-width: 100px;;"
-                            *ngIf="!transactionSucceded && !transactionFailed">
-                        <p style="margin-top: 50px;" *ngIf="showRetry && !transactionSucceded && !transactionFailed">
-                            {{ 'payment.processing-message4' | translate }}
-                            <span class="retry" (click)="openPayin()" *ngIf="!reOpen && !transactionSucceded">{{
-                                'payment.hereToRetry' | translate
-                                }}.</span>
-                            <span *ngIf="reOpen && !transactionSucceded">{{ 'payment.hereToRetry' | translate }}. {{
-                                'payment.opening' | translate }}...</span>
-                        </p>
-
-                        <img src="assets/img/resources/paymentDone.gif" alt="" style="max-width: 250px;;"
-                            *ngIf="transactionSucceded && !transactionFailed">
-                        <p style="margin-top: 50px;" *ngIf="transactionSucceded && !transactionFailed">{{
-                            'payment.paymentSuccess'
-                            | translate }}</p>
-
-                        <p style="margin-top: 50px;"
-                            *ngIf="!transactionSucceded && showRetry || !transactionSucceded && transactionSucceded">
-                            <br>
-                            {{ 'payment.ifPaymentConfirmed' | translate }}
-                        </p>
-
-                        <br>
-                        <button class="btn btn-primary" *ngIf="showRetry || transactionSucceded" (click)="ngOnDestroy()"
-                            data-bs-dismiss="modal"> {{ 'action.close' | translate }} </button>
-                    </div>
-                </div>
+                <app-proceed-payment
+                [planData]="planData"
+                [transactionType]="'subscription'"
+                [isSubscriber]="isSubscriber"
+                [currentUser]="currentUser"
+                *ngIf="!checkingSubscriptionStatus && planData"></app-proceed-payment>
             </div>
         </div>
     </div>
