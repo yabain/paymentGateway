@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, from, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { ApiService } from '../api/api.service';
 import {
@@ -116,6 +116,22 @@ export class FundraisingService {
     );
   }
 
+
+  updateServicePicture(fundraisingId: string, imageFile?: File): Observable<any> {
+    const data = new FormData();
+    if (imageFile) {
+      data.append('pictureFile', imageFile);
+    } else {
+      return of({ error: true, message: 'No file provided' });
+    }
+
+    return from(this.apiService.uploadPicture('fundraising/picture/' + fundraisingId, data)).pipe(
+      catchError(error => {
+        return of({ error: true, message: error.message || 'An error occurred: update fundraising\'s picture' });
+      })
+    );
+  }
+  
   updateStatus(id: string, status: boolean): Observable<any> {
     return this.apiService
       .updateWithoutId(`fundraising/${id}/status`, { status })

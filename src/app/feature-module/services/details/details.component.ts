@@ -119,7 +119,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.profilePictureForm();
+    this.pictureForm();
     this.route.paramMap.subscribe((datas: any) => {
       // this.startCountdown(this.futureDate);
       this.scrollToTop();
@@ -127,7 +127,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  profilePictureForm() {
+  pictureForm() {
     this.uploadPictureForm = new FormGroup({
       pictureFile: new FormControl(undefined, Validators.required),
     });

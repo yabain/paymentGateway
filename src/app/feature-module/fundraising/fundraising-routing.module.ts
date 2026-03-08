@@ -5,10 +5,6 @@ import { FundraisingListComponent } from './fundraising-list/fundraising-list.co
 import { FundraisingDetailsComponent } from './fundraising-details/fundraising-details.component';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: FundraisingComponent,
-    children: [
       {
         path: '',
         component: FundraisingListComponent,
@@ -45,8 +41,6 @@ const routes: Routes = [
         path: ':id',
         component: FundraisingDetailsComponent,
       },
-    ],
-  },
   {
     path: '**',
     pathMatch: 'full',

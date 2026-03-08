@@ -35,18 +35,8 @@ export class FundraisingListComponent implements OnInit, OnDestroy {
 
   contextPath = '';
   selectedUserId = '';
+  form: FormGroup;
 
-  form = new FormGroup({
-    title: new FormControl('', [Validators.required, Validators.minLength(3)]),
-    subTitle: new FormControl('', [Validators.required, Validators.minLength(3)]),
-    description: new FormControl('', [Validators.required, Validators.minLength(10)]),
-    currency: new FormControl('XAF', [Validators.required]),
-    targetAmount: new FormControl(0, [Validators.required, Validators.min(1000)]),
-    endDate: new FormControl('', [Validators.required]),
-    status: new FormControl(true, [Validators.required]),
-    visibility: new FormControl('public', [Validators.required]),
-    coverImageUrl: new FormControl('https://cdn.example.com/fundraising/cover.jpg', [Validators.required]),
-  });
 
   constructor(
     private route: ActivatedRoute,
@@ -73,6 +63,22 @@ export class FundraisingListComponent implements OnInit, OnDestroy {
     if (this.currentUser && this.selectedUserId === '') {
       this.selectedUserId = this.currentUser._id;
     }
+    this.initForm();
+  }
+
+  initForm(){
+    this.form = new FormGroup({
+      title: new FormControl('', [Validators.required, Validators.minLength(3)]),
+      subTitle: new FormControl('', [Validators.required, Validators.minLength(3)]),
+      description: new FormControl('', [Validators.required, Validators.minLength(10)]),
+      currency: new FormControl(this.currentUser.countryId.currency, [Validators.required]),
+      targetAmount: new FormControl(0, [Validators.required, Validators.min(1000)]),
+      startDate: new FormControl('', [Validators.required]),
+      endDate: new FormControl('', [Validators.required]),
+      status: new FormControl(true, [Validators.required]),
+      visibility: new FormControl('public', [Validators.required]),
+      coverImageUrl: new FormControl('https://cdn.example.com/fundraising/cover.jpg', [Validators.required]),
+    });
   }
 
   applyDefaultCurrency(): void {

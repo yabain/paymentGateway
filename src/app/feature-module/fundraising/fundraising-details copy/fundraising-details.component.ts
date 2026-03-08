@@ -5,9 +5,6 @@ import { Subject, takeUntil } from 'rxjs';
 import { Location } from '@angular/common';
 import { FundraisingService } from 'src/app/services/fundraising/fundraising.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
-import { UserService } from 'src/app/services/user/user.service';
-import { environment } from 'src/environments/environment';
-import { StorageService } from 'src/app/services/storage/storage.service';
 
 @Component({
   selector: 'app-fundraising-details',
@@ -16,26 +13,20 @@ import { StorageService } from 'src/app/services/storage/storage.service';
 })
 export class FundraisingDetailsComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
-  currentUser: any;
+
   loading = true;
   updating = false;
   donating = false;
 
   fundraisingId = '';
   donationId = '';
-  url: string = '';
 
   fundraisingData: any = null;
   donationStats: any = null;
   donations: any[] = [];
   donationDetails: any = null;
-  copied = false;
 
   isAdminRoute = false;
-  waitingCurrentUser: boolean = true;
-  isAdmin: boolean = false;
-  currency: string;
-  edition: boolean = false;
 
   editForm = new FormGroup({
     title: new FormControl('', [Validators.required, Validators.minLength(3)]),
@@ -51,53 +42,15 @@ export class FundraisingDetailsComponent implements OnInit, OnDestroy {
     message: new FormControl(''),
   });
 
-  isChangePicture = false;
-  uploadPictureForm: FormGroup;
-  memoryImage: string;
-  selectedImage: any;
-  uploadingPicture = false;
-  coverImageUrl: string = 'assets/img/resources/package_img.png';
-
-
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private location: Location,
     private fundraisingService: FundraisingService,
     private toastService: ToastService,
-    private userService: UserService,
-    private storage: StorageService
-  ) { }
-
-  changePicture(value: boolean) {
-    this.isChangePicture = value;
-  }
-
-  showPreview(event: any) {
-    if (event.target.files && event.target.files[0]) {
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.fundraisingData.coverImageUrl = e.target.result;
-      };
-      reader.readAsDataURL(event.target.files[0]);
-      this.selectedImage = event.target.files[0];
-      // console.log('img: ', this.selectedImage)
-    } else {
-      this.fundraisingData.coverImageUrl = 'assets/imgs/pictures/new_image.png';
-      this.selectedImage = null;
-    }
-  }
-
-
-  cancel() {
-    if (this.fundraisingData) {
-      this.fundraisingData.coverImageUrl = this.memoryImage;
-      this.isChangePicture = false;
-    }
-  }
+  ) {}
 
   ngOnInit(): void {
-    this.pictureForm();
     this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.isAdminRoute = this.location.path().includes('admin-fundraising');
       this.fundraisingId = params.get('id') || '';
@@ -111,39 +64,7 @@ export class FundraisingDetailsComponent implements OnInit, OnDestroy {
       if (this.fundraisingId) {
         this.loadFundraising();
       }
-
     });
-  }
-
-
-  savePicture() {
-    if (!this.selectedImage || !(this.selectedImage instanceof File)) {
-      this.toastService.presentToast('error', 'Error', 'Please select a valid image file');
-      return;
-    }
-    
-    this.uploadingPicture = true;
-    
-    this.fundraisingService.updateServicePicture(this.fundraisingData._id, this.selectedImage)
-      .subscribe
-      ({
-        next: (data) => {
-          if (data.error) {
-            this.toastService.presentToast('error', 'Error', '', 10000);
-          } else {
-            this.toastService.presentToast('success', 'Done !', '', 10000);
-            this.fundraisingData = data;
-            // this.refresh();
-            this.isChangePicture = false;
-          }
-          this.uploadingPicture = false;
-        },
-        error: (error) => {
-          this.toastService.presentToast('error', 'Error', error, 10000);
-          this.isChangePicture = false;
-          this.uploadingPicture = false;
-        },
-      });
   }
 
   loadFundraising(): void {
@@ -160,8 +81,6 @@ export class FundraisingDetailsComponent implements OnInit, OnDestroy {
         }
 
         this.fundraisingData = data;
-        console.log('fundraising data 2', data)
-        this.getCurrentUser();
         this.patchFormWithData();
         this.loadDonationStats();
         this.loadDonations();
@@ -184,13 +103,6 @@ export class FundraisingDetailsComponent implements OnInit, OnDestroy {
       return '';
     }
     return String(value).split('T')[0];
-  }
-
-
-  pictureForm() {
-    this.uploadPictureForm = new FormGroup({
-      pictureFile: new FormControl(undefined, Validators.required),
-    });
   }
 
   loadDonationStats(): void {
@@ -216,23 +128,6 @@ export class FundraisingDetailsComponent implements OnInit, OnDestroy {
       });
   }
 
-  getCurrentUser() {
-    this.waitingCurrentUser = true;
-    this.userService.getCurrentUser().then((user: any) => {
-      if (!user) return (this.waitingCurrentUser = false);
-      this.currentUser = user;
-      this.isAuthor(this.fundraisingData);
-      if (user.isAdmin) this.isAdmin = true;
-      this.currency = this.fundraisingData.currency;
-
-      return (this.waitingCurrentUser = true);
-    });
-  }
-
-  isAuthor(fundraising: any, user: any = this.currentUser) {
-    return user?._id.toString() === fundraising?.creatorId._id.toString() ? true : false;
-  }
-
   updateFundraising(): void {
     if (this.editForm.invalid || !this.fundraisingId) {
       this.editForm.markAllAsTouched();
@@ -241,12 +136,12 @@ export class FundraisingDetailsComponent implements OnInit, OnDestroy {
 
     this.updating = true;
     const payload = this.removeEmpty(this.editForm.value);
+
     this.fundraisingService
       .updateFundraising(this.fundraisingId, payload)
       .pipe(takeUntil(this.destroy$))
       .subscribe((res: any) => {
         this.updating = false;
-        this.edition = false;
         if (res?.error) {
           this.toastService.presentToast('error', 'Error', 'Operation failed');
           return;
@@ -257,51 +152,19 @@ export class FundraisingDetailsComponent implements OnInit, OnDestroy {
       });
   }
 
-
-  copyUrl() {
-    const url = this.getUrl();
-    navigator.clipboard.writeText(url).then(() => {
-      this.copied = true;
-
-      // Réinitialise le message après 2 secondes
-      this.toastService.presentToast('success', 'Copied !', '', 5000);
-      setTimeout(() => this.copied = false, 2000);
-    }).catch(err => {
-      console.error('Impossible de copier : ', err);
-    });
-  }
-
-  getUrl(): string {
-    return environment.frontUrl + '/fundraising-details/' + this.fundraisingId;
-  }
-
-  navigateTo(route) {
-    if (!this.currentUser && route === '/auth/login') {
-      this.storage.setStorage(environment.memory_link, this.url);
-    }
-    this.ngOnDestroy();
-    this.router.navigate([route]);
-  }
-
-
-  showName(userData) {
-    return this.userService.showName(userData);
-  }
-
   toggleStatus(): void {
     if (!this.fundraisingId) {
       return;
     }
 
-    const current = this.fundraisingData?.status ?? false;
-    console.log('current', current)
+    const current = this.fundraisingData?.isActive ?? this.fundraisingData?.status ?? false;
 
     this.fundraisingService
       .updateStatus(this.fundraisingId, !Boolean(current))
       .pipe(takeUntil(this.destroy$))
-      .subscribe((res) => {
-          this.toastService.presentToast('success', 'Success', 'Status updated');
-          this.loadFundraising();
+      .subscribe(() => {
+        this.toastService.presentToast('success', 'Success', 'Status updated');
+        this.loadFundraising();
       });
   }
 
@@ -374,7 +237,6 @@ export class FundraisingDetailsComponent implements OnInit, OnDestroy {
       .getDonationDetails(donationId)
       .pipe(takeUntil(this.destroy$))
       .subscribe((data: any) => {
-        console.log('donation details', data)
         this.donationDetails = data;
         this.loading = false;
       });

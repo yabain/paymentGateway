@@ -1,51 +1,250 @@
-<div class="page-header">
+<!-- <div class="page-header">
   <div class="content-page-header d-flex justify-content-between align-items-center">
     <h5>{{ 'fundraising.fundraisingInfo' | translate }}</h5>
     <button class="btn btn-outline-secondary" type="button" (click)="navigateBack()">Back</button>
   </div>
-</div>
+</div> -->
 
-<div class="d-flex justify-content-center py-4" *ngIf="loading">
-  <div class="spinner-border" role="status"></div>
-</div>
-
-<div class="card" *ngIf="!loading && donationDetails">
-  <div class="card-body">
-    <h5 class="mb-3">Donation details</h5>
-    <pre class="mb-0">{{ donationDetails | json }}</pre>
+<div *ngIf="loading">
+  <div class="card">
+    <div class="card-body">
+      <div class="d-flex justify-content-center" style=" padding: 50px;">
+        <div class="spinner-border spinner" role="status"></div>
+      </div>
+    </div>
   </div>
 </div>
+<div *ngIf="!loading">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="card page-tilte">
+            <div class="main-title">
+              <form [formGroup]="editForm" (ngSubmit)="updateFundraising()" class="row" *ngIf="edition">
+                <div class="col-md-6 mb-2">
+                  <label class="form-label">Title</label>
+                  <input class="form-control" formControlName="title" />
+                </div>
+        
+                <div class="col-md-3 mb-2">
+                  <label class="form-label">Start Date</label>
+                  <input class="form-control" type="date" formControlName="startDate" />
+                </div>
+        
+                <div class="col-md-3 mb-2">
+                  <label class="form-label">End Date</label>
+                  <input class="form-control" type="date" formControlName="endDate" />
+                </div>
+        
+                <div class="col-md-6 mb-2">
+                  <label class="form-label">Goal Amount</label>
+                  <input class="form-control" type="number" min="1" formControlName="targetAmount" />
+                </div>
+        
+                <div class="col-md-6 mb-2">
+                  <label class="form-label">Visibility</label>
+                  <select class="form-select" formControlName="visibility">
+                    <option value="public">Public</option>
+                    <option value="private">Private</option>
+                  </select>
+                </div>
+        
+                <div class="col-md-12 mb-2">
+                  <label class="form-label">Description</label>
+                  <textarea rows="4" class="form-control" formControlName="description"></textarea>
+                </div>
+        
+                <div class="col-12 mt-2">
+                  <button type="submit" class="btn btn-primary" [disabled]="updating">
+                    <span *ngIf="!updating">Save changes</span>
+                    <span *ngIf="updating" class="spinner-border spinner-border-sm" role="status"></span>
+                  </button>
+                </div>
+              </form>
+              <div class="row" *ngIf="!edition">
+                <div class="col-md-4">
+                  <!-- <div class="event-image">
+                    <img [src]="fundraisingData?.coverImageUrl" alt="">
+                  </div> -->
+                  <form [formGroup]="uploadPictureForm">
+                      <div class="event-image">
+                          <img src="{{ fundraisingData?.coverImageUrl ? fundraisingData?.coverImageUrl  : coverImageUrl}}"
+                              alt="" style="height: 30vh;">
+                      </div>
+                      <div style="text-align: left !important;" *ngIf="isAuthor(fundraisingData)">
+                          <span
+                              (click)="changePicture(true);fileUploader.click()">
+                              <i class="feather icon-camera avatar-uploader-icon shadow-soft"></i> {{ 'action.change' | translate }}
+                          </span>
+                      </div>
+                      <input type="file" name="picture" id="picture" accept="image/*"
+                          class="form-control ml-4" #fileUploader formControlName="pictureFile"
+                          (change)="showPreview($event)" style="display: none;">
+                      <div *ngIf="isChangePicture && isAuthor(fundraisingData)">
+                          <a class="btn btn-sm btn-secondary m-2" (click)="cancel()">{{
+                              "action.cancel" |
+                              translate }}</a>
+                          <a *ngIf="!uploadingPicture" class="btn btn-sm btn-success m-2"
+                              (click)="savePicture()">{{ "action.save" |
+                              translate }}</a>
+                          <a *ngIf="uploadingPicture" class="btn btn-sm btn-success" disabled>
+                              <span class="spinner-border spinner-border-sm me-2" role="status"
+                                  aria-hidden="true"></span>
+                          </a>
+                      </div>
+                  </form>
+
+
+                  <div [class]="fundraisingData?.status === true ? 'status-badge-success' : 'status-badge-danger'">
+                    <span
+                      [class]="fundraisingData?.status === true ? 'status-dot-success' : 'status-dot-danger'"></span>
+                    {{ (fundraisingData?.status === true ? 'subscriptions.active' :
+                    'subscriptions.inactive') |
+                    translate }}
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="event-details">
+                    <h6 class="col-md-12" style="color: #878787">
+                      <b>{{ fundraisingData.visibility }}</b>
+                    </h6>
+                    <h1>{{ fundraisingData?.title }}</h1>
+                    <h6 class="event-time" style="margin-bottom: 10px;">{{ fundraisingData?.subTitle }}
+                    </h6>
+
+                    <div class="price-line">
+                      <div class="price">{{ fundraisingData?.targetAmount }} {{ fundraisingData?.currency}}</div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-4">
+                        <button class="btn btn-rounded btn-primary me-1" data-bs-toggle="modal"
+                          data-bs-target="#subscriptionModal"
+                          *ngIf="currentUser && !isAuthor(fundraisingData) && fundraisingData?.status">
+                          {{ 'fundraising.donate' | translate }}</button>
+                        <button class="btn btn-rounded btn-primary me-1" *ngIf="!currentUser"
+                          (click)="navigateTo('/auth/login')">
+                          {{ 'auth.login' | translate }}</button>
+                      </div>
+                      <div class="col-md-8" style="text-align: right !important;">
+                        <button class="btn btn-rounded btn-outline-secondary me-1" (click)="copyUrl()">
+                          <i class="feather icon-share-2"></i>
+                          {{ 'action.share' | translate }}
+                        </button>
+                        <button type="button" *ngIf="isAuthor(fundraisingData) || isAdmin"
+                          class="btn btn-rounded btn-outline-secondary me-1">
+                          <i class="feather icon-alert-circle"></i>
+                        </button>
+                        <button class="btn btn-rounded btn-outline-secondary me-1"
+                          *ngIf="isAuthor(fundraisingData) || isAdmin" (click)="edition = true">
+                          <i class="feather icon-edit"></i>
+                        </button>
+                        <button class="btn btn-block me-1" (click)="toggleStatus()" [ngClass]=" fundraisingData?.status === true ?
+                                                'btn-outline-danger':  'btn-outline-success'"
+                          *ngIf="currentUser && isAuthor(fundraisingData) || currentUser && isAdmin">
+                          <i class="feather icon-power me-1"></i>
+                        </button>
+                        <button class="btn btn-block btn-outline-danger active" href="javascript:void(0);"
+                          data-bs-toggle="modal" data-bs-target="#delete_modal"
+                          *ngIf="currentUser && isAuthor(fundraisingData) || currentUser && isAdmin">
+                          <i class="feather icon-trash-2"></i>
+                        </button>
+                      </div>
+                      <h6 class="col-md-12"
+                        *ngIf="currentUser && !isAuthor(fundraisingData) && fundraisingData?.status">
+                        {{ 'subscriptions.as' | translate }} <b>{{ showName(currentUser)}}</b>
+                      </h6>
+                      <h6 class="col-md-12" *ngIf="!fundraisingData?.status" style="color: #bf1e1e">
+                        <b>{{ 'subscriptions.inactive' |
+                          translate }}</b>
+                      </h6>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4" style="text-align: left !important;">
+          <div class="card customer-details-group">
+            <div class="card-body">
+              <h2>{{ 'subscriptions.author' | translate }}</h2>
+              <div class="owner-card">
+                <div>
+                  <img class="avatar"
+                    [src]="fundraisingData ? fundraisingData?.creatorId.pictureUrl : 'assets/img/new/user.png'"
+                    alt="image">
+                </div>
+                <div class="owner-info">
+                  <h3>{{showName(fundraisingData?.creatorId)}}</h3>
+                  <div class="owner-id"><b>ID: </b>{{fundraisingData?.creatorId._id}}</div>
+                  <div class="owner-contact">
+                    <div><b>Email: </b>{{fundraisingData?.creatorId.email}}</div>
+                    <div><b>Phone: </b>{{fundraisingData?.creatorId.phone}}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-8">
+          <div class="card">
+            <div class="card-body">
+              <h3>{{ fundraisingData?.title }} </h3>
+              <h6 style="margin-bottom: 10px; color: #00000050;">{{ fundraisingData?.subTitle }} </h6>
+              <br><br>
+              {{ fundraisingData?.description }}
+              <br>
+              <app-qr-code [data]="getUrl()" [size]="160" *ngIf="fundraisingData"></app-qr-code>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4" style="text-align: left !important;">
+          <div class="card page-tilte">
+            <div class="countdown-card">
+              <div class="section-title">{{ 'fundraising.totalFundraisingRaised' | translate }}
+              </div>
+              <div class="timeline-dates">
+                <span>
+                  {{ donationStats?.totalAmount || 0 }} {{ fundraisingData?.currency || '' }}
+                </span>
+
+                <span>
+                  {{ donationStats?.totalDonations || 0 }} Donations
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="card customer-details-group">
+            <div class="card-body">
+              <h2>{{ 'fundraising.participants' | translate }}</h2>
+              <div class="owner-card">
+                <div>
+                  <img class="avatar"
+                    [src]="fundraisingData ? fundraisingData?.creatorId.pictureUrl : 'assets/img/new/user.png'"
+                    alt="image">
+                </div>
+                <div class="owner-info">
+                  <h3>{{showName(fundraisingData?.creatorId)}}</h3>
+                  <div class="owner-id"><b>ID: </b>{{fundraisingData?.creatorId._id}}</div>
+                  <div class="owner-contact">
+                    <div><b>Email: </b>{{fundraisingData?.creatorId.email}}</div>
+                    <div><b>Phone: </b>{{fundraisingData?.creatorId.phone}}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <div *ngIf="!loading && !donationDetails && fundraisingData">
-  <div class="row">
-    <div class="col-xl-4 col-md-6">
-      <div class="card">
-        <div class="card-body">
-          <div class="dash-title">{{ 'fundraising.totalFundraisingRaised' | translate }}</div>
-          <h4>{{ donationStats?.totalAmount || 0 }} {{ fundraisingData?.currency || '' }}</h4>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-xl-4 col-md-6">
-      <div class="card">
-        <div class="card-body">
-          <div class="dash-title">{{ 'fundraising.totalFundraisingGoal' | translate }}</div>
-          <h4>{{ fundraisingData?.targetAmount || fundraisingData?.targetAmount || 0 }} {{ fundraisingData?.currency || '' }}</h4>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-xl-4 col-md-6">
-      <div class="card">
-        <div class="card-body">
-          <div class="dash-title">{{ 'fundraising.totalFundraisingSubscribersGoal' | translate }}</div>
-          <h4>{{ donationStats?.totalDonations || 0 }}</h4>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <div class="card">
     <div class="card-body">
       <div class="d-flex justify-content-between flex-wrap mb-3 gap-2">
@@ -139,7 +338,8 @@
           <tbody>
             <tr *ngFor="let donation of donations">
               <td>{{ donation?._id }}</td>
-              <td>{{ donation?.amount || donation?.transactionAmount || 0 }} {{ donation?.currency || fundraisingData?.currency || '' }}</td>
+              <td>{{ donation?.amount || donation?.transactionAmount || 0 }} {{ donation?.currency ||
+                fundraisingData?.currency || '' }}</td>
               <td>{{ donation?.status || '--' }}</td>
               <td>{{ donation?.createdAt ? (donation.createdAt | date:'medium') : '--' }}</td>
               <td>

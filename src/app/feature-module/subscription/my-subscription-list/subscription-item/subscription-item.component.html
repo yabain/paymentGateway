@@ -11,7 +11,7 @@
             </div>
         </div>
     </div>
-    <span class="package-enabled" *ngIf="subscription.status">{{ 'subscriptions.actived' | translate }}</span>
+    <span class="package-enabled" *ngIf="subscription.status">{{ 'subscriptions.active' | translate }}</span>
     <span class="package-disabled" *ngIf="!subscription.status">{{ 'subscriptions.inactive' | translate }}</span>
     <p>{{ subscription.planId.subTitle }} </p>
     <span style="font-weight: 700; font-size: 1.7rem;" *ngIf="subscription.planId.price > 0">{{ subscription.planId.price }}</span>
