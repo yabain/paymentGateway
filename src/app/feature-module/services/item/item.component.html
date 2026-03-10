@@ -114,9 +114,9 @@
                         </div>
 
                         <div class="security-notice" *ngIf="user">
-                            <img src="assets/img/resources/flutterwave.png" alt=""
+                            <img [src]="isPaystackCurrency(service?.currency) ? 'assets/img/resources/paystack.png' : 'assets/img/resources/flutterwave.png'" alt=""
                                 style="max-width: 100px; border-radius: 5px; margin-right: 10px;">
-                            <p>{{ "payment.secureMessage" | translate }}</p>
+                            <p>{{ "payment.secureMessageByProvider" | translate:{ provider: getPaymentProviderName(service?.currency) } }}</p>
                         </div>
                         <div class="action-buttons">
                             <button class="btn btn-cancel" data-bs-dismiss="modal" (close)="ngOnDestroy()"
@@ -145,10 +145,10 @@
                         <img src="assets/img/resources/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;"
                             *ngIf="!modalClosed && !transactionSucceeded && !transactionFailed">
                         <!-- <div class="spinner-border" role="status" *ngIf="!modalClosed && !transactionSucceeded && !transactionFailed"></div> -->
-                        <p style="margin-top: 50px;" *ngIf="!modalClosed && !transactionSucceeded && !transactionFailed">
-                            {{ "payment.processing-message1" | translate }}<br>
-                            {{ "payment.processing-message2" | translate }}
-                        </p>
+                    <p style="margin-top: 50px;" *ngIf="!modalClosed && !transactionSucceeded && !transactionFailed">
+                        {{ "payment.processing-message1" | translate }}<br>
+                        {{ "payment.processing-message2ByProvider" | translate:{ provider: getPaymentProviderName(service?.currency) } }}
+                    </p>
 
 
                         <img src="../../../assets/img/resources/tfailed.gif" alt="" style="max-width: 100px;;"
@@ -165,8 +165,8 @@
                                 "payment.opening" | translate }}...</span>
                         </p>
 
-                        <img src="assets/img/resources/flutterwave.png" alt="" style="max-width: 100px;;"
-                            *ngIf="!transactionSucceeded && !transactionFailed">
+                    <img [src]="isPaystackCurrency(service?.currency) ? 'assets/img/resources/paystack.png' : 'assets/img/resources/flutterwave.png'" alt="" style="max-width: 100px;;"
+                        *ngIf="!transactionSucceeded && !transactionFailed">
                         <p style="margin-top: 50px;" *ngIf="showRetry && !transactionSucceeded && !transactionFailed">
                             {{ "payment.processing-message4" | translate }}
                             <span class="retry" (click)="openPayin()" *ngIf="!reOpen && !transactionSucceeded">{{
@@ -184,9 +184,9 @@
 
                         <p style="margin-top: 50px;"
                             *ngIf="!transactionSucceeded && showRetry || !transactionSucceeded && transactionSucceeded">
-                            <br>
-                            {{ 'payment.ifPaymentConfirmed' | translate }}
-                        </p>
+                        <br>
+                        {{ 'payment.ifPaymentConfirmedByProvider' | translate:{ provider: getPaymentProviderName(service?.currency) } }}
+                    </p>
 
                         <br>
                         <button class="btn btn-primary" *ngIf="showRetry || transactionSucceeded" (click)="ngOnDestroy()"

@@ -45,7 +45,7 @@
             </div>
 
             <div *ngIf="isEmail">
-              <form [formGroup]="form">
+              <form [formGroup]="form" (ngSubmit)="onSubmit()">
                 <div class="input-block mb-3">
                   <label class="form-label">{{ 'auth.email' | translate }} *</label>
                   <input class="form-control" formControlName="email" type="text"
@@ -79,7 +79,12 @@
                     </div>
                   </div>
                 </div>
-                <button type="submit" (click)="onSubmit()" class="btn btn-primary" *ngIf="!isLoading">
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  *ngIf="!isLoading"
+                  [disabled]="form.invalid"
+                >
                   {{ 'auth.login' | translate}}
                 </button>
                 <button [disabled]="true" class="btn btn-lg btn-block btn-light w-100" type="submit" disabled
@@ -91,7 +96,7 @@
 
             <div *ngIf="!isEmail">
               <div *ngIf="!gettingLocations">
-                <form [formGroup]="form2">
+                <form [formGroup]="form2" (ngSubmit)="onSubmit()">
                   <div class="input-block mb-3">
                     <label htmlFor="country">{{ 'auth.country' | translate}} *</label>
                     <div class="col-lg-12">
@@ -148,7 +153,12 @@
                       </div>
                     </div>
                   </div>
-                  <button type="submit" (click)="onSubmit()" class="btn btn-primary" *ngIf="!isLoading">
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    *ngIf="!isLoading"
+                    [disabled]="form2.invalid || !selectedCountry"
+                  >
                     {{ 'auth.login' | translate}}
                   </button>
                   <button [disabled]="true" class="btn btn-lg btn-block btn-light w-100" type="submit" disabled

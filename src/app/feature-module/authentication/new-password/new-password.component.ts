@@ -79,10 +79,10 @@ export class NewPasswordComponent implements OnInit {
   initForm() {
     this.form = new FormGroup({
       password: new FormControl(null, {
-        validators: [Validators.required, Validators.email],
+        validators: [Validators.required, Validators.minLength(8)],
       }),
       password2: new FormControl(null, {
-        validators: [Validators.required, Validators.email],
+        validators: [Validators.required, Validators.minLength(8)],
       }),
     });
   }

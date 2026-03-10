@@ -21,7 +21,7 @@
   <div class="col-lg-6">
     <div class="saas-login-wrapper p-0">
       <div class="login-content">
-        <form [formGroup]="form" *ngIf="form">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="form">
           <div class="login-userset">
             <div class="login-logo" routerLink="/">
               <img src="assets/img/resources/dk_logo.png" alt="Logo" />
@@ -126,7 +126,7 @@
                   </label>
                 </div>
               </div>
-              <button type="submit" (click)="onSubmit()" class="btn btn-primary" *ngIf="!isLoading">
+              <button type="submit" class="btn btn-primary" *ngIf="!isLoading" [disabled]="form.invalid">
                 {{ 'auth.register' | translate }}
               </button>
               <button [disabled]="form.invalid" class="btn btn-lg btn-block btn-light w-100" type="submit" disabled

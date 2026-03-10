@@ -18,6 +18,7 @@ import { FlutterwaveService } from 'src/app/services/flutterwave/flutterwave.ser
 import { SystemService } from 'src/app/services/system/system.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { environment } from 'src/environments/environment';
+import { FieldValidationService } from 'src/app/services/field-validation/field-validation.service';
 
 interface data {
   value: string;
@@ -116,6 +117,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     private systemService: SystemService,
     private fw: FlutterwaveService,
     private storage: StorageService,
+    private fieldValidationService: FieldValidationService,
   ) { }
 
   ngOnInit(): void {
@@ -418,7 +420,12 @@ export class DetailsComponent implements OnInit, OnDestroy {
         validators: [Validators.required],
       }),
       price: new FormControl(data?.price || this.price, {
-        validators: [Validators.required],
+        validators: [
+          Validators.required,
+          this.fieldValidationService.currencyAmountValidator(
+            () => data?.currency || this.serviceData?.currency || this.currentUser?.countryId?.currency || 'XAF',
+          ),
+        ],
       }),
       options: this.fb.array(data?.options || []),
     });
@@ -472,15 +479,17 @@ export class DetailsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if(this.form.value.price < 100) {
+    const currency = this.serviceData?.currency || this.currentUser?.countryId?.currency || 'XAF';
+    const price = this.fieldValidationService.parseAmount(this.form.value.price);
+    if (!this.fieldValidationService.isValidAmount(price, currency)) {
       this.toastService.presentToast('error', 'Invalid price', '', 5000);
       return;
     }
 
     const raw = this.form.getRawValue();
 
-    raw.price = +String(raw.price ?? '').replace(/\s/g, '') || 0;
-    raw.currency = this.serviceData.currency || 'XAF';
+    raw.price = this.fieldValidationService.parseAmount(raw.price) || 0;
+    raw.currency = currency;
 
     const formData = new FormData();
     Object.entries(raw).forEach(([key, value]) => {
@@ -537,7 +546,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   verifytransactionData(transactionData): boolean {
-    if (transactionData.payment < 100) {
+    const currency = this.currentUser?.countryId?.currency || this.serviceData?.currency || 'XAF';
+    if (!this.fieldValidationService.isValidAmount(transactionData.payment, currency)) {
       return false;
     }
     return true;
@@ -790,6 +800,14 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   createSubscriptionItem() {
 
+  }
+
+  isPaystackCurrency(currency?: string): boolean {
+    return (currency || '').toUpperCase() === 'KES';
+  }
+
+  getPaymentProviderName(currency?: string): string {
+    return this.isPaystackCurrency(currency) ? 'Paystack' : 'Flutterwave';
   }
 
   ngOnDestroy(): void {

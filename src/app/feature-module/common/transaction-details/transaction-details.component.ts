@@ -142,6 +142,18 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
       this.pollTimer = null;
     }
   }
+
+  isPaystackCurrency(currency?: string): boolean {
+    return (currency || '').toUpperCase() === 'KES';
+  }
+
+  getPaymentProviderNameByTransaction(): string {
+    const currency =
+      this.transactionData?.receiverCurrency ||
+      this.transactionData?.senderCurrency ||
+      '';
+    return this.isPaystackCurrency(currency) ? 'Paystack' : 'Flutterwave';
+  }
   
   ngOnDestroy(): void {
     this.destroy$.next();

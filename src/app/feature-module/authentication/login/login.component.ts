@@ -11,6 +11,7 @@ import { SystemService } from 'src/app/services/system/system.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { UserSettingsService } from 'src/app/services/user/userSettings.service';
+import { FieldValidationService } from 'src/app/services/field-validation/field-validation.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -45,7 +46,8 @@ export class LoginComponent implements OnInit {
     private toastService: ToastService,
     private language: LanguageService,
     private location: LocationService,
-    private userSettingsService: UserSettingsService
+    private userSettingsService: UserSettingsService,
+    private fieldValidationService: FieldValidationService,
   ) {
     this.initForm();
     this.getLocations();
@@ -78,11 +80,17 @@ export class LoginComponent implements OnInit {
     let country = this.countries.filter((e) => e._id === value);
     this.selectedCountry = country[0];
     this.setFlag(value);
+    this.form2?.get('whatsapp')?.updateValueAndValidity();
   }
 
   setFlag(coutryId) {
     let country = this.countries.filter((e) => e._id === coutryId);
     country = country[0];
+    if (!country) {
+      this.flagCountry = '../../../../assets/resources/flag.png';
+      this.contryCode = '--';
+      return;
+    }
     this.flagCountry =
       country.flagUrl || '../../../../assets/resources/flag.png';
     this.contryCode = '+' + country.code || '--';
@@ -107,7 +115,7 @@ export class LoginComponent implements OnInit {
         validators: [Validators.required],
       }),
       email: new FormControl(null, {
-        validators: [Validators.required, Validators.email],
+        validators: [Validators.required, this.fieldValidationService.emailValidator()],
       }),
       password: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(8)],
@@ -119,7 +127,12 @@ export class LoginComponent implements OnInit {
         validators: [Validators.required],
       }),
       whatsapp: new FormControl(null, {
-        validators: [Validators.required],
+        validators: [
+          Validators.required,
+          this.fieldValidationService.phoneValidator(
+            () => String(this.selectedCountry?.code || '237'),
+          ),
+        ],
       }),
       password: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(8)],
@@ -138,28 +151,41 @@ export class LoginComponent implements OnInit {
    * Handles form submission for user login
    */
   onSubmit() {
-    let data: any = {}
+    let data: any = {};
     if (this.isEmail) {
       if (!this.form.valid) {
         this.form.markAllAsTouched();
         return;
       }
+      data = {
+        type: 'email',
+        email: this.form.value.email,
+        password: this.form.value.password,
+      };
     } else {
-      const phone = this.form2.value.whatsapp;
       if (!this.form2.valid) {
-        this.form.markAllAsTouched();
+        this.form2.markAllAsTouched();
+        return;
+      }
+      if (!this.selectedCountry?.code) {
+        this.toastService.presentToast('warning', 'Warning', 'Please select a country.', 10000);
+        return;
+      }
+      const phone = this.fieldValidationService.normalizePhoneDigits(this.form2.value.whatsapp);
+      if (!this.fieldValidationService.isValidPhoneForCountry(phone, this.selectedCountry?.code || '237')) {
+        this.toastService.presentToast('warning', 'Invalid phone number', '', 10000);
         return;
       }
       data = {
+        type: 'phone',
+        whatsapp: `+${this.selectedCountry.code} ${phone}`,
         password: this.form2.value.password,
-        type: "phone",
-        whatsapp: '+' + this.selectedCountry.code + ' ' + phone.toString()
-      }
+      };
     }
 
     this.isLoading = true;
     this.authService
-      .login(this.isEmail ? this.form.value : data)
+      .login(data)
       .then((user: any) => {
         if (user) {
           if (user === false) {
@@ -187,18 +213,18 @@ export class LoginComponent implements OnInit {
             this.language.useLanguage(user.language);
             this.form.reset();
             this.userSettingsService.getUserSettings()
-            .subscribe((res)=>{
-              this.storage.getStorage(environment.memory_link).then((url) => {
-                if (url) {
-                  this.router.navigateByUrl(url, { replaceUrl: true });
-                  this.storage.removeStorage(environment.memory_link);
-                  // setTimeout(() => window.location.reload(), 1000);
-                } else {
-                  this.router.navigateByUrl('/dashboard', { replaceUrl: true });
-                  // setTimeout(() => window.location.reload(), 1000);
-                }
-              });
-            })
+              .subscribe((res) => {
+                this.storage.getStorage(environment.memory_link).then((url) => {
+                  if (url) {
+                    this.router.navigateByUrl(url, { replaceUrl: true });
+                    this.storage.removeStorage(environment.memory_link);
+                    // setTimeout(() => window.location.reload(), 1000);
+                  } else {
+                    this.router.navigateByUrl('/dashboard', { replaceUrl: true });
+                    // setTimeout(() => window.location.reload(), 1000);
+                  }
+                });
+              })
           }
         } else {
           this.isLoading = false;
@@ -212,9 +238,13 @@ export class LoginComponent implements OnInit {
       })
       .catch((e) => {
         this.isLoading = false;
-        const err = e.error.message.message;
-        console.error('error to login: ', e.error.message.message)
-        if (err.search('account is disabled') > 0) {
+        const err =
+          e?.error?.message?.message ||
+          e?.error?.message ||
+          e?.message ||
+          '';
+        console.error('error to login: ', err);
+        if (String(err).includes('account is disabled')) {
           this.translate
             .get('auth.desabledAccountMsg')
             .subscribe((res: string) => {
@@ -222,7 +252,7 @@ export class LoginComponent implements OnInit {
             });
           // this.authService.logout();
         } else {
-          console.error('onSubmit catch: ', e.error.message.message);
+          console.error('onSubmit catch: ', err);
           this.translate
             .get('auth.errorCredential')
             .subscribe((res: string) => {
@@ -246,10 +276,8 @@ export class LoginComponent implements OnInit {
    * @param message - The message to display in the alert
    */
   async showAlert(message: string) {
-    let msg = '';
     this.translate.get('auth.authenticationFailed').subscribe((res: string) => {
-      msg = res;
-      this.toastService.presentToast('error', 'Error', msg, 10000);
+      this.toastService.presentToast('error', res, message || res, 10000);
     });
     // const alert = await this.alertController.create({
     //   header: msg,

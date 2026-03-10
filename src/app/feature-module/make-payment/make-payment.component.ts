@@ -6,6 +6,7 @@ import { take } from 'rxjs';
 import { FacturationService } from 'src/app/core/services/facturation/facturation.service';
 import { PaymentService } from 'src/app/core/services/payment/payment.service';
 import { PrintService } from 'src/app/core/services/print/print.service';
+import { FieldValidationService } from 'src/app/services/field-validation/field-validation.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -37,7 +38,8 @@ export class MakePaymentComponent {
     private toastService: ToastrService,
     private facturationService: FacturationService,
     private paymentService: PaymentService,
-    private pdfExportService: PrintService
+    private pdfExportService: PrintService,
+    private fieldValidationService: FieldValidationService,
   ) {
   }
 
@@ -63,14 +65,27 @@ export class MakePaymentComponent {
 
   initForm(invoiceData: any) {
     this.form = new FormGroup({
-      email: new FormControl(invoiceData.email, [Validators.email]),
+      email: new FormControl(invoiceData.email, [
+        Validators.required,
+        this.fieldValidationService.emailValidator(),
+      ]),
       name: new FormControl(invoiceData.name, Validators.required),
-      phone: new FormControl(invoiceData.phone, Validators.required),
+      phone: new FormControl(invoiceData.phone, [
+        Validators.required,
+        this.fieldValidationService.phoneValidator(
+          () => String(invoiceData?.countryCode || '237'),
+        ),
+      ]),
       service: new FormControl(invoiceData.service, [Validators.required]),
       description: new FormControl(invoiceData.description, [Validators.required]),
       language: new FormControl(invoiceData.language, [Validators.required]),
       currency: new FormControl(invoiceData.currency, [Validators.required]),
-      payment: new FormControl(invoiceData.payment, [Validators.required]),
+      payment: new FormControl(invoiceData.payment, [
+        Validators.required,
+        this.fieldValidationService.currencyAmountValidator(
+          () => String(invoiceData?.currency || 'XAF'),
+        ),
+      ]),
       rest: new FormControl(invoiceData.rest, [Validators.required]),
       ir: new FormControl(invoiceData.ir),
       yn: new FormControl(invoiceData.yn),
@@ -284,23 +299,32 @@ export class MakePaymentComponent {
     }
 
     // Phone number verification
-    if (!this.isValidPhoneNumber(this.form.value.phone)) {
+    if (!this.fieldValidationService.isValidPhoneForCountry(this.form.value.phone, this.invoiceData?.countryCode || '237')) {
       this.toastService.warning('Numéro payeur Invalid', 'Erreur form');
       return false;
     }
 
     // Phone number verification: Orange Cameroon
-    if (!this.isValidOMPhoneNumber(this.form.value.phone)) {
+    if (
+      !this.fieldValidationService.isValidOperatorPhone(
+        this.form.value.phone,
+        this.invoiceData?.countryCode || '237',
+        'OM',
+      )
+    ) {
       this.toastService.warning('Le numéro n\'est payeur pas un numéro Orange', 'Erreur form', {
         timeOut: 10000
       });
       return false;
     }
 
-    // if (this.form.value.payment < 10) {
-    //   this.toastService.warning('Le montant minimale est de 10', 'Erreur form');
-    //   return false;
-    // }
+    if (!this.fieldValidationService.isValidAmount(this.form.value.payment, this.form.value.currency)) {
+      this.toastService.warning(
+        `Montant invalide (${this.fieldValidationService.getRangeMessage(this.form.value.currency)})`,
+        'Erreur form',
+      );
+      return false;
+    }
 
     // General form validation
     if (!this.form.valid) {
@@ -314,16 +338,19 @@ export class MakePaymentComponent {
 
   // Phone number verification
   isValidPhoneNumber(input: string): boolean {
-    // Chech if string has exactly 9 numbers
-    const isNineDigits = /^\d{9}$/.test(input);
-    return isNineDigits;
+    return this.fieldValidationService.isValidPhoneForCountry(
+      input,
+      this.invoiceData?.countryCode || '237',
+    );
   }
 
   // Phone number verification: Orange Cameroon
   isValidOMPhoneNumber(input: string): boolean {
-    // Check if string start with 69 or 655 to 659
-    const startsWithValidPrefix = /^69|65[5-9]/.test(input);
-    return startsWithValidPrefix;
+    return this.fieldValidationService.isValidOperatorPhone(
+      input,
+      this.invoiceData?.countryCode || '237',
+      'OM',
+    );
   }
 
 

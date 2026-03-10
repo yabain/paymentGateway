@@ -56,7 +56,7 @@
                 </div>
         
                 <div class="col-12 mt-2">
-                  <button type="submit" class="btn btn-primary" [disabled]="updating">
+                  <button type="submit" class="btn btn-primary" [disabled]="updating || editForm.invalid">
                     <span *ngIf="!updating">Save changes</span>
                     <span *ngIf="updating" class="spinner-border spinner-border-sm" role="status"></span>
                   </button>
@@ -290,7 +290,7 @@
         </div>
 
         <div class="col-12 mt-2">
-          <button type="submit" class="btn btn-primary" [disabled]="updating">
+          <button type="submit" class="btn btn-primary" [disabled]="updating || editForm.invalid">
             <span *ngIf="!updating">Save changes</span>
             <span *ngIf="updating" class="spinner-border spinner-border-sm" role="status"></span>
           </button>
@@ -312,7 +312,7 @@
           <input class="form-control" formControlName="message" />
         </div>
         <div class="col-12 mt-2">
-          <button class="btn btn-success" type="submit" [disabled]="donating">
+          <button class="btn btn-success" type="submit" [disabled]="donating || donateForm.invalid">
             <span *ngIf="!donating">{{ 'fundraising.pay' | translate }}</span>
             <span *ngIf="donating" class="spinner-border spinner-border-sm" role="status"></span>
           </button>

@@ -8,6 +8,7 @@ import { ToastService } from 'src/app/services/toast/toast.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { environment } from 'src/environments/environment';
 import { StorageService } from 'src/app/services/storage/storage.service';
+import { FieldValidationService } from 'src/app/services/field-validation/field-validation.service';
 
 @Component({
   selector: 'app-fundraising-details',
@@ -40,14 +41,14 @@ export class FundraisingDetailsComponent implements OnInit, OnDestroy {
   editForm = new FormGroup({
     title: new FormControl('', [Validators.required, Validators.minLength(3)]),
     description: new FormControl('', [Validators.required, Validators.minLength(10)]),
-    targetAmount: new FormControl(0, [Validators.required, Validators.min(1)]),
+    targetAmount: new FormControl(0, [Validators.required]),
     startDate: new FormControl(''),
     endDate: new FormControl(''),
     visibility: new FormControl('public', [Validators.required]),
   });
 
   donateForm = new FormGroup({
-    amount: new FormControl(0, [Validators.required, Validators.min(1)]),
+    amount: new FormControl(0, [Validators.required]),
     message: new FormControl(''),
   });
 
@@ -66,7 +67,8 @@ export class FundraisingDetailsComponent implements OnInit, OnDestroy {
     private fundraisingService: FundraisingService,
     private toastService: ToastService,
     private userService: UserService,
-    private storage: StorageService
+    private storage: StorageService,
+    private fieldValidationService: FieldValidationService,
   ) { }
 
   changePicture(value: boolean) {
@@ -163,6 +165,7 @@ export class FundraisingDetailsComponent implements OnInit, OnDestroy {
         console.log('fundraising data 2', data)
         this.getCurrentUser();
         this.patchFormWithData();
+        this.applyAmountValidators(this.fundraisingData?.currency || this.currentUser?.countryId?.currency || 'XAF');
         this.loadDonationStats();
         this.loadDonations();
       });
@@ -224,9 +227,28 @@ export class FundraisingDetailsComponent implements OnInit, OnDestroy {
       this.isAuthor(this.fundraisingData);
       if (user.isAdmin) this.isAdmin = true;
       this.currency = this.fundraisingData.currency;
+      this.applyAmountValidators(this.currency || this.currentUser?.countryId?.currency || 'XAF');
 
       return (this.waitingCurrentUser = true);
     });
+  }
+
+  applyAmountValidators(currency: string): void {
+    this.editForm
+      .get('targetAmount')
+      ?.setValidators([
+        Validators.required,
+        this.fieldValidationService.currencyAmountValidator(() => currency),
+      ]);
+    this.editForm.get('targetAmount')?.updateValueAndValidity();
+
+    this.donateForm
+      .get('amount')
+      ?.setValidators([
+        Validators.required,
+        this.fieldValidationService.currencyAmountValidator(() => currency),
+      ]);
+    this.donateForm.get('amount')?.updateValueAndValidity();
   }
 
   isAuthor(fundraising: any, user: any = this.currentUser) {
@@ -236,6 +258,17 @@ export class FundraisingDetailsComponent implements OnInit, OnDestroy {
   updateFundraising(): void {
     if (this.editForm.invalid || !this.fundraisingId) {
       this.editForm.markAllAsTouched();
+      return;
+    }
+
+    const currency = this.fundraisingData?.currency || this.currentUser?.countryId?.currency || 'XAF';
+    const targetAmount = this.fieldValidationService.parseAmount(this.editForm.value.targetAmount);
+    if (!this.fieldValidationService.isValidAmount(targetAmount, currency)) {
+      this.toastService.presentToast(
+        'error',
+        'Error',
+        `Montant invalide (${this.fieldValidationService.getRangeMessage(currency)})`,
+      );
       return;
     }
 
@@ -324,6 +357,17 @@ export class FundraisingDetailsComponent implements OnInit, OnDestroy {
   donate(): void {
     if (this.donateForm.invalid || !this.fundraisingId) {
       this.donateForm.markAllAsTouched();
+      return;
+    }
+
+    const currency = this.fundraisingData?.currency || this.currentUser?.countryId?.currency || 'XAF';
+    const amount = this.fieldValidationService.parseAmount(this.donateForm.value.amount);
+    if (!this.fieldValidationService.isValidAmount(amount, currency)) {
+      this.toastService.presentToast(
+        'error',
+        'Error',
+        `Montant invalide (${this.fieldValidationService.getRangeMessage(currency)})`,
+      );
       return;
     }
 

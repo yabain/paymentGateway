@@ -159,6 +159,18 @@
                             </div>
                           </div>
 
+                          <div class="method-card" (click)="selectMethod('MPESA')"
+                            *ngIf="currentUser?.countryId?.currency === 'KES'"
+                            [ngClass]="selectedMethod === 'MPESA' ? 'method-card active' : 'method-card'">
+                            <div class="method-icon">
+                              <img src="assets/img/resources/mpesa.png" alt="" class="method-img">
+                            </div>
+                            <div class="method-info">
+                              <h3>M-Pesa</h3>
+                              <p>{{ "payment.mtnDescription" | translate }}</p>
+                            </div>
+                          </div>
+
                           <div (click)="selectMethod('BANK')"
                             [ngClass]="selectedMethod === 'BANK' ? 'method-card active' : 'method-card'">
                             <div class="method-icon">
@@ -194,7 +206,7 @@
                         <div class="account-details"
                           style="background: #edf4f7 !important; padding: 25px; border-radius: 8px;">
 
-                          <div class="col-md-12" *ngIf="selectedMethod === 'OM' || selectedMethod === 'MTN'">
+                          <div class="col-md-12" *ngIf="selectedMethod === 'OM' || selectedMethod === 'MTN' || selectedMethod === 'MPESA'">
                             <div class="col-md-12">
                               <div class="input-block mb-3">
                                 <label htmlFor="receiverMobileAccountNumber">
@@ -278,6 +290,10 @@
                           <img src="assets/img/resources/mtn_money.webp" alt=""
                             style="width: 50px; margin-right: 10px;"> {{ methodName }}
                         </h3>
+                        <h3 *ngIf="selectedMethod === 'MPESA'">
+                          <img src="assets/img/resources/mpesa.png" alt=""
+                            style="width: 50px; margin-right: 10px;"> {{ methodName }}
+                        </h3>
 
                         <div class="detail-item" *ngIf="selectedMethod === 'BANK'">
                           <span class="detail-label">{{ 'payment.accountNumber' | translate }}</span>
@@ -322,9 +338,9 @@
                       
 
                       <div class="security-notice">
-                        <img src="assets/img/resources/flutterwave.png" alt=""
+                        <img [src]="isPaystackCurrency(currentUser?.countryId?.currency) ? 'assets/img/resources/paystack.png' : 'assets/img/resources/flutterwave.png'" alt=""
                           style="max-width: 100px; border-radius: 5px; margin-right: 10px;">
-                        <p>{{ "payment.secureMessage" | translate }}</p>
+                        <p>{{ "payment.secureMessageByProvider" | translate:{ provider: getPaymentProviderName(currentUser?.countryId?.currency) } }}</p>
                       </div>
                       <div class="action-buttons">
                         <button class="btn btn-cancel" matStepperPrevious>
@@ -385,7 +401,7 @@
                 {{ "payment.processing-message1" | translate }}<br>
                 <span *ngIf="!proceed && result">{{ "payment.processing-message3" | translate }}</span>
               </p>
-              <img src="assets/img/resources/flutterwave.png" alt="" style="max-width: 100px;;">
+              <img [src]="isPaystackCurrency(currentUser?.countryId?.currency) ? 'assets/img/resources/paystack.png' : 'assets/img/resources/flutterwave.png'" alt="" style="max-width: 100px;;">
             </div>
           </div>
           <div class="col-md-6">

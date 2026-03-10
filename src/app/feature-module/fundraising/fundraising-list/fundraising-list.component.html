@@ -77,7 +77,7 @@
       </div>
 
       <div class="col-12 mt-2">
-        <button class="btn btn-primary" [disabled]="creating" type="submit">
+        <button class="btn btn-primary" [disabled]="creating || form.invalid" type="submit">
           <span *ngIf="!creating">Save</span>
           <span *ngIf="creating" class="spinner-border spinner-border-sm" role="status"></span>
         </button>

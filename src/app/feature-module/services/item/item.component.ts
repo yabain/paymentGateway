@@ -366,4 +366,12 @@ export class ItemComponent implements OnInit, OnDestroy {
     this.ngOnDestroy();
     this.router.navigate([route]);
   }
+
+  isPaystackCurrency(currency?: string): boolean {
+    return (currency || '').toUpperCase() === 'KES';
+  }
+
+  getPaymentProviderName(currency?: string): string {
+    return this.isPaystackCurrency(currency) ? 'Paystack' : 'Flutterwave';
+  }
 }

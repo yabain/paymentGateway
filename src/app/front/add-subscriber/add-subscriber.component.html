@@ -1,4 +1,4 @@
-<form [formGroup]="form" *ngIf="form">
+<form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="form">
   <div class="modal-body">
     <div class="login-userset">
       <div class="input-block mb-3">
@@ -89,7 +89,12 @@
       <div class="modal-footer justify-content-center p-0">
         <button type="button" data-bs-dismiss="modal" class="btn btn-outline-secondary m-1">{{ 'action.cancel' |
           translate }}</button>
-        <button type="submit" (click)="onSubmit()" class="btn btn-primary m-1" *ngIf="!waittingSubscription">
+        <button
+          type="submit"
+          class="btn btn-primary m-1"
+          *ngIf="!waittingSubscription"
+          [disabled]="form.invalid"
+        >
           {{ "action.add" | translate }}</button>
         <button *ngIf="waittingSubscription" class="btn btn-primary m-1">
           <div class="spinner-border" role="status"></div></button>

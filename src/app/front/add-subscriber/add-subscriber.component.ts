@@ -9,6 +9,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { LanguageService } from 'src/app/services/language/language.service';
 import { ActivatedRoute } from '@angular/router';
 import { SubscriptionService } from 'src/app/services/subscription/subscription.service';
+import { FieldValidationService } from 'src/app/services/field-validation/field-validation.service';
 
 @Component({
   selector: 'app-add-subscriber',
@@ -37,7 +38,8 @@ export class AddSubscriberComponent implements OnInit {
     private toastService: ToastService,
     private language: LanguageService,
     private route: ActivatedRoute,
-    private subscriptionService: SubscriptionService
+    private subscriptionService: SubscriptionService,
+    private fieldValidationService: FieldValidationService,
   ) {}
 
   ngOnInit(): void {
@@ -77,6 +79,8 @@ export class AddSubscriberComponent implements OnInit {
     this.selectedCounry = this.countries.filter((e) => e._id === value);
     this.selectedCounry = this.selectedCounry[0];
     this.setFlag(value);
+    this.form?.get('phone')?.updateValueAndValidity();
+    this.form?.get('whatsapp')?.updateValueAndValidity();
   }
 
   createSubscriptionItem() {
@@ -148,8 +152,17 @@ export class AddSubscriberComponent implements OnInit {
       accountType: new FormControl('personal', {
         validators: [Validators.required],
       }),
-      phone: new FormControl(null, { validators: [Validators.required] }),
-      whatsapp: new FormControl(null),
+      phone: new FormControl(null, {
+        validators: [
+          Validators.required,
+          this.fieldValidationService.phoneValidator(() => String(this.selectedCounry?.code || '237')),
+        ],
+      }),
+      whatsapp: new FormControl(null, {
+        validators: [
+          this.fieldValidationService.phoneValidator(() => String(this.selectedCounry?.code || '237')),
+        ],
+      }),
       balance: new FormControl(0, { validators: [Validators.required] }),
       countryId: new FormControl(null, { validators: [Validators.required] }),
       cityId: new FormControl(null, { validators: [Validators.required] }),
@@ -159,7 +172,7 @@ export class AddSubscriberComponent implements OnInit {
         validators: [Validators.required],
       }),
       email: new FormControl(null, {
-        validators: [Validators.required, Validators.email],
+        validators: [Validators.required, this.fieldValidationService.emailValidator()],
       }),
       password: new FormControl('00000000', {
         validators: [Validators.required, Validators.minLength(8)],
@@ -174,7 +187,8 @@ export class AddSubscriberComponent implements OnInit {
   }
 
   onSubmit() {
-    this.form.value.phone = this.form.value.phone.replace(/\D/g, '');
+    const phoneDigits = this.fieldValidationService.normalizePhoneDigits(this.form.value.phone);
+    this.form.value.phone = phoneDigits;
 
     if (!this.form.valid) {
       this.form.markAllAsTouched();
@@ -187,9 +201,7 @@ export class AddSubscriberComponent implements OnInit {
       return;
     }
 
-    if (
-      !this.isValidPhoneNumber(this.form.value.phone, this.selectedCounry.code)
-    ) {
+    if (!this.isValidPhoneNumber(this.form.value.phone, this.selectedCounry?.code || '237')) {
       this.toastService.presentToast(
         'warning',
         'Invalid phone number',
@@ -198,7 +210,7 @@ export class AddSubscriberComponent implements OnInit {
       );
       return;
     }
-    this.form.value.whatsapp = this.contryCode + ' ' + this.form.value.phone.replace(/\D/g, '');
+    this.form.value.whatsapp = this.contryCode + ' ' + phoneDigits;
     this.createSubscriptionItem();
   }
 
@@ -261,13 +273,7 @@ export class AddSubscriberComponent implements OnInit {
   }
 
   isValidPhoneNumber(input: string, countryCode): boolean {
-    console.log('Input phone number:', input);
-    // Chech if string has exactly 9 numbers
-    if (countryCode === '237') {
-      const isNineDigits = /^\d{9}$/.test(input);
-      return isNineDigits;
-    }
-    return true;
+    return this.fieldValidationService.isValidPhoneForCountry(input, countryCode);
   }
 
 

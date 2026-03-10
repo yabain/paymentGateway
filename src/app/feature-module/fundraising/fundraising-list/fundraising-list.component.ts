@@ -6,6 +6,7 @@ import { Location } from '@angular/common';
 import { FundraisingService } from 'src/app/services/fundraising/fundraising.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { UserService } from 'src/app/services/user/user.service';
+import { FieldValidationService } from 'src/app/services/field-validation/field-validation.service';
 
 @Component({
   selector: 'app-fundraising-list',
@@ -45,6 +46,7 @@ export class FundraisingListComponent implements OnInit, OnDestroy {
     private fundraisingService: FundraisingService,
     private userService: UserService,
     private toastService: ToastService,
+    private fieldValidationService: FieldValidationService,
   ) {}
 
   ngOnInit(): void {
@@ -67,18 +69,31 @@ export class FundraisingListComponent implements OnInit, OnDestroy {
   }
 
   initForm(){
+    const defaultCurrency = this.currentUser?.countryId?.currency || 'XAF';
     this.form = new FormGroup({
       title: new FormControl('', [Validators.required, Validators.minLength(3)]),
       subTitle: new FormControl('', [Validators.required, Validators.minLength(3)]),
       description: new FormControl('', [Validators.required, Validators.minLength(10)]),
-      currency: new FormControl(this.currentUser.countryId.currency, [Validators.required]),
-      targetAmount: new FormControl(0, [Validators.required, Validators.min(1000)]),
+      currency: new FormControl(defaultCurrency, [Validators.required]),
+      targetAmount: new FormControl(0, [
+        Validators.required,
+        this.fieldValidationService.currencyAmountValidator(
+          () => this.form?.value?.currency || this.currentUser?.countryId?.currency || 'XAF',
+        ),
+      ]),
       startDate: new FormControl('', [Validators.required]),
       endDate: new FormControl('', [Validators.required]),
       status: new FormControl(true, [Validators.required]),
       visibility: new FormControl('public', [Validators.required]),
       coverImageUrl: new FormControl('https://cdn.example.com/fundraising/cover.jpg', [Validators.required]),
     });
+
+    this.form
+      .get('currency')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.form.get('targetAmount')?.updateValueAndValidity();
+      });
   }
 
   applyDefaultCurrency(): void {
@@ -189,6 +204,17 @@ export class FundraisingListComponent implements OnInit, OnDestroy {
     console.log('form data: ', this.form.value);
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+      return;
+    }
+
+    const currency = this.form.value.currency || this.currentUser?.countryId?.currency || 'XAF';
+    const targetAmount = this.fieldValidationService.parseAmount(this.form.value.targetAmount);
+    if (!this.fieldValidationService.isValidAmount(targetAmount, currency)) {
+      this.toastService.presentToast(
+        'error',
+        'Error',
+        `Montant invalide (${this.fieldValidationService.getRangeMessage(currency)})`,
+      );
       return;
     }
 

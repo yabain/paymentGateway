@@ -8,6 +8,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { SystemService } from 'src/app/services/system/system.service';
 import { UserService } from 'src/app/services/user/user.service';
+import { FieldValidationService } from 'src/app/services/field-validation/field-validation.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -31,7 +32,8 @@ export class ForgotPasswordComponent  implements OnInit {
     private storage: StorageService,
     private userService: UserService,
     private translate: TranslateService,
-    private systemService: SystemService
+    private systemService: SystemService,
+    private fieldValidationService: FieldValidationService,
   ) {
     this.initForm();
   }
@@ -63,7 +65,9 @@ export class ForgotPasswordComponent  implements OnInit {
    */
   initForm() {
     this.form = new FormGroup({
-      email: new FormControl(null, { validators: [Validators.required, Validators.email] }),
+      email: new FormControl(null, {
+        validators: [Validators.required, this.fieldValidationService.emailValidator()],
+      }),
     });
   }
 

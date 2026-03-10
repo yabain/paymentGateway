@@ -289,6 +289,28 @@ export class ProceedPaymentComponent implements OnInit {
     }
   }
 
+  isPaystackCurrency(currency?: string): boolean {
+    const normalized = (currency || '').toUpperCase();
+    return normalized === 'KES';
+  }
+
+  getTransactionCurrency(): string {
+    return (
+      this.transactionData?.receiverCurrency ||
+      this.planData?.currency ||
+      this.serviceData?.currency ||
+      this.fundraisingData?.currency ||
+      this.requestPaymentData?.currency ||
+      this.transferData?.receiverCurrency ||
+      this.currentUser?.countryId?.currency ||
+      ''
+    );
+  }
+
+  getPaymentProviderName(currency?: string): string {
+    return this.isPaystackCurrency(currency) ? 'Paystack' : 'Flutterwave';
+  }
+
   ngOnDestroy(): void {
     if (this.intervalId) {
       clearInterval(this.intervalId);

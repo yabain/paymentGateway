@@ -11,6 +11,7 @@ import { SystemService } from 'src/app/services/system/system.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { environment } from 'src/environments/environment';
 import { ToastService } from 'src/app/services/toast/toast.service';
+import { FieldValidationService } from 'src/app/services/field-validation/field-validation.service';
 
 @Component({
   selector: 'app-register',
@@ -64,6 +65,7 @@ export class RegisterComponent implements OnInit {
     private language: LanguageService,
     private userService: UserService,
     private toastService: ToastService,
+    private fieldValidationService: FieldValidationService,
   ) {}
 
   /**
@@ -87,7 +89,12 @@ export class RegisterComponent implements OnInit {
       accountType: new FormControl('personal', {
         validators: [Validators.required],
       }),
-      phone: new FormControl(null, { validators: [Validators.required] }),
+      phone: new FormControl(null, {
+        validators: [
+          Validators.required,
+          this.fieldValidationService.phoneValidator(() => this.getSelectedCountryCode()),
+        ],
+      }),
       balance: new FormControl(0, { validators: [Validators.required] }),
       countryId: new FormControl(null, { validators: [Validators.required] }),
       cityId: new FormControl(null, { validators: [Validators.required] }),
@@ -95,9 +102,11 @@ export class RegisterComponent implements OnInit {
       language: new FormControl(lang, { validators: [Validators.required] }),
       pictureUrl: new FormControl('assets/img/new/user.png', { validators: [Validators.required] }),
       email: new FormControl(null, {
-        validators: [Validators.required, Validators.email],
+        validators: [Validators.required, this.fieldValidationService.emailValidator()],
       }),
-      whatsapp: new FormControl(null, { validators: [Validators.required] }),
+      whatsapp: new FormControl(null, {
+        validators: [this.fieldValidationService.phoneValidator(() => this.getSelectedCountryCode())],
+      }),
       password: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(8)],
       }),
@@ -142,8 +151,14 @@ export class RegisterComponent implements OnInit {
   onSubmit(): void {
     console.log('form', this.form.value);
 
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
     // Vérification numéro
-    if (!this.isValidPhoneNumber(this.form.value.phone)) {
+    const phoneDigits = this.fieldValidationService.normalizePhoneDigits(this.form.value.phone);
+    if (!this.isValidPhoneNumber(phoneDigits)) {
       this.toastService.presentToast(
         'warning',
         'Invalid phone number',
@@ -154,7 +169,7 @@ export class RegisterComponent implements OnInit {
     }
 
     // Vérification formulaire
-    if (this.form.value.accountType === 'persolnal') {
+    if (this.form.value.accountType === 'personal') {
       this.form.get('firstName').setValidators([Validators.required]);
       this.form.get('lastName').setValidators([Validators.required]);
       this.form.get('name').clearValidators();
@@ -178,8 +193,8 @@ export class RegisterComponent implements OnInit {
     // }
 
     // Nettoyage numéro
-    this.form.value.phone = this.form.value.phone.replace(/\D/g, '');
-    this.form.value.whatsapp = this.contryCode + ' ' + this.form.value.phone.replace(/\D/g, '');
+    this.form.value.phone = phoneDigits;
+    this.form.value.whatsapp = this.contryCode + ' ' + phoneDigits;
 
     this.isLoading = true;
 
@@ -249,24 +264,32 @@ export class RegisterComponent implements OnInit {
     this.flagCountry =
       country.flagUrl || '../../../../assets/resources/flag.png';
     this.contryCode = '+' + country.code || '--';
+    this.form?.get('phone')?.updateValueAndValidity();
+    this.form?.get('whatsapp')?.updateValueAndValidity();
   }
 
   updateFormStructure(accountType) {
     if (accountType == 'personal') {
       // this.form.reset();
       this.formType = 'personal';
-      this.form.value.accountType = accountType;
+      this.form.get('accountType')?.setValue(accountType);
       this.form.get('firstName').setValidators([Validators.required]);
       this.form.get('lastName').setValidators([Validators.required]);
       this.form.get('name').clearValidators();
+      this.form.get('firstName')?.updateValueAndValidity();
+      this.form.get('lastName')?.updateValueAndValidity();
+      this.form.get('name')?.updateValueAndValidity();
       console.log('Account personal', this.form);
     } else if (accountType == 'organisation') {
       // this.form.reset();
       this.formType = 'organisation';
-      this.form.value.accountType = accountType;
+      this.form.get('accountType')?.setValue(accountType);
       this.form.get('name').setValidators([Validators.required]);
       this.form.get('firstName').clearValidators();
       this.form.get('lastName').clearValidators();
+      this.form.get('firstName')?.updateValueAndValidity();
+      this.form.get('lastName')?.updateValueAndValidity();
+      this.form.get('name')?.updateValueAndValidity();
       console.log('Account personal', this.form);
     }
   }
@@ -285,10 +308,16 @@ export class RegisterComponent implements OnInit {
     this.router.navigate(['/terms']);
   }
 
+  getSelectedCountryCode(): string {
+    const countryId = this.form?.value?.countryId;
+    const selectedCountry = this.countries?.find((e) => e._id === countryId);
+    return String(selectedCountry?.code || '').trim() || '237';
+  }
+
   isValidPhoneNumber(input: string): boolean {
-    console.log('Input phone number:', input);
-    // Chech if string has exactly 9 numbers
-    const isNineDigits = /^\d{9}$/.test(input);
-    return isNineDigits;
+    return this.fieldValidationService.isValidPhoneForCountry(
+      input,
+      this.getSelectedCountryCode(),
+    );
   }
 }

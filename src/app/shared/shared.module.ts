@@ -12,6 +12,7 @@ import { NgChartsModule } from 'ng2-charts';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { SpinnerInterceptor } from '../core/interceptor/spinner/spinner.interceptor';
+import { ApiErrorInterceptor } from '../core/interceptor/api-error/api-error.interceptor';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { LightboxModule } from 'ngx-lightbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -65,6 +66,7 @@ import { CommonItemModule } from '../feature-module/common/common-item.module';
         NgxEditorModule], providers: [
         BsDatepickerConfig,
         { provide: HTTP_INTERCEPTORS, useClass: SpinnerInterceptor, multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: ApiErrorInterceptor, multi: true },
         provideHttpClient(withInterceptorsFromDi()),
 
         CommonItemModule,

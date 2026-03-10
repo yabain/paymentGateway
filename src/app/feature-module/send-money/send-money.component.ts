@@ -18,6 +18,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { FlutterwaveService } from 'src/app/services/flutterwave/flutterwave.service';
+import { FieldValidationService } from 'src/app/services/field-validation/field-validation.service';
 declare var FlutterwaveCheckout: any;
 
 @Component({
@@ -102,6 +103,7 @@ export class SendMoneyComponent implements OnInit {
     private exchange: ExchangeService,
     private location: LocationService,
     private fw: FlutterwaveService,
+    private fieldValidationService: FieldValidationService,
   ) {
     this.estimation = 0;
   }
@@ -122,6 +124,8 @@ export class SendMoneyComponent implements OnInit {
       this.methodName = 'Orange Money';
     } else if (method === 'MTN') {
       this.methodName = 'MTN Mobile Money';
+    } else if (method === 'MPESA') {
+      this.methodName = 'M-Pesa';
     } else if (method === 'CARD') {
       this.methodName = 'Card Payment';
     } else if (method === 'PAYPAL') {
@@ -322,7 +326,12 @@ export class SendMoneyComponent implements OnInit {
     const formContactControls: any = {
       paymentMethodNumber: [
         this.currentUser?.phone ? this.currentUser?.phone : 0,
-        [Validators.required, Validators.pattern(/^[0-9]{9}$/)],
+        [
+          Validators.required,
+          this.fieldValidationService.phoneValidator(
+            () => String(this.currentUser?.countryId?.code || '237'),
+          ),
+        ],
       ],
     };
   }
@@ -352,13 +361,17 @@ export class SendMoneyComponent implements OnInit {
 
   canNext(): boolean {
     this.receiverName = this.receiverFirstName + ' ' + this.receiverLastName;
-    // return true;
+    this.receiverCurrency = this.selectedCountry?.currency || 'XAF';
+    const amountValid = this.fieldValidationService.isValidAmount(
+      this.amountToBeReceived,
+      this.receiverCurrency,
+    );
+
     if (
-      this.estimation < 50 ||
+      !amountValid ||
       this.watingEstimation ||
       this.waitingUserData ||
-      this.waitingExchangeRate ||
-      this.estimation > 500000
+      this.waitingExchangeRate
     )
       return false;
     if (
@@ -388,6 +401,12 @@ export class SendMoneyComponent implements OnInit {
         return (this.canNext2Val = true);
     } else {
       if (!this.receiverMobileAccountNumber) this.canNext2Val = false;
+      if (this.selectedMethod === 'MPESA')
+        return (this.canNext2Val = this.fieldValidationService.isValidOperatorPhone(
+          this.receiverMobileAccountNumber,
+          this.selectedCountry?.code,
+          'MPESA',
+        ));
       if (
         this.selectedMethod === 'MTN' &&
         this.isValidMTNPhoneNumber(this.receiverMobileAccountNumber)
@@ -407,8 +426,7 @@ export class SendMoneyComponent implements OnInit {
   }
 
   isEmailValide(email) {
-    const regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return regexEmail.test(email);
+    return this.fieldValidationService.isValidEmail(email);
   }
 
   canSubmit(): boolean {
@@ -424,6 +442,7 @@ export class SendMoneyComponent implements OnInit {
     this.waitingUserData = true;
     this.userService.getCurrentUserData().then((user: any) => {
       if (user) {
+        console.log('user: ', user)
         this.currentUser = user;
         this.waitingUserData = false;
         this.getId();
@@ -485,7 +504,7 @@ export class SendMoneyComponent implements OnInit {
   }
 
   async onSubmit() {
-    if (!this.verifytransactionData(this.transactionData)) return;
+    if (this.verifytransactionData(this.transactionData) === false) return;
     this.proceed = true;
 
     await this.fw.loadFlutterwaveScript();
@@ -594,6 +613,10 @@ export class SendMoneyComponent implements OnInit {
       this.bankAccountNumber =
         this.selectedCountry.code + this.receiverMobileAccountNumber;
       this.bankCode = 'ORANGEMONEY';
+    } else if (this.selectedMethod === 'MPESA') {
+      this.bankAccountNumber =
+        this.selectedCountry.code + this.receiverMobileAccountNumber;
+      this.bankCode = 'MPESA';
     }
     this.transactionData = {
       transactionRef: this.transactionRef,
@@ -635,7 +658,7 @@ export class SendMoneyComponent implements OnInit {
   }
 
   getreceiverAccountType(){
-    if(this.selectedMethod === 'OM' || this.selectedMethod === 'MTN') return 'mobile_money';
+    if(this.selectedMethod === 'OM' || this.selectedMethod === 'MTN' || this.selectedMethod === 'MPESA') return 'mobile_money';
     else if(this.selectedMethod === 'BANK') return 'bank';
     else return 'wallet'
   }
@@ -648,8 +671,10 @@ export class SendMoneyComponent implements OnInit {
     // Phone number verification: Orange Cameroon
     if (
       transactionData.paymentMethod === 'OM' &&
-      !this.isValidOrangePhoneNumber(
+      !this.fieldValidationService.isValidOperatorPhone(
         transactionData.receiverMobileAccountNumber,
+        this.selectedCountry?.code,
+        'OM',
       )
     ) {
       this.translate.get('payment.notOmNumber').subscribe((res: string) => {
@@ -658,7 +683,11 @@ export class SendMoneyComponent implements OnInit {
       return false;
     } else if (
       transactionData.paymentMethod === 'MTN' &&
-      !this.isValidMTNPhoneNumber(transactionData.receiverMobileAccountNumber)
+      !this.fieldValidationService.isValidOperatorPhone(
+        transactionData.receiverMobileAccountNumber,
+        this.selectedCountry?.code,
+        'MTN',
+      )
     ) {
       this.translate.get('payment.notMTNNumber').subscribe((res: string) => {
         this.toastService.presentToast('warning', 'Warning', res);
@@ -666,53 +695,46 @@ export class SendMoneyComponent implements OnInit {
       return false;
     }
 
-    if (transactionData.payment < 100) {
-      // If payment amount < 10 FCFA
-      this.translate.get('payment.minimalAmount').subscribe((res: string) => {
-        this.toastService.presentToast('warning', 'Warning', res);
-      });
-      return false;
-    }
+    // const userCurrency = this.currentUser?.countryId?.currency || 'XAF';
+    // const estimation = this.fieldValidationService.parseAmount(
+    //   transactionData?.estimation,
+    // );
+    // if (!this.fieldValidationService.isValidAmount(this.amountToBeReceived, userCurrency)) {
+    //   this.toastService.presentToast(
+    //     'warning',
+    //     'Warning',
+    //     `Montant invalide (${this.fieldValidationService.getRangeMessage(userCurrency)})`,
+    //   );
+    //   return false;
+    // }
 
     return true;
   }
 
   // Phone number verification
   isValidPhoneNumber(phone: string): boolean {
-    if (this.selectedCountry.code !== '237') return true;
-    // Chech if string has exactly 9 numbers
-    const isNineDigits = /^\d{9}$/.test(phone);
-    return isNineDigits;
+    return this.fieldValidationService.isValidPhoneForCountry(
+      phone,
+      this.selectedCountry?.code,
+    );
   }
 
   // Phone number verification: Orange Cameroon
   isValidOrangePhoneNumber(phone: string): boolean {
-    if (this.selectedCountry.code !== '237') return true;
-    // Check if string start with 655, 656, 657, 658, 659 or 69*
-    const orangeRegex = /^6((55|56|57|58|59|86|87|88|89)|9[0-9])\d{6}$/;
-
-    const res = orangeRegex.test(phone);
-    // if (this.isValidPhoneNumber(phone) && !res) {
-    //   this.translate.get('payment.notOmNumber').subscribe((res: string) => {
-    //     this.toastService.presentToast('warning', 'Warning', res);
-    //   });
-    // }
-    return res;
+    return this.fieldValidationService.isValidOperatorPhone(
+      phone,
+      this.selectedCountry?.code,
+      'OM',
+    );
   }
 
   // Phone number verification: MTN Cameroon
   isValidMTNPhoneNumber(phone: string): boolean {
-    if (this.selectedCountry.code !== '237') return true;
-    // Check if string start with 650, 651, 652, 653, 654, 67* or 680*
-    const mtnRegex = /^6((50|51|52|53|54)|7[0-9]|8[0-5])\d{6}$/;
-
-    const res = mtnRegex.test(phone);
-    // if (this.isValidPhoneNumber(phone) && !res) {
-    //   this.translate.get('payment.notMTNNumber').subscribe((res: string) => {
-    //     this.toastService.presentToast('warning', 'Warning', res);
-    //   });
-    // }
-    return res;
+    return this.fieldValidationService.isValidOperatorPhone(
+      phone,
+      this.selectedCountry?.code,
+      'MTN',
+    );
   }
 
   /**
@@ -868,6 +890,12 @@ export class SendMoneyComponent implements OnInit {
     this.bankCode = undefined;
     this.bankAccountNumber = undefined;
     this.receiverMobileAccountNumber = undefined;
+    if (this.selectedCountry?.currency === 'KES') {
+      this.selectedMethod = 'MPESA';
+    } else {
+      this.selectedMethod = 'BANK';
+    }
+    this.getMethodName(this.selectedMethod);
 
     this.convertCurrency();
   }
@@ -875,6 +903,15 @@ export class SendMoneyComponent implements OnInit {
   navigateTo(route) {
     this.ngOnDestroy();
     this.router.navigate([route]);
+  }
+
+  isPaystackCurrency(currency?: string): boolean {
+    const normalized = (currency || '').toUpperCase();
+    return normalized === 'KES';
+  }
+
+  getPaymentProviderName(currency?: string): string {
+    return this.isPaystackCurrency(currency) ? 'Paystack' : 'Flutterwave';
   }
   
   /**

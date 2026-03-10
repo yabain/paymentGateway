@@ -19,6 +19,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { FlutterwaveService } from 'src/app/services/flutterwave/flutterwave.service';
+import { FieldValidationService } from 'src/app/services/field-validation/field-validation.service';
 
 @Component({
   selector: 'app-withdrawal',
@@ -79,6 +80,7 @@ export class WithdrawalComponent implements OnInit {
     private location: LocationService,
     private balanceService: BalanceService,
     private fw: FlutterwaveService,
+    private fieldValidationService: FieldValidationService,
   ) {
     this.estimation = 0;
   }
@@ -118,6 +120,8 @@ export class WithdrawalComponent implements OnInit {
       this.methodName = 'Orange Money';
     } else if (method === 'MTN') {
       this.methodName = 'MTN Mobile Money';
+    } else if (method === 'MPESA') {
+      this.methodName = 'M-Pesa';
     } else if (method === 'CARD') {
       this.methodName = 'Card Payment';
     } else if (method === 'PAYPAL') {
@@ -232,7 +236,12 @@ export class WithdrawalComponent implements OnInit {
     const formContactControls: any = {
       paymentMethodNumber: [
         this.currentUser?.phone ? this.currentUser?.phone : 0,
-        [Validators.required, Validators.pattern(/^[0-9]{9}$/)],
+        [
+          Validators.required,
+          this.fieldValidationService.phoneValidator(
+            () => String(this.currentUser?.countryId?.code || '237'),
+          ),
+        ],
       ],
     };
   }
@@ -242,9 +251,14 @@ export class WithdrawalComponent implements OnInit {
   }
 
   canNext(): boolean {
-    // return true;
+    const userCurrency = this.currentUser?.countryId?.currency || 'XAF';
+    const amountValid = this.fieldValidationService.isValidAmount(
+      this.estimation,
+      userCurrency,
+    );
+
     if (
-      this.estimation < this.minVal ||
+      !amountValid ||
       this.watingEstimation ||
       this.waitingUserData ||
       this.waitingExchangeRate
@@ -270,6 +284,12 @@ export class WithdrawalComponent implements OnInit {
         return (this.canNext2Val = true);
     } else {
       if (!this.receiverMobileAccountNumber) this.canNext2Val = false;
+      if (this.selectedMethod === 'MPESA')
+        return (this.canNext2Val = this.fieldValidationService.isValidOperatorPhone(
+          this.receiverMobileAccountNumber,
+          this.currentUser?.countryId?.code,
+          'MPESA',
+        ));
       if (
         this.selectedMethod === 'MTN' &&
         this.isValidMTNPhoneNumber(this.receiverMobileAccountNumber)
@@ -289,8 +309,7 @@ export class WithdrawalComponent implements OnInit {
   }
 
   isEmailValide(email) {
-    const regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return regexEmail.test(email);
+    return this.fieldValidationService.isValidEmail(email);
   }
 
   canSubmit(): boolean {
@@ -307,7 +326,15 @@ export class WithdrawalComponent implements OnInit {
     this.userService.getCurrentUserData().then((user: any) => {
       if (user) {
         this.currentUser = user;
-        console.log('user: ', user);
+        // console.log('user: ', user);
+        if (this.currentUser?.countryId?.currency === 'KES') {
+          this.selectedMethod = 'MPESA';
+        } else if (this.currentUser?.countryId?.code === '237') {
+          this.selectedMethod = 'MTN';
+        } else {
+          this.selectedMethod = 'BANK';
+        }
+        this.getMethodName(this.selectedMethod);
         this.waitingUserData = false;
         this.getRates();
         this.getSystemData();
@@ -346,12 +373,12 @@ export class WithdrawalComponent implements OnInit {
   onSubmit() {
     if (!this.verifytransactionData(this.transactionData)) return;
     this.proceed = true;
-    console.log('Payment data:', this.transactionData);
+    // console.log('Payment data:', this.transactionData);
     // return ;
     this.paymentService
       .proceedWithdrawal(this.transactionData)
       .subscribe((res: any) => {
-        console.log('the end of the transaction: ', res);
+        // console.log('the end of the transaction: ', res);
           this.proceed = false;
           this.result = res;
           if (res.status === 'error') {
@@ -367,7 +394,7 @@ export class WithdrawalComponent implements OnInit {
   getSystemData() {
     this.waitingSystemData = true;
     this.systemService.getSystemData().subscribe((resp: any) => {
-      console.log('system data: ', resp);
+      // console.log('system data: ', resp);
       this.invoiceTaxes = resp ? resp.invoiceTaxes : 0;
       this.waitingSystemData = false;
     });
@@ -382,6 +409,10 @@ export class WithdrawalComponent implements OnInit {
       this.bankAccountNumber =
         this.currentUser.countryId.code + this.receiverMobileAccountNumber;
       this.bankCode = 'ORANGEMONEY';
+    } else if (this.selectedMethod === 'MPESA') {
+      this.bankAccountNumber =
+        this.currentUser.countryId.code + this.receiverMobileAccountNumber;
+      this.bankCode = 'MPESA';
     }
     this.transactionData = {
       transactionRef: this.transactionRef,
@@ -430,8 +461,10 @@ export class WithdrawalComponent implements OnInit {
     // Phone number verification: Orange Cameroon
     if (
       transactionData.paymentMethod === 'OM' &&
-      !this.isValidOrangePhoneNumber(
+      !this.fieldValidationService.isValidOperatorPhone(
         transactionData.receiverMobileAccountNumber,
+        this.currentUser?.countryId?.code,
+        'OM',
       )
     ) {
       this.translate.get('payment.notOmNumber').subscribe((res: string) => {
@@ -440,7 +473,11 @@ export class WithdrawalComponent implements OnInit {
       return false;
     } else if (
       transactionData.paymentMethod === 'MTN' &&
-      !this.isValidMTNPhoneNumber(transactionData.receiverMobileAccountNumber)
+      !this.fieldValidationService.isValidOperatorPhone(
+        transactionData.receiverMobileAccountNumber,
+        this.currentUser?.countryId?.code,
+        'MTN',
+      )
     ) {
       this.translate.get('payment.notMTNNumber').subscribe((res: string) => {
         this.toastService.presentToast('warning', 'Warning', res);
@@ -448,11 +485,16 @@ export class WithdrawalComponent implements OnInit {
       return false;
     }
 
-    if (transactionData.payment < 10) {
-      // If payment amount < 10 FCFA
-      this.translate.get('payment.minimalAmount').subscribe((res: string) => {
-        this.toastService.presentToast('warning', 'Warning', res);
-      });
+    const userCurrency = this.currentUser?.countryId?.currency || 'XAF';
+    const estimation = this.fieldValidationService.parseAmount(
+      transactionData?.estimation,
+    );
+    if (!this.fieldValidationService.isValidAmount(estimation, userCurrency)) {
+      this.toastService.presentToast(
+        'warning',
+        'Warning',
+        `Montant invalide (${this.fieldValidationService.getRangeMessage(userCurrency)})`,
+      );
       return false;
     }
 
@@ -462,37 +504,28 @@ export class WithdrawalComponent implements OnInit {
 
   // Phone number verification
   isValidPhoneNumber(phone: string): boolean {
-    // Chech if string has exactly 9 numbers
-    const isNineDigits = /^\d{9}$/.test(phone);
-    return isNineDigits;
+    return this.fieldValidationService.isValidPhoneForCountry(
+      phone,
+      this.currentUser?.countryId?.code,
+    );
   }
 
   // Phone number verification: Orange Cameroon
   isValidOrangePhoneNumber(phone: string): boolean {
-    // Check if string start with 655, 656, 657, 658, 659 or 69*
-    const orangeRegex = /^6((55|56|57|58|59|86|87|88|89)|9[0-9])\d{6}$/;
-    // console.log('Test OM: ', orangeRegex.test(phone));
-    const res = orangeRegex.test(phone);
-    // if (this.isValidPhoneNumber(phone) && !res) {
-    //   this.translate.get('payment.notOmNumber').subscribe((res: string) => {
-    //     this.toastService.presentToast('warning', 'Warning', res);
-    //   });
-    // }
-    return res;
+    return this.fieldValidationService.isValidOperatorPhone(
+      phone,
+      this.currentUser?.countryId?.code,
+      'OM',
+    );
   }
 
   // Phone number verification: MTN Cameroon
   isValidMTNPhoneNumber(phone: string): boolean {
-    // Check if string start with 650, 651, 652, 653, 654, 67* or 680*
-    const mtnRegex = /^6((50|51|52|53|54)|7[0-9]|8[0-5])\d{6}$/;
-    // console.log('Test MTN: ', mtnRegex.test(phone));
-    const res = mtnRegex.test(phone);
-    // if (this.isValidPhoneNumber(phone) && !res) {
-    //   this.translate.get('payment.notMTNNumber').subscribe((res: string) => {
-    //     this.toastService.presentToast('warning', 'Warning', res);
-    //   });
-    // }
-    return res;
+    return this.fieldValidationService.isValidOperatorPhone(
+      phone,
+      this.currentUser?.countryId?.code,
+      'MTN',
+    );
   }
 
   /**
@@ -597,6 +630,14 @@ export class WithdrawalComponent implements OnInit {
 
   fotmatForBr(text: string): string {
     return text.replace(/\n/g, '<br>');
+  }
+
+  isPaystackCurrency(currency?: string): boolean {
+    return (currency || '').toUpperCase() === 'KES';
+  }
+
+  getPaymentProviderName(currency?: string): string {
+    return this.isPaystackCurrency(currency) ? 'Paystack' : 'Flutterwave';
   }
 
   /**

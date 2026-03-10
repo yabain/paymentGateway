@@ -18,6 +18,7 @@ import { FlutterwaveService } from 'src/app/services/flutterwave/flutterwave.ser
 import { SystemService } from 'src/app/services/system/system.service';
 import { environment } from 'src/environments/environment';
 import { StorageService } from 'src/app/services/storage/storage.service';
+import { FieldValidationService } from 'src/app/services/field-validation/field-validation.service';
 
 interface data {
   value: string;
@@ -104,6 +105,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
     private systemService: SystemService,
     private fw: FlutterwaveService,
     private storage: StorageService,
+    private fieldValidationService: FieldValidationService,
   ) { }
 
   ngOnInit(): void {
@@ -333,16 +335,22 @@ export class ServicesComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const price = +String(this.form.value.price ?? '').replace(/\s/g, '') || 0;
-    if (price < 100) {
-      this.toastService.presentToast('error', 'Error', 'Invalid Price (price < 100)', 5000);
+    const currency = this.user?.countryId?.currency || this.currency || 'XAF';
+    const price = this.fieldValidationService.parseAmount(this.form.value.price);
+    if (!this.fieldValidationService.isValidAmount(price, currency)) {
+      this.toastService.presentToast(
+        'error',
+        'Error',
+        `Montant invalide (${this.fieldValidationService.getRangeMessage(currency)})`,
+        5000,
+      );
       return;
     }
 
     const raw = this.form.getRawValue();
 
-    raw.price = +String(raw.price ?? '').replace(/\s/g, '') || 0;
-    raw.currency = this.user.countryId.currency || 'XAF';
+    raw.price = this.fieldValidationService.parseAmount(raw.price) || 0;
+    raw.currency = currency;
 
     const formData = new FormData();
     Object.entries(raw).forEach(([key, value]) => {
@@ -706,7 +714,14 @@ export class ServicesComponent implements OnInit, OnDestroy {
         validators: [Validators.required, Validators.minLength(3)],
       }),
       description: new FormControl('', { validators: [Validators.required] }),
-      price: new FormControl(this.price, { validators: [Validators.required] }),
+      price: new FormControl(this.price, {
+        validators: [
+          Validators.required,
+          this.fieldValidationService.currencyAmountValidator(() =>
+            this.user?.countryId?.currency || this.currency || 'XAF',
+          ),
+        ],
+      }),
       options: this.fb.array([]),
     });
     this.addOptions();

@@ -130,9 +130,9 @@
                 </div>
 
                 <div class="security-notice" *ngIf="currentUser">
-                    <img src="assets/img/resources/flutterwave.png" alt=""
+                    <img [src]="isPaystackCurrency(getTransactionCurrency()) ? 'assets/img/resources/paystack.png' : 'assets/img/resources/flutterwave.png'" alt=""
                         style="max-width: 100px; border-radius: 5px; margin-right: 10px;">
-                    <p>{{ 'payment.secureMessage' | translate }}</p>
+                    <p>{{ 'payment.secureMessageByProvider' | translate:{ provider: getPaymentProviderName(getTransactionCurrency()) } }}</p>
                 </div>
                 <div class="action-buttons">
                     <button class="btn btn-cancel" data-bs-dismiss="modal" (close)="ngOnDestroy()" *ngIf="!proceed">
@@ -159,7 +159,7 @@
                     <!-- <div class="spinner-border" role="status" *ngIf="!modalClosed && !transactionSucceded && !transactionFailed"></div> -->
                     <p style="margin-top: 50px;" *ngIf="!modalClosed && !transactionSucceded && !transactionFailed">
                         {{ 'payment.processing-message1' | translate }}<br>
-                        {{ 'payment.processing-message2' | translate }}
+                        {{ 'payment.processing-message2ByProvider' | translate:{ provider: getPaymentProviderName(getTransactionCurrency()) } }}
                     </p>
 
 
@@ -177,7 +177,7 @@
                             'payment.opening' | translate }}...</span>
                     </p>
 
-                    <img src="assets/img/resources/flutterwave.png" alt="" style="max-width: 100px;;"
+                    <img [src]="isPaystackCurrency(getTransactionCurrency()) ? 'assets/img/resources/paystack.png' : 'assets/img/resources/flutterwave.png'" alt="" style="max-width: 100px;;"
                         *ngIf="!transactionSucceded && !transactionFailed">
                     <p style="margin-top: 50px;" *ngIf="showRetry && !transactionSucceded && !transactionFailed">
                         {{ 'payment.processing-message4' | translate }}
@@ -197,7 +197,7 @@
                     <p style="margin-top: 50px;"
                         *ngIf="!transactionSucceded && showRetry || !transactionSucceded && transactionSucceded">
                         <br>
-                        {{ 'payment.ifPaymentConfirmed' | translate }}
+                        {{ 'payment.ifPaymentConfirmedByProvider' | translate:{ provider: getPaymentProviderName(getTransactionCurrency()) } }}
                     </p>
 
                     <br>
