@@ -1,3 +1,8 @@
+:host {
+    display: block;
+    width: 100%;
+}
+
 .edit-delete-content {
     margin-left: -5px;
 }
@@ -20,6 +25,11 @@
 .invoice-wrapper {
     margin: O !important;
     padding: 0 !important;
+}
+
+.modal-dialog {
+    margin-left: auto !important;
+    margin-right: auto !important;
 }
 
 .organisation-name {

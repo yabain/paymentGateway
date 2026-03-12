@@ -1,10 +1,29 @@
-<div class="modal-dialog modal-dialog-centered modal-xl">
+<div class="modal-dialog" [class.modal-dialog-centered]="inModal" [class.modal-xl]="inModal">
     <style *ngIf="inModal === false">
-        .modal-dialog { max-width: 2300px !important; width: 2300px !important; }
-        .row { flex-wrap: nowrap !important; }
-        .col, [class*="col-"] { flex: 0 0 auto !important; min-width: 0 !important; }
-        @media (max-width: 768px) {
-            .col-lg-4, .col-lg-6, .col-md-6, .col-md-12 { flex: 0 0 auto !important; width: auto !important; }
+        .modal-dialog {
+            max-width: 210mm !important;
+            width: 210mm !important;
+            margin: 0 auto !important;
+        }
+        .main-wrapper.invoice-one,
+        .modal-content,
+        .invoice-wrapper {
+            width: 210mm !important;
+            max-width: 210mm !important;
+        }
+        .main-wrapper.invoice-one,
+        .modal-content,
+        .invoice-wrapper.download_section {
+            min-height: 297mm !important;
+        }
+        .invoice-wrapper.download_section {
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+        }
+        .modal-content {
+            box-shadow: none !important;
+            border-radius: 0 !important;
         }
     </style>
     <div class="main-wrapper invoice-one" style="margin: 0 !important;">
@@ -14,8 +33,8 @@
                     id="closeModal" (click)="ngOnDestroy()">
                 </button>
             </div>
-            <br *ngIf="inModal === false">
-            <br *ngIf="inModal === false">
+            <!-- <br *ngIf="inModal === false"> -->
+            <!-- <br *ngIf="inModal === false"> -->
             <div *ngIf="!showInvoice"
             class="row d-flex align-items-cente justify-content-center">
             <div class="spinner-border text-primary" role="status" style="margin: 20px;">
@@ -24,7 +43,7 @@
           </div>
             <div *ngIf="showInvoice" class="invoice-wrapper download_section">
                 <div class="inv-content">
-                    <span class="line"></span>
+                    <!-- <span class="line"></span> -->
                     <div class="invoice-header">
                         <div class="inv-header-left">
                             <!-- <img [src]="logoUrl" alt="" style="max-width: 150px;" *ngIf="transactionData?.transactionType === 'transfer' 
@@ -203,12 +222,12 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td></td>
+                                                <!-- <td></td>
                                                 <td *ngIf="transactionData?.transactionType === 'subscription'
                                                         || transactionData?.transactionType === 'payment'"></td>
                                                 <td *ngIf="transactionData?.transactionType === 'subscription'
                                                         || transactionData?.transactionType === 'payment'"></td>
-                                                <th></th>
+                                                <th></th> -->
                                             </tr>
                                         </tbody>
                                     </table>

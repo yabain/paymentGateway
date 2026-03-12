@@ -42,21 +42,23 @@ export class PrintService {
         
         const pdf = new jsPDF('p', 'mm', 'a4');  // Create jsPDF object in portrait mode and A4 size
 
-        // Calculate the image dimensions to fit the A4 page
-        const imgWidth = 210; // A4 width in mm
-        const pageHeight = 297; // A4 height in mm
+        // A4 full width
+        const pageWidth = 210;
+        const pageHeight = 297;
+        const margin = 0;
+        const imgWidth = pageWidth;
         const imgHeight = canvas.height * imgWidth / canvas.width;
         let heightLeft = imgHeight;
-        let position = 0;
+        let position = margin;
 
         // Utiliser 'JPEG' au lieu de 'PNG' pour une meilleure compression
-        pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+        pdf.addImage(imgData, 'JPEG', margin, position, imgWidth, imgHeight);
         heightLeft -= pageHeight;
 
         while (heightLeft >= 0) {
-          position = heightLeft - imgHeight;
+          position = margin + (heightLeft - imgHeight);
           pdf.addPage();
-          pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+          pdf.addImage(imgData, 'JPEG', margin, position, imgWidth, imgHeight);
           heightLeft -= pageHeight;
         }
 
