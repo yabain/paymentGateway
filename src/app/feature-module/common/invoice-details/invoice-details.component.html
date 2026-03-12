@@ -198,7 +198,7 @@
                                                         <span *ngIf="itemData?.dateStart">
                                                             {{ getDate(itemData?.dateStart) }} / {{ getDate(itemData?.dateEnd) }}</span>
                                                 </td>
-                                                <td class="text-end">{{transactionData?.estimation}}
+                                                <td class="text-end">{{transactionData?.transactionType === 'transfer' ? transactionData?.receiverAmount : transactionData?.estimation}}
                                                     {{transactionData?.receiverCurrency}}
                                                 </td>
                                             </tr>
@@ -240,7 +240,7 @@
                                 <div class="invoice-total-box"
                                     style="border: 2px dashed #021d66; padding: 10px; border-radius: 5px;">
                                     <div class="invoice-total-inner">
-                                        <p>Somme :<span>{{transactionData?.estimation}}
+                                        <p>Somme :<span>{{transactionData?.transactionType === 'transfer' ? transactionData?.receiverAmount : transactionData?.estimation}}
                                                 {{transactionData?.receiverCurrency}}</span></p>
                                         <!-- <p>Taxes service en ligne ({{transactionData?.taxes}}%)
                                             :<span>{{transactionData?.taxesAmount}}
@@ -248,7 +248,7 @@
                                     </div>
                                     <div class="invoice-total-footer">
                                         <h4>{{ 'payment.totalAmount' | translate }}:
-                                            <span>{{transactionData?.estimation}}
+                                            <span>{{transactionData?.transactionType === 'transfer' ? transactionData?.receiverAmount : transactionData?.estimation}}
                                                 {{transactionData?.receiverCurrency}}</span>
                                         </h4>
                                     </div>
@@ -258,7 +258,7 @@
                     </div>
                     <div class="total-amountdetails">
                         <p>{{ 'payment.totalAmount' | translate }} ({{ 'payment.inWords' | translate }}): <span> {{
-                                numberToWords(transactionData?.estimation) }}
+                                numberToWords(transactionData?.transactionType === 'transfer' ? transactionData?.receiverAmount : transactionData?.estimation) }}
                                 {{transactionData?.receiverCurrency}}</span>
                         </p>
                     </div>

@@ -28,7 +28,7 @@ declare var FlutterwaveCheckout: any;
   encapsulation: ViewEncapsulation.None,
 })
 export class SendMoneyComponent implements OnInit {
-  selectedMethod: string = 'BANK';
+  selectedMethod: string;
   step: number = 1;
   invoiceTaxes: number = 5;
   currentUser: any | undefined;
@@ -375,10 +375,10 @@ export class SendMoneyComponent implements OnInit {
     )
       return false;
     if (
-      !this.receiverContact ||
+      !this.isPhoneValid(this.receiverContact, this.selectedCountry.code) ||
       !this.minLength(this.receiverAddress) ||
       !this.minLength(this.receiverName) ||
-      !this.isEmailValide(this.receiverEmail) ||
+      this.receiverEmail && !this.isEmailValid(this.receiverEmail) ||
       !this.raisonForTransfer
     )
       return false;
@@ -425,10 +425,14 @@ export class SendMoneyComponent implements OnInit {
     return data?.length >= 4;
   }
 
-  isEmailValide(email) {
+  isEmailValid(email) {
     return this.fieldValidationService.isValidEmail(email);
   }
 
+  isPhoneValid(receiverContact, countryCode) {
+    return this.fieldValidationService.isValidPhoneForCountry(receiverContact, countryCode);
+  }
+  
   canSubmit(): boolean {
     if (this.canNext() && this.canNext2()) return true;
     else return false;
@@ -444,7 +448,10 @@ export class SendMoneyComponent implements OnInit {
       if (user) {
         console.log('user: ', user)
         this.currentUser = user;
+        this.selectedCountry = this.currentUser.countryId;
+        this.raisonForTransfer = this.currentUser.language === 'fr' ? 'Soutient financier familliale.' : 'Financial family support.';
         this.waitingUserData = false;
+        // this.selectedMethod = this.choseDefaultMethod(this.selectedCountry.currency);
         this.getId();
         this.getRates();
         this.getSystemData();
@@ -462,6 +469,12 @@ export class SendMoneyComponent implements OnInit {
     });
   }
 
+  choseDefaultMethod(currency: string){
+    if(['KES'].includes(currency)) return 'MPESA';
+    else if(['XAF', 'XOF'].includes(currency)) return 'MTN';
+    else return 'BANK';
+  }
+  
   getId() {
     const idParam = this.route.snapshot.paramMap.get('id');
 
@@ -637,7 +650,7 @@ export class SendMoneyComponent implements OnInit {
       userId: this.currentUser._id,
 
       receiverName: this.receiverName,
-      receiverEmail: this.receiverEmail,
+      receiverEmail: this.receiverEmail || 'no-email@digikuntz.com',
       receiverContact: this.receiverContact,
       receiverAddress: this.receiverAddress,
       receiverCountry: this.selectedCountry.name,
@@ -782,6 +795,7 @@ export class SendMoneyComponent implements OnInit {
   // }
 
   nextStep() {
+    this.selectedMethod = this.choseDefaultMethod(this.selectedCountry.currency || 'XAF')
     if (this.step === 2) {
       this.setTransactionData();
       if (!this.verifytransactionData(this.transactionData)) return;

@@ -57,9 +57,9 @@
                   t?.senderCountry | translate }} )</td>
                 <td (click)="selectTransaction(t)" href="javascript:void(0);" data-bs-toggle="modal"
                   data-bs-target="#invoices_preview">{{ t?.receiverName }} ( {{
-                  t?.senderCountry | translate }} )</td>
+                  t?.receiverCountry | translate }} )</td>
                 <td (click)="selectTransaction(t)" href="javascript:void(0);" data-bs-toggle="modal"
-                  data-bs-target="#invoices_preview">{{ t?.estimation |
+                  data-bs-target="#invoices_preview">{{ (t?.transactionType === 'transfer' ? t?.receiverAmount : t?.estimation) |
                   number:'1.2-2' }} {{ t?.receiverCurrency }}</td>
                 <td>
                   <div>

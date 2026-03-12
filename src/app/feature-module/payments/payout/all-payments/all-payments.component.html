@@ -63,7 +63,7 @@
                                     t?.senderCountry | translate }} )</td>
                                 <td (click)="selectTransaction(t)" href="javascript:void(0);" data-bs-toggle="modal"
                                     data-bs-target="#payment_transaction_details">{{ t?.receiverName }} ( {{
-                                    t?.senderCountry | translate }} )</td>
+                                    t?.receiverCountry | translate }} )</td>
                                 <td (click)="selectTransaction(t)" href="javascript:void(0);" data-bs-toggle="modal"
                                     data-bs-target="#payment_transaction_details">{{ t?.receiverAmount | number:'1.2-2'
                                     }} {{ t?.receiverCurrency }}</td>
