@@ -795,7 +795,8 @@ export class SendMoneyComponent implements OnInit {
   // }
 
   nextStep() {
-    this.selectedMethod = this.choseDefaultMethod(this.selectedCountry.currency || 'XAF')
+    this.selectedMethod = this.choseDefaultMethod(this.selectedCountry.currency || 'XAF');
+    this.receiverMobileAccountNumber = this.receiverContact;
     if (this.step === 2) {
       this.setTransactionData();
       if (!this.verifytransactionData(this.transactionData)) return;
