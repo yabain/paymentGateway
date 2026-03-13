@@ -13,7 +13,7 @@ export class FieldValidationService {
   private readonly rules: Record<string, CurrencyAmountRule> = {
     XAF: { min: 1000, max: 500000 },
     KES: { min: 50, max: 400000 },
-    NGN: { min: 1000, max: 500000 },
+    NGN: { min: 1000, max: 1000000 },
   };
 
   normalizeCurrency(currency?: string): string {
