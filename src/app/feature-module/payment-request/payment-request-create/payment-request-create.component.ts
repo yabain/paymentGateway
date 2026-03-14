@@ -26,7 +26,8 @@ export class PaymentRequestCreateComponent implements OnInit, OnDestroy {
   form: FormGroup;
   currentUser: any;
   loadingUser = true;
-  submitting = false;
+  processing = false;
+  transactionData: any;
 
   currency = 'XAF';
   countryCode = '237';
@@ -44,7 +45,6 @@ export class PaymentRequestCreateComponent implements OnInit, OnDestroy {
   submittedPhone = '';
 
   loadingData: boolean = true;
-  processing: boolean = false;
   systemData: any;
   invoiceTaxes: number = 5;
 
@@ -63,7 +63,7 @@ export class PaymentRequestCreateComponent implements OnInit, OnDestroy {
       provider: new FormControl('', [Validators.required]),
       phone: new FormControl('', [Validators.required]),
       email: new FormControl('', [this.fieldValidationService.emailValidator()]),
-      reason: new FormControl(''),
+      reason: new FormControl('Payment request.'),
     });
   }
 
@@ -201,13 +201,13 @@ export class PaymentRequestCreateComponent implements OnInit, OnDestroy {
       },
     };
 
-    this.submitting = true;
+    this.processing = true;
     this.paymentRequestService
       .createPaymentRequest(payload)
       .pipe(takeUntil(this.destroy$))
       .subscribe((res: any) => {
-        this.submitting = false;
         if (res?.error) {
+          this.processing = false;
           this.toastService.presentToast('error', 'Error', 'Operation failed');
           return;
         }
@@ -253,29 +253,65 @@ export class PaymentRequestCreateComponent implements OnInit, OnDestroy {
     this.router.navigate(['/payment-request']);
   }
 
-
-  checkStatus(transactionId) {
-    console.log('checkStatus: ', transactionId)
+  checkStatus(transactionId: string) {
     this.processing = true;
     this.paymentService
       .getTransactionData(transactionId)
       .subscribe((res: any) => {
-        if (res.status === this.paymentService.status.PAYOUTPENDING) {
-          console.log('pending');
-        } else if (res.status === this.paymentService.status.PAYOUTSUCCESS) {
-          this.toastService.presentToast('success', 'Done !', '');
-            this.processing = false;
-            this.scrollToTop();
-        } else if (res.status === this.paymentService.status.PAYOUTERROR) {
-          this.toastService.presentToast('error', 'Error to Payout !', '');
-            this.processing = false;
-            this.scrollToTop();
+        if (!res) {
+          this.processing = false;
+          return;
+        }
+
+        const status = String(
+          res?.status || res?.data?.status || res?.data?.data?.status || '',
+        );
+        this.transactionData = res;
+
+        if (
+          status === this.paymentService.status.PAYINPENDING ||
+          status === this.paymentService.status.INITIALIZED
+        ) {
+          this.pollStatus = 'pending';
+          this.processing = true;
+          return;
+        }
+
+        if (status === this.paymentService.status.PAYINSUCCESS) {
+          this.pollStatus = 'success';
+          this.toastService.presentToast('success', 'Payment done !', '');
+          this.processing = false;
+          this.stopPolling();
+          // this.goToList();
+          this.scrollToTop();
+          return;
+        }
+
+        if (status === this.paymentService.status.PAYINERROR) {
+          this.pollStatus = 'failed';
+          this.toastService.presentToast('error', 'Error on the request !', '');
+          this.processing = false;
+          this.stopPolling();
+          this.scrollToTop();
+          return;
+        }
+
+        if (status === this.paymentService.status.PAYINCLOSED) {
+          this.pollStatus = 'canceled';
+          this.processing = false;
+          this.stopPolling();
+          this.scrollToTop();
+          return;
         } else {
           this.processing = true;
         }
       });
   }
 
+  navigateTo(route) {
+    this.router.navigate([route]);
+  }
+  
   ngOnDestroy(): void {
     this.stopPolling();
     this.destroy$.next();

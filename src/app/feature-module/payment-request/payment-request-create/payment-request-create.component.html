@@ -38,38 +38,70 @@
         </div>
 
         <div class="col-md-6">
-          <label class="form-label">{{ 'paymentRequest.email' | translate }}</label>
+          <label class="form-label">{{ 'paymentRequest.email' | translate }} (Optional)</label>
           <input class="form-control" type="email" formControlName="email" />
           <small class="text-muted">{{ 'paymentRequest.emailFallback' | translate }}</small>
         </div>
 
         <div class="col-md-12">
-          <label class="form-label">{{ 'paymentRequest.reason' | translate }}</label>
+          <label class="form-label">{{ 'paymentRequest.reason' | translate }} (Optional)</label>
           <textarea class="form-control" rows="3" formControlName="reason"></textarea>
         </div>
 
         <div class="col-12">
-          <button class="btn btn-primary" type="submit" [disabled]="form.invalid || submitting">
-            <span *ngIf="!submitting">{{ 'paymentRequest.submit' | translate }}</span>
-            <span *ngIf="submitting" class="spinner-border spinner-border-sm" role="status"></span>
+          <button class="btn btn-primary" type="submit" [disabled]="form.invalid || processing">
+            <span *ngIf="!processing">{{ 'paymentRequest.submit' | translate }}</span>
+            <span *ngIf="processing" class="spinner-border spinner-border-sm" role="status"></span>
           </button>
         </div>
       </div>
     </form>
 
     <div class="request-result" *ngIf="requestSubmitted">
-      <h5>{{ 'paymentRequest.sentTitle' | translate }}</h5>
-      <p>{{ 'paymentRequest.sentDescription' | translate }}</p>
-      <p><b>{{ 'paymentRequest.amount' | translate }}:</b> {{ submittedAmount | number: '1.0-2' }} {{ submittedCurrency }}</p>
-      <p><b>{{ 'paymentRequest.phone' | translate }}:</b> {{ submittedPhone }}</p>
-      <p>
-        <b>{{ 'mail.status' | translate }}:</b>
-        {{ 'paymentRequest.status.' + pollStatus | translate }}
-        <span *ngIf="polling" class="spinner-border spinner-border-sm ms-2" role="status"></span>
-      </p>
-      <button class="btn btn-outline-primary" type="button" (click)="goToList()">
-        {{ 'paymentRequest.backToList' | translate }}
-      </button>
+
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="wating-msg">
+            <img src="assets/img/resources/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;"
+              *ngIf="processing">
+
+            <img src="../../../assets/img/resources/tfailed.gif" alt="" style="max-width: 100px;;"
+            *ngIf="(transactionData && transactionData.status === 'transaction_payin_error')
+            || (transactionData && transactionData.status === 'transaction_payin_closed')">
+          <br>
+          <span style="color: red !important" *ngIf="transactionData && transactionData.status === 'transaction_payin_error'">
+            {{ "payment.transactionFailed" | translate }}</span>
+
+
+          <img src="assets/img/resources/paymentDone.gif" alt="" style="max-width: 250px;;"
+            *ngIf="transactionData && transactionData.status === 'transaction_payin_success'">
+          <p style="margin-top: 50px;" *ngIf="transactionData && transactionData.status === 'transaction_payin_error'">
+            {{ 'payment.paymentSuccess'
+            | translate }}<br>
+            {{ 'payment.fundsWillReceive' | translate }}</p>
+
+            <!-- <div class="spinner-border" role="status" *ngIf="!modalClosed && !transactionSucceded && !transactionFailed"></div> -->
+            <p style="margin-top: 50px;" *ngIf="processing">
+              <h5>{{ 'paymentRequest.sentTitle' | translate }}</h5>
+              <p>{{ 'paymentRequest.sentDescription' | translate }}
+            </p>
+            <p><b>{{ 'paymentRequest.amount' | translate }}:</b> {{ submittedAmount | number: '1.0-2' }} {{ submittedCurrency }}</p>
+            <p *ngIf="transactionData"><b>{{ 'payment.taxes' | translate }}:</b> {{ transactionData?.taxesAmount | number: '1.0-2' }} {{ submittedCurrency }}</p>
+            <p><b>{{ 'paymentRequest.phone' | translate }}:</b> {{ submittedPhone }}</p>
+            <p>
+              <b>{{ 'mail.status' | translate }}:</b>
+              {{ 'paymentRequest.status.' + pollStatus | translate }}
+              <span *ngIf="polling" class="spinner-border spinner-border-sm ms-2" role="status"></span>
+            </p>
+
+            <br>
+            <button class="btn btn-outline-primary" type="button" (click)="goToList()">
+              {{ 'paymentRequest.backToList' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -79,4 +111,3 @@
     <div class="spinner-border" role="status"></div>
   </div>
 </div>
-
