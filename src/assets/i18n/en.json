@@ -605,7 +605,9 @@
     "myTransactions": "My transactions",
     "services": "Services",
     "servicesProducts": "Products / Services",
-    "settings": "Settings"
+    "settings": "Settings",
+    "paymentRequests": "Payment requests",
+    "paymentRequestsAdmin": "Payment requests"
   },
   "flutterwave": {
     "otherCurrencyBalances": "Othes currency balance available",
@@ -846,6 +848,35 @@
     "renewSubscription": "Renew your subscription",
     "subscriberList": "Subscriber list",
     "subscriptionStartDate": "Subscription start date"
+  },
+  "paymentRequest": {
+    "myTitle": "My payment requests",
+    "allTitle": "All payment requests",
+    "createTitle": "Initiate payment request",
+    "createAction": "New request",
+    "backToList": "Back to list",
+    "detailsTitle": "Payment request details",
+    "date": "Date",
+    "user": "User",
+    "amount": "Amount",
+    "currency": "Currency",
+    "phone": "Phone number",
+    "provider": "Mobile operator",
+    "email": "Email",
+    "reason": "Reason",
+    "submit": "Send request",
+    "sentTitle": "Payment request sent",
+    "sentDescription": "Your payment request has been sent to the selected phone number.",
+    "emailFallback": "If empty, the system will use no-email@digikuntz.com.",
+    "prev": "Prev",
+    "next": "Next",
+    "page": "Page",
+    "status": {
+      "pending": "Pending",
+      "success": "Success",
+      "failed": "Failed",
+      "canceled": "Canceled"
+    }
   },
   "dev": {
     "title": "Dev tools",

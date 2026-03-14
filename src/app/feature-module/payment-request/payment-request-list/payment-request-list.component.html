@@ -1,0 +1,117 @@
+<div class="page-header">
+  <div class="content-page-header d-flex justify-content-between align-items-center page-tilte">
+    <h5>
+      {{ (isAdminRoute ? 'paymentRequest.allTitle' : 'paymentRequest.myTitle') | translate }}
+      <span *ngIf="!loading">({{ totalItems }})</span>
+    </h5>
+    <div class="d-flex gap-2">
+      <button class="btn btn-outline-secondary" type="button" (click)="refresh()" [disabled]="refreshing || loading">
+        <span *ngIf="!refreshing">{{ 'action.refresh' | translate }}</span>
+        <span *ngIf="refreshing" class="spinner-border spinner-border-sm" role="status"></span>
+      </button>
+      <button
+        *ngIf="!isAdminRoute"
+        class="btn btn-primary"
+        type="button"
+        (click)="goToCreate()"
+      >
+        {{ 'paymentRequest.createAction' | translate }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <div class="table-responsive" *ngIf="!loading && items.length > 0">
+      <table class="table table-striped table-hover mb-0">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>{{ 'paymentRequest.date' | translate }}</th>
+            <th *ngIf="isAdminRoute">{{ 'paymentRequest.user' | translate }}</th>
+            <th>{{ 'paymentRequest.amount' | translate }}</th>
+            <th>{{ 'paymentRequest.currency' | translate }}</th>
+            <th>{{ 'paymentRequest.phone' | translate }}</th>
+            <th>{{ 'paymentRequest.provider' | translate }}</th>
+            <th>{{ 'mail.status' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let item of items; let i = index"
+            data-bs-toggle="modal"
+            data-bs-target="#payment_request_details_modal"
+            (click)="openDetails(item)"
+            style="cursor: pointer"
+          >
+            <td>{{ (page - 1) * limit + i + 1 }}</td>
+            <td>{{ item?.createdAt | date: 'dd-MM-yyyy HH:mm:ss' }}</td>
+            <td *ngIf="isAdminRoute">{{ formatUserLabel(item) }}</td>
+            <td>{{ item?.amount | number: '1.0-2' }}</td>
+            <td>{{ item?.currency || item?.transactionId?.senderCurrency || '--' }}</td>
+            <td>{{ item?.transactionId?.senderContact || '--' }}</td>
+            <td>{{ item?.transactionId?.paymentMethod || '--' }}</td>
+            <td>
+              <span class="badge badge-label" [ngClass]="statusBadgeClass(item?.status)">
+                {{ 'paymentRequest.status.' + (item?.status || 'pending') | translate }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mt-3" *ngIf="!loading && items.length > 0">
+      <button class="btn btn-outline-secondary btn-sm" [disabled]="!hasPrevPage" (click)="previousPage()">
+        {{ 'paymentRequest.prev' | translate }}
+      </button>
+      <span>{{ 'paymentRequest.page' | translate }} {{ page }}</span>
+      <button class="btn btn-outline-secondary btn-sm" [disabled]="!hasNextPage" (click)="nextPage()">
+        {{ 'paymentRequest.next' | translate }}
+      </button>
+    </div>
+
+    <div class="d-flex justify-content-center py-4" *ngIf="loading">
+      <div class="spinner-border" role="status"></div>
+    </div>
+
+    <div class="text-center py-3" *ngIf="!loading && items.length === 0">
+      {{ 'nts' | translate }}
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal custom-modal fade"
+  id="payment_request_details_modal"
+  role="dialog"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content" *ngIf="selectedItem">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ 'paymentRequest.detailsTitle' | translate }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row g-2">
+          <div class="col-md-6"><b>ID:</b> {{ selectedItem?._id }}</div>
+          <div class="col-md-6"><b>{{ 'paymentRequest.date' | translate }}:</b> {{ selectedItem?.createdAt | date: 'dd-MM-yyyy HH:mm:ss' }}</div>
+          <div class="col-md-6"><b>{{ 'paymentRequest.amount' | translate }}:</b> {{ selectedItem?.amount | number: '1.0-2' }}</div>
+          <div class="col-md-6"><b>{{ 'paymentRequest.currency' | translate }}:</b> {{ selectedItem?.currency || selectedItem?.transactionId?.senderCurrency || '--' }}</div>
+          <div class="col-md-6"><b>{{ 'paymentRequest.phone' | translate }}:</b> {{ selectedItem?.transactionId?.senderContact || '--' }}</div>
+          <div class="col-md-6"><b>{{ 'paymentRequest.provider' | translate }}:</b> {{ selectedItem?.transactionId?.paymentMethod || '--' }}</div>
+          <div class="col-md-6"><b>{{ 'paymentRequest.email' | translate }}:</b> {{ selectedItem?.transactionId?.senderEmail || '--' }}</div>
+          <div class="col-md-6"><b>{{ 'mail.status' | translate }}:</b> {{ 'paymentRequest.status.' + (selectedItem?.status || 'pending') | translate }}</div>
+          <div class="col-md-12" *ngIf="selectedItem?.transactionId?.raisonForTransfer">
+            <b>{{ 'paymentRequest.reason' | translate }}:</b> {{ selectedItem?.transactionId?.raisonForTransfer }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

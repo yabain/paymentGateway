@@ -57,6 +57,13 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'payment-request',
+        loadChildren: () =>
+          import('./payment-request/payment-request.module').then(
+            (m) => m.PaymentRequestModule,
+          ),
+      },
+      {
         path: 'fundraisings',
         loadChildren: () =>
           import('./fundraising/fundraising.module').then(
@@ -85,6 +92,14 @@ const routes: Routes = [
         loadChildren: () =>
           import('./fundraising/fundraising.module').then(
             (m) => m.FundraisingModule,
+          ),
+      },
+      {
+        path: 'admin-payment-request',
+        canActivate: [AdminGuard],
+        loadChildren: () =>
+          import('./payment-request/payment-request.module').then(
+            (m) => m.PaymentRequestModule,
           ),
       },
       {

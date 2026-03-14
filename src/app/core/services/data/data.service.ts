@@ -864,6 +864,14 @@ export class DataService {
           base: 'fundraising',
         },
         {
+          menuValue: 'paymentRequests',
+          route: '/payment-request',
+          hasSubRoute: false,
+          showSubRoute: true,
+          icon: 'credit-card',
+          base: 'payment-request',
+        },
+        {
           menuValue: 'settings',
           route: '/organisation-settings',
           hasSubRoute: false, // Show arrow after menu item title
@@ -906,6 +914,14 @@ export class DataService {
           showSubRoute: true,
           icon: 'command',
           base: 'admin-fundraising',
+        },
+        {
+          menuValue: 'paymentRequestsAdmin',
+          route: '/admin-payment-request',
+          hasSubRoute: false,
+          showSubRoute: true,
+          icon: 'credit-card',
+          base: 'admin-payment-request',
         },
         {
           menuValue: 'flutterwaveWallets',
