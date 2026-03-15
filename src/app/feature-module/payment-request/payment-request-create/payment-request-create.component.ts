@@ -39,6 +39,7 @@ export class PaymentRequestCreateComponent implements OnInit, OnDestroy {
   pollTimer: any;
   pollAttempts = 0;
   createdTxRef = '';
+  redirect_url = '';
 
   submittedAmount = 0;
   submittedCurrency = 'XAF';
@@ -218,6 +219,12 @@ export class PaymentRequestCreateComponent implements OnInit, OnDestroy {
           res?.data?.txRef ||
           res?.data?.tx_ref ||
           '';
+        this.redirect_url =
+          res?.redirect_url ||
+          res?.data?.redirect_url ||
+          '';
+
+        const transactionId = res?.transactionId || res?.data?.transactionId || '';
 
         this.requestSubmitted = true;
         this.polling = true;
@@ -226,11 +233,18 @@ export class PaymentRequestCreateComponent implements OnInit, OnDestroy {
         this.submittedCurrency = this.currency;
         this.submittedPhone = payload.mobile_money.phone;
         this.form.disable();
-        this.startPolling(res?.transactionId);
+        this.startPolling(transactionId);
+        this.handleRequest(transactionId);
       });
   }
 
   startPolling(transactionId: string) {
+    if (!transactionId) {
+      this.polling = false;
+      this.processing = false;
+      return;
+    }
+
     if (this.pollTimer) clearInterval(this.pollTimer);
     this.pollTimer = setInterval(async () => {
       try {
@@ -251,6 +265,31 @@ export class PaymentRequestCreateComponent implements OnInit, OnDestroy {
 
   goToList(): void {
     this.router.navigate(['/payment-request']);
+  }
+
+  openModal() {
+    return window.open(this.redirect_url, '_blank', 'width=800,height=800');
+  }
+
+  handleRequest(transactionId?: string): void {
+    if (!this.redirect_url) {
+      return;
+    }
+
+    const payWin = this.openModal();
+    if (!payWin) {
+      location.href = this.redirect_url;
+      return;
+    }
+
+    const timer = setInterval(() => {
+      if (payWin.closed) {
+        clearInterval(timer);
+        if (transactionId) {
+          this.checkStatus(transactionId);
+        }
+      }
+    }, 600);
   }
 
   checkStatus(transactionId: string) {

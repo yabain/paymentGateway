@@ -781,7 +781,14 @@ export class SendMoneyComponent implements OnInit {
     this.getMethodName(method);
     this.bankCode = undefined;
     this.bankAccountNumber = undefined;
-    this.receiverMobileAccountNumber = undefined;
+
+    // Keep a usable default for mobile methods from step1 beneficiary number.
+    if (this.isMobileMethod(method)) {
+      const fallbackPhone = this.receiverMobileAccountNumber || this.receiverContact;
+      this.receiverMobileAccountNumber =
+        this.fieldValidationService.normalizePhoneDigits(fallbackPhone);
+    }
+
     this.setTransactionData();
     this.canNext2();
   }
@@ -795,22 +802,22 @@ export class SendMoneyComponent implements OnInit {
   // }
 
   nextStep() {
-    this.selectedMethod = this.choseDefaultMethod(this.selectedCountry.currency || 'XAF');
-    this.receiverMobileAccountNumber = this.receiverContact;
+    if (this.step === 1) {
+      this.prefillStep2DataFromReceiver();
+    }
+
     if (this.step === 2) {
       this.setTransactionData();
       if (!this.verifytransactionData(this.transactionData)) return;
     }
 
-    // Vérifier la validité du formulaire avant de passer à l'étape suivante
-    if (this.step === 1 && !this.firstFormGroup.valid) {
-      this.markFormGroupTouched(this.firstFormGroup);
+    // Guard transitions with actual business validators used by buttons.
+    if (this.step === 1 && !this.canNext()) {
       if (this.selectedCountry) this.getBanksList(this.selectedCountry.iso2);
       return;
     }
 
-    if (this.step === 2 && !this.secondFormGroup.valid) {
-      this.markFormGroupTouched(this.secondFormGroup);
+    if (this.step === 2 && !this.canNext2()) {
       return;
     }
 
@@ -913,6 +920,41 @@ export class SendMoneyComponent implements OnInit {
     this.getMethodName(this.selectedMethod);
 
     this.convertCurrency();
+  }
+
+  private isMobileMethod(method?: string): boolean {
+    return ['MTN', 'OM', 'MPESA'].includes(String(method || '').toUpperCase());
+  }
+
+  private detectMethodFromReceiverPhone(phoneDigits: string): string {
+    const countryCode = this.selectedCountry?.code;
+    const currency = this.selectedCountry?.currency || 'XAF';
+
+    if (this.fieldValidationService.isValidOperatorPhone(phoneDigits, countryCode, 'OM')) {
+      return 'OM';
+    }
+    if (this.fieldValidationService.isValidOperatorPhone(phoneDigits, countryCode, 'MTN')) {
+      return 'MTN';
+    }
+    if (this.fieldValidationService.isValidOperatorPhone(phoneDigits, countryCode, 'MPESA')) {
+      return 'MPESA';
+    }
+
+    return this.choseDefaultMethod(currency);
+  }
+
+  private prefillStep2DataFromReceiver(): void {
+    const receiverDigits = this.fieldValidationService.normalizePhoneDigits(
+      this.receiverContact,
+    );
+    if (!receiverDigits) {
+      return;
+    }
+
+    this.receiverMobileAccountNumber = receiverDigits;
+    this.selectedMethod = this.detectMethodFromReceiverPhone(receiverDigits);
+    this.getMethodName(this.selectedMethod);
+    this.canNext2();
   }
 
   navigateTo(route) {
