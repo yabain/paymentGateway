@@ -59,7 +59,8 @@
                   data-bs-target="#invoices_preview">{{ t?.receiverName }} ( {{
                   t?.receiverCountry | translate }} )</td>
                 <td (click)="selectTransaction(t)" href="javascript:void(0);" data-bs-toggle="modal"
-                  data-bs-target="#invoices_preview">{{ (t?.transactionType === 'transfer' ? t?.receiverAmount : t?.estimation) |
+                  data-bs-target="#invoices_preview">{{ (t?.transactionType === 'transfer' ? t?.receiverAmount :
+                  t?.estimation) |
                   number:'1.2-2' }} {{ t?.receiverCurrency }}</td>
                 <td>
                   <div>
@@ -92,9 +93,7 @@
                         {{ "payment.success" | translate }}
                       </span>
                     </span>
-                    <span class="badge rounded-pill badge-outline-secondary"
-                     style="margin-left: 10px;"
-                     *ngIf="t?.transactionType !== 'transfer'
+                    <span class="badge rounded-pill badge-outline-secondary" style="margin-left: 10px;" *ngIf="t?.transactionType !== 'transfer'
                      && t?.transactionType !== 'withdrawal'
                      && t?.status === 'transaction_payin_success'
                      || t?.transactionType === 'transfer'
@@ -149,7 +148,6 @@
   <app-invoice-details [transactionData]="selectedTransaction" [inModal]="true"></app-invoice-details>
 </div>
 
-<div *ngIf="printing" id="selectedInvoice"
-  style="width: 210mm !important; max-width: 210mm !important; margin: 0 auto !important; background: #fff;">
+<div *ngIf="printing" id="selectedInvoice" style="min-width: 2500px !important;">
   <app-invoice-details [transactionData]="selectedTransaction" [inModal]="false"></app-invoice-details>
 </div>
