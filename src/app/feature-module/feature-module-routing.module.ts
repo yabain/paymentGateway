@@ -111,6 +111,14 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'paystack-wallets',
+        canActivate: [AdminGuard],
+        loadChildren: () =>
+          import('./paystack/paystack.module').then(
+            (m) => m.PaystackModule,
+          ),
+      },
+      {
         path: 'admin-payments',
         canActivate: [AdminGuard],
         loadChildren: () =>

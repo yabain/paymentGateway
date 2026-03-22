@@ -2,88 +2,86 @@
   <div class="content-page-header page-tilte d-flex justify-content-between">
     <h5>
       <img src="assets/img/resources/card.png" alt="" style="width: 30px; margin-right: 10px;">
-      {{ 'payment.paymentMethods' | translate }}</h5>
+      {{ 'payment.paymentMethods' | translate }}
+    </h5>
+    <div>
+      <button
+        type="button"
+        class="btn btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#add_payment_method"
+        (click)="openCreateModal()"
+      >
+        <i class="fa fa-plus-circle me-2" aria-hidden="true"></i>{{ 'payment.paymentSettings.addPaymentMethod' | translate }}
+      </button>
+    </div>
   </div>
 </div>
 
 <div class="card">
-  <div class="card-body w-100">
+  <div class="card-body w-100" *ngIf="paymentMethodsList">
     <div class="row">
-      <div class="form-group-item">
+      <div class="form-group-item" *ngFor="let method of paymentMethodsList">
         <div class="row">
           <div class="col-12">
             <div class="payment-toggle">
               <div class="method-icon">
-                <img src="assets/img/resources/om.png" alt="" class="method-img" style="width: 100px;">
+                <img [src]="method?.image" alt="" class="method-img" style="width: 100px;">
               </div>
-              <h5 class="form-title">Orange Money</h5>
-              <div class="status-toggle">
-                <input id="rating_1" class="check" type="checkbox" checked="" />
-                <label for="rating_1" class="checktoggle checkbox-bg">checkbox</label>
+              <div>
+                <h5 class="form-title">{{method?.name}}</h5> <br>
+                {{ 'payment.paymentSettings.provider' | translate }}: {{method?.provider}} |
+                {{ 'payment.paymentSettings.paymentFees' | translate }}: {{method?.taxesPayment}}% |
+                {{ 'payment.paymentSettings.transferFees' | translate }}: {{method?.taxesTransfer}}% <br>
+                {{ 'payment.paymentSettings.minAmount' | translate }}: {{method?.minAmount}} |
+                {{ 'payment.paymentSettings.maxAmount' | translate }}: {{method?.maxAmount}}
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="form-group-item">
-        <div class="row">
-          <div class="col-12">
-            <div class="payment-toggle">
-              <div class="method-icon">
-                <img src="assets/img/resources/mtn_money.webp" alt="" class="method-img" style="width: 100px;">
-              </div>
-              <h5 class="form-title">MTN Mobile Money</h5>
-              <div class="status-toggle">
-                <input id="rating_2" class="check" type="checkbox" checked="" />
-                <label for="rating_2" class="checktoggle checkbox-bg">checkbox</label>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="form-group-item border-0 p-0">
-        <div class="row">
-          <div class="col-12">
-            <div class="payment-toggle">
-              <div class="method-icon" style="color: #003087;">
-                <img src="assets/img/resources/card.png" alt="" class="method-img" style="width: 100px;">
-              </div>
-              <h5 class="form-title">Card</h5>
-              <div class="status-toggle">
-                <input id="rating_3" class="check" type="checkbox" [checked]="false" />
-                <label for="rating_3" class="checktoggle checkbox-bg">checkbox</label>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="form-group-item border-0 p-0">
-        <div class="row">
-          <div class="col-12">
-            <div class="payment-toggle">
-              <div class="method-icon" style="color: #003087;">
-                <img src="assets/img/resources/paypal.png" alt="" class="method-img" style="width: 100px;">
-              </div>
-              <h5 class="form-title">Paypal</h5>
-              <div class="status-toggle">
-                <input id="rating_4" class="check" type="checkbox" [checked]="false" />
-                <label for="rating_4" class="checktoggle checkbox-bg">checkbox</label>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="form-group-item border-0 p-0">
-        <div class="row">
-          <div class="col-12">
-            <div class="payment-toggle">
-              <div class="method-icon" style="color: #003087;">
-                <img src="assets/img/resources/bank.png" alt="" class="method-img" style="width: 100px;">
-              </div>
-              <h5 class="form-title">Bank transfer</h5>
-              <div class="status-toggle">
-                <input id="rating_5" class="check" type="checkbox" [checked]="false" />
-                <label for="rating_5" class="checktoggle checkbox-bg">checkbox</label>
+              <div>
+                <table>
+                  <tr>
+                    <td>{{ 'payment.paymentSettings.payIn' | translate }}</td>
+                    <td>
+                      <div class="status-toggle">
+                        <input
+                          [id]="'payin_' + method?._id"
+                          class="check"
+                          type="checkbox"
+                          [checked]="method?.statusPayin"
+                          [disabled]="isStatusUpdating(method?._id, 'statusPayin')"
+                          (change)="toggleMethodStatus(method, 'statusPayin', $event)"
+                        />
+                        <label [for]="'payin_' + method?._id" class="checktoggle checkbox-bg">checkbox</label>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>{{ 'payment.paymentSettings.payOut' | translate }}</td>
+                    <td>
+                      <div class="status-toggle">
+                        <input
+                          [id]="'payout_' + method?._id"
+                          class="check"
+                          type="checkbox"
+                          [checked]="method?.statusPayout"
+                          [disabled]="isStatusUpdating(method?._id, 'statusPayout')"
+                          (change)="toggleMethodStatus(method, 'statusPayout', $event)"
+                        />
+                        <label [for]="'payout_' + method?._id" class="checktoggle checkbox-bg">checkbox</label>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+                <div class="mt-2">
+                  <button
+                    type="button"
+                    class="btn btn-primary btn-sm"
+                    data-bs-toggle="modal"
+                    data-bs-target="#edit_payment_method"
+                    (click)="openEditModal(method)"
+                  >
+                    {{ 'action.edit' | translate }}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -91,5 +89,225 @@
       </div>
     </div>
   </div>
+  <div class="card-body w-100" *ngIf="!paymentMethodsList" class="row d-flex align-items-cente justify-content-center">
+    <!-- <img src="assets/img/resources/loader.gif" alt="" style="max-width: 50px; margin-right: 10px;"> -->
+    <div class="spinner-border text-primary" role="status" style="margin: 20px;">
+      <span class="visually-hidden">{{ "loading" | translate }}...</span>
+    </div>
+  </div>
 
+</div>
+
+<div class="modal custom-modal fade" id="edit_payment_method" role="dialog">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header border-0 pb-0">
+        <div class="form-header modal-header-title text-start mb-0">
+          <h4 class="mb-0">{{ 'payment.paymentSettings.editPaymentMethod' | translate }}</h4>
+        </div>
+        <button
+          type="button"
+          class="btn-close"
+          id="closeEditPaymentMethodModal"
+          data-bs-dismiss="modal"
+          [attr.aria-label]="'action.close' | translate"
+        ></button>
+      </div>
+      <form [formGroup]="editPaymentMethodForm" (ngSubmit)="savePaymentMethod()">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="input-block mb-3">
+                <label>{{ 'payment.paymentSettings.name' | translate }}</label>
+                <input type="text" class="form-control" formControlName="name" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="input-block mb-3">
+                <label>{{ 'payment.paymentSettings.image' | translate }}</label>
+                <input type="text" class="form-control" formControlName="image" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="input-block mb-3">
+                <label htmlFor="country">{{ 'auth.country' | translate}} *</label>
+                <div class="col-lg-12">
+                  <div class="input-group">
+                    <img [src]="flagCountry" alt="" class="flag" slot="start" style="width: 30px; margin: 7px 5px;">
+                    <select id="country" formControlName="countryId" *ngIf="!gettingLocations"
+                      (change)="onSelect($event)" class="form-select">
+                      <option value="" selected></option>
+                      <option *ngFor="let country of countries" [value]="country._id">
+                        {{ country.name | translate}}
+                      </option>
+                    </select>
+                    <span id="basic-addon1" class="form-select" *ngIf="gettingLocations">
+                      <div class="spinner-border" role="status"></div>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="input-block mb-3">
+                <label>{{ 'payment.paymentSettings.provider' | translate }}</label>
+                <input type="text" class="form-control" formControlName="provider" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="input-block mb-3">
+                <label>{{ 'payment.paymentSettings.paymentFees' | translate }}</label>
+                <input type="number" class="form-control" formControlName="taxesPayment" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="input-block mb-3">
+                <label>{{ 'payment.paymentSettings.transferFees' | translate }}</label>
+                <input type="number" class="form-control" formControlName="taxesTransfer" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="input-block mb-3">
+                <label>{{ 'payment.paymentSettings.minAmount' | translate }}</label>
+                <input type="number" class="form-control" formControlName="minAmount" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="input-block mb-3">
+                <label>{{ 'payment.paymentSettings.maxAmount' | translate }}</label>
+                <input type="number" class="form-control" formControlName="maxAmount" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="input-block mb-3">
+                <label class="me-2">{{ 'payment.paymentSettings.payIn' | translate }}</label>
+                <input type="checkbox" formControlName="statusPayin" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="input-block mb-3">
+                <label class="me-2">{{ 'payment.paymentSettings.payOut' | translate }}</label>
+                <input type="checkbox" formControlName="statusPayout" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" data-bs-dismiss="modal" class="btn btn-back cancel-btn me-2">
+            {{ 'action.cancel' | translate }}
+          </button>
+          <button type="submit" class="btn btn-primary paid-continue-btn" [disabled]="editPaymentMethodForm.invalid || saveLoading">
+            {{ 'action.save' | translate }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal custom-modal fade" id="add_payment_method" role="dialog">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header border-0 pb-0">
+        <div class="form-header modal-header-title text-start mb-0">
+          <h4 class="mb-0">{{ 'payment.paymentSettings.createPaymentMethod' | translate }}</h4>
+        </div>
+        <button
+          type="button"
+          class="btn-close"
+          id="closeCreatePaymentMethodModal"
+          data-bs-dismiss="modal"
+          [attr.aria-label]="'action.close' | translate"
+        ></button>
+      </div>
+      <form [formGroup]="createPaymentMethodForm" (ngSubmit)="createPaymentMethod()">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="input-block mb-3">
+                <label>{{ 'payment.paymentSettings.name' | translate }}</label>
+                <input type="text" class="form-control" formControlName="name" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="input-block mb-3">
+                <label>{{ 'payment.paymentSettings.image' | translate }}</label>
+                <input type="text" class="form-control" formControlName="image" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="input-block mb-3">
+                <label htmlFor="country_create">{{ 'auth.country' | translate}} *</label>
+                <div class="col-lg-12">
+                  <div class="input-group">
+                    <img [src]="createFlagCountry" alt="" class="flag" slot="start" style="width: 30px; margin: 7px 5px;">
+                    <select id="country_create" formControlName="countryId" *ngIf="!gettingLocations"
+                      (change)="onSelectCreate($event)" class="form-select">
+                      <option value="" selected></option>
+                      <option *ngFor="let country of countries" [value]="country._id">
+                        {{ country.name | translate}}
+                      </option>
+                    </select>
+                    <span id="basic-addon1" class="form-select" *ngIf="gettingLocations">
+                      <div class="spinner-border" role="status"></div>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="input-block mb-3">
+                <label>{{ 'payment.paymentSettings.provider' | translate }}</label>
+                <input type="text" class="form-control" formControlName="provider" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="input-block mb-3">
+                <label>{{ 'payment.paymentSettings.paymentFees' | translate }}</label>
+                <input type="number" class="form-control" formControlName="taxesPayment" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="input-block mb-3">
+                <label>{{ 'payment.paymentSettings.transferFees' | translate }}</label>
+                <input type="number" class="form-control" formControlName="taxesTransfer" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="input-block mb-3">
+                <label>{{ 'payment.paymentSettings.minAmount' | translate }}</label>
+                <input type="number" class="form-control" formControlName="minAmount" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="input-block mb-3">
+                <label>{{ 'payment.paymentSettings.maxAmount' | translate }}</label>
+                <input type="number" class="form-control" formControlName="maxAmount" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="input-block mb-3">
+                <label class="me-2">{{ 'payment.paymentSettings.payIn' | translate }}</label>
+                <input type="checkbox" formControlName="statusPayin" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="input-block mb-3">
+                <label class="me-2">{{ 'payment.paymentSettings.payOut' | translate }}</label>
+                <input type="checkbox" formControlName="statusPayout" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" data-bs-dismiss="modal" class="btn btn-back cancel-btn me-2">
+            {{ 'action.cancel' | translate }}
+          </button>
+          <button type="submit" class="btn btn-primary paid-continue-btn" [disabled]="createPaymentMethodForm.invalid || createLoading">
+            {{ 'action.add' | translate }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>

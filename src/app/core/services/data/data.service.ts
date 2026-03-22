@@ -932,6 +932,15 @@ export class DataService {
           base: 'flutterwave-wallets',
           subMenus: [],
         },
+        {
+          menuValue: 'paystackWallets',
+          route: '/paystack-wallets',
+          hasSubRoute: false,
+          showSubRoute: false,
+          icon: 'activity',
+          base: 'paystack-wallets',
+          subMenus: [],
+        },
         // {
         //   menuValue: 'messageCenter',
         //   route: '/admin-massaging',
