@@ -18,6 +18,7 @@ export class PaymentMethodsService {
   constructor(
     private apiService: ApiService,
   ) {}
+
   getOnePaymentMethods(
     id: string,
   ): Observable<any> {
@@ -34,6 +35,13 @@ export class PaymentMethodsService {
     );
   }
 
+  getPaymentMethodsByCountryId(countryId: string): Observable<any> {
+    return this.apiService.getWithoutId(`payment-methods/country/${countryId}`).pipe(
+      map((res: any) => res),
+      catchError(this.handleError<any>({ data: [] })),
+    );
+  }
+  
   createPaymentMethods(payload: {
   name: string,
   statusPayin: boolean,

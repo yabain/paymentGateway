@@ -111,10 +111,10 @@
                           <label htmlFor="estimation">{{ 'payment.estimation' | translate }} HT</label>
                           <div class="input-group">
 
-                            <span class="spinner-border spinner-border-sm me-2" role="status" *ngIf="watingEstimation"
+                            <span class="spinner-border spinner-border-sm me-2" role="status" *ngIf="waitingEstimation"
                               style="margin-left: 25vh"></span>
 
-                            <input class="form-control" placeholder="Estimation" *ngIf="!watingEstimation"
+                            <input class="form-control" placeholder="Estimation" *ngIf="!waitingEstimation"
                               style="text-align: right" type="number" id="estimation" placeholder=""
                               [(ngModel)]="estimation" name="estimation" [disabled]="true" />
                             <span class="input-group-text">{{ currentUser?.countryId.currency }}</span>
@@ -159,7 +159,29 @@
 
                         <div class="payment-methods">
 
-                          <div class="method-card" (click)="selectMethod('MTN')" *ngIf="selectedCountry?.currency === 'XAF'"
+                          <div *ngFor="let method of paymentMethodsList" class="method-card" (click)="method?.statusPayout && selectMethod(method)"
+                            [ngClass]="{'active': selectedMethod?.code === method?.code, 'disabled-method': !method?.statusPayout}">
+                            <div class="method-icon">
+                              <img [src]="method?.image" alt="" class="method-img">
+                            </div>
+                            <div class="method-info">
+                              <h3>{{method?.name}}</h3>
+                              <p>{{method?.description }}</p>
+                              <!-- <p>{{ "payment.mtnDescription" | translate }}</p> -->
+                            </div>
+                          </div>
+
+                          <div *ngFor="let method of paymentMethodsDisabledList" class="method-card" style="opacity: 0.6;">
+                            <div class="method-icon" style="color: #003087;">
+                              <img [src]="method?.image" alt="" class="method-img">
+                            </div>
+                            <div class="method-info">
+                              <h3>{{method?.name}}</h3>
+                              <p>{{method?.description }}</p>
+                              <span class="coming-soon">{{ "payment.comingSoon" | translate }}</span>
+                            </div>
+                          </div>
+                          <!-- <div class="method-card" (click)="selectMethod('MTN')" *ngIf="selectedCountry?.currency === 'XAF'"
                             [ngClass]="selectedMethod === 'MTN' ? 'method-card active' : 'method-card'" disabled>
                             <div class="method-icon">
                               <img src="assets/img/resources/mtn_money.webp" alt="" class="method-img">
@@ -212,10 +234,8 @@
                               <p>{{ "payment.paypalDescription" | translate }}</p>
                               <span class="coming-soon">{{ "payment.comingSoon" | translate }}</span>
                             </div>
-                          </div>
-
-
-                          <div class="method-card" style="opacity: 0.6;">
+                          </div> -->
+                          <div class="method-card" style="opacity: 0.6;" *ngIf="!gettingPaymentMethods">
                             <div class="method-icon" style="color: #003087;">
                               <img src="assets/img/resources/icon.jpg" alt="" class="method-img">
                             </div>
@@ -225,6 +245,16 @@
                               <span class="coming-soon">{{ "payment.comingSoon" | translate }}</span>
                             </div>
                           </div>
+
+
+                          <div class="method-card" style="opacity: 0.6;" *ngIf="gettingPaymentMethods">
+                            <div class="method-icon" style="color: #003087;">
+                              <div class="spinner-border text-primary" role="status"></div>
+                            </div>
+                            <div class="method-info">
+                              <h3>{{ "loading" | translate }}</h3>
+                            </div>
+                          </div>
                         </div>
                       </div>
 
@@ -232,14 +262,14 @@
                     <div class="col-md-6">
                       <h5 class="card-title">
                         <i class="fas fa-info-circle" style="color: #003087;"></i>
-                        {{ "payment.accountDetails" | translate }}: {{ methodName }}
+                        {{ "payment.accountDetails" | translate }}: {{ selectedMethod?.name }}
                       </h5>
                       <br>
                       <div class="row">
                         <div class="account-details"
                           style="background: #edf4f7 !important; padding: 25px; border-radius: 8px;">
 
-                          <div class="col-md-12" *ngIf="selectedMethod === 'OM' || selectedMethod === 'MTN' || selectedMethod === 'MPESA'">
+                          <div class="col-md-12" *ngIf="getSelectedOperator() === 'OM' || getSelectedOperator() === 'MTN' || getSelectedOperator() === 'MPESA'">
                             <div class="col-md-12">
                               <div class="input-block mb-3">
                                 <label htmlFor="receiverMobileAccountNumber">
@@ -253,7 +283,7 @@
                               </div>
                             </div>
                           </div>
-                          <div class="col-md-12" *ngIf="selectedMethod === 'BANK'">
+                          <div class="col-md-12" *ngIf="getSelectedOperator() === 'BANK'">
                             <div class="col-md-12">
                               <div class="input-block mb-3">
                                 <label htmlFor="bankCode">BANK <span style="color:#bf1f03">*</span></label>
@@ -268,7 +298,7 @@
                               </div>
                             </div>
                           </div>
-                          <div class="col-md-12" *ngIf="selectedMethod === 'BANK'">
+                          <div class="col-md-12" *ngIf="getSelectedOperator() === 'BANK'">
                             <div class="col-md-12">
                               <div class="input-block mb-3">
                                 <label htmlFor="bankAccountNumber">{{ 'payment.accountNumber' | translate }} <span style="color:#bf1f03">*</span></label>
@@ -278,7 +308,7 @@
                               </div>
                             </div>
                           </div>
-                          <div class="fee-breakdown" *ngIf="selectedMethod === 'BANK'">
+                          <div class="fee-breakdown" *ngIf="getSelectedOperator() === 'BANK'">
                             <h4><i class="feather icon-triangle"></i> Warning !</h4>
                             {{ "payment.sureBankAccountNumberMessage" | translate }}
                           </div>
@@ -288,7 +318,7 @@
                     </div>
                   </div>
                   <div class="text-end">
-                    <button mat-button matStepperPrevious>
+                    <button mat-button matStepperPrevious (click)="previousStep()">
                       <i class="feather icon-chevron-left" data-bs-toggle="tooltip"
                         title="feather icon-skip-back"></i>{{ "action.back" | translate }}
                     </button>
@@ -374,32 +404,23 @@
 
                       <div class="detail-card" style="border-left: 4px solid #fff !important; margin-bottom: 10px;">
                         <h3 style="margin-bottom: 10px;">{{ "payment.accountDetailsReception" | translate }}</h3>
-                        <h3 *ngIf="selectedMethod === 'BANK'"><i class="fas fa-university"></i> {{ methodName }}
-                        </h3>
-                        <h3 *ngIf="selectedMethod === 'OM'">
-                          <img src="assets/img/resources/om.png" alt="" style="width: 50px; margin-right: 10px;"> {{
-                          methodName }}
-                        </h3>
-                        <h3 *ngIf="selectedMethod === 'MTN'">
-                          <img src="assets/img/resources/mtn_money.webp" alt=""
-                            style="width: 50px; margin-right: 10px;"> {{ methodName }}
-                        </h3>
-                        <h3 *ngIf="selectedMethod === 'MPESA'">
-                          <img src="assets/img/resources/mpesa.png" alt=""
-                            style="width: 50px; margin-right: 10px;"> {{ methodName }}
+                        <h3>
+                          <img *ngIf="selectedMethod?.image" [src]="selectedMethod?.image" alt=""
+                            style="width: 50px; margin-right: 10px;">
+                          {{ selectedMethod?.name }}
                         </h3>
 
-                        <div class="detail-item" *ngIf="selectedMethod === 'BANK'">
+                        <div class="detail-item" *ngIf="getSelectedOperator() === 'BANK'">
                           <span class="detail-label">{{ 'payment.accountNumber' | translate }}</span>
                           <span class="detail-value">{{ bankAccountNumber }}</span>
                         </div>
-                        <div class="detail-item" *ngIf="selectedMethod === 'BANK'">
+                        <div class="detail-item" *ngIf="getSelectedOperator() === 'BANK'">
                           <span class="detail-label">Bank code</span>
                           <span class="detail-value">{{ bankCode }}</span>
                         </div>
-                        <div class="detail-item" *ngIf="selectedMethod != 'BANK'">
+                        <div class="detail-item" *ngIf="getSelectedOperator() !== 'BANK'">
                           <span class="detail-label">{{ 'payment.receiverMobileAccountNumber' | translate }}</span>
-                          <span class="detail-value">+{{ selectedCountry.code }} {{ receiverMobileAccountNumber
+                          <span class="detail-value">+{{ selectedCountry?.code }} {{ receiverMobileAccountNumber
                             }}</span>
                         </div>
                       </div>
@@ -422,7 +443,7 @@
                         </div>
                         <div class="fee-item">
                           <span>{{ "payment.feeDetails" | translate }}</span>
-                          <span>{{ transactionData?.taxesAmount }} {{ currentUser?.countryId.currency }}</span>
+                          <span>{{ transactionData?.taxesAmount }} {{ currentUser?.countryId.currency }} ({{ getTransferTaxRate() }}%)</span>
                         </div>
                         <div class="fee-total">
                           <span>{{ "payment.total" | translate }}</span>
@@ -431,12 +452,12 @@
                       </div>
 
                       <div class="security-notice">
-                        <img [src]="!isPaystackCurrency(selectedCountry?.currency) ? 'assets/img/resources/paystack.png' : 'assets/img/resources/flutterwave.png'" alt=""
+                        <img [src]="isPaystackCurrency(selectedCountry?.currency) ? 'assets/img/resources/paystack.png' : 'assets/img/resources/flutterwave.png'" alt=""
                           style="max-width: 100px; border-radius: 5px; margin-right: 10px;">
-                        <p>{{ "payment.secureMessageByProvider" | translate:{ provider: !getPaymentProviderName(currentUser?.countryId.currency) } }}</p>
+                        <p>{{ "payment.secureMessageByProvider" | translate:{ provider: getPaymentProviderName(selectedCountry?.currency) } }}</p>
                       </div>
                       <div class="action-buttons">
-                        <button class="btn btn-cancel" matStepperPrevious>
+                        <button class="btn btn-cancel" matStepperPrevious (click)="previousStep()">
                           <i class="feather icon-chevron-left" data-bs-toggle="tooltip"
                             title="feather icon-skip-back"></i>
                           {{ "action.back" | translate }}
@@ -463,7 +484,7 @@
               <!-- <div class="spinner-border" role="status" *ngIf="!modalClosed && !transactionSucceded && !transactionFailed"></div> -->
               <p style="margin-top: 50px;" *ngIf="!modalClosed && !transactionSucceded && !transactionFailed">
                 {{ "payment.processing-message1" | translate }}<br>
-                {{ "payment.processing-message2ByProvider" | translate:{ provider: !getPaymentProviderName(currentUser?.countryId.currency) } }}
+                {{ "payment.processing-message2ByProvider" | translate:{ provider: getPaymentProviderName(selectedCountry?.currency) } }}
               </p>
 
 
@@ -479,7 +500,7 @@
                 <span *ngIf="reOpen && transactionFailed">{{ "payment.hereToRetry" | translate }}. {{ "payment.opening" | translate }}...</span>
               </p>
 
-              <img [src]="!isPaystackCurrency(selectedCountry?.currency) ? 'assets/img/resources/paystack.png' : 'assets/img/resources/flutterwave.png'" alt="" style="max-width: 100px;;"
+              <img [src]="isPaystackCurrency(selectedCountry?.currency) ? 'assets/img/resources/paystack.png' : 'assets/img/resources/flutterwave.png'" alt="" style="max-width: 100px;;"
                 *ngIf="!transactionSucceded && !transactionFailed">
               <p style="margin-top: 50px;" *ngIf="showRetry && !transactionSucceded && !transactionFailed">
                 {{ "payment.processing-message4" | translate }}
@@ -497,7 +518,7 @@
 
               <br>
               <p style="margin-top: 50px;" *ngIf="!transactionSucceded && showRetry || !transactionSucceded && transactionSucceded">
-                {{ 'payment.ifPaymentConfirmedByProvider' | translate:{ provider: getPaymentProviderName(currentUser?.countryId.currency) } }}</p>
+                {{ 'payment.ifPaymentConfirmedByProvider' | translate:{ provider: getPaymentProviderName(selectedCountry?.currency) } }}</p>
                 <br>
               <button class="btn btn-primary" *ngIf="showRetry || transactionSucceded"
                 (click)="navigateTo('/dashboard')"> {{ "action.backToHome" | translate }} </button>

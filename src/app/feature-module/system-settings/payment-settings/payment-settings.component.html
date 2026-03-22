@@ -33,8 +33,8 @@
                 {{ 'payment.paymentSettings.provider' | translate }}: {{method?.provider}} |
                 {{ 'payment.paymentSettings.paymentFees' | translate }}: {{method?.taxesPayment}}% |
                 {{ 'payment.paymentSettings.transferFees' | translate }}: {{method?.taxesTransfer}}% <br>
-                {{ 'payment.paymentSettings.minAmount' | translate }}: {{method?.minAmount}} |
-                {{ 'payment.paymentSettings.maxAmount' | translate }}: {{method?.maxAmount}}
+                {{ 'payment.paymentSettings.minAmount' | translate }}: {{method?.minAmount}} {{method?.countryId.currency}} |
+                {{ 'payment.paymentSettings.maxAmount' | translate }}: {{method?.maxAmount}} {{method?.countryId.currency}}
               </div>
               <div>
                 <table>

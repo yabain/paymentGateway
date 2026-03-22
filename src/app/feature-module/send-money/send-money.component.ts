@@ -19,6 +19,7 @@ import {
 } from '@angular/forms';
 import { FlutterwaveService } from 'src/app/services/flutterwave/flutterwave.service';
 import { FieldValidationService } from 'src/app/services/field-validation/field-validation.service';
+import { PaymentMethodsService } from 'src/app/services/payment-methods/payment-methods.service';
 declare var FlutterwaveCheckout: any;
 
 @Component({
@@ -28,7 +29,7 @@ declare var FlutterwaveCheckout: any;
   encapsulation: ViewEncapsulation.None,
 })
 export class SendMoneyComponent implements OnInit {
-  selectedMethod: string;
+  selectedMethod: any;
   step: number = 1;
   invoiceTaxes: number = 5;
   currentUser: any | undefined;
@@ -59,17 +60,20 @@ export class SendMoneyComponent implements OnInit {
   receiverCurrency: string = '';
   amountToBeReceived: string = '0';
   estimation: number = 0;
-  watingEstimation: boolean = true;
-  watingRates: boolean = true;
+  waitingEstimation: boolean = true;
+  waitingRates: boolean = true;
   rates: any;
   raisonForTransfer: string = '';
   waitingSystemData: boolean = true;
   bankList: any;
   selectedBank: any;
   waitingBankList: boolean = true;
+  gettingPaymentMethods: any = true;
+  paymentMethodsList: any[] = [];
+  paymentMethodsDisabledList: any[] = [];
+  private systemTransferTaxes = 5;
 
   statusErrorMsg: any = [];
-  methodName: string = 'Bank transfer';
   bankAccountNumber: string = '';
   bankCode: string = '';
   canNext2Val: boolean = false;
@@ -104,6 +108,7 @@ export class SendMoneyComponent implements OnInit {
     private location: LocationService,
     private fw: FlutterwaveService,
     private fieldValidationService: FieldValidationService,
+    private paymentMethodsService: PaymentMethodsService,
   ) {
     this.estimation = 0;
   }
@@ -119,21 +124,29 @@ export class SendMoneyComponent implements OnInit {
     });
   }
 
-  getMethodName(method) {
-    if (method === 'OM') {
-      this.methodName = 'Orange Money';
-    } else if (method === 'MTN') {
-      this.methodName = 'MTN Mobile Money';
-    } else if (method === 'MPESA') {
-      this.methodName = 'M-Pesa';
-    } else if (method === 'CARD') {
-      this.methodName = 'Card Payment';
-    } else if (method === 'PAYPAL') {
-      this.methodName = 'PayPal';
-    } else {
-      this.methodName = 'Bank Transfer';
+  getPaymentMethods(countryId) {
+    if (!countryId) {
+      this.paymentMethodsList = [];
+      this.gettingPaymentMethods = false;
+      return;
     }
-    return this.methodName;
+    this.gettingPaymentMethods = true;
+    this.paymentMethodsService
+      .getPaymentMethodsByCountryId(countryId)
+      .subscribe((resp: any) => {
+        if (resp && Array.isArray(resp)) {
+          this.paymentMethodsList = resp.filter(
+            (method) => method?.statusPayout !== false,
+          );
+          this.paymentMethodsDisabledList = resp.filter(
+            (method) => method?.statusPayout === false,
+          );
+          this.syncSelectedMethodAfterLoad();
+        } else {
+          this.paymentMethodsList = [];
+        }
+        this.gettingPaymentMethods = false;
+      });
   }
 
   formatAccountNumber(event: any) {
@@ -168,8 +181,8 @@ export class SendMoneyComponent implements OnInit {
       resp?.data?.status ||
       resp?.status ||
       'pending';
-      console.log('resp: ', resp);
-      console.log('status: ', status);
+      // console.log('resp: ', resp);
+      // console.log('status: ', status);
     if (['successful', 'success'].includes(status.toLowerCase())) {
       this.transactionSucceded = true;
       this.transactionFailed = false;
@@ -188,11 +201,12 @@ export class SendMoneyComponent implements OnInit {
   }
 
   getBanksList(countryIso2) {
+    // console.log('country iso2: ', countryIso2)
     this.waitingBankList = true;
     this.fw.getBanksList(countryIso2).subscribe((res: any) => {
       this.waitingBankList = false;
       this.bankList = res;
-      console.log('bank list: ', res)
+      // console.log('bank list: ', res)
     });
   }
 
@@ -215,12 +229,12 @@ export class SendMoneyComponent implements OnInit {
 
   convertCurrency() {
     this.estimation = 0;
-    this.watingEstimation = true;
+    this.waitingEstimation = true;
     const toCurrency = this.currentUser?.countryId?.currency || 'XAF';
     const fromCurrency = this.selectedCountry?.currency || 'XAF';
     if (fromCurrency === toCurrency) {
       this.estimation = this.getCleanAmount();
-      this.watingEstimation = false;
+      this.waitingEstimation = false;
     } else
       this.proceedCurrencyConvertion(
         fromCurrency,
@@ -234,7 +248,7 @@ export class SendMoneyComponent implements OnInit {
     toCurrency: string,
     amount: number,
   ) {
-    this.watingEstimation = true;
+    this.waitingEstimation = true;
     if (this.rates) {
       const estimation = this.localConversion(
         this.rates,
@@ -243,14 +257,14 @@ export class SendMoneyComponent implements OnInit {
         amount,
       );
       this.estimation = Math.ceil(estimation);
-      this.watingEstimation = false;
+      this.waitingEstimation = false;
     } else {
       this.getRates();
     }
   }
 
   getRates() {
-    this.watingRates = true;
+    this.waitingRates = true;
     return this.exchange.getExchangeRate().subscribe((res) => {
       this.rates = res.rates;
       if (this.selectedCountry) {
@@ -261,8 +275,8 @@ export class SendMoneyComponent implements OnInit {
           this.getCleanAmount(),
         );
       }
-      this.watingEstimation = false;
-      this.watingRates = false;
+      this.waitingEstimation = false;
+      this.waitingRates = false;
       this.waitingExchangeRate = false;
     });
   }
@@ -348,7 +362,7 @@ export class SendMoneyComponent implements OnInit {
   }
 
   calculateTaxesAmount(): number {
-    return this.aroundValue(this.estimation * (this.invoiceTaxes / 100));
+    return this.aroundValue(this.estimation * (this.getTransferTaxRate() / 100));
   }
 
   aroundValue(val) {
@@ -360,6 +374,7 @@ export class SendMoneyComponent implements OnInit {
   }
 
   canNext(): boolean {
+    if (!this.selectedCountry) return false;
     this.receiverName = this.receiverFirstName + ' ' + this.receiverLastName;
     this.receiverCurrency = this.selectedCountry?.currency || 'XAF';
     const amountValid = this.fieldValidationService.isValidAmount(
@@ -369,13 +384,13 @@ export class SendMoneyComponent implements OnInit {
 
     if (
       !amountValid ||
-      this.watingEstimation ||
+      this.waitingEstimation ||
       this.waitingUserData ||
       this.waitingExchangeRate
     )
       return false;
     if (
-      !this.isPhoneValid(this.receiverContact, this.selectedCountry.code) ||
+      !this.isPhoneValid(this.receiverContact, this.selectedCountry?.code) ||
       !this.minLength(this.receiverAddress) ||
       !this.minLength(this.receiverName) ||
       this.receiverEmail && !this.isEmailValid(this.receiverEmail) ||
@@ -395,27 +410,24 @@ export class SendMoneyComponent implements OnInit {
 
   canNext2(): boolean {
     if (!this.canNext()) return false;
-    this.setTransactionData();
-    if (this.selectedMethod === 'BANK') {
+    const operator = this.getSelectedOperator();
+    if (operator === 'UNKNOWN') {
+      return (this.canNext2Val = false);
+    }
+    if (operator === 'BANK') {
       if (this.bankAccountNumber && this.bankCode)
         return (this.canNext2Val = true);
     } else {
       if (!this.receiverMobileAccountNumber) this.canNext2Val = false;
-      if (this.selectedMethod === 'MPESA')
+      if (operator === 'MPESA')
         return (this.canNext2Val = this.fieldValidationService.isValidOperatorPhone(
           this.receiverMobileAccountNumber,
           this.selectedCountry?.code,
           'MPESA',
         ));
-      if (
-        this.selectedMethod === 'MTN' &&
-        this.isValidMTNPhoneNumber(this.receiverMobileAccountNumber)
-      )
+      if (operator === 'MTN' && this.isValidMTNPhoneNumber(this.receiverMobileAccountNumber))
         return (this.canNext2Val = true);
-      if (
-        this.selectedMethod === 'OM' &&
-        this.isValidOrangePhoneNumber(this.receiverMobileAccountNumber)
-      )
+      if (operator === 'OM' && this.isValidOrangePhoneNumber(this.receiverMobileAccountNumber))
         return (this.canNext2Val = true);
     }
     return (this.canNext2Val = false);
@@ -446,7 +458,7 @@ export class SendMoneyComponent implements OnInit {
     this.waitingUserData = true;
     this.userService.getCurrentUserData().then((user: any) => {
       if (user) {
-        console.log('user: ', user)
+        // console.log('user: ', user)
         this.currentUser = user;
         this.selectedCountry = this.currentUser.countryId;
         this.raisonForTransfer = this.currentUser.language === 'fr' ? 'Soutient financier familliale.' : 'Financial family support.';
@@ -469,10 +481,10 @@ export class SendMoneyComponent implements OnInit {
     });
   }
 
-  choseDefaultMethod(currency: string){
-    if(['KES'].includes(currency)) return 'MPESA';
-    else if(['XAF', 'XOF'].includes(currency)) return 'MTN';
-    else return 'BANK';
+  choseDefaultMethod(currency: string): string {
+    if (['KES'].includes(currency)) return 'MPESA';
+    if (['XAF', 'XOF'].includes(currency)) return 'MTN';
+    return 'BANK';
   }
   
   getId() {
@@ -517,6 +529,7 @@ export class SendMoneyComponent implements OnInit {
   }
 
   async onSubmit() {
+    this.setTransactionData();
     if (this.verifytransactionData(this.transactionData) === false) return;
     this.proceed = true;
 
@@ -612,23 +625,26 @@ export class SendMoneyComponent implements OnInit {
   getSystemData() {
     this.waitingSystemData = true;
     this.systemService.getSystemData().subscribe((resp: any) => {
-      this.invoiceTaxes = resp ? resp.invoiceTaxes : 0;
+      this.systemTransferTaxes = resp ? resp.invoiceTaxes : 0;
+      this.invoiceTaxes = this.systemTransferTaxes;
       this.waitingSystemData = false;
     });
   }
 
   setTransactionData() {
-    if (this.selectedMethod === 'MTN') {
+    if (!this.selectedCountry || !this.currentUser) return;
+    const operator = this.getSelectedOperator();
+    if (operator === 'MTN') {
       this.bankAccountNumber =
-        this.selectedCountry.code + this.receiverMobileAccountNumber;
+        this.selectedCountry?.code + this.receiverMobileAccountNumber;
       this.bankCode = 'MTN';
-    } else if (this.selectedMethod === 'OM') {
+    } else if (operator === 'OM') {
       this.bankAccountNumber =
-        this.selectedCountry.code + this.receiverMobileAccountNumber;
+        this.selectedCountry?.code + this.receiverMobileAccountNumber;
       this.bankCode = 'ORANGEMONEY';
-    } else if (this.selectedMethod === 'MPESA') {
+    } else if (operator === 'MPESA') {
       this.bankAccountNumber =
-        this.selectedCountry.code + this.receiverMobileAccountNumber;
+        this.selectedCountry?.code + this.receiverMobileAccountNumber;
       this.bankCode = 'MPESA';
     }
     this.transactionData = {
@@ -655,11 +671,11 @@ export class SendMoneyComponent implements OnInit {
       receiverAddress: this.receiverAddress,
       receiverCountry: this.selectedCountry.name,
       receiverCurrency: this.selectedCountry.currency,
-      receiverCountryCode: this.selectedCountry.code,
+      receiverCountryCode: this.selectedCountry?.code,
       // receiverAccountType: this.getreceiverAccountType(),
       receiverAmount: this.getCleanAmount(),
 
-      paymentMethod: this.selectedMethod,
+      paymentMethod: this.selectedMethod?.code || operator,
       receiverMobileAccountNumber: this.receiverMobileAccountNumber,
       bankAccountNumber:
         this.bankAccountNumber?.replaceAll(' ', '') || undefined,
@@ -670,10 +686,11 @@ export class SendMoneyComponent implements OnInit {
     };
   }
 
-  getreceiverAccountType(){
-    if(this.selectedMethod === 'OM' || this.selectedMethod === 'MTN' || this.selectedMethod === 'MPESA') return 'mobile_money';
-    else if(this.selectedMethod === 'BANK') return 'bank';
-    else return 'wallet'
+  getreceiverAccountType() {
+    const operator = this.getSelectedOperator();
+    if (['OM', 'MTN', 'MPESA'].includes(operator)) return 'mobile_money';
+    if (operator === 'BANK') return 'bank';
+    return 'wallet';
   }
 
   verifytransactionData(transactionData): boolean {
@@ -682,8 +699,9 @@ export class SendMoneyComponent implements OnInit {
     //   transactionData.paymentMethodNumber.replace(/\D/g, "");
 
     // Phone number verification: Orange Cameroon
+    const operator = this.resolveOperatorFromPaymentMethod(transactionData.paymentMethod);
     if (
-      transactionData.paymentMethod === 'OM' &&
+      operator === 'OM' &&
       !this.fieldValidationService.isValidOperatorPhone(
         transactionData.receiverMobileAccountNumber,
         this.selectedCountry?.code,
@@ -695,7 +713,7 @@ export class SendMoneyComponent implements OnInit {
       });
       return false;
     } else if (
-      transactionData.paymentMethod === 'MTN' &&
+      operator === 'MTN' &&
       !this.fieldValidationService.isValidOperatorPhone(
         transactionData.receiverMobileAccountNumber,
         this.selectedCountry?.code,
@@ -773,12 +791,12 @@ export class SendMoneyComponent implements OnInit {
     this.router.navigate(['/tabs/home']);
   }
 
-  selectMethod(method: string) {
-    if (method === 'card' || method === 'paypal') {
+  selectMethod(method: any) {
+    if (!method || method?.statusPayin === false) {
       return;
     }
     this.selectedMethod = method;
-    this.getMethodName(method);
+    this.invoiceTaxes = Number(method?.taxesTransfer ?? this.systemTransferTaxes ?? 0);
     this.bankCode = undefined;
     this.bankAccountNumber = undefined;
 
@@ -802,10 +820,6 @@ export class SendMoneyComponent implements OnInit {
   // }
 
   nextStep() {
-    if (this.step === 1) {
-      this.prefillStep2DataFromReceiver();
-    }
-
     if (this.step === 2) {
       this.setTransactionData();
       if (!this.verifytransactionData(this.transactionData)) return;
@@ -813,8 +827,13 @@ export class SendMoneyComponent implements OnInit {
 
     // Guard transitions with actual business validators used by buttons.
     if (this.step === 1 && !this.canNext()) {
-      if (this.selectedCountry) this.getBanksList(this.selectedCountry.iso2);
       return;
+    }
+
+    if (this.step === 1) {
+      if (this.selectedCountry) this.getBanksList(this.selectedCountry.iso2);
+      this.prefillStep2DataFromReceiver();
+      this.getPaymentMethods(this.selectedCountry?._id);
     }
 
     if (this.step === 2 && !this.canNext2()) {
@@ -908,22 +927,24 @@ export class SendMoneyComponent implements OnInit {
       this.receiverCurrency = countryData.currency || '--';
     }
     this.bankList = [];
+    this.paymentMethodsList = [];
+    this.selectedMethod = undefined;
     this.selectedBank = undefined;
     this.bankCode = undefined;
     this.bankAccountNumber = undefined;
     this.receiverMobileAccountNumber = undefined;
-    if (this.selectedCountry?.currency === 'KES') {
-      this.selectedMethod = 'MPESA';
-    } else {
-      this.selectedMethod = 'BANK';
-    }
-    this.getMethodName(this.selectedMethod);
+    // if (this.selectedCountry?.currency === 'KES') {
+    //   this.selectedMethod = 'MPESA';
+    // } else {
+    //   this.selectedMethod = 'BANK';
+    // }
 
     this.convertCurrency();
   }
 
-  private isMobileMethod(method?: string): boolean {
-    return ['MTN', 'OM', 'MPESA'].includes(String(method || '').toUpperCase());
+  private isMobileMethod(method?: any): boolean {
+    const operator = this.getMethodOperator(method);
+    return ['MTN', 'OM', 'MPESA'].includes(operator);
   }
 
   private detectMethodFromReceiverPhone(phoneDigits: string): string {
@@ -952,9 +973,69 @@ export class SendMoneyComponent implements OnInit {
     }
 
     this.receiverMobileAccountNumber = receiverDigits;
-    this.selectedMethod = this.detectMethodFromReceiverPhone(receiverDigits);
-    this.getMethodName(this.selectedMethod);
+    const detectedOperator = this.detectMethodFromReceiverPhone(receiverDigits);
+    const foundMethod = this.findMethodByOperator(detectedOperator);
+    if (foundMethod) {
+      this.selectMethod(foundMethod);
+    }
     this.canNext2();
+  }
+
+  private syncSelectedMethodAfterLoad(): void {
+    if (!Array.isArray(this.paymentMethodsList) || this.paymentMethodsList.length < 1) {
+      this.selectedMethod = undefined;
+      this.invoiceTaxes = this.systemTransferTaxes;
+      return;
+    }
+
+    const receiverDigits = this.fieldValidationService.normalizePhoneDigits(this.receiverContact);
+    const detectedOperator = receiverDigits ? this.detectMethodFromReceiverPhone(receiverDigits) : this.choseDefaultMethod(this.selectedCountry?.currency);
+    const preferred = this.findMethodByOperator(detectedOperator) || this.paymentMethodsList[0];
+    this.selectMethod(preferred);
+  }
+
+  private findMethodByOperator(operator: string): any {
+    if (!Array.isArray(this.paymentMethodsList)) {
+      return undefined;
+    }
+    return this.paymentMethodsList.find((m) => this.getMethodOperator(m) === operator);
+  }
+
+  getSelectedOperator(): string {
+    return this.getMethodOperator(this.selectedMethod);
+  }
+
+  getMethodOperator(method: any): string {
+    const code = String(method?.code || '').toUpperCase();
+    const provider = String(method?.provider || '').toUpperCase();
+    const name = String(method?.name || '').toUpperCase();
+    const type = String(method?.type || '').toUpperCase();
+
+    if (code.includes('MPESA') || provider.includes('PAYSTACK') || name.includes('M-PESA') || name.includes('MPESA')) {
+      return 'MPESA';
+    }
+    if (code.includes('OM') || name.includes('ORANGE')) {
+      return 'OM';
+    }
+    if (code.includes('MTN') || name.includes('MTN')) {
+      return 'MTN';
+    }
+    if (type === 'BANK' || code.includes('BANK')) {
+      return 'BANK';
+    }
+    return 'UNKNOWN';
+  }
+
+  private resolveOperatorFromPaymentMethod(paymentMethod: string): string {
+    const upper = String(paymentMethod || '').toUpperCase();
+    if (['OM', 'MTN', 'MPESA', 'BANK'].includes(upper)) {
+      return upper;
+    }
+    return this.getMethodOperator({ code: upper, provider: upper, name: upper });
+  }
+
+  getTransferTaxRate(): number {
+    return Number(this.selectedMethod?.taxesTransfer ?? this.systemTransferTaxes ?? 0);
   }
 
   navigateTo(route) {
