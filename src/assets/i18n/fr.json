@@ -851,6 +851,7 @@
   },
   "fundraising": {
     "title": "Collecte de fonds",
+    "createCampaign": "Créer une campagne",
     "allFundraising": "Toutes les collectes",
     "myFundraising": "Mes collectes",
     "totalFundraising": "Total des collectes",

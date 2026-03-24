@@ -1,0 +1,26 @@
+<div class="card">
+    <div class="card-image" (click)="navigateTo('/fundraising/' + campaign?._id)">
+        <img [src]="campaign?.coverImageUrl || picture" alt="Description de l'image">
+        <div class="overlay"></div>
+    </div>
+
+    <div class="card-content">
+        <div (click)="navigateTo('/fundraising/' + campaign?._id)">
+            <h2 style="color: #fff;">{{ campaign?.title }}</h2>
+            <p class="subtitle">{{ campaign?.subTitle }}</p>
+
+            <div class="details">
+                <div class="small mb-1">
+                  <strong>{{ 'fundraising.totalFundraisingGoal' | translate }}:</strong>
+                  {{ campaign?.targetAmount || 0 }} {{ campaign?.currency || '' }}
+                </div>
+                <!-- <div class="small mb-2">
+                  <strong>{{ 'fundraising.totalFundraisingRaised' | translate }}:</strong>
+                  {{ campaign?.raisedAmount || campaign?.amountRaised || 0 }} {{ campaign?.currency || '' }}
+                </div> -->
+            </div>
+        </div>
+        <div [ngClass]="campaign?.status === true ? 'badge-success':  'badge-danger'" style="position: absolute;">
+        </div>
+    </div>
+</div>

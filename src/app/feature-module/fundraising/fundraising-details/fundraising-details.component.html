@@ -1,10 +1,3 @@
-<!-- <div class="page-header">
-  <div class="content-page-header d-flex justify-content-between align-items-center">
-    <h5>{{ 'fundraising.fundraisingInfo' | translate }}</h5>
-    <button class="btn btn-outline-secondary" type="button" (click)="navigateBack()">Back</button>
-  </div>
-</div> -->
-
 <div *ngIf="loading">
   <div class="card">
     <div class="card-body">
@@ -56,8 +49,11 @@
                 </div>
         
                 <div class="col-12 mt-2">
-                  <button type="submit" class="btn btn-primary" [disabled]="updating || editForm.invalid">
-                    <span *ngIf="!updating">Save changes</span>
+                  <button class="btn btn-secondary" *ngIf="!updating" (click)="edition = false">
+                    <span *ngIf="!updating">{{ "action.cancel" | translate }}</span>
+                  </button>
+                  <button type="submit" class="btn btn-primary m-3" [disabled]="updating || editForm.invalid">
+                    <span *ngIf="!updating">{{ "action.save" | translate }}</span>
                     <span *ngIf="updating" class="spinner-border spinner-border-sm" role="status"></span>
                   </button>
                 </div>
@@ -131,9 +127,9 @@
                           <i class="feather icon-share-2"></i>
                           {{ 'action.share' | translate }}
                         </button>
-                        <button type="button" *ngIf="isAuthor(fundraisingData) || isAdmin"
+                        <button type="button" *ngIf="isAuthor(fundraisingData) || isAdmin" (click)="toggleVisibility()"
                           class="btn btn-rounded btn-outline-secondary me-1">
-                          <i class="feather icon-alert-circle"></i>
+                          <i class="feather icon-eye"></i>
                         </button>
                         <button class="btn btn-rounded btn-outline-secondary me-1"
                           *ngIf="isAuthor(fundraisingData) || isAdmin" (click)="edition = true">
@@ -243,62 +239,7 @@
   </div>
 </div>
 
-
 <div *ngIf="!loading && !donationDetails && fundraisingData">
-  <div class="card">
-    <div class="card-body">
-      <div class="d-flex justify-content-between flex-wrap mb-3 gap-2">
-        <h5 class="mb-0">{{ fundraisingData?.title }}</h5>
-        <div class="d-flex gap-2">
-          <button class="btn btn-sm btn-outline-dark" (click)="toggleStatus()">Toggle Status</button>
-          <button class="btn btn-sm btn-outline-dark" (click)="toggleVisibility()">Toggle Visibility</button>
-        </div>
-      </div>
-
-      <form [formGroup]="editForm" (ngSubmit)="updateFundraising()" class="row">
-        <div class="col-md-6 mb-2">
-          <label class="form-label">Title</label>
-          <input class="form-control" formControlName="title" />
-        </div>
-
-        <div class="col-md-3 mb-2">
-          <label class="form-label">Start Date</label>
-          <input class="form-control" type="date" formControlName="startDate" />
-        </div>
-
-        <div class="col-md-3 mb-2">
-          <label class="form-label">End Date</label>
-          <input class="form-control" type="date" formControlName="endDate" />
-        </div>
-
-        <div class="col-md-6 mb-2">
-          <label class="form-label">Goal Amount</label>
-          <input class="form-control" type="number" min="1" formControlName="targetAmount" />
-        </div>
-
-        <div class="col-md-6 mb-2">
-          <label class="form-label">Visibility</label>
-          <select class="form-select" formControlName="visibility">
-            <option value="public">Public</option>
-            <option value="private">Private</option>
-          </select>
-        </div>
-
-        <div class="col-md-12 mb-2">
-          <label class="form-label">Description</label>
-          <textarea rows="4" class="form-control" formControlName="description"></textarea>
-        </div>
-
-        <div class="col-12 mt-2">
-          <button type="submit" class="btn btn-primary" [disabled]="updating || editForm.invalid">
-            <span *ngIf="!updating">Save changes</span>
-            <span *ngIf="updating" class="spinner-border spinner-border-sm" role="status"></span>
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-
   <div class="card">
     <div class="card-body">
       <h5 class="mb-3">Donate</h5>

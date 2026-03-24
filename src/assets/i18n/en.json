@@ -851,6 +851,7 @@
   },
   "fundraising": {
     "title": "Fundraising",
+    "createCampaign": "Create Campaign",
     "allFundraising": "All Fundraisers",
     "myFundraising": "My Fundraisers",
     "totalFundraising": "Total Fundraisers",

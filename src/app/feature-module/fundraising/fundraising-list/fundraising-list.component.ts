@@ -85,7 +85,7 @@ export class FundraisingListComponent implements OnInit, OnDestroy {
       endDate: new FormControl('', [Validators.required]),
       status: new FormControl(true, [Validators.required]),
       visibility: new FormControl('public', [Validators.required]),
-      coverImageUrl: new FormControl('https://cdn.example.com/fundraising/cover.jpg', [Validators.required]),
+      coverImageUrl: new FormControl('https://payments.digikuntz.com/assets/img/icons/price-01.svg', [Validators.required]),
     });
 
     this.form
@@ -197,7 +197,19 @@ export class FundraisingListComponent implements OnInit, OnDestroy {
   }
 
   openCreateForm(): void {
-    this.showCreateForm = !this.showCreateForm;
+    this.showCreateForm = true;
+    this.form.reset({
+      title: '',
+      subTitle: '',
+      description: '',
+      currency: this.currentUser?.countryId?.currency || 'XAF',
+      targetAmount: 0,
+      startDate: '',
+      endDate: '',
+      status: true,
+      visibility: 'public',
+      coverImageUrl: 'https://cdn.example.com/fundraising/cover.jpg',
+    });
   }
 
   createCampaign(): void {
@@ -237,8 +249,24 @@ export class FundraisingListComponent implements OnInit, OnDestroy {
           currency: this.currentUser?.countryId?.currency || 'XAF',
           visibility: 'public',
         });
+        const closeButton = document.getElementById('close-add-fundraising');
+        closeButton?.click();
         this.loadList(1);
       });
+  }
+
+  refresh(): void {
+    this.loadList(this.page);
+  }
+
+  get activeCount(): number {
+    return (this.campaigns || []).filter(
+      (campaign) => Boolean(campaign?.isActive ?? campaign?.status),
+    ).length;
+  }
+
+  get inactiveCount(): number {
+    return Math.max((this.campaigns || []).length - this.activeCount, 0);
   }
 
   goToDetails(campaign: any): void {

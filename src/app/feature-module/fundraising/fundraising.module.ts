@@ -8,12 +8,14 @@ import { FundraisingListComponent } from './fundraising-list/fundraising-list.co
 import { FundraisingDetailsComponent } from './fundraising-details/fundraising-details.component';
 import { FundraisingService } from 'src/app/services/fundraising/fundraising.service';
 import { FrontModule } from 'src/app/front/front.module';
+import { ItemComponent } from './item/item.component';
 
 @NgModule({
   declarations: [
     FundraisingComponent,
     FundraisingListComponent,
     FundraisingDetailsComponent,
+    ItemComponent,
   ],
   imports: [
     CommonModule,

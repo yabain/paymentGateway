@@ -2,3 +2,35 @@
 .table th {
   vertical-align: middle;
 }
+
+.fundraising-card {
+  height: 100%;
+  border: 1px solid #e8edf7;
+  border-radius: 12px;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.fundraising-card:hover {
+  box-shadow: 0 8px 18px rgba(2, 29, 102, 0.08);
+  transform: translateY(-2px);
+}
+
+.empty-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  height: 300px;
+}
+
+.empty-state img {
+  max-width: 150px;
+  height: auto;
+}
+
+.loading-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+}
