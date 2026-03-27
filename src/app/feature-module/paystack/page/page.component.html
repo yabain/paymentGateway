@@ -194,6 +194,16 @@
           <p><b>Status:</b> {{ selectedPayinTransaction?.status || '-' }}</p>
         </div>
       </div>
+      <br>
+      <div class="modal-body">
+          {{ "rawData" | translate }}:
+          <div class="col-sm-12 col-md-12">
+              <div class="option-space">
+                  <app-json-viewer [data]="selectedPayinTransaction"
+                      *ngIf="selectedPayinTransaction"></app-json-viewer>
+              </div>
+          </div>
+      </div>
     </div>
   </div>
 </div>
