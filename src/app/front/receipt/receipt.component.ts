@@ -21,6 +21,6 @@ export class ReceiptComponent {
 
 
   getUrl(): string {
-    return environment.frontUrl + '/invoice/' + this.receiptData.transactionId._id;
+    return environment.frontUrl + '/invoice/' + this.receiptData._id;
   }
 }
