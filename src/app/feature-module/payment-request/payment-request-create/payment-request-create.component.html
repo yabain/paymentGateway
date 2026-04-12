@@ -58,8 +58,6 @@
     </form>
 
     <div class="request-result" *ngIf="requestSubmitted">
-
-
       <div class="row">
         <div class="col-md-6">
           <div class="wating-msg">
@@ -80,6 +78,7 @@
             {{ 'payment.paymentSuccess'
             | translate }}<br>
             {{ 'payment.fundsWillReceive' | translate }}</p>
+            <button class="btn btn-primary" *ngIf="transactionData && transactionData?.status === 'transaction_payin_success'" (click)="exportToPdf()">Print receipt</button>
 
             <!-- <div class="spinner-border" role="status" *ngIf="!modalClosed && !transactionSucceded && !transactionFailed"></div> -->
             <p style="margin-top: 50px;" *ngIf="processing">
@@ -111,3 +110,6 @@
     <div class="spinner-border" role="status"></div>
   </div>
 </div>
+
+
+<app-receipt id="receipt" [receiptData]="transactionData" *ngIf="transactionData && printing" [name]="currentUser?.name"></app-receipt>

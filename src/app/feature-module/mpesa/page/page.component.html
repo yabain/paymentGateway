@@ -1,0 +1,232 @@
+<div class="page-header">
+  <div class="content-page-header page-tilte">
+    <h5 style="color: black !important;">
+      <img src="assets/img/resources/mpesa.png" alt="" style="max-width: 50px; margin-right: 10px;">
+      M-Pesa
+    </h5>
+    <div class="page-content">
+      <div class="list-btn">
+        <ul class="filter-list">
+          <li *ngIf="status" class="status-enabled">{{ "users.enabled" | translate }}</li>
+          <li *ngIf="!status" class="status-disabled">{{ "users.disabled" | translate }}</li>
+          <li>
+            <a class="btn-filters btn-hover" href="javascript:void(0);" (click)="refresh()">
+              <span><i class="feather icon-refresh-ccw"></i></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card customer-details-group">
+  <div class="card-body">
+    <div *ngIf="gettingSolde" class="row d-flex align-items-center justify-content-center">
+      <div class="spinner-border text-primary" role="status" style="margin: 20px;">
+        <span class="visually-hidden">{{ "loading" | translate }}...</span>
+      </div>
+    </div>
+    <div class="row align-items-center" *ngIf="!gettingSolde">
+      <div class="col-xl-3 col-lg-4 col-md-6 col-12">
+        <div class="customer-details">
+          <div class="d-flex align-items-center">
+            <span class="customer-widget-img d-inline-flex">
+              <img class="rounded-circle" src="assets/img/resources/mpesa.png" alt="image">
+            </span>
+            <div class="customer-details-cont">
+              <h6>{{ mainCurrency }} {{ solde | number:'1.2-2' }}</h6>
+              <p style="font-size: 0.5rem;"><b>{{ 'mpesa.balance' | translate }}</b></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br />
+    <h6 *ngIf="!gettingSolde" style="margin-bottom: 10px;">{{ "mpesa.otherCurrencyBalances" | translate }}</h6>
+    <div class="row align-items-center" *ngIf="!gettingSolde">
+      <div class="col-xl-2 col-lg-2 col-md-6 col-12" *ngFor="let os of otherSolde">
+        <div class="customer-details">
+          <div class="d-flex align-items-center">
+            <div class="customer-details-cont">
+              <h6>{{ os.currency }} {{ (os.available_balance || os.balance || 0) | number:'1.2-2' }}</h6>
+              <p style="font-size: 0.5rem;"><b>{{ "mpesa.balanceIn" | translate }} {{ os.currency }}</b></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title">{{ "sideMenu.payin" | translate }}</h5>
+        <select class="form-select" (change)="onSelectInPeriode($event)" *ngIf="!gettingPayinTransactions" [value]="periodePayin">
+          <option value="1">{{ "mpesa.lastMonth" | translate }}</option>
+          <option value="6">{{ "mpesa.last6Months" | translate }}</option>
+          <option value="12">{{ "mpesa.last12Months" | translate }}</option>
+          <option value="24">{{ "mpesa.last24Months" | translate }}</option>
+        </select>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table mb-0" *ngIf="!gettingPayinTransactions && payinList?.length > 0">
+            <thead>
+              <tr>
+                <th>{{ "subscriptions.name" | translate }}</th>
+                <th>{{ "payment.amount" | translate }}</th>
+                <th>{{ "payment.taxes" | translate }}</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let p of payinList" [ngClass]="getStatusClass(p)" (click)="selectPayinTransaction(p)"
+                href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#mpesa_payin_transaction_details">
+                <td style="color: black !important;">{{ getTxName(p) }}</td>
+                <td style="color: black !important;">{{ getTxAmount(p) | number:'1.2-2' }} {{ getTxCurrency(p) }}</td>
+                <td style="color: black !important;">{{ getTxFee(p) | number:'1.2-2' }} {{ getTxCurrency(p) }}</td>
+                <td style="color: black !important;">{{ getTxDate(p) | date:'dd-MM-yyyy HH:mm:ss' }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <br>
+          <div *ngIf="!gettingPayinTransactions && payinList?.length > 0">
+            <button class="btn btn-block btn-outline-light active" (click)="previousPayinPage()" [disabled]="payinPage === 1">
+              << </button>
+                <button class="btn btn-block btn-outline-light active">{{ payinPage }}</button>
+                <button class="btn btn-block btn-outline-light active" (click)="nextPayinPage()" [disabled]="payinList?.length < 10">
+                  >>
+                </button>
+          </div>
+          <div *ngIf="gettingPayinTransactions" class="row d-flex align-items-cente justify-content-center">
+            <div class="spinner-border text-primary" role="status" style="margin: 20px;">
+              <span class="visually-hidden">{{ "loading" | translate }}...</span>
+            </div>
+          </div>
+          <div *ngIf="!gettingPayinTransactions && payinList?.length < 1" class="row d-flex align-items-center justify-content-center">
+            <div class="col-md-12 center-content">
+              <img src="assets/img/resources/nts.png" alt="" style="max-width: 150px; height: auto;">
+            </div>
+            <div class="col-md-12 center-content">{{ "nts" | translate }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title">{{ "sideMenu.payout" | translate }}</h5>
+        <select class="form-select" (change)="onSelectOutPeriode($event)" *ngIf="!gettingPayoutTransactions" [value]="periodePayout">
+          <option value="1">{{ "mpesa.lastMonth" | translate }}</option>
+          <option value="6">{{ "mpesa.last6Months" | translate }}</option>
+          <option value="12">{{ "mpesa.last12Months" | translate }}</option>
+          <option value="24">{{ "mpesa.last24Months" | translate }}</option>
+        </select>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table mb-0" *ngIf="!gettingPayoutTransactions && payoutList?.length > 0">
+            <thead>
+              <tr>
+                <th>{{ "subscriptions.name" | translate }}</th>
+                <th>{{ "payment.amount" | translate }}</th>
+                <th>{{ "payment.bank" | translate }}</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let p of payoutList" [ngClass]="getStatusClass(p)" (click)="selectPayoutTransaction(p)"
+                href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#mpesa_payout_transaction_details">
+                <td style="color: black !important;">{{ getTxName(p) }}</td>
+                <td style="color: black !important;">{{ getTxAmount(p) | number:'1.2-2' }} {{ getTxCurrency(p) }}</td>
+                <td style="color: black !important;">{{ p.bank_name || p.bank || '-' }}</td>
+                <td style="color: black !important;">{{ getTxDate(p) | date:'dd-MM-yyyy HH:mm:ss' }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <br>
+          <div *ngIf="!gettingPayoutTransactions && payoutList?.length > 0">
+            <button class="btn btn-block btn-outline-light active" (click)="previousPayoutPage()" [disabled]="payoutPage === 1">
+              << </button>
+                <button class="btn btn-block btn-outline-light active">{{ payoutPage }}</button>
+                <button class="btn btn-block btn-outline-light active" (click)="nextPayoutPage()" [disabled]="payoutList?.length < 10">
+                  >>
+                </button>
+          </div>
+          <div *ngIf="gettingPayoutTransactions" class="row d-flex align-items-cente justify-content-center">
+            <div class="spinner-border text-primary" role="status" style="margin: 20px;">
+              <span class="visually-hidden">{{ "loading" | translate }}...</span>
+            </div>
+          </div>
+          <div *ngIf="!gettingPayoutTransactions && payoutList?.length < 1" class="row d-flex align-items-center justify-content-center">
+            <div class="col-md-12 center-content">
+              <img src="assets/img/resources/nts.png" alt="" style="max-width: 150px; height: auto;">
+            </div>
+            <div class="col-md-12 center-content">{{ "nts" | translate }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal custom-modal fade p-20" id="mpesa_payin_transaction_details" role="dialog">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <div class="form-header modal-header-title text-start mb-0">
+          <h4 class="mb-0">{{ 'payment.transactionDetails' | translate }}</h4>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" [attr.aria-label]="'action.close' | translate"></button>
+      </div>
+      <div class="modal-body">
+        <div class="option-space">
+          <p><b>{{ 'subscriptions.name' | translate }}:</b> {{ getTxName(selectedPayinTransaction) }}</p>
+          <p><b>{{ 'payment.amount' | translate }}:</b> {{ getTxAmount(selectedPayinTransaction) | number:'1.2-2' }} {{ getTxCurrency(selectedPayinTransaction) }}</p>
+          <p><b>{{ 'payment.taxes' | translate }}:</b> {{ getTxFee(selectedPayinTransaction) | number:'1.2-2' }} {{ getTxCurrency(selectedPayinTransaction) }}</p>
+          <p><b>Reference:</b> {{ getTxRef(selectedPayinTransaction) }}</p>
+          <p><b>Date:</b> {{ getTxDate(selectedPayinTransaction) | date:'dd-MM-yyyy HH:mm:ss' }}</p>
+          <p><b>Status:</b> {{ selectedPayinTransaction?.status || '-' }}</p>
+        </div>
+      </div>
+      <br>
+      <div class="modal-body">
+          {{ "rawData" | translate }}:
+          <div class="col-sm-12 col-md-12">
+              <div class="option-space">
+                  <app-json-viewer [data]="selectedPayinTransaction"
+                      *ngIf="selectedPayinTransaction"></app-json-viewer>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal custom-modal fade p-20" id="mpesa_payout_transaction_details" role="dialog">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <div class="form-header modal-header-title text-start mb-0">
+          <h4 class="mb-0">{{ 'payment.transactionDetails' | translate }}</h4>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" [attr.aria-label]="'action.close' | translate"></button>
+      </div>
+      <div class="modal-body">
+        <div class="option-space">
+          <p><b>{{ 'subscriptions.name' | translate }}:</b> {{ getTxName(selectedPayoutTransaction) }}</p>
+          <p><b>{{ 'payment.amount' | translate }}:</b> {{ getTxAmount(selectedPayoutTransaction) | number:'1.2-2' }} {{ getTxCurrency(selectedPayoutTransaction) }}</p>
+          <p><b>{{ 'payment.bank' | translate }}:</b> {{ selectedPayoutTransaction?.bank_name || selectedPayoutTransaction?.bank || '-' }}</p>
+          <p><b>Reference:</b> {{ getTxRef(selectedPayoutTransaction) }}</p>
+          <p><b>Date:</b> {{ getTxDate(selectedPayoutTransaction) | date:'dd-MM-yyyy HH:mm:ss' }}</p>
+          <p><b>Status:</b> {{ selectedPayoutTransaction?.status || '-' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -2,7 +2,7 @@
     <div class="container">
         <div class="invoice-wrapper download_section">
 
-            <div id="showInvoice" *ngIf="transactionData" style="min-width: 1200px !important;">
+            <div id="showInvoice" *ngIf="transactionData" style="display: inline-block;">
                 <app-invoice-details [transactionData]="transactionData" [inModal]="false"></app-invoice-details>
             </div>
             <div *ngIf="!transactionData"

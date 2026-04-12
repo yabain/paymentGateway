@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { PaymentRequestService } from 'src/app/services/payment-request/payment-request.service';
 import { PaymentRequestItem } from 'src/app/services/payment-request/payment-request.types';
+import { PrintService } from 'src/app/services/print/print.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { UserService } from 'src/app/services/user/user.service';
 
@@ -14,6 +15,7 @@ import { UserService } from 'src/app/services/user/user.service';
 })
 export class PaymentRequestListComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
+  printing: boolean = false;
 
   currentUser: any;
   isAdminRoute = false;
@@ -35,6 +37,7 @@ export class PaymentRequestListComponent implements OnInit, OnDestroy {
     private toastService: ToastService,
     private router: Router,
     private location: Location,
+    private pdfExportService: PrintService,
   ) {}
 
   ngOnInit(): void {
@@ -45,6 +48,7 @@ export class PaymentRequestListComponent implements OnInit, OnDestroy {
 
   async loadCurrentUser(): Promise<void> {
     this.currentUser = await this.userService.getCurrentUser();
+    console.log('currentUser: ', this.currentUser);
   }
 
   loadList(page: number = this.page): void {
@@ -63,6 +67,7 @@ export class PaymentRequestListComponent implements OnInit, OnDestroy {
         const bDate = new Date(b?.createdAt || 0).getTime();
         return bDate - aDate;
       });
+      console.log('items: ', this.items)
 
       const pagination = response?.pagination || {};
       this.totalItems = Number(pagination?.totalItems || this.items.length);
@@ -90,6 +95,13 @@ export class PaymentRequestListComponent implements OnInit, OnDestroy {
 
   openDetails(item: PaymentRequestItem): void {
     this.selectedItem = item;
+    console.log(this.selectedItem);
+  }
+
+  onDetailsModalClose(event?: Event): void {
+    const target = event?.target as HTMLElement | null;
+    target?.blur();
+    (document.activeElement as HTMLElement | null)?.blur?.();
   }
 
   goToCreate(): void {
@@ -121,5 +133,23 @@ export class PaymentRequestListComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
-}
 
+  public exportToPdf(item): void {
+    this.selectedItem = item;
+    // console.log('exportation de pdf');
+    if (this.selectedItem) {
+      this.toastService.presentToast('info', 'Download', 'Téléchargement en cours...');
+      // this.toastService.info("Téléchargement en cours...", "PDF", {
+      //   timeOut: 10000,
+      //   closeButton: true,
+      // });
+      this.printing = true;
+      setTimeout(() => {
+        this.pdfExportService.generatePdf('receipt', 'Recu_' + this.selectedItem._id + '.pdf');
+      }, 1 * 1000);
+      setTimeout(() => {
+        this.printing = false;
+      }, 5 * 1000);
+    }
+  }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+}

@@ -5,10 +5,11 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { PaymentRequestCreateComponent } from './payment-request-create/payment-request-create.component';
 import { PaymentRequestListComponent } from './payment-request-list/payment-request-list.component';
 import { PaymentRequestRoutingModule } from './payment-request-routing.module';
+import { FrontModule } from 'src/app/front/front.module';
 
 @NgModule({
   declarations: [PaymentRequestListComponent, PaymentRequestCreateComponent],
-  imports: [CommonModule, SharedModule, TranslateModule, PaymentRequestRoutingModule],
+  imports: [CommonModule, SharedModule, TranslateModule, PaymentRequestRoutingModule, FrontModule],
 })
 export class PaymentRequestModule {}
 

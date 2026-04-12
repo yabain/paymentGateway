@@ -941,6 +941,15 @@ export class DataService {
           base: 'paystack-wallets',
           subMenus: [],
         },
+        {
+          menuValue: 'mpesaWallets',
+          route: '/mpesa-wallets',
+          hasSubRoute: false,
+          showSubRoute: false,
+          icon: 'activity',
+          base: 'mpesa-wallets',
+          subMenus: [],
+        },
         // {
         //   menuValue: 'messageCenter',
         //   route: '/admin-massaging',

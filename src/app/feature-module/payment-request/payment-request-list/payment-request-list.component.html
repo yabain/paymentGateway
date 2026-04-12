@@ -56,6 +56,7 @@
               <span class="badge badge-label" [ngClass]="statusBadgeClass(item?.status)">
                 {{ 'paymentRequest.status.' + (item?.status || 'pending') | translate }}
               </span>
+              <button class="btn m-3" *ngIf="item.transactionId.status === 'transaction_payin_success'" (click)="exportToPdf(item)">Print</button>
             </td>
           </tr>
         </tbody>
@@ -94,7 +95,13 @@
     <div class="modal-content" *ngIf="selectedItem">
       <div class="modal-header">
         <h5 class="modal-title">{{ 'paymentRequest.detailsTitle' | translate }}</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="onDetailsModalClose($event)"
+        ></button>
       </div>
       <div class="modal-body">
         <div class="row g-2">
@@ -115,3 +122,4 @@
   </div>
 </div>
 
+<app-receipt id="receipt" [receiptData]="selectedItem?.transactionId" *ngIf="selectedItem && printing" [name]="currentUser?.name"></app-receipt>

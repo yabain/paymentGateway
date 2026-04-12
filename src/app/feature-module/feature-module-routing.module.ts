@@ -119,6 +119,14 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'mpesa-wallets',
+        canActivate: [AdminGuard],
+        loadChildren: () =>
+          import('./mpesa/mpesa.module').then(
+            (m) => m.MpesaModule,
+          ),
+      },
+      {
         path: 'admin-payments',
         canActivate: [AdminGuard],
         loadChildren: () =>

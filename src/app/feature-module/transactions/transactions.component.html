@@ -148,6 +148,6 @@
   <app-invoice-details [transactionData]="selectedTransaction" [inModal]="true"></app-invoice-details>
 </div>
 
-<div *ngIf="printing" id="selectedInvoice" style="min-width: 2500px !important;">
+<div *ngIf="printing" id="selectedInvoice" style="display: inline-block;">
   <app-invoice-details [transactionData]="selectedTransaction" [inModal]="false"></app-invoice-details>
 </div>

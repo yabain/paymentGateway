@@ -19,6 +19,7 @@ import { SubscriberListComponent } from './subscriber-list/subscriber-list.compo
 import { QRCodeModule } from 'angularx-qrcode';
 import { QrCodeComponent } from './qr-code/qr-code.component';
 import { ProceedPaymentComponent } from './proceed-payment/proceed-payment.component';
+import { ReceiptComponent } from './receipt/receipt.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, '../assets/i18n/', '.json?v=' + new Date().getTime());
@@ -36,7 +37,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     PackageDetailsComponent,
     SubscriberListComponent,
     QrCodeComponent,
-    ProceedPaymentComponent
+    ProceedPaymentComponent,
+    ReceiptComponent
   ],
   providers: [],
   imports: [
@@ -59,7 +61,8 @@ export function HttpLoaderFactory(http: HttpClient) {
       SubscriberListComponent,
       FullCalendarModule,
       QrCodeComponent,
-      ProceedPaymentComponent
+      ProceedPaymentComponent,
+      ReceiptComponent
     ],
 })
 export class FrontModule {}

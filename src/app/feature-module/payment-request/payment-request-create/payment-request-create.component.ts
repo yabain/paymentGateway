@@ -6,6 +6,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { FieldValidationService } from 'src/app/services/field-validation/field-validation.service';
 import { PaymentRequestService } from 'src/app/services/payment-request/payment-request.service';
 import { PaymentService } from 'src/app/services/payment/payment.service';
+import { PrintService } from 'src/app/services/print/print.service';
 import { SystemService } from 'src/app/services/system/system.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { UserService } from 'src/app/services/user/user.service';
@@ -48,6 +49,7 @@ export class PaymentRequestCreateComponent implements OnInit, OnDestroy {
   loadingData: boolean = true;
   systemData: any;
   invoiceTaxes: number = 5;
+  printing: boolean = false;
 
   constructor(
     private paymentRequestService: PaymentRequestService,
@@ -58,6 +60,7 @@ export class PaymentRequestCreateComponent implements OnInit, OnDestroy {
     private location: Location,
     private paymentService: PaymentService,
     private systemService: SystemService,
+    private pdfExportService: PrintService,
   ) {
     this.form = new FormGroup({
       amount: new FormControl(0, [Validators.required]),
@@ -351,6 +354,24 @@ export class PaymentRequestCreateComponent implements OnInit, OnDestroy {
     this.router.navigate([route]);
   }
   
+  public exportToPdf(): void {
+    // console.log('exportation de pdf');
+    if (this.transactionData) {
+      this.toastService.presentToast('info', 'Download', 'Téléchargement en cours...');
+      // this.toastService.info("Téléchargement en cours...", "PDF", {
+      //   timeOut: 10000,
+      //   closeButton: true,
+      // });
+      this.printing = true;
+      setTimeout(() => {
+        this.pdfExportService.generatePdf('receipt', 'Recu_' + this.transactionData._id + '.pdf');
+      }, 1 * 1000);
+      setTimeout(() => {
+        this.printing = false;
+      }, 5 * 1000);
+    }
+  }          
+
   ngOnDestroy(): void {
     this.stopPolling();
     this.destroy$.next();

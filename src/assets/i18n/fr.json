@@ -613,6 +613,7 @@
     "systemSettings": "Paramètres Système",
     "flutterwaveWallets": "Flutterwave",
     "paystackWallets": "Paystack",
+    "mpesaWallets": "M-Pesa",
     "whatsapp": "WhatsApp",
     "whatsappCenter": "Centre WhatsApp",
     "mail": "Email",
@@ -648,6 +649,15 @@
     "last12Months": "Les 12 derniers mois",
     "last24Months": "Les 24 derniers mois",
     "balance": "Solde Paystack"
+  },
+  "mpesa": {
+    "otherCurrencyBalances": "Solde des autres devises disponibles",
+    "balanceIn": "Solde M-Pesa en",
+    "lastMonth": "Le dernier mois",
+    "last6Months": "Les 6 derniers mois",
+    "last12Months": "Les 12 derniers mois",
+    "last24Months": "Les 24 derniers mois",
+    "balance": "Solde M-Pesa"
   },
   "users": {
     "title": "Utilisateurs",
