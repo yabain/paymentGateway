@@ -1,19 +1,19 @@
 <div class="receipt-wrap receipt-three">
   <div class="receipt-top">
     <div class="receipt-title">{{name}}</div>
-    <div class="company-name">Payment receipt</div>
+    <div class="company-name" style="font-size: small !important; color: black !important;">Payment receipt</div>
   </div>
   <div class="receipt-seperator"></div>
   <div class="receipt-seperator"></div>
-  <div class="title">Invoice No:
-    <span style="font-size: small !important; color: black;">{{receiptData?._id}}</span>
+  <div class="title" style="font-size: small !important; color: black !important;">Invoice No:
+    <span style="font-size: small !important; color: black !important;">{{ receiptId }}</span>
   </div>
-  <div class="title">Date:
-    <span style="font-size: small !important; color: black;">{{ receiptData?.updatedAt | date: 'dd-MM-yyyy HH:mm:ss'
+  <div class="title" style="font-size: small !important; color: black !important;">Date:
+    <span style="font-size: small !important; color: black !important;">{{ tx?.updatedAt | date: 'dd-MM-yyyy HH:mm:ss'
       }}</span>
   </div>
-  <div class="title">Customer name:
-    <span style="font-size: small !important; color: black;">--------</span>
+  <div class="title" style="font-size: small !important; color: black !important;">Customer name:
+    <span style="font-size: small !important; color: black !important;">--------</span>
   </div>
   <!-- <ul class="customer-list">
       <li>
@@ -46,12 +46,12 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
+      <tr style="font-size: small !important; color: black !important;">
         <td>1.</td>
         <td>Payment request</td>
-        <td>{{receiptData?.estimation}} {{receiptData?.receiverCurrency}}</td>
+        <td>{{ tx?.estimation }} {{ tx?.receiverCurrency }}</td>
         <td>1</td>
-        <td>{{receiptData?.estimation}} {{receiptData?.receiverCurrency}}</td>
+        <td>{{ tx?.estimation }} {{ tx?.receiverCurrency }}</td>
       </tr>
       <!-- <tr>
                   <td>2.</td>
@@ -90,27 +90,27 @@
       <div class="bill_value">--</div>
     </div> -->
     <div class="receipt-seperator"></div>
-    <div class="bill_list_in">
+    <div class="bill_list_in" style="font-size: small !important; color: black !important;">
       <div class="bill_title bill_focus">Total Bill:</div>
-      <div class="bill_value bill_focus">{{receiptData?.estimation}} {{receiptData?.receiverCurrency}}</div>
+      <div class="bill_value bill_focus">{{ tx?.estimation }} {{ tx?.receiverCurrency }}</div>
     </div>
-    <div class="bill_list_in">
+    <div class="bill_list_in" style="font-size: small !important; color: black !important;">
       <div class="bill_title bill_focus">Fees:</div>
-      <div class="bill_value bill_focus">{{receiptData?.taxesAmount}} {{receiptData?.receiverCurrency}}</div>
+      <div class="bill_value bill_focus">{{ tx?.taxesAmount }} {{ tx?.receiverCurrency }}</div>
     </div>
-    <div class="bill_list_in total-payable">
+    <div class="bill_list_in total-payable" style="font-size: small !important; color: black !important;">
       <div class="bill_title bill_focus">Total Payable:</div>
-      <div class="bill_value bill_focus">{{receiptData?.paymentWithTaxes}} {{receiptData?.receiverCurrency}}</div>
+      <div class="bill_value bill_focus">{{ tx?.paymentWithTaxes }} {{ tx?.receiverCurrency }}</div>
     </div>
   </div>
   <div class="receipt-seperator"></div>
-  <div class="sample_text ">
-    Transaction Id: {{receiptData?.transactionId._id}}
+  <div class="sample_text " style="font-size: small !important; color: black !important;">
+    Transaction Id: {{ tx?._id }}
     <!-- <img src="assets/img/bar.png"alt="image"> -->
-    <app-qr-code [data]="getUrl()" [size]="160" *ngIf="receiptData"></app-qr-code>
+    <app-qr-code [data]="getUrl()" [size]="160" *ngIf="tx"></app-qr-code>
   </div>
   <div class="receipt-seperator"></div>
-  <div class="sample_text">
+  <div class="sample_text" style="font-size: small !important; color: black !important;">
     Powered by digiKUNTZ Payments <br>
     payments.digikuntz.com
   </div>

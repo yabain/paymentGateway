@@ -19,8 +19,16 @@ export class ReceiptComponent {
     console.log('Receipt Data:', this.receiptData);
   }
 
+  get tx(): any {
+    return this.receiptData?.transactionId || this.receiptData || null;
+  }
+
+  get receiptId(): string {
+    return this.tx?._id || this.receiptData?._id || '';
+  }
 
   getUrl(): string {
-    return environment.frontUrl + '/invoice/' + this.receiptData._id;
+    console.log('invoice url: ', environment.frontUrl + '/invoice/' + this.receiptId)
+    return environment.frontUrl + '/invoice/' + this.receiptId;
   }
 }
