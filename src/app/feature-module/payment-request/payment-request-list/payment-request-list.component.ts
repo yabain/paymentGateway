@@ -145,7 +145,13 @@ export class PaymentRequestListComponent implements OnInit, OnDestroy {
       // });
       this.printing = true;
       setTimeout(() => {
-        this.pdfExportService.generatePdf('receipt', 'Recu_' + this.selectedItem._id + '.pdf');
+        this.pdfExportService.generatePdf(
+          'receipt',
+          'Recu_' + this.selectedItem._id + '.pdf',
+          210,
+          297,
+          true,
+        );
       }, 1 * 1000);
       setTimeout(() => {
         this.printing = false;

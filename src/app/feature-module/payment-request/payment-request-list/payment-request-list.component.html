@@ -122,4 +122,9 @@
   </div>
 </div>
 
-<app-receipt id="receipt" [receiptData]="selectedItem?.transactionId" *ngIf="selectedItem && printing" [name]="currentUser?.name"></app-receipt>
+<app-receipt id="receipt"
+*ngIf="selectedItem && printing"
+[receiptData]="selectedItem?.transactionId"
+[name]="currentUser?.name"
+[phone]="currentUser?.phone"
+[email]="currentUser?.email"></app-receipt>

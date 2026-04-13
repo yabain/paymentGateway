@@ -11,6 +11,8 @@ import { environment } from 'src/environments/environment';
 export class ReceiptComponent {
   @Input() receiptData: any;
   @Input() name: string = 'digiKUNTZ Payments';
+  @Input() phone: boolean;
+  @Input() email: boolean;
   
 
   constructor() { }
