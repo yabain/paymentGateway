@@ -107,7 +107,7 @@
   <div class="sample_text " style="font-size: small !important; color: black !important;">
     Transaction Id: {{ tx?._id }}
     <!-- <img src="assets/img/bar.png"alt="image"> -->
-    <app-qr-code [data]="getUrl()" [size]="130" *ngIf="tx"></app-qr-code>
+    <app-qr-code [data]="getUrl()" [size]="160" *ngIf="tx"></app-qr-code>
     <br>Contact {{name}}
     <div class="title" style="font-size: small !important; color: black !important;">Phone:
       <span style="font-size: small !important; color: black !important;">{{ phone }}</span>
