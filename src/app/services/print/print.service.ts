@@ -18,7 +18,9 @@ export class PrintService {
     pageWidth: number = 210,
     pageHeight: number = 297,
     dynamicSize: boolean = false,
-  ): void {
+    renderScale: number = 1.2,
+    imageQuality: number = 0.82,
+  ): Promise<void> {
     // Get the receipt content element
     const element = document.getElementById(elementId);
 
@@ -51,12 +53,12 @@ export class PrintService {
 
       // Optimize html2canvas options for smaller file size
       const options = {
-        scale: 1.5, // Réduire la résolution (défaut: 2, peut être réduit à 1.5 ou 1)
+        scale: Math.max(0.7, Math.min(renderScale, 2)),
         useCORS: true,
         logging: false,
         backgroundColor: '#ffffff',
         removeContainer: true,
-        imageTimeout: 0,
+        imageTimeout: 15000,
         allowTaint: false,
         width: targetWidth,
         height: targetHeight,
@@ -75,7 +77,7 @@ export class PrintService {
         }
       };
 
-      html2canvas(captureElement, options).then(canvas => {
+      return html2canvas(captureElement, options).then(canvas => {
         if (!canvas || canvas.width < 1 || canvas.height < 1) {
           console.error('PDF generation aborted: invalid canvas size', {
             canvasWidth: canvas?.width,
@@ -86,7 +88,10 @@ export class PrintService {
 
         // Utiliser JPEG avec compression au lieu de PNG
         // Qualité 0.85 = bon compromis qualité/taille (0.0 à 1.0)
-        const imgData = canvas.toDataURL('image/jpeg', 0.85);
+        const imgData = canvas.toDataURL(
+          'image/jpeg',
+          Math.max(0.5, Math.min(imageQuality, 0.95)),
+        );
 
         if (dynamicSize) {
           const pdfWidthMm = this.pxToMm(canvas.width);
@@ -134,6 +139,6 @@ export class PrintService {
         console.error('PDF generation error:', error);
       });
     }
-  
+    return Promise.resolve();
   }
 }

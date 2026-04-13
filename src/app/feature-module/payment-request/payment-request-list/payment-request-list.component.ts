@@ -134,28 +134,29 @@ export class PaymentRequestListComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  public exportToPdf(item): void {
+  public async exportToPdf(item): Promise<void> {
     this.selectedItem = item;
-    // console.log('exportation de pdf');
-    if (this.selectedItem) {
-      this.toastService.presentToast('info', 'Download', 'Téléchargement en cours...');
-      // this.toastService.info("Téléchargement en cours...", "PDF", {
-      //   timeOut: 10000,
-      //   closeButton: true,
-      // });
-      this.printing = true;
-      setTimeout(() => {
-        this.pdfExportService.generatePdf(
-          'receipt',
-          'Recu_' + this.selectedItem._id + '.pdf',
-          210,
-          297,
-          true,
-        );
-      }, 1 * 1000);
-      setTimeout(() => {
-        this.printing = false;
-      }, 5 * 1000);
+    if (!this.selectedItem) {
+      return;
+    }
+
+    this.toastService.presentToast('info', 'Download', 'Téléchargement en cours...');
+    this.printing = true;
+
+    try {
+      // Laisse Angular rendre le composant receipt avant la capture.
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      await this.pdfExportService.generatePdf(
+        'receipt',
+        'Recu_' + this.selectedItem._id + '.pdf',
+        210,
+        297,
+        true,
+        0.95,
+        0.75,
+      );
+    } finally {
+      this.printing = false;
     }
   }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
 }
