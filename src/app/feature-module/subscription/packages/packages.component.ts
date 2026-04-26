@@ -21,6 +21,7 @@ import { FieldValidationService } from 'src/app/services/field-validation/field-
 interface data {
   value: string;
 }
+type PlanFilter = 'all' | 'active' | 'inactive';
 @Component({
   selector: 'app-packages',
   templateUrl: './packages.component.html',
@@ -81,6 +82,14 @@ export class PackagesComponent implements OnInit, OnDestroy {
   reOpen: boolean = false;
   transactionSucceded: boolean = false;
   transactionFailed: boolean = false;
+  viewMode: 'grid' | 'list' = 'grid';
+  showFilters = false;
+  selectedCategory: PlanFilter = 'all';
+  categories: Array<{ id: PlanFilter; name: string; value: number }> = [
+    { id: 'all', name: 'totalPlans', value: 0 },
+    { id: 'active', name: 'activePlans', value: 0 },
+    { id: 'inactive', name: 'inactivePlan', value: 0 },
+  ];
 
   openContent() {
     this.toggleData = !this.toggleData;
@@ -140,8 +149,12 @@ export class PackagesComponent implements OnInit, OnDestroy {
   }
 
   isAuthor(plan: any, user: any = this.currentUser) {
-    // console.log('plan: ', plan)
-    return user._id.toString() === plan.author._id.toString() ? true : false;
+    const userId = user?._id ? String(user._id) : '';
+    const authorId = plan?.author?._id ? String(plan.author._id) : '';
+    if (!userId || !authorId) {
+      return false;
+    }
+    return userId === authorId;
   }
 
   selectPlan(plan: any) {
@@ -200,6 +213,7 @@ export class PackagesComponent implements OnInit, OnDestroy {
     if (this.isAdmin) {
       this.subscriptionService.getPlanStatistics().subscribe((data: any) => {
         this.statistics = data;
+        this.updatePlanCategoryCounts();
         this.gettingStatistics = false;
       });
     } else {
@@ -239,8 +253,9 @@ export class PackagesComponent implements OnInit, OnDestroy {
     if (this.isAdmin) {
       this.subscriptionService.getAllPlansList().subscribe((data: any) => {
         this.watingPlansList = false;
-        this.plansList = data;
-        this.plansListBackup = data;
+        this.plansList = data || [];
+        this.plansListBackup = data || [];
+        // this.updatePlanCategoryCounts();
         // console.log('plansListBackup geted: ', this.plansListBackup);
       });
     } else {
@@ -248,8 +263,9 @@ export class PackagesComponent implements OnInit, OnDestroy {
         .getMyPlansList(this.currentUser._id)
         .subscribe((data: any) => {
           this.watingPlansList = false;
-          this.plansList = data;
-          this.plansListBackup = data;
+          this.plansList = data || [];
+          this.plansListBackup = data || [];
+          this.updatePlanCategoryCounts();
         });
     }
   }
@@ -628,6 +644,60 @@ export class PackagesComponent implements OnInit, OnDestroy {
   navigateTo(route) {
     this.ngOnDestroy();
     this.router.navigate([route]);
+  }
+
+  setCategoryFilter(category: PlanFilter): void {
+    this.selectedCategory = category;
+  }
+
+  toggleView(mode: 'grid' | 'list'): void {
+    this.viewMode = mode;
+  }
+
+  toggleFilters(): void {
+    this.showFilters = !this.showFilters;
+  }
+
+  get filteredPlans(): any[] {
+    const base = this.plansListBackup || [];
+    const query = (this.searchString || '').trim().toLowerCase();
+
+    return base.filter((plan: any) => {
+      const title = String(plan?.title || '').toLowerCase();
+      const subTitle = String(plan?.subTitle || '').toLowerCase();
+      const description = String(plan?.description || '').toLowerCase();
+      const matchesSearch =
+        !query ||
+        title.includes(query) ||
+        subTitle.includes(query) ||
+        description.includes(query);
+
+      const isActive = this.getPlanIsActive(plan);
+      const matchesCategory =
+        this.selectedCategory === 'all' ||
+        (this.selectedCategory === 'active' && isActive) ||
+        (this.selectedCategory === 'inactive' && !isActive);
+
+      return matchesSearch && matchesCategory;
+    });
+  }
+
+  private getPlanIsActive(plan: any): boolean {
+    return Boolean(plan?.isActive ?? plan?.status);
+  }
+
+  private updatePlanCategoryCounts(): void {
+    const base = this.plansListBackup || [];
+    const total = base.length;
+    const active = base.filter((plan: any) => this.getPlanIsActive(plan)).length;
+    const inactive = Math.max(total - active, 0);
+
+    this.categories = this.categories.map((cat) => {
+      if (cat.id === 'all') return { ...cat, value: this.statistics.totalPlans || 0 };
+      if (cat.id === 'active') return { ...cat, value: this.statistics.activePlans || 0 };
+      if (cat.id === 'inactive') return { ...cat, value: this.statistics.inactivePlans || 0 };
+      return { ...cat, value: inactive };
+    });
   }
 
   isPaystackCurrency(currency?: string): boolean {

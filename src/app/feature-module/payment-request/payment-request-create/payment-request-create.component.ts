@@ -2,6 +2,7 @@ import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Subject, takeUntil } from 'rxjs';
 import { FieldValidationService } from 'src/app/services/field-validation/field-validation.service';
 import { PaymentRequestService } from 'src/app/services/payment-request/payment-request.service';
@@ -61,6 +62,7 @@ export class PaymentRequestCreateComponent implements OnInit, OnDestroy {
     private paymentService: PaymentService,
     private systemService: SystemService,
     private pdfExportService: PrintService,
+    private toastr: ToastrService,
   ) {
     this.form = new FormGroup({
       amount: new FormControl(0, [Validators.required]),
@@ -215,6 +217,7 @@ export class PaymentRequestCreateComponent implements OnInit, OnDestroy {
           this.toastService.presentToast('error', 'Error', 'Operation failed');
           return;
         }
+        this.copyToClipboard(this.form.value.phone);
 
         this.createdTxRef =
           res?.txRef ||
@@ -238,6 +241,18 @@ export class PaymentRequestCreateComponent implements OnInit, OnDestroy {
         this.form.disable();
         this.startPolling(transactionId);
         this.handleRequest(transactionId);
+      });
+  }
+
+  
+  copyToClipboard(text: string): void {
+    
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        this.toastr.info('Le numéro de téléphone a été copié', 'Copié');
+      })
+      .catch((error) => {
+        this.toastr.error('Erreur lors de la copie du numéro de téléphone', 'Erreur');
       });
   }
 
@@ -353,7 +368,7 @@ export class PaymentRequestCreateComponent implements OnInit, OnDestroy {
   navigateTo(route) {
     this.router.navigate([route]);
   }
-  
+
   public exportToPdf(): void {
     // console.log('exportation de pdf');
     if (this.transactionData) {
@@ -370,7 +385,7 @@ export class PaymentRequestCreateComponent implements OnInit, OnDestroy {
         this.printing = false;
       }, 5 * 1000);
     }
-  }          
+  }
 
   ngOnDestroy(): void {
     this.stopPolling();

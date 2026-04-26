@@ -1,12 +1,14 @@
+import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { Location } from '@angular/common';
+import { FieldValidationService } from 'src/app/services/field-validation/field-validation.service';
 import { FundraisingService } from 'src/app/services/fundraising/fundraising.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { UserService } from 'src/app/services/user/user.service';
-import { FieldValidationService } from 'src/app/services/field-validation/field-validation.service';
+
+type CampaignFilter = 'all' | 'active' | 'inactive';
 
 @Component({
   selector: 'app-fundraising-list',
@@ -22,22 +24,28 @@ export class FundraisingListComponent implements OnInit, OnDestroy {
   showCreateForm = false;
 
   campaigns: any[] = [];
-  selectedUserDonationStats: any = null;
-  totalDonationsData: any = null;
-
   currentUser: any = null;
   isAdminRoute = false;
 
   page = 1;
-  limit = 10;
+  limit = 50;
   totalItems = 0;
   hasNextPage = false;
   hasPrevPage = false;
 
   contextPath = '';
-  selectedUserId = '';
   form: FormGroup;
 
+  viewMode: 'grid' | 'list' = 'grid';
+  searchQuery = '';
+  selectedCategory: CampaignFilter = 'all';
+  showFilters = false;
+
+  categories: Array<{ id: CampaignFilter; name: string; value: number }> = [
+    { id: 'all', name: 'totalFundraising', value: 0 },
+    { id: 'active', name: 'activeFundraising', value: 0 },
+    { id: 'inactive', name: 'inactiveFundraising', value: 0 },
+  ];
 
   constructor(
     private route: ActivatedRoute,
@@ -54,21 +62,16 @@ export class FundraisingListComponent implements OnInit, OnDestroy {
       this.contextPath = this.route.snapshot.routeConfig?.path || '';
       this.isAdminRoute = this.location.path().includes('admin-fundraising');
       await this.loadCurrentUser();
-      this.applyDefaultCurrency();
-      this.loadList();
-      this.loadAdminStats();
+      this.initForm();
+      this.loadList(1);
     });
   }
 
   async loadCurrentUser(): Promise<void> {
     this.currentUser = await this.userService.getCurrentUser();
-    if (this.currentUser && this.selectedUserId === '') {
-      this.selectedUserId = this.currentUser._id;
-    }
-    this.initForm();
   }
 
-  initForm(){
+  initForm(): void {
     const defaultCurrency = this.currentUser?.countryId?.currency || 'XAF';
     this.form = new FormGroup({
       title: new FormControl('', [Validators.required, Validators.minLength(3)]),
@@ -85,35 +88,16 @@ export class FundraisingListComponent implements OnInit, OnDestroy {
       endDate: new FormControl('', [Validators.required]),
       status: new FormControl(true, [Validators.required]),
       visibility: new FormControl('public', [Validators.required]),
-      coverImageUrl: new FormControl('https://payments.digikuntz.com/assets/img/icons/price-01.svg', [Validators.required]),
+      coverImageUrl: new FormControl(
+        'https://payments.digikuntz.com/assets/img/icons/price-01.svg',
+        [Validators.required],
+      ),
     });
 
     this.form
       .get('currency')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.form.get('targetAmount')?.updateValueAndValidity();
-      });
-  }
-
-  applyDefaultCurrency(): void {
-    const currency = this.currentUser?.countryId?.currency || 'XAF';
-    if (!this.form.value.currency) {
-      this.form.patchValue({ currency });
-    }
-  }
-
-  loadAdminStats(): void {
-    if (!this.isAdminRoute) {
-      return;
-    }
-
-    this.fundraisingService
-      .getTotalDonations()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((data: any) => {
-        this.totalDonationsData = data;
-      });
+      .subscribe(() => this.form.get('targetAmount')?.updateValueAndValidity());
   }
 
   loadList(page = this.page): void {
@@ -121,48 +105,39 @@ export class FundraisingListComponent implements OnInit, OnDestroy {
     this.loading = true;
 
     const query = { page: this.page, limit: this.limit };
-    const userId = this.route.snapshot.paramMap.get('userId') || this.selectedUserId;
-    const request$ = this.getRequestByContext(query, userId);
+    const request$ = this.getRequestByContext(query);
 
     request$.pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
       const normalized = this.normalizePaginatedData(response);
-      this.campaigns = normalized.items;
+      this.campaigns = normalized.items.map((campaign: any) => ({
+        ...campaign,
+        status: this.getCampaignIsActive(campaign),
+      }));
       this.totalItems = normalized.total;
       this.hasNextPage = normalized.hasNextPage;
       this.hasPrevPage = normalized.hasPrevPage;
+      this.updateCategoryCounts();
       this.loading = false;
     });
   }
 
-  getRequestByContext(query: any, userId: string) {
+  getRequestByContext(query: any) {
     if (this.contextPath === 'my/active') {
       return this.fundraisingService.getMyActiveFundraisings(query);
     }
-
-    if (this.contextPath === 'my/list') {
-      return this.fundraisingService.getMyFundraisings(query);
-    }
-
-    if (this.contextPath === '') {
+    if (this.contextPath === '' || this.contextPath === 'list' || this.contextPath === 'my/list') {
       return this.isAdminRoute
         ? this.fundraisingService.getAllSystem(query)
         : this.fundraisingService.getMyFundraisings(query);
     }
 
-    if (this.contextPath === 'list') {
-      return this.isAdminRoute
-        ? this.fundraisingService.getAllSystem(query)
-        : this.fundraisingService.getMyFundraisings(query);
-    }
-
+    const userId = this.route.snapshot.paramMap.get('userId');
     if (this.contextPath === 'user/:userId/list' && userId) {
       return this.fundraisingService.getUserFundraisings(userId, query);
     }
-
     if (this.contextPath === 'user/:userId/active' && userId) {
       return this.fundraisingService.getUserActiveFundraisings(userId, query);
     }
-
     if (this.contextPath === 'user/:userId/active-public' && userId) {
       return this.fundraisingService.getUserActivePublicFundraisings(userId, query);
     }
@@ -208,12 +183,11 @@ export class FundraisingListComponent implements OnInit, OnDestroy {
       endDate: '',
       status: true,
       visibility: 'public',
-      coverImageUrl: 'https://cdn.example.com/fundraising/cover.jpg',
+      coverImageUrl: 'https://payments.digikuntz.com/assets/img/icons/price-01.svg',
     });
   }
 
   createCampaign(): void {
-    console.log('form data: ', this.form.value);
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
@@ -231,10 +205,8 @@ export class FundraisingListComponent implements OnInit, OnDestroy {
     }
 
     this.creating = true;
-    const payload = this.removeEmpty(this.form.value);
-
     this.fundraisingService
-      .createFundraising(payload)
+      .createFundraising(this.removeEmpty(this.form.value))
       .pipe(takeUntil(this.destroy$))
       .subscribe((res: any) => {
         this.creating = false;
@@ -245,12 +217,7 @@ export class FundraisingListComponent implements OnInit, OnDestroy {
 
         this.toastService.presentToast('success', 'Success', 'Operation completed');
         this.showCreateForm = false;
-        this.form.reset({
-          currency: this.currentUser?.countryId?.currency || 'XAF',
-          visibility: 'public',
-        });
-        const closeButton = document.getElementById('close-add-fundraising');
-        closeButton?.click();
+        document.getElementById('close-add-fundraising')?.click();
         this.loadList(1);
       });
   }
@@ -260,20 +227,42 @@ export class FundraisingListComponent implements OnInit, OnDestroy {
   }
 
   get activeCount(): number {
-    return (this.campaigns || []).filter(
-      (campaign) => Boolean(campaign?.isActive ?? campaign?.status),
-    ).length;
+    return (this.campaigns || []).filter((campaign) => this.getCampaignIsActive(campaign)).length;
   }
 
   get inactiveCount(): number {
     return Math.max((this.campaigns || []).length - this.activeCount, 0);
   }
 
+  setCategoryFilter(category: CampaignFilter): void {
+    this.selectedCategory = category;
+  }
+
+  get filteredCampaigns(): any[] {
+    return (this.campaigns || []).filter((campaign) => {
+      const query = this.searchQuery.trim().toLowerCase();
+      const title = String(campaign?.title || '').toLowerCase();
+      const description = String(campaign?.description || '').toLowerCase();
+      const matchesSearch = !query || title.includes(query) || description.includes(query);
+
+      const isActive = this.getCampaignIsActive(campaign);
+      const matchesCategory =
+        this.selectedCategory === 'all' ||
+        (this.selectedCategory === 'active' && isActive) ||
+        (this.selectedCategory === 'inactive' && !isActive);
+
+      return matchesSearch && matchesCategory;
+    });
+  }
+
+  toggleView(mode: 'grid' | 'list'): void {
+    this.viewMode = mode;
+  }
+
   goToDetails(campaign: any): void {
     if (!campaign?._id) {
       return;
     }
-
     const prefix = this.isAdminRoute ? '/admin-fundraising' : '/fundraising';
     this.router.navigate([`${prefix}/${campaign._id}`]);
   }
@@ -283,16 +272,16 @@ export class FundraisingListComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const current = campaign?.isActive ?? campaign?.status ?? false;
+    const current = this.getCampaignIsActive(campaign);
     this.waitingAction = true;
 
     this.fundraisingService
-      .updateStatus(campaign._id, !Boolean(current))
+      .updateStatus(campaign._id, !current)
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         this.waitingAction = false;
         this.toastService.presentToast('success', 'Success', 'Status updated');
-        this.loadList();
+        this.loadList(this.page);
       });
   }
 
@@ -310,60 +299,34 @@ export class FundraisingListComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.waitingAction = false;
         this.toastService.presentToast('success', 'Success', 'Visibility updated');
-        this.loadList();
+        this.loadList(this.page);
       });
   }
 
-  viewUserDonationStats(): void {
-    if (!this.selectedUserId) {
-      return;
-    }
-
-    this.fundraisingService
-      .getUserDonationStats(this.selectedUserId)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((data) => {
-        this.selectedUserDonationStats = data;
-      });
+  private getCampaignIsActive(campaign: any): boolean {
+    return Boolean(campaign?.isActive ?? campaign?.status);
   }
 
-  openUserList(type: 'list' | 'active' | 'active-public'): void {
-    if (!this.selectedUserId) {
-      return;
-    }
+  private updateCategoryCounts(): void {
+    const total = (this.campaigns || []).length;
+    const active = this.activeCount;
+    const inactive = Math.max(total - active, 0);
 
-    const prefix = this.isAdminRoute ? '/admin-fundraising' : '/fundraising';
-    this.router.navigate([`${prefix}/user/${this.selectedUserId}/${type}`]);
+    this.categories = this.categories.map((cat) => {
+      if (cat.id === 'all') return { ...cat, value: total };
+      if (cat.id === 'active') return { ...cat, value: active };
+      return { ...cat, value: inactive };
+    });
   }
 
-  previousPage(): void {
-    if (!this.hasPrevPage) {
-      return;
-    }
-    this.loadList(this.page - 1);
-  }
-
-  nextPage(): void {
-    if (!this.hasNextPage) {
-      return;
-    }
-    this.loadList(this.page + 1);
-  }
-
-  trackById(_index: number, item: any): string {
-    return item?._id || String(_index);
-  }
-
-  removeEmpty(payload: any): any {
+  private removeEmpty(payload: any): any {
     const result: any = {};
-
     Object.keys(payload || {}).forEach((key) => {
       const value = payload[key];
       if (value !== undefined && value !== null && value !== '') {
         result[key] = value;
       }
     });
-
     return result;
   }
 

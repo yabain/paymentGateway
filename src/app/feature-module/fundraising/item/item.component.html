@@ -1,26 +1,64 @@
-<div class="card">
-    <div class="card-image" (click)="navigateTo('/fundraising/' + campaign?._id)">
-        <img [src]="campaign?.coverImageUrl || picture" alt="Description de l'image">
-        <div class="overlay"></div>
+<article class="product-card" [class.out-of-stock]="!campaign.status">
+    <!-- Image -->
+    <div class="product-card__image">
+        <img [src]="campaign.coverImageUrl" [alt]="campaign.title" (click)="navigateTo('/fundraising/' + campaign?._id)">
+
+        <!-- Badges -->
+        <div class="product-card__badges">
+            @if (!campaign.status) {
+            <span class="badge badge--disabled">{{ 'mail.disabled' | translate }}</span>
+            }
+            @if (campaign.status) {
+            <span class="badge badge--enabled">{{ 'mail.enabled' | translate }}</span>
+            }
+            <!-- @if (campaign.status) {
+            <span class="badge badge--bestseller">Best-seller</span>
+            } -->
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="product-card__actions">
+            <button class="action-btn">
+                <i class="feather icon-heart"></i>
+            </button>
+            <!-- <button class="action-btn">
+                <i class="feather icon-eye"></i>
+            </button> -->
+        </div>
+
+        @if (!campaign.status) {
+        <div class="out-of-stock-overlay" (click)="navigateTo('/fundraising/' + campaign?._id)">
+            <span>{{ 'mail.disabled' | translate }}</span>
+        </div>
+        }
     </div>
 
-    <div class="card-content">
-        <div (click)="navigateTo('/fundraising/' + campaign?._id)">
-            <h2 style="color: #fff;">{{ campaign?.title }}</h2>
-            <p class="subtitle">{{ campaign?.subTitle }}</p>
+    <!-- Info -->
+    <div class="product-card__info"
+    style="text-align: left;">
+        <span class="product-card__category">{{ truncate(campaign.subTitle, 25) }}</span>
+        <h3 class="product-card__name" (click)="navigateTo('/fundraising/' + campaign?._id)">{{ truncate(campaign.title, 25) }}</h3>
+        <p class="product-card__description">{{ truncate(campaign.description, 30) }}</p>
 
-            <div class="details">
-                <div class="small mb-1">
-                  <strong>{{ 'fundraising.totalFundraisingGoal' | translate }}:</strong>
-                  {{ campaign?.targetAmount || 0 }} {{ campaign?.currency || '' }}
-                </div>
-                <!-- <div class="small mb-2">
-                  <strong>{{ 'fundraising.totalFundraisingRaised' | translate }}:</strong>
-                  {{ campaign?.raisedAmount || campaign?.amountRaised || 0 }} {{ campaign?.currency || '' }}
-                </div> -->
+        <!-- Rating -->
+        <div class="product-card__rating" (click)="navigateTo('/fundraising/' + campaign?._id)">
+            <div class="stars">
+                @for (star of getStars(campaign.rating); track $index) {
+                <i class="feather" [ngClass]="star === 1 ? 'icon-star-fill' : (star === 0.5 ? 'icon-star-half' : 'icon-star')"></i>
+                }
             </div>
+            <span class="rating-text">{{ campaign.rating || 0 }} ({{ campaign.reviewsCount || 0 }})</span>
         </div>
-        <div [ngClass]="campaign?.status === true ? 'badge-success':  'badge-danger'" style="position: absolute;">
+
+        <!-- Price -->
+        <div class="product-card__price" (click)="navigateTo('/fundraising/' + campaign?._id)">
+            <span class="price-current">{{ formatPrice(campaign.targetAmount) }}</span>
         </div>
+
+        <!-- Add to Cart -->
+        <button class="add-to-cart-btn" [disabled]="!campaign.status">
+            <i class="bi bi-cart-plus"></i>
+            <span>{{ 'fundraising.contribute' | translate }}</span>
+        </button>
     </div>
-</div>
+</article>

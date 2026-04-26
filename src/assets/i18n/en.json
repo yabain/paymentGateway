@@ -486,6 +486,7 @@
     "fundraising": "Fundraising",
     "payment": "Payment",
     "receipt": "Receipt",
+    "paymentReceipt": "Payment receipt",
     "designation": "Designation",
     "totalAmount": "Total amount",
     "quantity": "Quantity",
@@ -494,6 +495,7 @@
     "balance": "Balance",
     "service": "Service",
     "invoice": "Invoice",
+    "fee": "Fee",
     "invoiceSettings": "Invoice settings",
     "paymentMethods": "Payment methods",
     "paymentSettings": {
@@ -877,6 +879,7 @@
     "donate": "Donate",
     "contributors": "Contributors",
     "pay": "Pay",
+    "contribute": "Contribute",
     "as": "To the account of",
     "fundraisingList": "List fundraisings",
     "fundraisingInfo": "Details",
@@ -892,6 +895,7 @@
     "subscriptionStartDate": "Subscription start date"
   },
   "paymentRequest": {
+    "title": "Payment requests",
     "myTitle": "My payment requests",
     "allTitle": "All payment requests",
     "createTitle": "Initiate payment request",
@@ -1202,5 +1206,6 @@
   "DATE_FORMAT": "MM/dd/yyyy",
   "nts": "Nothing to show!",
   "loading": "Loading",
-  "color": "Color"
+  "color": "Color",
+  "poweredByDk": "Powered by digiKUNTZ Payments"
 }

@@ -1,144 +1,3 @@
-<div class="page-header">
-  <div class="content-page-header page-tilte">
-    <h5 style="color: black !important;">{{ 'fundraising.title' | translate }}</h5>
-    <div class="page-content">
-      <div class="list-btn">
-        <ul class="filter-list">
-          <li>
-            <a
-              class="btn-filters btn-hover"
-              href="javascript:void(0);"
-              data-bs-toggle="tooltip"
-              data-bs-placement="bottom"
-              matTooltip="Refresh"
-              (click)="refresh()"
-            >
-              <span><i class="feather icon-refresh-ccw"></i></span>
-            </a>
-          </li>
-          <li>
-            <a
-              class="btn btn-primary"
-              href="javascript:void(0);"
-              data-bs-toggle="modal"
-              data-bs-target="#add_fundraising_campaign"
-              (click)="openCreateForm()"
-            >
-              <i class="fa fa-plus-circle me-2" aria-hidden="true"></i>{{ 'fundraising.createCampaign' | translate }}
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="super-admin-list-head">
-  <div class="row">
-    <div class="col-xl-3 col-md-6 d-flex">
-      <div class="card w-100">
-        <div class="card-body card-head">
-          <div class="grid-info-item total-plane">
-            <div class="grid-info">
-              <span>{{ 'fundraising.totalFundraising' | translate }}</span>
-              <h4>{{ totalItems }}</h4>
-            </div>
-            <div class="grid-head-icon"><i class="feather icon-package"></i></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-xl-3 col-md-6 d-flex">
-      <div class="card w-100">
-        <div class="card-body card-head">
-          <div class="grid-info-item active-plane">
-            <div class="grid-info">
-              <span>{{ 'fundraising.activeFundraising' | translate }}</span>
-              <h4>{{ activeCount }}</h4>
-            </div>
-            <div class="grid-head-icon"><i class="feather icon-check-circle"></i></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-xl-3 col-md-6 d-flex">
-      <div class="card w-100">
-        <div class="card-body card-head">
-          <div class="grid-info-item inactive-plane">
-            <div class="grid-info">
-              <span>{{ 'fundraising.inactiveFundraising' | translate }}</span>
-              <h4>{{ inactiveCount }}</h4>
-            </div>
-            <div class="grid-head-icon"><i class="feather icon-pause-circle"></i></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- <div class="row mb-3" *ngIf="isAdminRoute">
-  <div class="col-md-4">
-    <input
-      class="form-control"
-      [(ngModel)]="selectedUserId"
-      [ngModelOptions]="{ standalone: true }"
-      placeholder="User ID"
-    />
-  </div>
-  <div class="col-md-8 d-flex gap-2 flex-wrap">
-    <button type="button" class="btn btn-outline-primary btn-sm" (click)="openUserList('list')">
-      User List
-    </button>
-    <button type="button" class="btn btn-outline-primary btn-sm" (click)="openUserList('active')">
-      User Active
-    </button>
-    <button type="button" class="btn btn-outline-primary btn-sm" (click)="openUserList('active-public')">
-      User Active Public
-    </button>
-    <button type="button" class="btn btn-outline-secondary btn-sm" (click)="viewUserDonationStats()">
-      User Donation Stats
-    </button>
-  </div>
-</div> -->
-
-<div class="alert alert-info" *ngIf="selectedUserDonationStats">
-  <pre class="mb-0">{{ selectedUserDonationStats | json }}</pre>
-</div>
-
-<div class="row d-flex align-items-center justify-content-center"
-*ngIf="!loading && campaigns?.length >= 1">
-    <div class="col-sm-12 col-md-6 col-lg-5 col-xl-3" 
-    *ngFor="let campaign of campaigns; trackBy: trackById" style="text-align: center !important;">
-        <div>
-          <app-item [campaign]="campaign"></app-item>
-        </div>
-    </div>
-</div>
-
-<div class="row d-flex align-items-center justify-content-center" *ngIf="!loading && campaigns?.length < 1">
-  <div class="empty-state">
-    <img src="../../../../assets/img/resources/nts.png" alt="" />
-    <div>{{ 'nts' | translate }}</div>
-  </div>
-</div>
-
-<div class="row d-flex align-items-center justify-content-center" *ngIf="loading">
-  <div class="loading-wrap">
-    <div class="spinner-border" role="status"></div>
-  </div>
-</div>
-
-<div class="d-flex justify-content-between align-items-center mt-2" *ngIf="!loading">
-  <button type="button" class="btn btn-outline-secondary btn-sm" [disabled]="!hasPrevPage" (click)="previousPage()">
-    Prev
-  </button>
-  <span>Page {{ page }}</span>
-  <button type="button" class="btn btn-outline-secondary btn-sm" [disabled]="!hasNextPage" (click)="nextPage()">
-    Next
-  </button>
-</div>
-
 <div class="modal custom-modal fade p-20" id="add_fundraising_campaign" role="dialog">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
@@ -146,13 +5,8 @@
         <div class="form-header modal-header-title text-start mb-0">
           <h4 class="mb-0">{{ 'fundraising.createCampaign' | translate }}</h4>
         </div>
-        <button
-          id="close-add-fundraising"
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
+        <button id="close-add-fundraising" type="button" class="btn-close" data-bs-dismiss="modal"
+          aria-label="Close"></button>
       </div>
       <form [formGroup]="form" (ngSubmit)="createCampaign()" novalidate>
         <div class="modal-body">
@@ -195,7 +49,8 @@
           </div>
         </div>
         <div class="modal-footer border-0">
-          <button type="button" class="btn btn-light me-2" data-bs-dismiss="modal">{{ 'action.cancel' | translate }}</button>
+          <button type="button" class="btn btn-light me-2" data-bs-dismiss="modal">{{ 'action.cancel' | translate
+            }}</button>
           <button class="btn btn-primary" [disabled]="creating || form.invalid" type="submit">
             <span *ngIf="!creating">{{ 'action.save' | translate }}</span>
             <span *ngIf="creating" class="spinner-border spinner-border-sm" role="status"></span>
@@ -203,5 +58,116 @@
         </div>
       </form>
     </div>
+  </div>
+</div>
+
+<div class="product-list-page">
+  <!-- Header -->
+  <header class="page-header">
+    <div class="page-header__left">
+      <h1 class="page-header__title" style="color: black !important;">{{ 'fundraising.title' | translate }}</h1>
+    </div>
+    <div class="page-header__actions">
+      <button class="filter-toggle" (click)="refresh()">
+        <span><i class="feather icon-refresh-ccw"></i></span>
+      </button>
+      <button class="btn btn-primary" href="javascript:void(0);" data-bs-toggle="modal"
+        data-bs-target="#add_fundraising_campaign" (click)="openCreateForm()">
+        <i class="fa fa-plus-circle me-2" aria-hidden="true"></i>{{ 'fundraising.createCampaign' | translate }}
+      </button>
+    </div>
+  </header>
+
+  <div class="page-content" [class.filters-open]="showFilters">
+    <!-- Filters Sidebar -->
+    <aside class="filters-sidebar" [class.open]="showFilters">
+      <div class="filters-header">
+        <h3>Filtres</h3>
+        <button class="close-filters" (click)="showFilters = false">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+
+      <!-- Search -->
+      <div class="filter-section">
+        <label class="filter-label">Rechercher</label>
+        <div class="search-input">
+          <i class="bi bi-search"></i>
+          <input type="text" placeholder="Nom du produit..." [(ngModel)]="searchQuery">
+        </div>
+      </div>
+
+      <!-- Categories -->
+      <div class="filter-section">
+        <label class="filter-label">Catégorie</label>
+        <div class="category-list">
+          <!-- <button class="category-btn" [class.active]="selectedCategory === 'all'" (click)="selectedCategory = 'all'">
+            {{ 'fundraising.totalFundraising' | translate }} ({{ totalItems }})
+          </button>
+          <button class="category-btn" [class.active]="selectedCategory === true" (click)="selectedCategory = true">
+            {{ 'fundraising.activeFundraising' | translate }} ({{ activeCount }})
+          </button>
+          <button class="category-btn" [class.active]="selectedCategory === false" (click)="selectedCategory = false">
+            {{ 'fundraising.inactiveFundraising' | translate }} ({{ inactiveCount }})
+          </button> -->
+          @for (cat of categories; track cat.id) {
+          <button class="category-btn" [class.active]="selectedCategory === cat.id" (click)="setCategoryFilter(cat.id)">
+            {{ ('fundraising.' + cat.name) | translate }} ({{ cat.value }})
+          </button>
+          }
+        </div>
+      </div>
+
+      <!-- Price Range -->
+      <!-- <div class="filter-section">
+        <label class="filter-label">Prix</label>
+        <div class="price-inputs">
+          <input type="number" placeholder="Min" [(ngModel)]="priceRange.min">
+          <span>—</span>
+          <input type="number" placeholder="Max" [(ngModel)]="priceRange.max">
+        </div>
+      </div> -->
+
+      <!-- Sort -->
+      <!-- <div class="filter-section">
+        <label class="filter-label">Trier par</label>
+        <select class="sort-select" [(ngModel)]="sortBy">
+          @for (option of sortOptions; track option.value) {
+          <option [value]="option.value">{{ option.label }}</option>
+          }
+        </select>
+      </div> -->
+    </aside>
+
+    <!-- Products Grid/List -->
+    <main class="products-container">
+      <div class="row d-flex align-items-center justify-content-center" *ngIf="loading">
+        <div class="loading-wrap">
+          <div class="spinner-border" role="status"></div>
+        </div>
+      </div>
+      <div *ngIf="!loading">
+        @if (totalItems === 0) {
+        <div class="empty-state">
+          <i class="bi bi-search"></i>
+          <h3>Aucun élément trouvé</h3>
+          <p>Essayez de modifier vos filtres de recherche</p>
+        </div>
+        } @else {
+          @if (filteredCampaigns.length === 0) {
+            <div class="empty-state">
+                <img src="../../../../assets/img/resources/nts.png" alt="" style="max-width: 150px; height: auto;">
+                <br>
+                <h3>{{ "nts" | translate }}</h3>
+            </div>
+            }
+        <div class="products" [class.products--grid]="viewMode === 'grid'" [class.products--list]="viewMode === 'list'">
+          @for (campaign of filteredCampaigns; track campaign._id) {
+          <app-item [campaign]="campaign"></app-item>
+          }
+        </div>
+        }
+      </div>
+    </main>
   </div>
 </div>

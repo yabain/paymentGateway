@@ -1,18 +1,18 @@
 <div class="receipt-wrap receipt-three">
   <div class="receipt-top">
     <div class="receipt-title">{{name}}</div>
-    <div class="company-name" style="font-size: small !important; color: black !important;">Payment receipt</div>
+    <div class="company-name" style="font-size: small !important; color: black !important;">{{ 'payment.paymentReceipt' | translate }}</div>
   </div>
   <div class="receipt-seperator"></div>
   <div class="receipt-seperator"></div>
-  <div class="title" style="font-size: small !important; color: black !important;">Invoice No:
+  <div class="title" style="font-size: small !important; color: black !important;">{{ 'payment.invoice' | translate }} No:
     <span style="font-size: small !important; color: black !important;">{{ receiptId }}</span>
   </div>
   <div class="title" style="font-size: small !important; color: black !important;">Date:
     <span style="font-size: small !important; color: black !important;">{{ tx?.updatedAt | date: 'dd-MM-yyyy HH:mm:ss'
       }}</span>
   </div>
-  <div class="title" style="font-size: small !important; color: black !important;">Customer name:
+  <div class="title" style="font-size: small !important; color: black !important;">{{ 'profile.name' | translate }}:
     <span style="font-size: small !important; color: black !important;">--------</span>
   </div>
   <!-- <ul class="customer-list">
@@ -40,7 +40,7 @@
       <tr>
         <th>SL</th>
         <th>Item</th>
-        <th>Price</th>
+        <th>{{ 'subscriptions.price' | translate }}</th>
         <th>Qty</th>
         <th>Total</th>
       </tr>
@@ -48,7 +48,7 @@
     <tbody>
       <tr style="font-size: small !important; color: black !important;">
         <td>1.</td>
-        <td>Payment request</td>
+        <td>{{ 'paymentRequest.title' | translate }}</td>
         <td>{{ tx?.estimation }} {{ tx?.receiverCurrency }}</td>
         <td>1</td>
         <td>{{ tx?.estimation }} {{ tx?.receiverCurrency }}</td>
@@ -95,7 +95,7 @@
       <div class="bill_value bill_focus">{{ tx?.estimation }} {{ tx?.receiverCurrency }}</div>
     </div>
     <div class="bill_list_in" style="font-size: small !important; color: black !important;">
-      <div class="bill_title bill_focus">Fees:</div>
+      <div class="bill_title bill_focus">{{ 'payment.fee' | translate }}:</div>
       <div class="bill_value bill_focus">{{ tx?.taxesAmount }} {{ tx?.receiverCurrency }}</div>
     </div>
     <div class="bill_list_in total-payable" style="font-size: small !important; color: black !important;">
@@ -109,7 +109,7 @@
     <!-- <img src="assets/img/bar.png"alt="image"> -->
     <app-qr-code [data]="getUrl()" [size]="160" *ngIf="tx"></app-qr-code>
     <br>Contact {{name}}
-    <div class="title" style="font-size: small !important; color: black !important;">Phone:
+    <div class="title" style="font-size: small !important; color: black !important;">{{ 'auth.phone' | translate }}:
       <span style="font-size: small !important; color: black !important;">{{ phone }}</span>
     </div>
     <div class="title" style="font-size: small !important; color: black !important;">Email:
@@ -118,7 +118,7 @@
   </div>
   <div class="receipt-seperator"></div>
   <div class="sample_text" style="font-size: small !important; color: black !important;">
-    Powered by digiKUNTZ Payments <br>
+    {{ "poweredByDk" | translate }} <br>
     payments.digikuntz.com
   </div>
 </div>

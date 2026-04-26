@@ -23,6 +23,7 @@ import { FieldValidationService } from 'src/app/services/field-validation/field-
 interface data {
   value: string;
 }
+type ServiceFilter = 'all' | 'active' | 'inactive';
 @Component({
   selector: 'app-services',
   templateUrl: './services.component.html',
@@ -88,6 +89,14 @@ export class ServicesComponent implements OnInit, OnDestroy {
   waitingServicesListStat: boolean = true;
   servicesListStat: any;
   systemData: any;
+  viewMode: 'grid' | 'list' = 'grid';
+  showFilters = false;
+  selectedCategory: ServiceFilter = 'all';
+  categories: Array<{ id: ServiceFilter; name: string; value: number }> = [
+    { id: 'all', name: 'totalServices', value: 0 },
+    { id: 'active', name: 'activeServices', value: 0 },
+    { id: 'inactive', name: 'inactiveServices', value: 0 },
+  ];
 
   openContent() {
     this.toggleData = !this.toggleData;
@@ -661,16 +670,18 @@ export class ServicesComponent implements OnInit, OnDestroy {
     if (this.isAdminRoute) {
       this.servicesService.getAllServicesList(userId).subscribe((data: any) => {
         this.waitingServicesList = false;
-        this.servicesList = data;
-        this.servicesListBackup = data;
+        this.servicesList = data || [];
+        this.servicesListBackup = data || [];
+        this.updateServiceCategoryCounts();
       });
     } else {
       this.servicesService
         .getMyServicesList(userId)
         .subscribe((data: any) => {
           this.waitingServicesList = false;
-          this.servicesList = data;
-          this.servicesListBackup = data;
+          this.servicesList = data || [];
+          this.servicesListBackup = data || [];
+          this.updateServiceCategoryCounts();
           this.getMyServicesListStat(userId);
         });
     }
@@ -739,6 +750,59 @@ export class ServicesComponent implements OnInit, OnDestroy {
 
   isAuthor(service: any, user: any = this.user) {
     return user._id.toString() === service.author._id.toString() ? true : false;
+  }
+
+  setCategoryFilter(category: ServiceFilter): void {
+    this.selectedCategory = category;
+  }
+
+  toggleView(mode: 'grid' | 'list'): void {
+    this.viewMode = mode;
+  }
+
+  toggleFilters(): void {
+    this.showFilters = !this.showFilters;
+  }
+
+  get filteredServices(): any[] {
+    const base = this.servicesListBackup || [];
+    const query = (this.searchString || '').trim().toLowerCase();
+
+    return base.filter((service: any) => {
+      const title = String(service?.title || '').toLowerCase();
+      const subTitle = String(service?.subTitle || '').toLowerCase();
+      const description = String(service?.description || '').toLowerCase();
+      const matchesSearch =
+        !query ||
+        title.includes(query) ||
+        subTitle.includes(query) ||
+        description.includes(query);
+
+      const isActive = this.getServiceIsActive(service);
+      const matchesCategory =
+        this.selectedCategory === 'all' ||
+        (this.selectedCategory === 'active' && isActive) ||
+        (this.selectedCategory === 'inactive' && !isActive);
+
+      return matchesSearch && matchesCategory;
+    });
+  }
+
+  private getServiceIsActive(service: any): boolean {
+    return Boolean(service?.isActive ?? service?.status);
+  }
+
+  private updateServiceCategoryCounts(): void {
+    const base = this.servicesListBackup || [];
+    const total = base.length;
+    const active = base.filter((service: any) => this.getServiceIsActive(service)).length;
+    const inactive = Math.max(total - active, 0);
+
+    this.categories = this.categories.map((cat) => {
+      if (cat.id === 'all') return { ...cat, value: total };
+      if (cat.id === 'active') return { ...cat, value: active };
+      return { ...cat, value: inactive };
+    });
   }
   
 }
