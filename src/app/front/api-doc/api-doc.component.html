@@ -57,19 +57,19 @@
     </button>
     <button (click)="selectSection('auth-section')" class="tab-btn"
       [ngClass]="selectedSection === 'auth-section' ? 'is-active' : ''">
-      Authentification
+      {{ 'apidoc.authTitle' | translate }}
     </button>
-    <button (click)="selectSection('api-keys')" class="tab-btn"
+    <!-- <button (click)="selectSection('api-keys')" class="tab-btn"
       [ngClass]="selectedSection === 'api-keys' ? 'is-active' : ''">
       Clés API
-    </button>
+    </button> -->
     <button (click)="selectSection('transactions')" class="tab-btn"
       [ngClass]="selectedSection === 'transactions' ? 'is-active' : ''">
       {{ 'apidoc.transactions' | translate }}
     </button>
     <button (click)="selectSection('payout')" class="tab-btn"
       [ngClass]="selectedSection === 'payout' ? 'is-active' : ''">
-      Payout
+      {{ 'apidoc.payoutTitle' | translate }}
     </button>
     <button (click)="selectSection('balance')" class="tab-btn"
       [ngClass]="selectedSection === 'balance' ? 'is-active' : ''">
@@ -77,7 +77,7 @@
     </button>
     <button (click)="selectSection('webhook')" class="tab-btn"
       [ngClass]="selectedSection === 'webhook' ? 'is-active' : ''">
-      Webhook
+      {{ 'apidoc.webhookTitle' | translate }}
     </button>
     <button (click)="selectSection('auth')" class="tab-btn" [ngClass]="selectedSection === 'auth' ? 'is-active' : ''">
       {{ 'apidoc.history' | translate }}
@@ -140,7 +140,7 @@
 
     <!-- AUTH -->
     <div class="tab-panel" id="auth-section" [ngClass]="selectedSection === 'auth-section' ? 'is-active' : ''">
-      <h2 class="section-title">Authentification</h2>
+      <h2 class="section-title">{{ 'apidoc.authTitle' | translate }}</h2>
       <p>{{ 'apidoc.authDesc' | translate }}</p>
       <ul>
         <li><code>x-user-id</code> — {{ 'apidoc.authHeaderUserId' | translate }} </li>
@@ -396,7 +396,7 @@
   &#125;
 &#125;</code></pre>
             <br>
-            <b>Statuts: </b><ul><li><code>payin_pending</code> — Paiement en attente</li><li><code>payin_success</code> — Paiement reçu avec succès</li><li><code>payin_closed</code> — Paiement fermé</li><li><code>payin_error</code> — Échec du paiement</li></ul>
+            <b>{{ 'apidoc.status' | translate }}: </b><ul><li><code>payin_pending</code> — {{ 'apidoc.payinPending' | translate }}</li><li><code>payin_success</code> — {{ 'apidoc.payinSuccess' | translate }}</li><li><code>payin_closed</code> — {{ 'apidoc.payinClosed' | translate }}</li><li><code>payin_error</code> — {{ 'apidoc.payinError' | translate }}</li></ul>
           </div>
         </div>
       </article>
@@ -439,7 +439,7 @@
   &#125;
 &#125;</code></pre>
             <br>
-            <b>Statuts: </b><ul><li><code>payin_pending</code> — Paiement en attente</li><li><code>payin_success</code> — Paiement reçu avec succès</li><li><code>payin_closed</code> — Paiement fermé</li><li><code>payin_error</code> — Échec du paiement</li></ul>
+            <b>{{ 'apidoc.status' | translate }}: </b><ul><li><code>payin_pending</code> — {{ 'apidoc.payinPending' | translate }}</li><li><code>payin_success</code> — {{ 'apidoc.payinSuccess' | translate }}</li><li><code>payin_closed</code> — {{ 'apidoc.payinClosed' | translate }}</li><li><code>payin_error</code> — {{ 'apidoc.payinError' | translate }}</li></ul>
           </div>
         </div>
       </article>
@@ -449,7 +449,7 @@
           <span class="badge badge--get">GET</span>
           <code>/dev/transactions-list?page=1&amp;limit=20</code>
         </div>
-        <p>Récupère la liste paginée des transactions.</p>
+        <p>{{ 'apidoc.getPaginatedTransactions' | translate }}</p>
 
         <div class="endpoint__grid">
           <div>
@@ -463,8 +463,8 @@
           <div>
             <h3>Query</h3>
             <ul>
-              <li><code>page</code> (number, optionnel, défaut: 1)</li>
-              <li><code>limit</code> (number, optionnel, défaut: 20, max: 100)</li>
+              <li><code>page</code> ({{ 'apidoc.pageParam' | translate }})</li>
+              <li><code>limit</code> ({{ 'apidoc.limitParam' | translate }})</li>
             </ul>
           </div>
 
@@ -536,7 +536,7 @@
           </div>
           <div>
             <h3>Body</h3>
-            <p>Aucun.</p>
+            <p>{{ 'apidoc.noBody' | translate }}</p>
           </div>
           <div>
             <h3>{{ 'apidoc.response' | translate }}</h3>
@@ -552,7 +552,7 @@
 
     <!-- WEBHOOK -->
     <div class="tab-panel" id="payout" [ngClass]="selectedSection === 'payout' ? 'is-active' : ''">
-      <h2 class="section-title">Payout</h2>
+      <h2 class="section-title">{{ 'apidoc.payoutTitle' | translate }}</h2>
 
       <article class="endpoint">
         <div class="endpoint__header">
@@ -598,7 +598,7 @@
   &#125;
 &#125;</code></pre>
             <br>
-            <b>Statuts: </b><ul><li><code>payin_success</code> — Virement en attente</li><li><code>payout_pending</code> — Virement en cours</li><li><code>payout_success</code> — Virement effectué avec succès</li><li><code>payout_closed</code> — Virement fermé</li><li><code>payout_error</code> — Échec du virement</li></ul>
+            <b>{{ 'apidoc.status' | translate }}: </b><ul><li><code>payout_pending</code> — {{ 'apidoc.payoutPending' | translate }}</li><li><code>payout_success</code> — {{ 'apidoc.payoutSuccess' | translate }}</li><li><code>payout_closed</code> — {{ 'apidoc.payoutClosed' | translate }}</li><li><code>payout_error</code> — {{ 'apidoc.payoutError' | translate }}</li></ul>
           </div>
         </div>
       </article>
@@ -606,18 +606,18 @@
 
     <!-- WEBHOOK -->
     <div class="tab-panel" id="webhook" [ngClass]="selectedSection === 'webhook' ? 'is-active' : ''">
-      <h2 class="section-title">Webhook</h2>
-      <p>Configurez une URL de webhook dans votre profil pour recevoir les notifications de transactions en temps réel.</p>
+      <h2 class="section-title">{{ 'apidoc.webhookTitle' | translate }}</h2>
+      <p>{{ 'apidoc.webhookDesc' | translate }}</p>
 
       <article class="endpoint">
         <div class="endpoint__header">
           <span class="badge badge--post">POST</span>
           <code>Votre URL de webhook</code>
         </div>
-        <p>Payload envoyé par le backend lors d'un changement de statut de transaction.</p>
+        <p>{{ 'apidoc.webhookPayloadDesc' | translate }}</p>
         <div class="endpoint__grid">
           <div>
-            <h3>Payload reçu</h3>
+            <h3>{{ 'apidoc.payloadReceived' | translate }}</h3>
             <pre ngNonBindable><code>&#123;
   "id": "664f1a2b3c4d5e6f7a8b9c0d",
   "status": "payin_success",
@@ -635,19 +635,18 @@
 &#125;</code></pre>
           </div>
           <div>
-            <h3>Statuts possibles</h3>
+            <h3>{{ 'apidoc.possibleStatuses' | translate }}</h3>
             <ul>
               <li>Transaction/Payin</li>
-              <li><code>payin_pending</code> — Paiement en attente</li>
-              <li><code>payin_success</code> — Paiement reçu</li>
-              <li><code>payin_error</code> — Échec du paiement</li>
-              <li><code>payin_closed</code> — Paiement fermé</li>
+              <li><code>payin_pending</code> — {{ 'apidoc.payinPending' | translate }}</li>
+              <li><code>payin_success</code> — {{ 'apidoc.payinSuccess' | translate }}</li>
+              <li><code>payin_error</code> — {{ 'apidoc.payinError' | translate }}</li>
+              <li><code>payin_closed</code> — {{ 'apidoc.payinClosed' | translate }}</li>
               <li>Payout</li>
-              <li><code>payin_success</code> — Virement en attente</li>
-              <li><code>payout_pending</code> — Virement en cours</li>
-              <li><code>payout_success</code> — Virement effectué</li>
-              <li><code>payout_error</code> — Échec du virement</li>
-              <li><code>payout_closed</code> — Virement fermé</li>
+              <li><code>payout_pending</code> — {{ 'apidoc.payoutPending' | translate }}</li>
+              <li><code>payout_success</code> — {{ 'apidoc.payoutSuccess' | translate }}</li>
+              <li><code>payout_error</code> — {{ 'apidoc.payoutError' | translate }}</li>
+              <li><code>payout_closed</code> — {{ 'apidoc.payoutClosed' | translate }}</li>
             </ul>
           </div>
         </div>
