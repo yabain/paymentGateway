@@ -55,13 +55,29 @@
     <button (click)="selectSection('intro')" class="tab-btn" [ngClass]="selectedSection === 'intro' ? 'is-active' : ''">
       {{ 'apidoc.introduction' | translate }}
     </button>
+    <button (click)="selectSection('auth-section')" class="tab-btn"
+      [ngClass]="selectedSection === 'auth-section' ? 'is-active' : ''">
+      Authentification
+    </button>
+    <button (click)="selectSection('api-keys')" class="tab-btn"
+      [ngClass]="selectedSection === 'api-keys' ? 'is-active' : ''">
+      Clés API
+    </button>
     <button (click)="selectSection('transactions')" class="tab-btn"
       [ngClass]="selectedSection === 'transactions' ? 'is-active' : ''">
       {{ 'apidoc.transactions' | translate }}
     </button>
+    <button (click)="selectSection('payout')" class="tab-btn"
+      [ngClass]="selectedSection === 'payout' ? 'is-active' : ''">
+      Payout
+    </button>
     <button (click)="selectSection('balance')" class="tab-btn"
       [ngClass]="selectedSection === 'balance' ? 'is-active' : ''">
       {{ 'apidoc.balance' | translate }}
+    </button>
+    <button (click)="selectSection('webhook')" class="tab-btn"
+      [ngClass]="selectedSection === 'webhook' ? 'is-active' : ''">
+      Webhook
     </button>
     <button (click)="selectSection('auth')" class="tab-btn" [ngClass]="selectedSection === 'auth' ? 'is-active' : ''">
       {{ 'apidoc.history' | translate }}
@@ -122,6 +138,217 @@
       </div>
     </div>
 
+    <!-- AUTH -->
+    <div class="tab-panel" id="auth-section" [ngClass]="selectedSection === 'auth-section' ? 'is-active' : ''">
+      <h2 class="section-title">Authentification</h2>
+      <p>{{ 'apidoc.authDesc' | translate }}</p>
+      <ul>
+        <li><code>x-user-id</code> — {{ 'apidoc.authHeaderUserId' | translate }} </li>
+        <li><code>x-secret-key</code> — {{ 'apidoc.authHeaderSecretKey' | translate }} </li>
+      </ul>
+
+      <article class="endpoint">
+        <div class="endpoint__header">
+          <span class="badge badge--post">POST</span>
+          <code>/auth/signup</code>
+        </div>
+        <p>{{ 'apidoc.signupDesc' | translate }} </p>
+        <div class="endpoint__grid">
+          <div>
+            <h3>Body</h3>
+            <pre ngNonBindable><code>&#123;
+  "email": "user&#64;example.com",
+  "password": "motdepasse",
+  "firstName": "Jean",
+  "lastName": "Dupont"
+&#125;</code></pre>
+          </div>
+          <div>
+            <h3>{{ 'apidoc.response' | translate }} </h3>
+            <pre ngNonBindable><code>&#123;
+  "token": "jwt_token",
+  "user": &#123; ... &#125;
+&#125;</code></pre>
+          </div>
+        </div>
+      </article>
+
+      <article class="endpoint">
+        <div class="endpoint__header">
+          <span class="badge badge--post">POST</span>
+          <code>/auth/signin</code>
+        </div>
+        <p>{{ 'apidoc.signinDesc' | translate }} </p>
+        <div class="endpoint__grid">
+          <div>
+            <h3>Body</h3>
+            <pre ngNonBindable><code>&#123;
+  "email": "user&#64;example.com",
+  "password": "motdepasse"
+&#125;</code></pre>
+          </div>
+          <div>
+            <h3>{{ 'apidoc.response' | translate }}</h3>
+            <pre ngNonBindable><code>&#123;
+  "token": "jwt_token",
+  "user": &#123; ... &#125;
+&#125;</code></pre>
+          </div>
+        </div>
+      </article>
+
+      <article class="endpoint">
+        <div class="endpoint__header">
+          <span class="badge badge--post">POST</span>
+          <code>/auth/request-password-reset</code>
+        </div>
+        <p>{{ 'apidoc.requestPasswordResetDesc' | translate }} </p>
+        <div class="endpoint__grid">
+          <div>
+            <h3>Body</h3>
+            <pre ngNonBindable><code>&#123;
+  "email": "user&#64;example.com"
+&#125;</code></pre>
+          </div>
+          <div>
+            <h3>{{ 'apidoc.response' | translate }}</h3>
+            <pre ngNonBindable><code>&#123;
+  "message": "Email sended"
+&#125;</code></pre>
+          </div>
+        </div>
+      </article>
+
+      <article class="endpoint">
+        <div class="endpoint__header">
+          <span class="badge badge--post">POST</span>
+          <code>/auth/reset-password</code>
+        </div>
+        <p>{{ 'apidoc.resetPasswordDesc' | translate }} </p>
+        <div class="endpoint__grid">
+          <div>
+            <h3>Body</h3>
+            <pre ngNonBindable><code>&#123;
+  "token": "reset_token",
+  "password": "new_password"
+&#125;</code></pre>
+          </div>
+          <div>
+            <h3>{{ 'apidoc.response' | translate }}</h3>
+            <pre ngNonBindable><code>&#123;
+  "message": "Password reset"
+&#125;</code></pre>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <!-- API KEYS -->
+    <!-- <div class="tab-panel" id="api-keys" [ngClass]="selectedSection === 'api-keys' ? 'is-active' : ''">
+      <h2 class="section-title">{{ 'apidoc.apiKeysTitle' | translate }} </h2>
+
+      <article class="endpoint">
+        <div class="endpoint__header">
+          <span class="badge badge--get">GET</span>
+          <code>/dev/my-key</code>
+        </div>
+        <p>Récupérer la paire de clés API de l'utilisateur connecté.</p>
+        <div class="endpoint__grid">
+          <div>
+            <h3>Headers</h3>
+            <ul>
+              <li><code>x-user-id</code> (string, requis)</li>
+              <li><code>x-secret-key</code> (string, requis)</li>
+            </ul>
+          </div>
+          <div>
+            <h3>{{ 'apidoc.response' | translate }}</h3>
+            <pre ngNonBindable><code>&#123;
+  "userId": "id",
+  "publicKey": "pk_...",
+  "secretKey": "sk_...",
+  "isActive": true
+&#125;</code></pre>
+          </div>
+        </div>
+      </article>
+
+      <article class="endpoint">
+        <div class="endpoint__header">
+          <span class="badge badge--post">POST</span>
+          <code>/dev/generate-key</code>
+        </div>
+        <p>Générer une nouvelle paire de clés API pour l'utilisateur connecté.</p>
+        <div class="endpoint__grid">
+          <div>
+            <h3>Headers</h3>
+            <ul>
+              <li><code>x-user-id</code> (string, requis)</li>
+              <li><code>x-secret-key</code> (string, requis)</li>
+            </ul>
+          </div>
+          <div>
+            <h3>{{ 'apidoc.response' | translate }}</h3>
+            <pre ngNonBindable><code>&#123;
+  "userId": "id",
+  "publicKey": "pk_...",
+  "secretKey": "sk_...",
+  "isActive": true
+&#125;</code></pre>
+          </div>
+        </div>
+      </article>
+
+      <article class="endpoint">
+        <div class="endpoint__header">
+          <span class="badge badge--put">PUT</span>
+          <code>/dev/reset-key</code>
+        </div>
+        <p>Réinitialiser la paire de clés API de l'utilisateur connecté.</p>
+        <div class="endpoint__grid">
+          <div>
+            <h3>Headers</h3>
+            <ul>
+              <li><code>x-user-id</code> (string, requis)</li>
+              <li><code>x-secret-key</code> (string, requis)</li>
+            </ul>
+          </div>
+          <div>
+            <h3>{{ 'apidoc.response' | translate }}</h3>
+            <pre ngNonBindable><code>&#123;
+  "userId": "id",
+  "publicKey": "pk_...",
+  "secretKey": "sk_...",
+  "isActive": true
+&#125;</code></pre>
+          </div>
+        </div>
+      </article>
+
+      <article class="endpoint">
+        <div class="endpoint__header">
+          <span class="badge badge--put">PUT</span>
+          <code>/dev/update-status</code>
+        </div>
+        <p>Activer ou désactiver l'accès API de l'utilisateur connecté.</p>
+        <div class="endpoint__grid">
+          <div>
+            <h3>Headers</h3>
+            <ul>
+              <li><code>x-user-id</code> (string, requis)</li>
+              <li><code>x-secret-key</code> (string, requis)</li>
+            </ul>
+          </div>
+          <div>
+            <h3>{{ 'apidoc.response' | translate }}</h3>
+            <pre ngNonBindable><code>&#123;
+  "isActive": false
+&#125;</code></pre>
+          </div>
+        </div>
+      </article>
+    </div> -->
+
     <!-- TRANSACTIONS -->
     <div class="tab-panel" id="transactions" [ngClass]="selectedSection === 'transactions' ? 'is-active' : ''">
       <h2 class="section-title">{{ 'apidoc.transactions' | translate }}</h2>
@@ -144,7 +371,7 @@
             <h3>Body</h3>
             <pre ngNonBindable><code>&#123;
 "estimation": 100,
-"raisonForTransfer": "Test",
+"raisonForTransfer": "Paiement fournisseur",
 "userEmail": "email&#64;example.com",
 "userPhone": "691224472",
 "userCountry": "Cameroon",
@@ -154,16 +381,22 @@
           <div>
             <h3>{{ 'apidoc.response' | translate }}</h3>
             <pre ngNonBindable><code>&#123;
-"id": "6977ef263980e24b64996062",
-"status": "pending",
-"transactionRef": "txPayin-1769467686449-6ce86896",
-"amount": 100,
-"paymentCurrency": "XAF",
-"paymentWithTaxes": 105,
-"paymentLink": "Lien de paiement"
+  "id": "664f1a2b3c4d5e6f7a8b9c0d",
+  "status": "payin_pending",
+  "data": &#123;
+    "estimation": "100",
+    "transactionRef": "IN123#250101120000",
+    "invoiceTaxes": "5",
+    "paymentWithTaxes": "105",
+    "raisonForTransfer": "Paiement fournisseur",
+    "receiverCurrency": "XAF",
+    "transactionType": "apiCall",
+    "createdAt": "2025-01-01T12:00:00.000Z",
+    "updatedAt": "2025-01-01T12:00:00.000Z"
+  &#125;
 &#125;</code></pre>
             <br>
-            <b>Statuts: </b> pending - success - closed - error
+            <b>Statuts: </b><ul><li><code>payin_pending</code> — Paiement en attente</li><li><code>payin_success</code> — Paiement reçu avec succès</li><li><code>payin_closed</code> — Paiement fermé</li><li><code>payin_error</code> — Échec du paiement</li></ul>
           </div>
         </div>
       </article>
@@ -171,7 +404,7 @@
       <article class="endpoint">
         <div class="endpoint__header">
           <span class="badge badge--get">GET</span>
-          <code>/dev/transaction?transactionId=6977ef263980e24b64996062</code>
+          <code>/dev/transaction?transactionId=664f1a2b3c4d5e6f7a8b9c0d</code>
         </div>
         <p>{{ 'apidoc.getTransaction' | translate }}</p>
         <div class="endpoint__grid">
@@ -191,24 +424,22 @@
           <div>
             <h3>{{ 'apidoc.response' | translate }}</h3>
             <pre ngNonBindable><code>&#123;
-"id": "6977ef263980e24b64996062",
-"status": "success",
-"data": &#123;
-  "estimation": "30",
-  "transactionRef": "IN959#260126224806",
-  "invoiceTaxes": "2",
-  "paymentWithTaxes": "32",
-  "raisonForTransfer": "Test M",
-  "receiverCurrency": "XAF",
-  "transactionType": "apiCall",
-  "paymentLink": "",
-  "createdAt": "2026-01-26T22:48:06.461Z",
-  "updatedAt": "2026-01-26T22:54:30.231Z"
+  "id": "664f1a2b3c4d5e6f7a8b9c0d",
+  "status": "payin_success",
+  "data": &#123;
+    "estimation": "100",
+    "transactionRef": "IN123#250101120000",
+    "invoiceTaxes": "5",
+    "paymentWithTaxes": "105",
+    "raisonForTransfer": "Paiement fournisseur",
+    "receiverCurrency": "XAF",
+    "transactionType": "apiCall",
+    "createdAt": "2025-01-01T12:00:00.000Z",
+    "updatedAt": "2025-01-01T12:00:00.000Z"
   &#125;
-&#125;
-</code></pre>
+&#125;</code></pre>
             <br>
-            <b>Statuts: </b> pending - success - closed - error
+            <b>Statuts: </b><ul><li><code>payin_pending</code> — Paiement en attente</li><li><code>payin_success</code> — Paiement reçu avec succès</li><li><code>payin_closed</code> — Paiement fermé</li><li><code>payin_error</code> — Échec du paiement</li></ul>
           </div>
         </div>
       </article>
@@ -216,7 +447,7 @@
       <article class="endpoint">
         <div class="endpoint__header">
           <span class="badge badge--get">GET</span>
-          <code>/dev/transactions?page=1&limit=20</code>
+          <code>/dev/transactions-list?page=1&amp;limit=20</code>
         </div>
         <p>Récupère la liste paginée des transactions.</p>
 
@@ -314,6 +545,110 @@
 "currency": "XAF",
 "lastUpdate": "2026-01-26T22:54:30.219Z"
 &#125;</code></pre>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <!-- WEBHOOK -->
+    <div class="tab-panel" id="payout" [ngClass]="selectedSection === 'payout' ? 'is-active' : ''">
+      <h2 class="section-title">Payout</h2>
+
+      <article class="endpoint">
+        <div class="endpoint__header">
+          <span class="badge badge--post">POST</span>
+          <code>/dev/payout</code>
+        </div>
+        <p>{{ 'apidoc.payoutDesc' | translate }}</p>
+        <div class="endpoint__grid">
+          <div>
+            <h3>Headers</h3>
+            <ul>
+              <li><code>x-user-id</code> (string, requis)</li>
+              <li><code>x-secret-key</code> (string, requis)</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Body</h3>
+            <pre ngNonBindable><code>&#123;
+  "amount": 5000,
+  "accountBankCode": "MTN",
+  "accountNumber": "237691224472",
+  "receiverName": "John Doe",
+  "currency": "XAF",
+  "narration": "Paiement fournisseur",
+  "callbackUrl": "https://your-server.com/webhook"
+&#125;</code></pre>
+          </div>
+          <div>
+            <h3>{{ 'apidoc.response' | translate }}</h3>
+            <pre ngNonBindable><code>&#123;
+  "id": "664f1a2b3c4d5e6f7a8b9c0d",
+  "status": "payout_pending",
+  "data": &#123;
+    "estimation": "5000",
+    "transactionRef": "IN123#250101120000",
+    "invoiceTaxes": "250",
+    "paymentWithTaxes": "5250",
+    "raisonForTransfer": "Paiement fournisseur",
+    "receiverCurrency": "XAF",
+    "transactionType": "apiCall",
+    "createdAt": "2025-01-01T12:00:00.000Z",
+    "updatedAt": "2025-01-01T12:00:00.000Z"
+  &#125;
+&#125;</code></pre>
+            <br>
+            <b>Statuts: </b><ul><li><code>payin_success</code> — Virement en attente</li><li><code>payout_pending</code> — Virement en cours</li><li><code>payout_success</code> — Virement effectué avec succès</li><li><code>payout_closed</code> — Virement fermé</li><li><code>payout_error</code> — Échec du virement</li></ul>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <!-- WEBHOOK -->
+    <div class="tab-panel" id="webhook" [ngClass]="selectedSection === 'webhook' ? 'is-active' : ''">
+      <h2 class="section-title">Webhook</h2>
+      <p>Configurez une URL de webhook dans votre profil pour recevoir les notifications de transactions en temps réel.</p>
+
+      <article class="endpoint">
+        <div class="endpoint__header">
+          <span class="badge badge--post">POST</span>
+          <code>Votre URL de webhook</code>
+        </div>
+        <p>Payload envoyé par le backend lors d'un changement de statut de transaction.</p>
+        <div class="endpoint__grid">
+          <div>
+            <h3>Payload reçu</h3>
+            <pre ngNonBindable><code>&#123;
+  "id": "664f1a2b3c4d5e6f7a8b9c0d",
+  "status": "payin_success",
+  "data": &#123;
+    "estimation": "5000",
+    "transactionRef": "IN123#250101120000",
+    "invoiceTaxes": "250",
+    "paymentWithTaxes": "5250",
+    "raisonForTransfer": "Paiement fournisseur",
+    "receiverCurrency": "XAF",
+    "transactionType": "apiCall",
+    "createdAt": "2025-01-01T12:00:00.000Z",
+    "updatedAt": "2025-01-01T12:00:00.000Z"
+  &#125;
+&#125;</code></pre>
+          </div>
+          <div>
+            <h3>Statuts possibles</h3>
+            <ul>
+              <li>Transaction/Payin</li>
+              <li><code>payin_pending</code> — Paiement en attente</li>
+              <li><code>payin_success</code> — Paiement reçu</li>
+              <li><code>payin_error</code> — Échec du paiement</li>
+              <li><code>payin_closed</code> — Paiement fermé</li>
+              <li>Payout</li>
+              <li><code>payin_success</code> — Virement en attente</li>
+              <li><code>payout_pending</code> — Virement en cours</li>
+              <li><code>payout_success</code> — Virement effectué</li>
+              <li><code>payout_error</code> — Échec du virement</li>
+              <li><code>payout_closed</code> — Virement fermé</li>
+            </ul>
           </div>
         </div>
       </article>
