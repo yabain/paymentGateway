@@ -1018,7 +1018,9 @@
     "payoutError": "Payout failed",
     "getPaginatedTransactions": "Retrieve the paginated list of transactions.",
     "pageParam": "number, optional, default: 1",
-    "limitParam": "number, optional, default: 20, max: 100"
+    "limitParam": "number, optional, default: 20, max: 100",
+    "required": "required",
+    "yourWebhookUrl": "Your webhook URL"
   },
   "portal": {
     "title": "Portal",

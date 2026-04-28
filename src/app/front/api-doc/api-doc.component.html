@@ -370,12 +370,13 @@
           <div>
             <h3>Body</h3>
             <pre ngNonBindable><code>&#123;
-"estimation": 100,
-"raisonForTransfer": "Paiement fournisseur",
-"userEmail": "email&#64;example.com",
-"userPhone": "691224472",
-"userCountry": "Cameroon",
-"senderName": "Kevin"
+  "estimation": 100,
+  "raisonForTransfer": "Paiement fournisseur",
+  "userEmail": "email&#64;example.com",
+  "userPhone": "691224472",
+  "userCountry": "Cameroon",
+  "senderName": "Kevin",
+  "callbackUrl": "https://your-server.com/webhook"
 &#125;</code></pre>
           </div>
           <div>
@@ -391,6 +392,7 @@
     "raisonForTransfer": "Paiement fournisseur",
     "receiverCurrency": "XAF",
     "transactionType": "apiCall",
+    "paymentLink": "https://checkout.flutterwave.com/v3/hosted/pay/xxxxx",
     "createdAt": "2025-01-01T12:00:00.000Z",
     "updatedAt": "2025-01-01T12:00:00.000Z"
   &#125;
@@ -434,6 +436,7 @@
     "raisonForTransfer": "Paiement fournisseur",
     "receiverCurrency": "XAF",
     "transactionType": "apiCall",
+    "paymentLink": "https://checkout.flutterwave.com/v3/hosted/pay/xxxxx",
     "createdAt": "2025-01-01T12:00:00.000Z",
     "updatedAt": "2025-01-01T12:00:00.000Z"
   &#125;
@@ -455,8 +458,8 @@
           <div>
             <h3>Headers</h3>
             <ul>
-              <li><code>x-user-id</code> (string, requis)</li>
-              <li><code>x-secret-key</code> (string, requis)</li>
+              <li><code>x-user-id</code> (string, {{ 'apidoc.required' | translate }})</li>
+              <li><code>x-secret-key</code> (string, {{ 'apidoc.required' | translate }})</li>
             </ul>
           </div>
 
@@ -564,8 +567,8 @@
           <div>
             <h3>Headers</h3>
             <ul>
-              <li><code>x-user-id</code> (string, requis)</li>
-              <li><code>x-secret-key</code> (string, requis)</li>
+              <li><code>x-user-id</code> (string, {{ 'apidoc.required' | translate }})</li>
+              <li><code>x-secret-key</code> (string, {{ 'apidoc.required' | translate }})</li>
             </ul>
           </div>
           <div>
@@ -612,7 +615,7 @@
       <article class="endpoint">
         <div class="endpoint__header">
           <span class="badge badge--post">POST</span>
-          <code>Votre URL de webhook</code>
+          <code>{{ 'apidoc.yourWebhookUrl' | translate }}</code>
         </div>
         <p>{{ 'apidoc.webhookPayloadDesc' | translate }}</p>
         <div class="endpoint__grid">
