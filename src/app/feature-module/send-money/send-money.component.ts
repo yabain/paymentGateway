@@ -47,7 +47,7 @@ export class SendMoneyComponent implements OnInit {
   private destroy$ = new Subject<void>();
   availableCountries: any[] = [];
   waitingLocations: boolean = true;
-  flagCountry: string = 'assets/resources/flag.png';
+  flagCountry: string = 'assets/img/resources/flag.png';
   selectedCountry: any;
   idParam: string | null = null;
   receiverName!: string;
@@ -913,17 +913,17 @@ export class SendMoneyComponent implements OnInit {
       if (this.currentUser && this.currentUser.countryId) {
         this.selectedCountry = this.currentUser.countryId;
         this.flagCountry =
-          this.currentUser.countryId.flagUrl || 'assets/resources/flag.png';
+          this.currentUser.countryId.flagUrl || 'assets/img/resources/flag.png';
         this.receiverCurrency = this.currentUser.countryId.currency || 'XAF';
       } else {
         // Valeurs de fallback absolues
         this.selectedCountry = { name: 'Cameroun', currency: 'XAF' };
-        this.flagCountry = 'assets/resources/flag.png';
+        this.flagCountry = 'assets/img/resources/flag.png';
         this.receiverCurrency = 'XAF';
       }
     } else {
       this.selectedCountry = countryData;
-      this.flagCountry = countryData.flagUrl || 'assets/resources/flag.png';
+      this.flagCountry = countryData.flagUrl || 'assets/img/resources/flag.png';
       this.receiverCurrency = countryData.currency || '--';
     }
     this.bankList = [];

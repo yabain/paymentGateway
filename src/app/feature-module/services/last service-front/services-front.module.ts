@@ -7,7 +7,6 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ServicesService } from 'src/app/services/services/services.service';
 import { FrontModule } from 'src/app/front/front.module';
 import { ServicesFrontComponent } from './services-front.component';
-import { CandidateService } from './candidate.service';
 import { ServicesModule } from '../services.module';
 
 
@@ -24,6 +23,6 @@ import { ServicesModule } from '../services.module';
     FrontModule,
     ServicesModule
   ],
-  providers: [ServicesService, CandidateService]
+  providers: [ServicesService]
 })
 export class ServicesFrontModule { }

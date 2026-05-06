@@ -561,7 +561,7 @@ nav.scrolled {
 	height: 100vh;
 	position: relative;
 	overflow: hidden;
-	background: #a1d09e;
+	background: #d09e9e;
 }
 
 .hero-bg {
@@ -621,7 +621,7 @@ nav.scrolled {
 .hero-badge {
 	display: inline-block;
 	padding: 8px 20px;
-	background: rgba(78, 255, 51, 0.1);
+	background: rgba(255, 51, 102, 0.1);
 	border: 1px solid var(--accent);
 	color: var(--accent);
 	font-size: 11px;
@@ -684,7 +684,7 @@ nav.scrolled {
 }
 
 .hero-title .accent {
-	background: linear-gradient(90deg, #c6d42b, #5dbc26);
+	background: linear-gradient(90deg, #ff9269, #ff6690);
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
 	font-style: italic;
@@ -1667,9 +1667,9 @@ nav.scrolled {
 
 .contact-info {
 	padding: 50px;
-	background: linear-gradient(135deg, rgba(85, 255, 51, 0.08), rgba(51, 241, 255, 0.02));
+	background: linear-gradient(135deg, rgba(255, 51, 102, 0.08), rgba(255, 51, 102, 0.02));
 	border-radius: 10px;
-	border: 1px solid rgba(51, 255, 109, 0.1);
+	border: 1px solid rgba(255, 51, 102, 0.1);
 }
 
 .info-item {

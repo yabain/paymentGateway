@@ -21,8 +21,8 @@ export class PaymentSettingsComponent implements OnInit {
   public statusUpdating: Record<string, boolean> = {};
   public saveLoading = false;
   public createLoading = false;
-  flagCountry: string = '../../../../assets/resources/flag.png';
-  createFlagCountry: string = '../../../../assets/resources/flag.png';
+  flagCountry: string = '../../../../assets/img/resources/flag.png';
+  createFlagCountry: string = '../../../../assets/img/resources/flag.png';
   countries: any = [];
   gettingLocations: boolean = true;
 
@@ -86,7 +86,7 @@ export class PaymentSettingsComponent implements OnInit {
   setCountry(countryId: string) {
     if (!countryId) {
       this.editPaymentMethodForm.patchValue({ countryId: '' });
-      this.flagCountry = '../../../../assets/resources/flag.png';
+      this.flagCountry = '../../../../assets/img/resources/flag.png';
       return;
     }
     let country = this.countries.filter((e) => e._id === countryId);
@@ -103,7 +103,7 @@ export class PaymentSettingsComponent implements OnInit {
   setCountryCreate(countryId: string) {
     if (!countryId) {
       this.createPaymentMethodForm.patchValue({ countryId: '' });
-      this.createFlagCountry = '../../../../assets/resources/flag.png';
+      this.createFlagCountry = '../../../../assets/img/resources/flag.png';
       return;
     }
     let country = this.countries.filter((e) => e._id === countryId);
@@ -121,22 +121,22 @@ export class PaymentSettingsComponent implements OnInit {
     let country = this.countries.filter((e) => e._id === coutryId);
     country = country[0];
     if (!country) {
-      this.flagCountry = '../../../../assets/resources/flag.png';
+      this.flagCountry = '../../../../assets/img/resources/flag.png';
       return;
     }
     this.flagCountry =
-      country.flagUrl || '../../../../assets/resources/flag.png';
+      country.flagUrl || '../../../../assets/img/resources/flag.png';
   }
 
   setFlagCreate(coutryId: string) {
     let country = this.countries.filter((e) => e._id === coutryId);
     country = country[0];
     if (!country) {
-      this.createFlagCountry = '../../../../assets/resources/flag.png';
+      this.createFlagCountry = '../../../../assets/img/resources/flag.png';
       return;
     }
     this.createFlagCountry =
-      country.flagUrl || '../../../../assets/resources/flag.png';
+      country.flagUrl || '../../../../assets/img/resources/flag.png';
   }
 
   ngOnInit(): void {
@@ -219,7 +219,7 @@ export class PaymentSettingsComponent implements OnInit {
       statusPayin: false,
       statusPayout: false,
     });
-    this.createFlagCountry = '../../../../assets/resources/flag.png';
+    this.createFlagCountry = '../../../../assets/img/resources/flag.png';
   }
 
   createPaymentMethod(): void {

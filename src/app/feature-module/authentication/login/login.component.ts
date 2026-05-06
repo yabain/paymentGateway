@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
   phone: number;
   gettingLocations: boolean = true;
 
-  flagCountry: string = 'assets/resources/flag.png';
+  flagCountry: string = 'assets/img/resources/flag.png';
 
   constructor(
     private authService: AuthService,
@@ -87,12 +87,12 @@ export class LoginComponent implements OnInit {
     let country = this.countries.filter((e) => e._id === coutryId);
     country = country[0];
     if (!country) {
-      this.flagCountry = '../../../../assets/resources/flag.png';
+      this.flagCountry = '../../../../assets/img/resources/flag.png';
       this.contryCode = '--';
       return;
     }
     this.flagCountry =
-      country.flagUrl || '../../../../assets/resources/flag.png';
+      country.flagUrl || '../../../../assets/img/resources/flag.png';
     this.contryCode = '+' + country.code || '--';
   }
 
