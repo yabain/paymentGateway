@@ -28,6 +28,11 @@ RewriteRule ^(.*) /index.html [NC,L]
   ExpiresByType application/x-javascript "access plus 1 month"
   ExpiresDefault "access plus 1 week"
 </IfModule>
+<IfModule mod_headers.c>
+  Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+  Header set Pragma "no-cache"
+  Header set Expires "0"
+</IfModule>
 
 # php -- BEGIN cPanel-generated handler, do not edit
 # Set the “ea-php81” package as the default “PHP” programming language.

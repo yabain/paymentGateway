@@ -23,7 +23,7 @@ const routes: Routes = [
     component: ApiDocComponent,
   },
   {
-    path: 'test',
+    path: 'payment-done',
     component: PaymentComponent,
   },
   {
@@ -64,8 +64,6 @@ const routes: Routes = [
   //   pathMatch: 'full',
   //   redirectTo: 'login',
   // },
-
-
 ];
 
 @NgModule({
