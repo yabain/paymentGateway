@@ -1,8 +1,6 @@
 // src/app/auth.service.ts
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, catchError, tap } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
 import { from, Observable, of, throwError } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { ApiService } from '../api/api.service';
@@ -47,7 +45,6 @@ export class PaymentService {
   private pollTimer: any;
 
   constructor(
-    private http: HttpClient,
     private translate: TranslateService,
     private toastService: ToastService,
     private fw: FlutterwaveService,
@@ -248,17 +245,11 @@ export class PaymentService {
     paymentRef: string,
     invoiceId?: string,
   ): Observable<any> {
-    // console.log('paymentRef: ', paymentRef);
-    const checkDepositEndPoint =
-      environment.backendUrl + '/payment/check/' + paymentRef;
-
-    return this.http.get<any>(checkDepositEndPoint).pipe(
+    return this.apiService.getById('fw/verify-payin', encodeURIComponent(paymentRef)).pipe(
       tap((response) => {
         return response;
-        // console.log('response of check: ', response);
       }),
       catchError((error) => {
-        // console.error('Error occurred while checking transaction:', error);
         return throwError(error);
       }),
     );

@@ -115,8 +115,12 @@ export class FlutterwaveService {
       );
   }
 
-  listTransactions(countryCode: string = 'CMR'): Observable<any> {
-    return this.apiService.getById(`fw/transactions`, countryCode).pipe(
+  listTransactions(page: number = 1, status?: string): Observable<any> {
+    const query = new URLSearchParams();
+    query.set('page', String(page));
+    if (status) query.set('status', status);
+
+    return this.apiService.getWithoutId(`fw/transactions?${query.toString()}`).pipe(
       map((res: any) => {
         if (res) {
           return res;

@@ -143,13 +143,12 @@ export class ApiService {
         const headers = new HttpHeaders({
           'Authorization': `Bearer ${token}`
         });
-        return this.http.post<any>(`${this.apiUrl}/${endpoint}`, { headers });
+        return this.http.post<any>(`${this.apiUrl}/${endpoint}`, {}, { headers });
       })
     );
   }
 
   update(endpoint: string, id: string, data: any): Observable<any> {
-    console.log('ici continu')
     return from(this.getToken()).pipe(
       switchMap((token: any) => {
         const headers = new HttpHeaders({

@@ -1,8 +1,5 @@
-// src/app/auth.service.ts
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { finalize, map, catchError, switchMap, take, tap } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
+import { take, tap } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 import { FirestoreService } from '../firestore/firestore.service';
 import { ToastrService } from 'ngx-toastr';
@@ -14,62 +11,17 @@ export class PaymentService {
 
   
   constructor(
-    private http: HttpClient,
     private firestore: FirestoreService,
     private toastService: ToastrService,
   ) {
   }
 
-  deposit(paymentData: any, paymentGatwayAPIKey: any) {
-    // console.log('datat: ', paymentData);
-    const depositEndPoint = environment.apiUrl + "/payment/pay";
-    const depositData = {
-      "amount": paymentData.payment,
-      "type": "deposit",
-      "paymentMode": "ORANGE",
-      "moneyCode": "XAF",
-      "userRef": {
-        "fullName": paymentData.name,
-        "account": `${paymentData.phone}`
-      },
-      "raison": 'Paiement de facture',
-      "appID": paymentGatwayAPIKey
-
-    }
-    console.log("depositData", depositData);
-    console.log("endpoint: ", depositEndPoint);
-
-    return new Observable<any>(observer => {
-      this.http.post<any>(depositEndPoint, depositData)
-        .subscribe(
-          (response) => {
-            //    console.log('res du backend', response)
-            observer.next(response);
-            // console.log("la réponse depuis le service de paiement: ", response);
-            observer.complete();
-          },
-          (error) => {
-            observer.error(error);
-            observer.complete();
-          }
-        );
-    });
+  deposit(paymentData: any, paymentGatwayAPIKey: any): Observable<any> {
+    return throwError(() => new Error('Legacy payment flow has been removed.'));
   }
 
   getPaymentStatus(paymentRef: string, invoiceId?: string): Observable<any> {
-    // console.log('paymentRef: ', paymentRef);
-    const checkDepositEndPoint = environment.apiUrl + "/payment/check/" + paymentRef;
-
-    return this.http.get<any>(checkDepositEndPoint).pipe(
-      tap((response) => {
-        return response;
-        // console.log('response of check: ', response);
-      }),
-      catchError((error) => {
-        // console.error('Error occurred while checking transaction:', error);
-        return throwError(error);
-      })
-    );
+    return throwError(() => new Error('Legacy payment status flow has been removed.'));
   }
 
   chekStatus(res: any, userId: string, invoiceData: any) {

@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SystemSettingsComponent } from './system-settings.component';
-import { WhatsappSettingsComponent } from './whatsapp-settings/whatsapp-settings.component';
 import { EmailSettingsComponent } from './email-settings/email-settings.component';
 import { InvoiceSettingsComponent } from './invoice-settings/invoice-settings.component';
 import { PaymentSettingsComponent } from './payment-settings/payment-settings.component';
@@ -11,10 +10,6 @@ const routes: Routes = [
     path: '',
     component: SystemSettingsComponent,
     children: [
-      {
-        path: 'whatsapp-settings',
-        component: WhatsappSettingsComponent
-      },
       {
         path: 'email-settings',
         component: EmailSettingsComponent
