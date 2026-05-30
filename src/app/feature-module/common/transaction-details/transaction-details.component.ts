@@ -7,6 +7,8 @@ import {
   AfterViewInit,
   ElementRef,
   OnDestroy,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { UserService } from 'src/app/services/user/user.service';
@@ -18,14 +20,14 @@ import { Subject } from 'rxjs/internal/Subject';
   templateUrl: './transaction-details.component.html',
   styleUrls: ['./transaction-details.component.scss'],
 })
-export class TransactionDetailsComponent implements OnInit, OnDestroy {
+export class TransactionDetailsComponent implements OnInit, OnDestroy, OnChanges {
   @Input() transactionData: any;
   customer: any;
   card: any;
   meta: any;
   currentUser: any;
   status: string = 'transaction_initialized';
-  processing: boolean = false;
+  processingTransactionId: string | null = null;
   private destroy$ = new Subject<void>();
   private pollTimer: any;
 
@@ -45,6 +47,17 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
     this.getTransactionStatus();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['transactionData']) {
+      const previousId = changes['transactionData']?.previousValue?._id;
+      const currentId = changes['transactionData']?.currentValue?._id;
+      if (previousId && currentId && String(previousId) !== String(currentId)) {
+        this.stopPolling();
+        this.processingTransactionId = null;
+      }
+    }
+  }
+
   async getCurrentUser() {
     this.currentUser = await this.userService.getCurrentUser();
     console.log('currentUser', this.currentUser);
@@ -62,7 +75,7 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
   }
 
   acceptPayment(transactionId) {
-    this.processing = true;
+    this.processingTransactionId = String(transactionId || '');
     this.paymentService.acceptPayment(transactionId).subscribe((resp: any) => {
       this.startPolling(transactionId);
     });
@@ -71,7 +84,7 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
   rejectPayment(transactionId) {}
 
   retryPayment(transactionId) {
-    this.processing = true;
+    this.processingTransactionId = String(transactionId || '');
     this.paymentService.retryPayment(transactionId).subscribe((resp: any) => {
       this.startPolling(transactionId);
     });
@@ -93,7 +106,7 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
 
   checkStatus(transactionId) {
     console.log('checkStatus: ', transactionId)
-    this.processing = true;
+    this.processingTransactionId = String(transactionId || '');
     this.paymentService
       .getTransactionData(transactionId)
       .subscribe((res: any) => {
@@ -101,18 +114,25 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
           console.log('pending');
         } else if (res.status === this.paymentService.status.PAYOUTSUCCESS) {
           this.toastService.presentToast('success', 'Done !', '');
+            this.stopPolling();
             this.closeModalClick();
-            this.processing = false;
+            this.processingTransactionId = null;
             this.scrollToTop();
         } else if (res.status === this.paymentService.status.PAYOUTERROR) {
           this.toastService.presentToast('error', 'Error to Payout !', '');
+            this.stopPolling();
             this.closeModalClick();
-            this.processing = false;
+            this.processingTransactionId = null;
             this.scrollToTop();
         } else {
-          this.processing = true;
+          this.processingTransactionId = String(transactionId || '');
         }
       });
+  }
+
+  isProcessingCurrent(): boolean {
+    const currentId = String(this.transactionData?._id || '');
+    return !!currentId && this.processingTransactionId === currentId;
   }
 
   scrollToTop(): void {
@@ -159,5 +179,6 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
     this.stopPolling();
+    this.processingTransactionId = null;
   }
 }

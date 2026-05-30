@@ -411,7 +411,7 @@
     <br>
     <div class="modal-body">
         <div class="form-header modal-header-title text-start mb-0"
-            *ngIf="currentUser?.isAdmin && transactionData?._id && !processing">
+            *ngIf="currentUser?.isAdmin && transactionData?._id && !isProcessingCurrent()">
             <span
                 *ngIf="transactionData?.status === 'transaction_payout_error'">
 
@@ -443,14 +443,14 @@
                 </button>
             </span>
         </div>
-        <div class="form-header modal-header-title text-start mb-0" *ngIf="currentUser?.isAdmin && processing">
+        <div class="form-header modal-header-title text-start mb-0" *ngIf="currentUser?.isAdmin && isProcessingCurrent()">
             <span role="status" class="spinner-border spinner-border-sm me-2"></span>
         </div>
     </div>
 
     <button class="btn btn-rounded btn-outline-secondary me-1" href="javascript:void(0);" style="margin-left: 20px;"
         data-bs-toggle="tooltip" data-bs-placement="bottom" matTooltip="Close view"
-        (click)="ngOnDestroy(); closeModalClick()" *ngIf="!processing"><span>
+        (click)="ngOnDestroy(); closeModalClick()" *ngIf="!isProcessingCurrent()"><span>
             {{ "action.close" | translate }}
         </span>
     </button>
