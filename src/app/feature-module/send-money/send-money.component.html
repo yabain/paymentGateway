@@ -451,10 +451,45 @@
                         </div>
                       </div>
 
+                      <div class="fee-breakdown">
+                        <h4><i class="fas fa-wallet"></i> Méthode de paiement</h4>
+                        <div class="payment-methods">
+                          <div class="method-card" (click)="selectPaymentSource('provider')"
+                            [ngClass]="{'active': selectedPaymentSource === 'provider'}">
+                            <div class="method-icon">
+                              <img [src]="isPaystackCurrency(selectedCountry?.currency) ? 'assets/img/resources/paystack.png' : 'assets/img/resources/flutterwave.png'"
+                                alt="" class="method-img">
+                            </div>
+                            <div class="method-info">
+                              <h3>{{ getPaymentProviderName(selectedCountry?.currency) }}</h3>
+                              <p>Payer maintenant via le fournisseur de paiement.</p>
+                            </div>
+                          </div>
+
+                          <div class="method-card" (click)="selectPaymentSource('account_balance')"
+                            [ngClass]="{'active': selectedPaymentSource === 'account_balance', 'disabled-method': !canPayWithBalance()}">
+                            <div class="method-icon">
+                              <img src="assets/img/resources/icon.jpg" alt="" class="method-img">
+                            </div>
+                            <div class="method-info">
+                              <h3>Solde du compte</h3>
+                              <p *ngIf="!waitingBalance">
+                                Disponible: {{ accountBalance | number:'1.0-0' }} {{ currentUser?.countryId.currency }}
+                              </p>
+                              <p *ngIf="waitingBalance">{{ "loading" | translate }}...</p>
+                              <span class="coming-soon" *ngIf="!canPayWithBalance() && !waitingBalance">
+                                Solde insuffisant
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
                       <div class="security-notice">
-                        <img [src]="isPaystackCurrency(selectedCountry?.currency) ? 'assets/img/resources/paystack.png' : 'assets/img/resources/flutterwave.png'" alt=""
+                        <img [src]="selectedPaymentSource === 'account_balance' ? 'assets/img/resources/icon.jpg' : (isPaystackCurrency(selectedCountry?.currency) ? 'assets/img/resources/paystack.png' : 'assets/img/resources/flutterwave.png')" alt=""
                           style="max-width: 100px; border-radius: 5px; margin-right: 10px;">
-                        <p>{{ "payment.secureMessageByProvider" | translate:{ provider: getPaymentProviderName(selectedCountry?.currency) } }}</p>
+                        <p *ngIf="selectedPaymentSource === 'provider'">{{ "payment.secureMessageByProvider" | translate:{ provider: getPaymentProviderName(selectedCountry?.currency) } }}</p>
+                        <p *ngIf="selectedPaymentSource === 'account_balance'">Le montant total sera débité de votre solde et le transfert sera envoyé en validation.</p>
                       </div>
                       <div class="action-buttons">
                         <button class="btn btn-cancel" matStepperPrevious (click)="previousStep()">

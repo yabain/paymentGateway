@@ -10,12 +10,17 @@
                     <li>
                         <a class="btn btn-rounded btn-outline-success me-1" href="javascript:void(0);"
                             data-bs-toggle="tooltip" data-bs-placement="bottom" matTooltip="Accept all payments"
+                            [class.disabled]="processingBulkAction"
+                            [attr.aria-disabled]="processingBulkAction"
                             (click)="acceptAll()"><span>
+                                <span *ngIf="processingBulkAction" class="spinner-border spinner-border-sm me-2"></span>
                                 {{ "payment.payAll" | translate }}</span></a>
                     </li>
                     <li>
                         <a class="btn btn-rounded btn-outline-danger me-1" href="javascript:void(0);"
                             data-bs-toggle="tooltip" data-bs-placement="bottom" matTooltip="Reject all payments"
+                            [class.disabled]="processingBulkAction"
+                            [attr.aria-disabled]="processingBulkAction"
                             (click)="rejectAll()"><span>
                                 {{ "payment.rejectAll" | translate }}
                             </span></a>

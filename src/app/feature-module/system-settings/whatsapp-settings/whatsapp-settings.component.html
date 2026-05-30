@@ -1,0 +1,52 @@
+<div class="page-header">
+  <div class="content-page-header page-tilte">
+    <h5 style="color: black !important">
+      <img src="assets/img/resources/whatsapp.png" alt="" style="width: 30px; margin-right: 10px;">
+      {{ 'sideMenu.whatsapp' | translate }}
+    </h5>
+    <div class="page-content">
+      <button class="btn btn-outline-primary" type="button" (click)="getSystemData()" [disabled]="loading || saving">
+        <i class="feather icon-refresh-ccw"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body">
+        <div *ngIf="loading" class="settings-loader">
+          <span class="spinner-border spinner-border-sm me-2"></span>
+          {{ 'loading' | translate }}...
+        </div>
+
+        <div *ngIf="!loading" class="notification-setting">
+          <div>
+            <h5>WhatsApp notifications</h5>
+            <p>
+              Active ou désactive l'envoi automatique des messages WhatsApp transactionnels.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            class="toggle-button"
+            [class.is-enabled]="enabled"
+            [disabled]="saving"
+            (click)="toggleWhatsappNotifications()"
+            [attr.aria-pressed]="enabled"
+          >
+            <span class="toggle-track">
+              <span class="toggle-thumb"></span>
+            </span>
+            <span class="toggle-label">
+              {{ enabled ? ('users.enabled' | translate) : ('users.disabled' | translate) }}
+            </span>
+            <span *ngIf="saving" class="spinner-border spinner-border-sm ms-2"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

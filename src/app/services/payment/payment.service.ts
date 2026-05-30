@@ -61,6 +61,15 @@ export class PaymentService {
     );
   }
 
+  proceedTransferFromBalance(data): Observable<any> {
+    return from(this.apiService.create(`fw/transfer-from-balance`, data)).pipe(
+      map((resp) => {
+        return resp;
+      }),
+      catchError((error) => of({ error })),
+    );
+  }
+
   proceedWithdrawal(data): Observable<any> {
     console.log('proceedWithdrawal data: ', data);
     return from(this.apiService.create(`fw/withdrawal`, data)).pipe(
@@ -177,6 +186,21 @@ export class PaymentService {
       catchError((err) => {
         console.error('Error getting favorites:', err);
         return of(false); // Emit false if there's an error
+      }),
+    );
+  }
+
+  rejectPayment(transactionId): Observable<any> {
+    return this.apiService.updateWithoutId(`transaction/reject-payout/${transactionId}`, {}).pipe(
+      map((res: any) => {
+        if (res) {
+          return res;
+        }
+        return false;
+      }),
+      catchError((err) => {
+        console.error('Error rejecting payment:', err);
+        return of(false);
       }),
     );
   }

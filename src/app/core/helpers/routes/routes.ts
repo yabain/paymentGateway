@@ -305,6 +305,9 @@ export class routes {
   public static get emailSettings(): string {
     return this.settings + '/email-settings';
   }
+  public static get whatsappSettings(): string {
+    return this.settings + '/whatsapp-settings';
+  }
   public static get deleteAccount(): string {
     return this.settings + '/delete-account';
   }

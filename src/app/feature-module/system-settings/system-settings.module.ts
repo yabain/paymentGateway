@@ -5,6 +5,7 @@ import { SidemenuComponent } from './sidemenu/sidemenu.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { SystemSettingsComponent } from './system-settings.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { WhatsappSettingsComponent } from './whatsapp-settings/whatsapp-settings.component';
 import { CommonItemModule } from '../common/common-item.module';
 import { EmailSettingsComponent } from './email-settings/email-settings.component';
 import { InvoiceSettingsComponent } from './invoice-settings/invoice-settings.component';
@@ -14,6 +15,7 @@ import { PaymentSettingsComponent } from './payment-settings/payment-settings.co
   declarations: [
     SystemSettingsComponent,
     SidemenuComponent,
+    WhatsappSettingsComponent,
     EmailSettingsComponent,
     InvoiceSettingsComponent,
     PaymentSettingsComponent

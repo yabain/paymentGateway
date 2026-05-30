@@ -19,7 +19,8 @@ export class SidemenuComponent  {
     });
   }
 
-
-
+  isActive(path: string): boolean {
+    return typeof this.url === 'string' && this.url.split('?')[0].endsWith(`/system-settings/${path}`);
+  }
   
 }

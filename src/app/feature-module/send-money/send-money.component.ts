@@ -20,6 +20,7 @@ import {
 import { FlutterwaveService } from 'src/app/services/flutterwave/flutterwave.service';
 import { FieldValidationService } from 'src/app/services/field-validation/field-validation.service';
 import { PaymentMethodsService } from 'src/app/services/payment-methods/payment-methods.service';
+import { BalanceService } from 'src/app/services/balance/balance.service';
 declare var FlutterwaveCheckout: any;
 
 @Component({
@@ -72,6 +73,9 @@ export class SendMoneyComponent implements OnInit {
   paymentMethodsList: any[] = [];
   paymentMethodsDisabledList: any[] = [];
   private systemTransferTaxes = 5;
+  accountBalance: number = 0;
+  waitingBalance: boolean = true;
+  selectedPaymentSource: 'provider' | 'account_balance' = 'provider';
 
   statusErrorMsg: any = [];
   bankAccountNumber: string = '';
@@ -109,6 +113,7 @@ export class SendMoneyComponent implements OnInit {
     private fw: FlutterwaveService,
     private fieldValidationService: FieldValidationService,
     private paymentMethodsService: PaymentMethodsService,
+    private balanceService: BalanceService,
   ) {
     this.estimation = 0;
   }
@@ -373,6 +378,20 @@ export class SendMoneyComponent implements OnInit {
     return this.aroundValue(this.estimation + this.calculateTaxesAmount());
   }
 
+  canPayWithBalance(): boolean {
+    return (
+      !this.waitingBalance &&
+      this.accountBalance >= this.paymentWithTaxesCalculation()
+    );
+  }
+
+  selectPaymentSource(source: 'provider' | 'account_balance'): void {
+    if (source === 'account_balance' && !this.canPayWithBalance()) {
+      return;
+    }
+    this.selectedPaymentSource = source;
+  }
+
   canNext(): boolean {
     if (!this.selectedCountry) return false;
     this.receiverName = this.receiverFirstName + ' ' + this.receiverLastName;
@@ -467,6 +486,7 @@ export class SendMoneyComponent implements OnInit {
         this.getId();
         this.getRates();
         this.getSystemData();
+        this.getBalance();
       } else {
         this.currentUser = undefined;
         this.waitingUserData = false;
@@ -478,6 +498,14 @@ export class SendMoneyComponent implements OnInit {
         );
         this.router.navigate(['/tabs']);
       }
+    });
+  }
+
+  getBalance() {
+    this.waitingBalance = true;
+    this.balanceService.getBalance().subscribe((balance: any) => {
+      this.accountBalance = Number(balance?.balance || 0);
+      this.waitingBalance = false;
     });
   }
 
@@ -532,6 +560,30 @@ export class SendMoneyComponent implements OnInit {
     this.setTransactionData();
     if (this.verifytransactionData(this.transactionData) === false) return;
     this.proceed = true;
+
+    if (this.selectedPaymentSource === 'account_balance') {
+      this.paymentService
+        .proceedTransferFromBalance(this.transactionData)
+        .subscribe((res: any) => {
+          if (!res || res?.error) {
+            this.proceed = false;
+            this.goToProceed = false;
+            this.toastService.presentToast(
+              'error',
+              'Error',
+              res?.error?.error?.message || res?.error?.message || 'Insufficient balance',
+            );
+            this.getBalance();
+            return;
+          }
+          this.modalClosed = true;
+          this.transactionSucceded = true;
+          this.transactionFailed = false;
+          this.showRetry = false;
+          this.getBalance();
+        });
+      return;
+    }
 
     await this.fw.loadFlutterwaveScript();
     this.paymentService
@@ -676,6 +728,7 @@ export class SendMoneyComponent implements OnInit {
       receiverAmount: this.getCleanAmount(),
 
       paymentMethod: this.selectedMethod?.code || operator,
+      paymentSource: this.selectedPaymentSource,
       receiverMobileAccountNumber: this.receiverMobileAccountNumber,
       bankAccountNumber:
         this.bankAccountNumber?.replaceAll(' ', '') || undefined,

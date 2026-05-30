@@ -13,6 +13,7 @@ import { UserService } from 'src/app/services/user/user.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { Location } from '@angular/common';
 import { MailService } from 'src/app/services/mail/mail.service'; 
+import { SystemService } from 'src/app/services/system/system.service';
 import {
   ChartComponent,
   ApexAxisChartSeries,
@@ -83,8 +84,14 @@ export class EmailSettingsComponent implements OnInit {
   metadata: any;
   public chartOptionsThree: Partial<ChartOptions>;
   gettingStatistics: boolean = true;
+  emailNotificationsEnabled: boolean = true;
+  loadingSystemSettings: boolean = true;
+  savingSystemSettings: boolean = false;
 
-  constructor(private mailService: MailService) {
+  constructor(
+    private mailService: MailService,
+    private systemService: SystemService,
+  ) {
     
     this.chartOptionsThree = {
       series: [
@@ -172,6 +179,35 @@ export class EmailSettingsComponent implements OnInit {
 
   changeUserActiveStatus() { }
 
+  getSystemData() {
+    this.loadingSystemSettings = true;
+    this.systemService.getSystemData().subscribe({
+      next: (systemData: any) => {
+        this.emailNotificationsEnabled = systemData?.emailNotificationsEnabled !== false;
+        this.loadingSystemSettings = false;
+      },
+      error: (err) => {
+        this.loadingSystemSettings = false;
+        console.log(err);
+      },
+    });
+  }
+
+  toggleEmailNotifications() {
+    const nextValue = !this.emailNotificationsEnabled;
+    this.savingSystemSettings = true;
+    this.systemService.updateSystemData({ emailNotificationsEnabled: nextValue }).subscribe({
+      next: (systemData: any) => {
+        this.emailNotificationsEnabled = systemData?.emailNotificationsEnabled !== false;
+        this.savingSystemSettings = false;
+      },
+      error: (err) => {
+        this.savingSystemSettings = false;
+        console.log(err);
+      },
+    });
+  }
+
   getSmtpData() {
     this.waitingData = true;
     this.mailService.getSmtpData().subscribe({
@@ -198,6 +234,7 @@ export class EmailSettingsComponent implements OnInit {
   }
 
   refresh() {
+    this.getSystemData();
     this.getSmtpData();
     this.getOutputMails();
     this.getStatistics();

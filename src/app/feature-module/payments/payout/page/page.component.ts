@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import { forkJoin, Subject, takeUntil } from 'rxjs';
 import { FlutterwaveService } from 'src/app/services/flutterwave/flutterwave.service';
 import { PaymentService } from 'src/app/services/payment/payment.service';
 import { environment } from 'src/environments/environment';
@@ -20,6 +20,7 @@ export class PageComponent implements OnInit, OnDestroy {
   transactionList: any[] = [];
   selectedTransaction: any;
   private pollTimer: any;
+  processingBulkAction = false;
 
   constructor(
     private paymentService: PaymentService,
@@ -110,13 +111,20 @@ export class PageComponent implements OnInit, OnDestroy {
   }
 
   acceptPayment(transactionId) {
+    if (!transactionId || this.processingBulkAction) return;
     this.paymentService.acceptPayment(transactionId).subscribe((resp: any) => {
       console.log('resp to accept:', resp);
       this.refresh();
     });
   }
 
-  rejectPayment() {}
+  rejectPayment(transactionId) {
+    if (!transactionId || this.processingBulkAction) return;
+    this.paymentService.rejectPayment(transactionId).subscribe((resp: any) => {
+      console.log('resp to reject:', resp);
+      this.refresh();
+    });
+  }
 
   getData() {
     this.getStat();
@@ -124,9 +132,59 @@ export class PageComponent implements OnInit, OnDestroy {
     else return this.getTransactionListByStatus(this.sectionSelected);
   }
 
-  acceptAll() {}
+  acceptAll() {
+    const pendingTransactions = this.getAdminValidationPendingTransactions();
+    if (!pendingTransactions.length || this.processingBulkAction) return;
 
-  rejectAll() {}
+    this.processingBulkAction = true;
+    if (this.pollTimer) clearInterval(this.pollTimer);
+
+    forkJoin(
+      pendingTransactions.map((transaction) =>
+        this.paymentService.acceptPayment(transaction._id),
+      ),
+    ).subscribe({
+      next: () => {
+        this.processingBulkAction = false;
+        this.refresh();
+      },
+      error: (error) => {
+        console.error('acceptAll error:', error);
+        this.processingBulkAction = false;
+        this.refresh();
+      },
+    });
+  }
+
+  rejectAll() {
+    const pendingTransactions = this.getAdminValidationPendingTransactions();
+    if (!pendingTransactions.length || this.processingBulkAction) return;
+
+    this.processingBulkAction = true;
+    if (this.pollTimer) clearInterval(this.pollTimer);
+
+    forkJoin(
+      pendingTransactions.map((transaction) =>
+        this.paymentService.rejectPayment(transaction._id),
+      ),
+    ).subscribe({
+      next: () => {
+        this.processingBulkAction = false;
+        this.refresh();
+      },
+      error: (error) => {
+        console.error('rejectAll error:', error);
+        this.processingBulkAction = false;
+        this.refresh();
+      },
+    });
+  }
+
+  private getAdminValidationPendingTransactions(): any[] {
+    return (this.transactionList || []).filter(
+      (transaction) => transaction?.status === this.paymentService.status.PAYINSUCCESS,
+    );
+  }
 
   startPolling(byStatus = false, page: number = 1, transactionStatus?: string) {
     console.log('start polling: ', transactionStatus);

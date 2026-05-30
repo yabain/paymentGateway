@@ -16,3 +16,9 @@
 .c-hover:hover {
   cursor: pointer;
 }
+
+.btn.disabled,
+.btn[aria-disabled='true'] {
+  pointer-events: none;
+  opacity: 0.65;
+}

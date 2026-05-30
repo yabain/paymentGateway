@@ -19,27 +19,27 @@
         </li> -->
         <li class="nav-item">
           <a
-            [routerLink]="routes.companySettings"
+            routerLink="company-settings"
             class="nav-link"
-            [class.active]="url === routes.companySettings"
+            [class.active]="isActive('company-settings')"
           >
             <i class="feather icon-settings"></i> <span>{{ 'systemSettings.companySettings' | translate }}</span>
           </a>
         </li>
         <li class="nav-item">
           <a
-            [routerLink]="routes.invoiceSettings"
+            routerLink="invoice-settings"
             class="nav-link"
-            [class.active]="url === routes.invoiceSettings"
+            [class.active]="isActive('invoice-settings')"
           >
             <i class="feather icon-file"></i> <span>{{ 'payment.invoiceSettings' | translate }}</span>
           </a>
         </li>
         <li class="nav-item">
           <a
-            [routerLink]="routes.paymentSettings"
+            routerLink="payment-settings"
             class="nav-link"
-            [class.active]="url === routes.paymentSettings"
+            [class.active]="isActive('payment-settings')"
           >
             <i class="feather icon-credit-card"></i>
             <span>{{ 'payment.paymentMethods' | translate }}</span>
@@ -47,18 +47,28 @@
         </li>
         <li class="nav-item">
           <a
-            [routerLink]="routes.emailSettings"
+            routerLink="email-settings"
             class="nav-link"
-            [class.active]="url === routes.emailSettings"
+            [class.active]="isActive('email-settings')"
           >
             <i class="feather icon-mail"></i> <span>{{ 'systemSettings.emailSettings' | translate }}</span>
           </a>
         </li>
+        <li class="nav-item">
+          <a
+            routerLink="whatsapp-settings"
+            class="nav-link"
+            [class.active]="isActive('whatsapp-settings')"
+          >
+            <i class="feather icon-message-circle"></i>
+            <span>{{ 'systemSettings.whatsappSettings' | translate }}</span>
+          </a>
+        </li>
         <!-- <li class="nav-item">
           <a
-            [routerLink]="routes.preferences"
+            routerLink="preferences"
             class="nav-link"
-            [class.active]="url === routes.preferences"
+            [class.active]="isActive('preferences')"
           >
             <i class="feather icon-settings"></i>
             <span>Preference Settings</span>
@@ -66,9 +76,9 @@
         </li>
         <li class="nav-item">
           <a
-            [routerLink]="routes.twoFactor"
+            routerLink="two-factor"
             class="nav-link"
-            [class.active]="url === routes.twoFactor"
+            [class.active]="isActive('two-factor')"
           >
             <i class="feather icon-aperture"></i> <span>Two Factor</span>
           </a>
