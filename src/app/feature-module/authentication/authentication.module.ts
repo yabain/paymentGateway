@@ -11,6 +11,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { NewPasswordComponent } from './new-password/new-password.component';
+import { ForcePasswordChangeComponent } from './force-password-change/force-password-change.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { NewPasswordComponent } from './new-password/new-password.component';
     LoginComponent,
     RegisterComponent,
     NewPasswordComponent,
+    ForcePasswordChangeComponent,
     ForgotPasswordComponent
   ],
   imports: [

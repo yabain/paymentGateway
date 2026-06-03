@@ -5,6 +5,7 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { NewPasswordComponent } from './new-password/new-password.component';
+import { ForcePasswordChangeComponent } from './force-password-change/force-password-change.component';
 
 const routes: Routes = [
   {
@@ -46,6 +47,10 @@ const routes: Routes = [
       {
         path: 'new-password/:id',
         component: NewPasswordComponent,
+      },
+      {
+        path: 'force-password-change',
+        component: ForcePasswordChangeComponent,
       },
       {
         path: 'lock-screen',

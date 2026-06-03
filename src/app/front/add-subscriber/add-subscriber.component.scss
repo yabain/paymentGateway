@@ -1,0 +1,29 @@
+.selected-subscriber {
+  align-items: center;
+  background: #f7f8f9;
+  border: 1px solid #e9edf0;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  padding: 12px;
+}
+
+.subscriber-search {
+  display: grid;
+  gap: 8px;
+}
+
+.subscriber-candidate {
+  background: #fff;
+  border: 1px solid #e9edf0;
+  border-radius: 6px;
+  display: grid;
+  gap: 2px;
+  padding: 10px 12px;
+  text-align: left;
+  width: 100%;
+}
+
+.subscriber-candidate:hover {
+  background: #f7f8f9;
+}

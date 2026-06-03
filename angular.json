@@ -23,7 +23,15 @@
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": ["src/favicon.ico", "src/assets"],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets",
+              {
+                "glob": ".htaccess",
+                "input": ".",
+                "output": "."
+              }
+            ],
             "styles": [
               "node_modules/ngx-owl-carousel-o/lib/styles/scss/owl.carousel.scss",
               "node_modules/ngx-owl-carousel-o/lib/styles/scss/owl.theme.default.scss",

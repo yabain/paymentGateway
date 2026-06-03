@@ -42,6 +42,16 @@ export class DevService {
     }
   }
 
+  async updateWebhookUrl(webhookUrl: string): Promise<any> {
+    try {
+      const response = await this.apiService.updateWithoutId(`dev/webhook-url`, { webhookUrl }).toPromise();
+      return response;
+    } catch (error) {
+      console.error('Error updating webhook URL:', error);
+      throw error;
+    }
+  }
+
   async resetKey(): Promise<any> {
     try {
       const response = await this.apiService.updateWithoutId(`dev/reset-key`, {}).toPromise();

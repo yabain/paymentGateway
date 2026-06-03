@@ -32,7 +32,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
   getId() {
     const url = this.location.path();
     this.isAdminRoute = url.includes('admin-subscription');
-    console.log("isAdminRoute: ", this.isAdminRoute)
   }
 
   togglePackageRoute() {

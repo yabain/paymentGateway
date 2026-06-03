@@ -8,7 +8,7 @@
       </span>
       <span (click)="toggleStatus()" class="btn btn-light">
         <a class="btn-filters" href="javascript:void(0);" data-bs-toggle="tooltip"
-          data-bs-placement="bottom" matTooltip="Disable"><span><i class="feather icon-power"
+          data-bs-placement="bottom" [attr.title]="'dev.disableApiAccess' | translate"><span><i class="feather icon-power"
             [ngClass]="keyData?.status === true ?
         'danger-dark' : 'success-dark'"></i></span></a>
       </span>
@@ -42,6 +42,34 @@
     </small>
     <input *ngIf="showKey" type="text" class="form-control" [value]="keyData?.publicKey" disabled>
     <input *ngIf="!showKey" type="text" class="form-control" value="**************" disabled>
+    <br>
+    <small class="text-dark">{{ 'dev.webhookUrl' | translate }}</small>
+    <div class="input-group">
+      <input
+        type="url"
+        class="form-control"
+        placeholder="https://your-server.com/webhook"
+        [(ngModel)]="webhookUrl"
+        [disabled]="updatingWebhook">
+      <button
+        class="btn btn-primary"
+        type="button"
+        (click)="saveWebhookUrl()"
+        [disabled]="updatingWebhook">
+        <span *ngIf="updatingWebhook" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+        {{ 'dev.saveWebhookUrl' | translate }}
+      </button>
+      <button
+        class="btn btn-outline-danger"
+        type="button"
+        (click)="clearWebhookUrl()"
+        [disabled]="updatingWebhook || !webhookUrl">
+        {{ 'dev.clearWebhookUrl' | translate }}
+      </button>
+    </div>
+    <small class="text-muted">
+      {{ 'dev.webhookUrlHelp' | translate }}
+    </small>
     <!-- <div class="card-header d-flex justify-content-between">
           <h5 class="card-title">{{ "profile.aboutUs" | translate }}</h5>
           <a class="btn btn-sm btn-white" (click)="editDescription()" *ngIf="!descriptionEdition && !loading2">

@@ -212,6 +212,12 @@ export class LoginComponent implements OnInit {
             this.language.setLocalUserLanguage(user.language);
             this.language.useLanguage(user.language);
             this.form.reset();
+            if (user.mustChangePassword === true) {
+              localStorage.setItem('mustChangePassword', 'true');
+              this.router.navigateByUrl('/auth/force-password-change', { replaceUrl: true });
+              return;
+            }
+            localStorage.removeItem('mustChangePassword');
             this.userSettingsService.getUserSettings()
               .subscribe((res) => {
                 this.storage.getStorage(environment.memory_link).then((url) => {

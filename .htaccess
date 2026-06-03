@@ -1,10 +1,21 @@
 RewriteEngine on
+
+<IfModule mod_mime.c>
+  AddType application/javascript .js .mjs
+  AddType text/css .css
+  AddType application/wasm .wasm
+</IfModule>
+
 RewriteCond %{REQUEST_FILENAME} -s [OR]
 RewriteCond %{REQUEST_FILENAME} -l [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^.*$ - [NC,L]
 
-RewriteRule ^(.*) /index.html [NC,L]
+# Static files must never fall back to index.html. If a bundle is missing,
+# return a real 404 instead of serving HTML as a module script.
+RewriteRule \.(?:js|mjs|css|map|json|wasm|png|jpe?g|gif|svg|ico|webp|avif|woff2?|ttf|eot)$ - [NC,L]
+
+RewriteRule ^.*$ /index.html [NC,L]
 
 <IfModule mod_deflate.c>
   AddOutputFilterByType DEFLATE text/plain

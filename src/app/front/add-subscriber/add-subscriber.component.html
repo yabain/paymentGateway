@@ -3,27 +3,37 @@
     <div class="login-userset">
       <div class="input-block mb-3">
         <label htmlFor="label">{{ 'auth.accountType' | translate}} *</label>
-        <select id="accountType" formControlName="accountType" class="form-select" [disabled]>
+        <select id="accountType" formControlName="accountType" class="form-select" [disabled]="selectedExistingUser">
           <option value="personal" selected>{{ 'auth.personal' |
             translate }}</option>
         </select>
       </div>
-      <div class="input-block mb-3" *ngIf="formType === 'organisation'">
+      <div class="selected-subscriber mb-3" *ngIf="selectedExistingUser">
+        <div>
+          <strong>{{ showUserName(selectedExistingUser) }}</strong>
+          <div>{{ selectedExistingUser.email }}</div>
+          <div>{{ selectedExistingUser.whatsapp || selectedExistingUser.phone }}</div>
+        </div>
+        <button type="button" class="btn btn-sm btn-outline-secondary" (click)="clearSelectedExistingUser()">
+          {{ 'subscriptions.changeSubscriber' | translate }}
+        </button>
+      </div>
+      <div class="input-block mb-3" *ngIf="formType === 'organisation' && !selectedExistingUser">
         <label class="form-label">{{ 'auth.organisationName' | translate }}</label>
         <input type="text" formControlName="name" class="form-control"
           placeholder="{{ 'auth.organisationName' | translate }}" />
       </div>
-      <div class="input-block mb-3" *ngIf="formType === 'personal'">
+      <div class="input-block mb-3" *ngIf="formType === 'personal' && !selectedExistingUser">
         <label class="form-label">{{ 'auth.firstName'| translate }} *</label>
         <input type="text" formControlName="firstName" class="form-control"
           placeholder="{{ 'auth.needFirstName'| translate }}" />
       </div>
-      <div class="input-block mb-3" *ngIf="formType === 'personal'">
+      <div class="input-block mb-3" *ngIf="formType === 'personal' && !selectedExistingUser">
         <label class="form-label">{{ 'auth.lastName'| translate }} *</label>
         <input type="text" formControlName="lastName" class="form-control"
           placeholder="{{ 'auth.needLastName'| translate }}" />
       </div>
-      <div class="input-block mb-3">
+      <div class="input-block mb-3" *ngIf="!selectedExistingUser">
         <label htmlFor="country">{{ 'auth.country' | translate}} *</label>
         <div class="col-lg-12">
           <div class="input-group">
@@ -41,7 +51,7 @@
           </div>
         </div>
       </div>
-      <div class="input-block mb-3">
+      <div class="input-block mb-3" *ngIf="!selectedExistingUser">
         <label htmlFor="city">{{ 'auth.city' | translate}} *</label>
         <div class="col-lg-12">
           <div class="input-group">
@@ -54,7 +64,7 @@
           </div>
         </div>
       </div>
-      <div class="input-block mb-3 row">
+      <div class="input-block mb-3 row" *ngIf="!selectedExistingUser">
         <label htmlFor="phone">{{ 'auth.phone' | translate}} (Whatsapp) *</label>
         <div class="col-lg-12">
           <div class="input-group">
@@ -64,10 +74,24 @@
           </div>
         </div>
       </div>
-      <div class="input-block mb-3">
+      <div class="input-block mb-3" *ngIf="!selectedExistingUser">
         <label htmlFor="email" class="form-label">{{ 'auth.emailAddres'| translate }} *</label>
         <input type="email" id="email" formControlName="email" class="form-control"
           placeholder="{{ 'auth.needEmail'| translate }}" />
+      </div>
+      <div class="subscriber-search mb-3" *ngIf="!selectedExistingUser && (searchingSubscriber || subscriberCandidates.length > 0)">
+        <div class="text-muted small mb-2" *ngIf="searchingSubscriber">
+          {{ 'subscriptions.searchingSubscriber' | translate }}
+        </div>
+        <button
+          type="button"
+          class="subscriber-candidate"
+          *ngFor="let user of subscriberCandidates"
+          (click)="selectExistingUser(user)">
+          <strong>{{ showUserName(user) }}</strong>
+          <span>{{ user.email }}</span>
+          <span>{{ user.whatsapp || user.phone }}</span>
+        </button>
       </div>
       <div class="input-block mb-3">
         <label htmlFor="subscriptionStartDate" class="form-label">{{ 'subscriptions.subscriptionStartDate'| translate }}
@@ -93,7 +117,7 @@
           type="submit"
           class="btn btn-primary m-1"
           *ngIf="!waittingSubscription"
-          [disabled]="form.invalid"
+          [disabled]="selectedExistingUser ? !form.value.subscriptionStartDate : form.invalid"
         >
           {{ "action.add" | translate }}</button>
         <button *ngIf="waittingSubscription" class="btn btn-primary m-1">

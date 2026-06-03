@@ -29,6 +29,10 @@ export class AddSubscriberComponent implements OnInit {
   planId: string;
   selectedCounry: any;
   waittingSubscription: boolean = false;
+  subscriberCandidates: any[] = [];
+  selectedExistingUser: any = null;
+  searchingSubscriber: boolean = false;
+  private subscriberSearchTimer: any;
 
   constructor(
     private location: LocationService,
@@ -68,6 +72,11 @@ export class AddSubscriberComponent implements OnInit {
   setFlag(coutryId) {
     let country = this.countries.filter((e) => e._id === coutryId);
     country = country[0];
+    if (!country) {
+      this.flagCountry = '../../../../assets/img/resources/flag.png';
+      this.contryCode = '--';
+      return;
+    }
     this.flagCountry =
       country.flagUrl || '../../../../assets/img/resources/flag.png';
     this.contryCode = '+' + country.code || '--';
@@ -84,12 +93,15 @@ export class AddSubscriberComponent implements OnInit {
   }
 
   createSubscriptionItem() {
-    this.form.value.subscriptionStartDate = this.formatDateToISO(
-      this.form.value.subscriptionStartDate,
-    );
-    console.log('Form initialized:', this.form.value);
+    const payload = {
+      ...this.form.value,
+      ...(this.selectedExistingUser && { userId: this.selectedExistingUser._id }),
+      subscriptionStartDate: this.formatDateToISO(
+        this.form.value.subscriptionStartDate,
+      ),
+    };
     this.waittingSubscription = true;
-    this.subscriptionService.addSubscriber(this.form.value)
+    this.subscriptionService.addSubscriber(payload)
     .subscribe({
       next: (response) => {
           const hasError =
@@ -104,9 +116,9 @@ export class AddSubscriberComponent implements OnInit {
               'The user has been created and added to the plan subscribers',
               10000,
             );
-            console.log('data', response);
             this.closeModal('add_subscriber_modal');
             this.form.reset();
+            this.clearSelectedExistingUser(false);
             this.initForm()
             this.waittingSubscription = false;
             this.refresh();
@@ -117,7 +129,6 @@ export class AddSubscriberComponent implements OnInit {
               'This email or whatsapp already exist',
               10000,
             );
-            console.error('Error no resp:', response);
             this.waittingSubscription = false;
             return this.closeModal('add_subscriber_modal');
           }
@@ -132,9 +143,6 @@ export class AddSubscriberComponent implements OnInit {
           this.form.reset();
           this.initForm()
           this.waittingSubscription = false;
-      },
-      complete: () => {
-        console.log('complete case');
       },
     })
   }
@@ -177,6 +185,7 @@ export class AddSubscriberComponent implements OnInit {
       password: new FormControl('00000000', {
         validators: [Validators.required, Validators.minLength(8)],
       }),
+      userId: new FormControl(null),
       subscriptionStartDate: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(8)],
       }),
@@ -184,9 +193,27 @@ export class AddSubscriberComponent implements OnInit {
         validators: [Validators.required, Validators.minLength(8)],
       }),
     });
+
+    this.form.get('email')?.valueChanges.subscribe(() => this.queueSubscriberSearch());
+    this.form.get('phone')?.valueChanges.subscribe(() => this.queueSubscriberSearch());
   }
 
   onSubmit() {
+    if (this.selectedExistingUser) {
+      if (!this.form.value.subscriptionStartDate) {
+        this.form.get('subscriptionStartDate')?.markAsTouched();
+        this.toastService.presentToast(
+          'warning',
+          'Invalid form',
+          'Please verify your form.',
+          10000,
+        );
+        return;
+      }
+      this.createSubscriptionItem();
+      return;
+    }
+
     const phoneDigits = this.fieldValidationService.normalizePhoneDigits(this.form.value.phone);
     this.form.value.phone = phoneDigits;
 
@@ -212,6 +239,74 @@ export class AddSubscriberComponent implements OnInit {
     }
     this.form.value.whatsapp = this.contryCode + ' ' + phoneDigits;
     this.createSubscriptionItem();
+  }
+
+  queueSubscriberSearch(): void {
+    if (this.selectedExistingUser || !this.form) return;
+    clearTimeout(this.subscriberSearchTimer);
+    this.subscriberSearchTimer = setTimeout(() => this.searchExistingSubscriber(), 400);
+  }
+
+  searchExistingSubscriber(): void {
+    const email = String(this.form.get('email')?.value || '').trim();
+    const phone = this.fieldValidationService.normalizePhoneDigits(this.form.get('phone')?.value || '');
+    const countryCode = String(this.selectedCounry?.code || '237');
+    const validEmail = this.fieldValidationService.isValidEmail(email);
+    const validPhone = this.fieldValidationService.isValidPhoneForCountry(phone, countryCode);
+    const keyword = validEmail ? email : validPhone ? `${this.contryCode} ${phone}` : '';
+
+    if (!keyword) {
+      this.subscriberCandidates = [];
+      return;
+    }
+
+    this.searchingSubscriber = true;
+    this.subscriptionService.searchSubscriberCandidates(keyword).subscribe({
+      next: (users) => {
+        this.subscriberCandidates = users || [];
+        this.searchingSubscriber = false;
+      },
+      error: () => {
+        this.subscriberCandidates = [];
+        this.searchingSubscriber = false;
+      },
+    });
+  }
+
+  selectExistingUser(user: any): void {
+    this.selectedExistingUser = user;
+    this.subscriberCandidates = [];
+    const countryId = user?.countryId?._id || user?.countryId || null;
+    const cityId = user?.cityId?._id || user?.cityId || null;
+    if (countryId && this.countries?.length) {
+      this.selectedCounry = this.countries.find((country) => country._id === countryId) || user.countryId;
+      this.cities = this.allCities.filter((city) => city.countryId === countryId);
+      this.setFlag(countryId);
+    }
+    this.form.patchValue({
+      userId: user?._id || null,
+      firstName: user?.firstName || null,
+      lastName: user?.lastName || null,
+      name: user?.name || null,
+      email: user?.email || null,
+      phone: user?.phone || this.fieldValidationService.normalizePhoneDigits(user?.whatsapp || ''),
+      whatsapp: user?.whatsapp || null,
+      countryId,
+      cityId,
+    }, { emitEvent: false });
+  }
+
+  clearSelectedExistingUser(resetSearch = true): void {
+    this.selectedExistingUser = null;
+    this.form?.patchValue({ userId: null }, { emitEvent: false });
+    if (resetSearch) this.queueSubscriberSearch();
+  }
+
+  showUserName(user: any): string {
+    if (!user) return '';
+    return user.accountType === 'personal'
+      ? `${user.firstName || ''} ${user.lastName || ''}`.trim()
+      : user.name || user.email || user.whatsapp;
   }
 
   formatDateToISO(dateInput: string | Date): string {

@@ -19,7 +19,9 @@ export class DevComponent implements OnInit {
   @Input('userData') userData: any;
   loading: boolean = true;
   updatingStatus: boolean = false;
+  updatingWebhook: boolean = false;
   keyData: any;
+  webhookUrl: string = '';
   showKey: boolean = false;
   frontUrl: string = environment.frontUrl;
 
@@ -44,6 +46,7 @@ export class DevComponent implements OnInit {
       .then((data: any) => {
         if (data) {
           this.keyData = data;
+          this.webhookUrl = data?.webhookUrl || '';
         } else return null;
       }
       )
@@ -74,7 +77,7 @@ export class DevComponent implements OnInit {
   copy(data: string) {
     navigator.clipboard.writeText(data).then(() => {
       // Réinitialise le message après 2 secondes
-      this.toastr.success('Copied to clipboard !');
+      this.toastr.success(this.translate.instant('dev.copiedToClipboard'));
     }).catch(err => {
       console.error('Impossible de copier : ', err);
     });
@@ -97,11 +100,38 @@ export class DevComponent implements OnInit {
       .then((data: any) => {
         if (data) {
           this.keyData = data;
-          this.toastService.presentToast('success', 'Done !', '', 5 * 1000);
+          this.toastService.presentToast('success', this.translate.instant('dev.done'), '', 5 * 1000);
         } else return null;
         this.updatingStatus = false;
       })
 
+  }
+
+  async saveWebhookUrl() {
+    this.updatingWebhook = true;
+    await this.devService.updateWebhookUrl(this.webhookUrl || '')
+      .then((data: any) => {
+        if (data) {
+          this.keyData = data;
+          this.webhookUrl = data?.webhookUrl || '';
+          this.toastService.presentToast('success', this.translate.instant('dev.done'), '', 5 * 1000);
+        }
+        this.updatingWebhook = false;
+      })
+      .catch(() => {
+        this.updatingWebhook = false;
+        this.toastService.presentToast(
+          'danger',
+          this.translate.instant('dev.error'),
+          this.translate.instant('dev.invalidWebhookUrl'),
+          5 * 1000,
+        );
+      });
+  }
+
+  clearWebhookUrl() {
+    this.webhookUrl = '';
+    this.saveWebhookUrl();
   }
 
   async generateKey() {

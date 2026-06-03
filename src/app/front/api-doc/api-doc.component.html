@@ -155,7 +155,7 @@
         <p>{{ 'apidoc.signupDesc' | translate }} </p>
         <div class="endpoint__grid">
           <div>
-            <h3>Body</h3>
+            <h3>{{ 'apidoc.body' | translate }}</h3>
             <pre ngNonBindable><code>&#123;
   "email": "user&#64;example.com",
   "password": "motdepasse",
@@ -181,7 +181,7 @@
         <p>{{ 'apidoc.signinDesc' | translate }} </p>
         <div class="endpoint__grid">
           <div>
-            <h3>Body</h3>
+            <h3>{{ 'apidoc.body' | translate }}</h3>
             <pre ngNonBindable><code>&#123;
   "email": "user&#64;example.com",
   "password": "motdepasse"
@@ -205,7 +205,7 @@
         <p>{{ 'apidoc.requestPasswordResetDesc' | translate }} </p>
         <div class="endpoint__grid">
           <div>
-            <h3>Body</h3>
+            <h3>{{ 'apidoc.body' | translate }}</h3>
             <pre ngNonBindable><code>&#123;
   "email": "user&#64;example.com"
 &#125;</code></pre>
@@ -227,7 +227,7 @@
         <p>{{ 'apidoc.resetPasswordDesc' | translate }} </p>
         <div class="endpoint__grid">
           <div>
-            <h3>Body</h3>
+            <h3>{{ 'apidoc.body' | translate }}</h3>
             <pre ngNonBindable><code>&#123;
   "token": "reset_token",
   "password": "new_password"
@@ -255,7 +255,7 @@
         <p>Récupérer la paire de clés API de l'utilisateur connecté.</p>
         <div class="endpoint__grid">
           <div>
-            <h3>Headers</h3>
+            <h3>{{ 'apidoc.headers' | translate }}</h3>
             <ul>
               <li><code>x-user-id</code> (string, requis)</li>
               <li><code>x-secret-key</code> (string, requis)</li>
@@ -281,7 +281,7 @@
         <p>Générer une nouvelle paire de clés API pour l'utilisateur connecté.</p>
         <div class="endpoint__grid">
           <div>
-            <h3>Headers</h3>
+            <h3>{{ 'apidoc.headers' | translate }}</h3>
             <ul>
               <li><code>x-user-id</code> (string, requis)</li>
               <li><code>x-secret-key</code> (string, requis)</li>
@@ -307,7 +307,7 @@
         <p>Réinitialiser la paire de clés API de l'utilisateur connecté.</p>
         <div class="endpoint__grid">
           <div>
-            <h3>Headers</h3>
+            <h3>{{ 'apidoc.headers' | translate }}</h3>
             <ul>
               <li><code>x-user-id</code> (string, requis)</li>
               <li><code>x-secret-key</code> (string, requis)</li>
@@ -333,7 +333,7 @@
         <p>Activer ou désactiver l'accès API de l'utilisateur connecté.</p>
         <div class="endpoint__grid">
           <div>
-            <h3>Headers</h3>
+            <h3>{{ 'apidoc.headers' | translate }}</h3>
             <ul>
               <li><code>x-user-id</code> (string, requis)</li>
               <li><code>x-secret-key</code> (string, requis)</li>
@@ -359,16 +359,17 @@
           <code>/dev/transaction</code>
         </div>
         <p>{{ 'apidoc.createPayment' | translate }}</p>
+        <p>{{ 'apidoc.apiCallbackUrlDesc' | translate }}</p>
         <div class="endpoint__grid">
           <div>
-            <h3>Headers</h3>
+            <h3>{{ 'apidoc.headers' | translate }}</h3>
             <ul>
               <li><code>x-user-id</code> (string)</li>
               <li><code>x-secret-key</code> (string)</li>
             </ul>
           </div>
           <div>
-            <h3>Body</h3>
+            <h3>{{ 'apidoc.body' | translate }}</h3>
             <pre ngNonBindable><code>&#123;
   "estimation": 100,
   "raisonForTransfer": "Paiement fournisseur",
@@ -376,7 +377,7 @@
   "userPhone": "691224472",
   "userCountry": "Cameroon",
   "senderName": "Kevin",
-  "callbackUrl": "https://your-server.com/webhook"
+  "callbackUrl": "https://your-site.com/payment-return"
 &#125;</code></pre>
           </div>
           <div>
@@ -411,7 +412,7 @@
         <p>{{ 'apidoc.getTransaction' | translate }}</p>
         <div class="endpoint__grid">
           <div>
-            <h3>Headers</h3>
+            <h3>{{ 'apidoc.headers' | translate }}</h3>
             <ul>
               <li><code>x-user-id</code> (string)</li>
               <li><code>x-secret-key</code> (string)</li>
@@ -456,7 +457,7 @@
 
         <div class="endpoint__grid">
           <div>
-            <h3>Headers</h3>
+            <h3>{{ 'apidoc.headers' | translate }}</h3>
             <ul>
               <li><code>x-user-id</code> (string, {{ 'apidoc.required' | translate }})</li>
               <li><code>x-secret-key</code> (string, {{ 'apidoc.required' | translate }})</li>
@@ -531,14 +532,14 @@
         <p>{{ 'apidoc.checkBalance' | translate }}</p>
         <div class="endpoint__grid">
           <div>
-            <h3>Headers</h3>
+            <h3>{{ 'apidoc.headers' | translate }}</h3>
             <ul>
               <li><code>x-user-id</code> (string)</li>
               <li><code>x-secret-key</code> (string)</li>
             </ul>
           </div>
           <div>
-            <h3>Body</h3>
+            <h3>{{ 'apidoc.body' | translate }}</h3>
             <p>{{ 'apidoc.noBody' | translate }}</p>
           </div>
           <div>
@@ -565,22 +566,21 @@
         <p>{{ 'apidoc.payoutDesc' | translate }}</p>
         <div class="endpoint__grid">
           <div>
-            <h3>Headers</h3>
+            <h3>{{ 'apidoc.headers' | translate }}</h3>
             <ul>
               <li><code>x-user-id</code> (string, {{ 'apidoc.required' | translate }})</li>
               <li><code>x-secret-key</code> (string, {{ 'apidoc.required' | translate }})</li>
             </ul>
           </div>
           <div>
-            <h3>Body</h3>
+            <h3>{{ 'apidoc.body' | translate }}</h3>
             <pre ngNonBindable><code>&#123;
   "amount": 5000,
   "accountBankCode": "MTN",
   "accountNumber": "237691224472",
   "receiverName": "John Doe",
   "currency": "XAF",
-  "narration": "Paiement fournisseur",
-  "callbackUrl": "https://your-server.com/webhook"
+  "narration": "Paiement fournisseur"
 &#125;</code></pre>
           </div>
           <div>
@@ -611,6 +611,7 @@
     <div class="tab-panel" id="webhook" [ngClass]="selectedSection === 'webhook' ? 'is-active' : ''">
       <h2 class="section-title">{{ 'apidoc.webhookTitle' | translate }}</h2>
       <p>{{ 'apidoc.webhookDesc' | translate }}</p>
+      <p>{{ 'apidoc.apiWebhookUrlDesc' | translate }}</p>
 
       <article class="endpoint">
         <div class="endpoint__header">
@@ -640,12 +641,12 @@
           <div>
             <h3>{{ 'apidoc.possibleStatuses' | translate }}</h3>
             <ul>
-              <li>Transaction/Payin</li>
+              <li>{{ 'apidoc.payinStatusGroup' | translate }}</li>
               <li><code>payin_pending</code> — {{ 'apidoc.payinPending' | translate }}</li>
               <li><code>payin_success</code> — {{ 'apidoc.payinSuccess' | translate }}</li>
               <li><code>payin_error</code> — {{ 'apidoc.payinError' | translate }}</li>
               <li><code>payin_closed</code> — {{ 'apidoc.payinClosed' | translate }}</li>
-              <li>Payout</li>
+              <li>{{ 'apidoc.payoutStatusGroup' | translate }}</li>
               <li><code>payout_pending</code> — {{ 'apidoc.payoutPending' | translate }}</li>
               <li><code>payout_success</code> — {{ 'apidoc.payoutSuccess' | translate }}</li>
               <li><code>payout_error</code> — {{ 'apidoc.payoutError' | translate }}</li>

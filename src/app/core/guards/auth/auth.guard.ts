@@ -16,6 +16,13 @@ export class AuthGuard  {
     | boolean
     | UrlTree {
     if (localStorage.getItem('authenticated')) {
+      if (
+        localStorage.getItem('mustChangePassword') === 'true' &&
+        this.router.url !== '/auth/force-password-change'
+      ) {
+        this.router.navigate(['/auth/force-password-change']);
+        return false;
+      }
       return true;
     } else {
       this.router.navigate([routes.login]);

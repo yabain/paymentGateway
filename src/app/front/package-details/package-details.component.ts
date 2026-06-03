@@ -760,7 +760,6 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
   }
 
   openSubscription(subscription, subscriberId) {
-    console.log('openSubscription', subscription, subscriberId);
     return this.navigateTo('/subscription/subscription-details/' + subscription + '&&' + subscriberId);
   }
 

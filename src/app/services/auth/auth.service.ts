@@ -138,6 +138,10 @@ export class AuthService {
     return this.apiService.create('auth/reset-password', data);
   }
 
+  changePassword(data): Observable<any> {
+    return this.apiService.create('auth/change-password', data);
+  }
+
   /**
    * Redirects to the authentication screen.
    */

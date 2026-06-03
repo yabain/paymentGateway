@@ -43,7 +43,6 @@ export class SubscriptionDetailsComponent {
     if (idParam && idParam !== 'null' && idParam !== 'undefined') {
      [this.subscriptionId, this.subscriberId] = idParam.split('&&');
     }
-    console.log('paramId: ', this.subscriptionId, this.subscriberId);
     this.getSubscriptionItems(this.subscriptionId, this.subscriberId);
     this.getUserData(this.subscriberId);
   }
@@ -55,7 +54,6 @@ export class SubscriptionDetailsComponent {
       .getUser(userId)
       .pipe(
         catchError((error: any) => {
-          console.log('error: ', error);
           this.gettingUserData = false;
           this.router.navigateByUrl('/dashboard');
           return of({
@@ -66,7 +64,6 @@ export class SubscriptionDetailsComponent {
       )
       .subscribe((user: any) => {
         this.userData = user;
-        console.log('userData: ', this.userData)
         this.gettingUserData = false;
       });
   }
@@ -82,10 +79,8 @@ export class SubscriptionDetailsComponent {
   }
 
   getSubscriptionItems(subscriptionId, subscriberId) {
-    console.log('getSubscriptionItemsd', subscriptionId, subscriberId);
     this.subscriptionService.getSubscriptionItems(subscriptionId, subscriberId)
       .subscribe((data: any) => {
-        console.log('getSubscriptionItemsd', data);
         this.raw = data;
         this.items = data.map(item => ({
           title: item.plansId.title || '...', 

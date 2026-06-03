@@ -278,7 +278,7 @@ export class PackagesComponent implements OnInit, OnDestroy {
 
   getCurrentUser() {
     this.userService.getCurrentUser().then((user: any) => {
-      if (!user) return console.log('No user');
+      if (!user) return;
       this.currentUser = user;
       // console.log('current user: ', user)
       if (this.isAdminRoute && user.isAdmin) this.isAdmin = true;

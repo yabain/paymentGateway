@@ -209,6 +209,17 @@ export class SubscriptionService {
     );
   }
 
+  searchSubscriberCandidates(keyword: string): Observable<any[]> {
+    const query = encodeURIComponent(keyword || '');
+    return this.apiService.getWithoutId(`user/subscriber-candidates?keyword=${query}`).pipe(
+      map((data) => data || []),
+      catchError((error) => {
+        console.error('Error searching subscriber candidates:', error);
+        return of([]);
+      }),
+    );
+  }
+
   getSubscriptionItems(subscriptionId, subscriberId): Observable<any> {
     return this.apiService.getById('subscription/get-items', subscriptionId + 'AAA' + subscriberId).pipe(
       map((data) => {
